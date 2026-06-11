@@ -4,6 +4,7 @@ import {
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
   ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical,
+  Gamepad2,
 } from 'lucide-react'
 import { Landing }        from './pages/Landing'
 import { Builder }        from './pages/Builder'
@@ -18,6 +19,7 @@ import { RecapPage }      from './recap/RecapPage'
 import { Playbook }       from './pages/Playbook'
 import { BacktestPage }   from './pages/BacktestPage'
 import { PropFirms }      from './pages/PropFirms'
+import { Arcade }         from './pages/Arcade'
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
 import { SessionNotes }   from './components/SessionNotes'
 import { TradingRules }   from './components/TradingRules'
@@ -35,7 +37,7 @@ const SUPABASE_CONFIGURED = !!(
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY
 )
 
-type Tab  = 'builder' | 'chart' | 'map' | 'plan' | 'journal' | 'calendar' | 'templates' | 'builds' | 'recap' | 'playbook' | 'backtest'
+type Tab  = 'builder' | 'chart' | 'map' | 'plan' | 'journal' | 'calendar' | 'templates' | 'builds' | 'recap' | 'playbook' | 'backtest' | 'arcade'
 type View = 'landing' | 'login' | 'app'
 
 const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
@@ -49,7 +51,8 @@ const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
   { id: 'builds',    label: 'Builds',    Icon: Package        },
   { id: 'recap',     label: 'Recap',     Icon: BarChart2      },
   { id: 'playbook',  label: 'Playbook',  Icon: GraduationCap  },
-  { id: 'backtest',  label: 'Backtest',  Icon: Crosshair      },
+  { id: 'backtest',  label: 'Replay',    Icon: Crosshair      },
+  { id: 'arcade',    label: 'Arcade',    Icon: Gamepad2       },
 ]
 
 // Primary tabs always visible on mobile bottom bar
@@ -326,6 +329,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         {tab === 'recap'     && <RecapPage />}
         {tab === 'playbook'  && <Playbook />}
         {tab === 'backtest'  && <BacktestPage />}
+        {tab === 'arcade'    && <Arcade />}
       </main>
 
       <SessionNotes  open={notesOpen}    onClose={() => setNotesOpen(false)} />

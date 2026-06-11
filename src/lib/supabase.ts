@@ -7,7 +7,10 @@ if (!url || !key) {
   console.warn('[Trading Lab] Supabase env vars not set — running in local-only mode')
 }
 
-export const supabase = createClient(url ?? '', key ?? '')
+// createClient throws on empty strings, which white-screens the app when env
+// vars are absent — fall back to a placeholder so local-only mode can boot.
+// All sync helpers already guard on `url`, so nothing ever calls this host.
+export const supabase = createClient(url || 'https://local-only.invalid', key || 'local-only')
 
 // ── Helpers used by hooks ─────────────────────────────────────────────────────
 
