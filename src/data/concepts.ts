@@ -445,6 +445,106 @@ export const concepts: Concept[] = [
     ],
   },
 
+  {
+    id: 'volume-imbalance',
+    name: 'Volume Imbalance (VI)',
+    shortName: 'Volume Imbalance',
+    tier: 'intermediate',
+    category: 'entry',
+    description:
+      'A two-candle pattern where the body (open-to-close) of candle 1 and the body of candle 2 do not overlap, leaving a gap between closes and opens. Unlike an FVG — which requires three candles and measures wick-to-wick — a Volume Imbalance is purely about candle bodies. It marks a level where price transacted heavily but left no body overlap, indicating institutional urgency. Price frequently returns to fill the body gap before continuing.',
+    howToUse:
+      'Identify two adjacent candles whose bodies don\'t overlap. Mark the gap between the close of the first candle and the open of the second. Use it to refine entries within a larger FVG or OB zone — a VI sitting inside a wider zone gives you the precise level where price reacts most sharply. On NQ and ES, VIs inside a displacement move are often the first fill target on any pullback.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['VI', 'volume imbalance', 'body gap', 'two candle', 'imbalance'],
+    synergies: [
+      { conceptId: 'fvg', strength: 3, note: 'VI and FVG both mark imbalances — a VI often lives inside a larger FVG and gets filled first before the full gap closes.' },
+      { conceptId: 'displacement', strength: 3, note: 'Displacement creates VIs on every candle in the sequence — aggressive institutional moves are chains of body gaps.' },
+      { conceptId: 'order-block', strength: 2, note: 'A VI at the edge of an OB zone tightens the entry — price entering the VI within the OB is the precision level.' },
+      { conceptId: 'consequent-encroachment', strength: 2, note: 'CE and VI both refine wide zones; a VI near the CE of an FVG creates the tightest possible entry within the zone.' },
+    ],
+  },
+  {
+    id: 'ifvg',
+    name: 'Inversion FVG (IFVG)',
+    shortName: 'IFVG',
+    tier: 'intermediate',
+    category: 'entry',
+    description:
+      'When price fully trades through a Fair Value Gap — closing candles on the other side — that gap inverts and acts as an opposing PD array. A bullish FVG that price closes below becomes bearish resistance on the return; a bearish FVG that price closes above becomes bullish support. IFVGs are often stronger than fresh FVGs because they\'ve been price-confirmed: the original imbalance was fully absorbed and institutional intent has flipped.',
+    howToUse:
+      'Mark any FVG that price has fully traded through. When price returns to that zone from the opposite direction, treat it as an IFVG — now acting as opposing PD array. A rejection wick or 1m CHoCH at the IFVG confirms the flip is active. IFVGs aligned with HTF structure and a kill zone are the most reliable. Don\'t confuse a partial FVG fill with an inversion — the full gap must be closed for the zone to flip.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['IFVG', 'inversion FVG', 'flipped FVG', 'inverse FVG', 'polarity flip'],
+    synergies: [
+      { conceptId: 'fvg', strength: 3, note: 'IFVG is a direct evolution of the FVG — every IFVG was a standard FVG that got fully filled and flipped.' },
+      { conceptId: 'breaker-block', strength: 3, note: 'IFVG and Breaker Block share the same flip logic — Breaker is the OB version, IFVG is the gap version.' },
+      { conceptId: 'market-structure', strength: 2, note: 'An FVG that fails and inverts often coincides with a CHoCH — the structural break and the IFVG are frequently the same event.' },
+      { conceptId: 'displacement', strength: 2, note: 'The candle that fills an FVG and creates an IFVG must close through the full gap with momentum — weak drifts through do not produce reliable IFVGs.' },
+    ],
+  },
+  {
+    id: 'dealing-range',
+    name: 'Dealing Range (DR)',
+    shortName: 'Dealing Range',
+    tier: 'intermediate',
+    category: 'structure',
+    description:
+      'A defined swing-high to swing-low range that acts as the analytical container for a trade setup. Its high and low represent 100% and 0% of the range; the midpoint is equilibrium (50%). Every PD array — OBs, FVGs, mitigation blocks — is evaluated relative to whether it sits in discount (below 50%, source of buys) or premium (above 50%, source of sells). Choosing which swing points define the dealing range is one of the most critical — and most frequently wrong — decisions in ICT analysis. Dealing ranges nest fractally: every timeframe has its own.',
+    howToUse:
+      'Identify the most recent significant swing high and swing low on your trading timeframe. Mark the range with a box, label 50% as equilibrium, and 62%–79% as the OTE zone. For intraday NQ/ES analysis, the dealing range is typically the prior day\'s high to low, or the current session\'s range once established. Every PD array inside the range is only valid from discount (for buys) or premium (for sells) — an OB in premium is a sell zone, not a buy, regardless of direction. MTFA is the practice of stacking dealing ranges across timeframes.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['dealing range', 'DR', 'range', 'analytical range', 'container', 'swing range'],
+    synergies: [
+      { conceptId: 'premium-discount', strength: 3, note: 'The dealing range IS the framework that makes premium/discount possible — you cannot apply P/D without first defining the range.' },
+      { conceptId: 'ote', strength: 3, note: 'OTE (0.62–0.79) is a fib zone within the dealing range — the range defines where those levels sit.' },
+      { conceptId: 'mtfa', strength: 3, note: 'MTFA is the practice of stacking and aligning multiple dealing ranges simultaneously across timeframes.' },
+      { conceptId: 'order-block', strength: 2, note: 'OBs only have full context within their dealing range — the same OB means different things in discount vs. premium.' },
+      { conceptId: 'market-structure', strength: 2, note: 'BOS and CHoCH events define the edges of new dealing ranges — each structural shift creates a new container.' },
+      { conceptId: 'fibonacci', strength: 2, note: 'The fib tool maps the dealing range\'s internal structure — 0.5, 0.62, and 0.79 are all points within it.' },
+    ],
+  },
+  {
+    id: 'nmog',
+    name: 'New Month Opening Gap (NMOG)',
+    shortName: 'NMOG',
+    tier: 'intermediate',
+    category: 'structure',
+    description:
+      'The price gap between the last trading day of a calendar month\'s close and the first trading day of the new month\'s open. Like the NWOG but at the monthly scale, the NMOG represents unfilled institutional orders across the month transition. The algorithm prioritizes filling NMOGs — often within the first 1–3 trading days — before committing to the monthly direction. On indices and Gold, NMOGs are especially reliable because of the large position-closing and rebalancing activity at month-end.',
+    howToUse:
+      'On the first trading day of each month, draw a box between the prior month\'s last close and the current day\'s midnight open. Label it NMOG. If your bias is bullish and the NMOG is below current price, expect a pullback to fill it before the real monthly move begins. Don\'t enter long at a premium price with an unfilled NMOG below — it\'s a magnet. The NMOG fill often serves as the first week\'s Judas before the true monthly delivery takes over.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['NMOG', 'new month opening gap', 'monthly gap', 'month open', 'month close', 'gap fill'],
+    synergies: [
+      { conceptId: 'opening-gaps', strength: 3, note: 'NMOG is the monthly version of NDOG/NWOG — the same gap logic applied at the larger timeframe.' },
+      { conceptId: 'draw-on-liquidity', strength: 2, note: 'An unfilled NMOG is a macro DOL at the start of the month — price must return to address it.' },
+      { conceptId: 'daily-bias', strength: 2, note: 'NMOG location relative to current price (above or below) is a key input for daily bias in the first week of the month.' },
+      { conceptId: 'ipda', strength: 2, note: 'IPDA 20-day lookback periods frequently begin or end near monthly opens — NMOG and IPDA reference levels often coincide.' },
+      { conceptId: 'judas-swing', strength: 2, note: 'The early-month Judas frequently targets the NMOG as its manipulation destination before the real monthly move.' },
+    ],
+  },
+  {
+    id: 'prev-month-hl',
+    name: 'Previous Month High & Low (PMH / PML)',
+    shortName: 'PMH / PML',
+    tier: 'intermediate',
+    category: 'liquidity',
+    description:
+      'The high and low of the prior calendar month — major liquidity pools at the monthly timeframe. Stop orders from all traders who entered during the prior month cluster above the PMH (BSL) and below the PML (SSL). The algorithm frequently targets PMH or PML as the macro draw for multi-day delivery, especially in the first two weeks of a new month. On Gold in particular, PMH and PML are among the most reliable macro targets session to session.',
+    howToUse:
+      'On the first trading day of each month, mark the prior month\'s high and low as labeled horizontal lines. Determine which aligns with your weekly and daily bias — that level is your macro draw. Intraday setups in the direction of the PMH (bullish month) or PML (bearish month) carry higher follow-through because the macro draw is supporting them. On NQ/ES, price often trends toward one of these levels throughout the first two weeks before reversing.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['PMH', 'PML', 'prior month high', 'prior month low', 'monthly liquidity', 'macro level'],
+    synergies: [
+      { conceptId: 'prev-day-week-hl', strength: 3, note: 'PMH/PML extends the same liquidity logic as PDH/PDL and PWH/PWL to the monthly timeframe — the hierarchy is day → week → month.' },
+      { conceptId: 'liquidity', strength: 3, note: 'PMH/PML are the highest intraday liquidity pools — BSL above PMH and SSL below PML are macro stop clusters.' },
+      { conceptId: 'draw-on-liquidity', strength: 3, note: 'PMH/PML are the macro DOL for multi-day delivery — every intraday setup in the first two weeks of a month should be checked against them.' },
+      { conceptId: 'ipda', strength: 2, note: 'IPDA 20/40/60 day periods frequently align with PMH/PML levels — they confirm each other as the macro target.' },
+      { conceptId: 'daily-bias', strength: 2, note: 'Monthly draw (PMH or PML) directly informs daily bias — if price is trending toward PMH, bias stays bullish until it\'s reached.' },
+    ],
+  },
+
   // ─── ADVANCED ─────────────────────────────────────────────────────────────
 
   {
@@ -730,6 +830,68 @@ export const concepts: Concept[] = [
       { conceptId: 'displacement', strength: 2, note: 'Displacement after the inducement sweep creates the step 3 PD array — no displacement means no valid entry zone.' },
       { conceptId: 'market-maker-buy', strength: 2, note: 'IOFED is the entry mechanism that executes within the OTE phase of the MM buy model.' },
       { conceptId: 'market-maker-sell', strength: 2, note: 'IOFED is the entry mechanism that executes within the OTE phase of the MM sell model.' },
+    ],
+  },
+  {
+    id: 'bpr',
+    name: 'Balanced Price Range (BPR)',
+    shortName: 'BPR',
+    tier: 'advanced',
+    category: 'entry',
+    description:
+      'The overlap zone created when a bullish Fair Value Gap and a bearish Fair Value Gap share the same price area. The overlap represents true equilibrium — both sides of the market have inefficiencies that cancel out, creating a concentrated reaction zone where institutional buy and sell orders are stacked on top of each other. Price respects the BPR with precision because of this dual-order density. The midpoint (CE of the BPR) is the highest-probability reaction level within it.',
+    howToUse:
+      'Identify a bullish FVG and a bearish FVG that overlap at any portion. Mark only the overlap as the BPR box. Treat the midpoint (CE) as your primary entry level — set a limit there or wait for a rejection wick at that level. BPRs form most commonly after displacement moves where price gaps in one direction and then creates an opposing gap on the immediate pullback. Combine with kill zone timing and HTF structure alignment for maximum conviction.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['BPR', 'balanced price range', 'overlapping FVG', 'equilibrium zone', 'CE', 'dual gap'],
+    synergies: [
+      { conceptId: 'fvg', strength: 3, note: 'BPR is two overlapping FVGs — it cannot exist without at least two valid FVGs sharing price real estate.' },
+      { conceptId: 'consequent-encroachment', strength: 3, note: 'CE of the BPR overlap is the tightest possible setup in ICT — midpoint of an already-narrow confluence zone.' },
+      { conceptId: 'displacement', strength: 2, note: 'BPRs most commonly form when opposing displacements leave overlapping gaps — fast moves in both directions creating the dual-gap overlap.' },
+      { conceptId: 'volume-imbalance', strength: 2, note: 'A Volume Imbalance within the BPR overlap stacks three layers of imbalance in the same area — extremely high-reaction zone.' },
+      { conceptId: 'order-block', strength: 2, note: 'An OB that overlaps with a BPR creates one of the most confluent PD arrays possible — three zones (OB, bullish FVG, bearish FVG) in the same price.' },
+      { conceptId: 'premium-discount', strength: 2, note: 'BPR acts as a micro-equilibrium zone — discount within a premium area, or premium within a discount area, depending on context.' },
+    ],
+  },
+  {
+    id: 'liquidity-void',
+    name: 'Liquidity Void',
+    shortName: 'Liquidity Void',
+    tier: 'advanced',
+    category: 'structure',
+    description:
+      'An area of extreme one-directional price delivery where consecutive candles share no wick-to-wick overlap — not even between wicks. A Liquidity Void is more aggressive than a standard FVG or displacement: it spans multiple candles in the same direction with zero retracement, indicating institutional urgency at a scale that bypasses normal price delivery. Because the area was never traded at any level, the algorithm is programmed to return and fill the entire void before price can sustain a move in the opposite direction.',
+    howToUse:
+      'Identify a run of consecutive candles all in one direction with no wick-to-wick overlap between any of them. Mark the full range as a Liquidity Void box. This zone WILL be filled — treat it as an obligation, not a possibility. Use the void as a target when you\'re positioned before it\'s filled, or as a high-probability entry zone on the first return. Enter at the top of the void on bearish fills or the bottom on bullish fills, targeting the full fill. First fills of liquidity voids are among the cleanest high-R setups in the methodology.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['liquidity void', 'void', 'price void', 'one-sided delivery', 'extreme imbalance', 'must fill'],
+    synergies: [
+      { conceptId: 'fvg', strength: 3, note: 'A Liquidity Void is a stack of nested FVGs — the entire non-overlapping sequence contains multiple FVGs compressed together.' },
+      { conceptId: 'displacement', strength: 3, note: 'Liquidity Voids are created by extreme displacement — they\'re the most aggressive expression of institutional velocity in the methodology.' },
+      { conceptId: 'volume-imbalance', strength: 2, note: 'A Liquidity Void contains multiple Volume Imbalances stacked consecutively — filling the void fills all of them at once.' },
+      { conceptId: 'draw-on-liquidity', strength: 2, note: 'An unfilled Liquidity Void is always a DOL — the algorithm is unconditionally drawn back to fill what it skipped.' },
+      { conceptId: 'market-structure', strength: 2, note: 'Liquidity Voids almost always cross structural levels — a BOS through a Void is the most impulsive structural break possible.' },
+    ],
+  },
+  {
+    id: 'london-close-model',
+    name: 'London Close Model',
+    shortName: 'London Close',
+    tier: 'advanced',
+    category: 'model',
+    description:
+      'ICT\'s reversal setup that runs during the London close window (10:00–11:00 AM EST). At this time, London traders square positions and the algorithm frequently reverses the AM direction before the afternoon session. The model: (1) Price establishes an AM high or low during the London/NY overlap (8:30–10 AM), (2) at the London close window, price sweeps that AM extreme — collecting BSL or SSL, (3) a CHoCH and FVG form on the reversal, (4) the NY PM session delivers to the opposing AM extreme. This model explains the classic structure of trending AM, reversing PM days on NQ and ES.',
+    howToUse:
+      'After the NY AM kill zone, mark the session high and low. When 10:00 AM arrives, watch for price to briefly exceed one of those levels and reverse — that\'s the London close sweep. The FVG created on the reversal is your entry. Target the opposing AM extreme as your DOL for the afternoon. This model is most reliable on Tuesdays and Thursdays and least reliable on Mondays and Fridays. Daily bias determines which AM extreme gets swept — bullish days sweep the AM low before the PM run up; bearish days sweep the AM high.',
+    instruments: ['NQ', 'ES'],
+    tags: ['London close', '10AM model', 'AM reversal', 'afternoon reversal', 'session close', 'PM setup'],
+    synergies: [
+      { conceptId: 'silver-bullet', strength: 3, note: 'The 10–11 AM Silver Bullet window IS the London Close model entry window — they describe the same setup from different angles.' },
+      { conceptId: 'kill-zones', strength: 3, note: 'London Close model is defined by the 10–11 AM kill zone boundary — timing is the entire trigger mechanism.' },
+      { conceptId: 'amd', strength: 2, note: 'The London close sweep is the Manipulation phase of the PM AMD cycle — it sets up the afternoon Distribution.' },
+      { conceptId: 'judas-swing', strength: 2, note: 'The London close sweep of the AM extreme is a micro Judas — a false continuation that sets up the PM reversal.' },
+      { conceptId: 'fvg', strength: 2, note: 'The reversal off the London close sweep creates the entry FVG — that specific FVG formed at the 10 AM reversal is the trade.' },
+      { conceptId: 'daily-bias', strength: 2, note: 'Daily bias determines whether the London close sweep targets the AM high (bearish day) or AM low (bullish day).' },
     ],
   },
 ]

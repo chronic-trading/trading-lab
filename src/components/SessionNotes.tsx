@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, StickyNote, RotateCcw } from 'lucide-react'
 import { syncUserDataField } from '../lib/supabase'
 import { getCurrentUserId } from '../lib/currentUser'
+import { useModalBackButton } from '../hooks/useModalBackButton'
 
 const KEY = 'trading-lab-session-notes'
 
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export function SessionNotes({ open, onClose }: Props) {
+  useModalBackButton(open, onClose)
   const [note, setNote] = useState(load)
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Settings, Check, Download, Upload, AlertTriangle } from 'lucide-react'
 import { useSettings, POINT_VALUES } from '../hooks/useSettings'
 import type { Instrument } from '../types'
+import { useModalBackButton } from '../hooks/useModalBackButton'
 
 const INSTRUMENTS: Instrument[] = ['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]
 const BACKUP_KEYS = [
@@ -62,6 +63,7 @@ function importData(file: File): Promise<void> {
 interface Props { open: boolean; onClose: () => void }
 
 export function SettingsModal({ open, onClose }: Props) {
+  useModalBackButton(open, onClose)
   const { settings, update } = useSettings()
   const [accountSize, setAccountSize] = useState(settings.accountSize.toString())
   const [riskPercent, setRiskPercent] = useState(settings.riskPercent.toString())

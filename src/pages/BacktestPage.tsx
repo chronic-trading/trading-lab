@@ -15,6 +15,8 @@ const INSTRUMENTS: Instrument[] = ['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD',
 const TIMEFRAMES = ['1m','5m','15m','1H','4H'] as const
 const INITIAL_CONTEXT = 80  // bars shown on load before replay starts
 const TRADES_KEY = 'tl:replay-trades'
+const SPEEDS = [0.5, 1, 2, 4] as const
+type Speed = typeof SPEEDS[number]
 
 type TF = typeof TIMEFRAMES[number]
 
@@ -163,6 +165,7 @@ export function BacktestPage() {
 
   const [cursor,     setCursor]     = useState(INITIAL_CONTEXT)
   const [playing,    setPlaying]    = useState(false)
+  const [speed,      setSpeed]      = useState<Speed>(1)
 
   const [activeTrade, setActiveTrade] = useState<ActiveTrade | null>(null)
 
@@ -190,9 +193,9 @@ export function BacktestPage() {
         if (c >= bars.length) { setPlaying(false); return c }
         return c + 1
       })
-    }, 400)
+    }, Math.round(400 / speed))
     return () => { if (playRef.current) clearInterval(playRef.current) }
-  }, [playing, bars.length])
+  }, [playing, bars.length, speed])
 
   // ── Auto-detect stop/target hit ─────────────────────────────────────────────
   useEffect(() => {
@@ -330,12 +333,15 @@ export function BacktestPage() {
         {/* Date */}
         <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
           max={today()}
+          style={{ colorScheme: 'dark' }}
           className="bg-slate-900/70 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-300 focus:outline-none focus:border-slate-600 transition-all" />
 
         {/* Load button */}
         <button onClick={handleLoad} disabled={loading}
           className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg border border-amber-500/35 bg-amber-500/12 text-amber-300 text-[11px] font-bold hover:bg-amber-500/22 transition-all disabled:opacity-50">
-          {loading ? <span className="animate-spin">⟳</span> : <Crosshair size={11} />}
+          {loading
+            ? <span className="w-3 h-3 border border-amber-400/40 border-t-amber-300 rounded-full animate-spin flex-shrink-0" />
+            : <Crosshair size={11} />}
           {loading ? 'Loading…' : 'Load'}
         </button>
 
@@ -397,12 +403,16 @@ export function BacktestPage() {
                   </>
                 ) : (
                   <>
-                    <Crosshair size={32} className="text-slate-800" />
-                    <div className="text-center">
-                      <p className="text-[14px] font-bold text-slate-500 mb-1">Chart Replay</p>
-                      <p className="text-[12px] text-slate-700 max-w-xs">
-                        Select an instrument, timeframe, and date then hit Load.
+                    <div className="w-14 h-14 rounded-2xl bg-slate-800/40 border border-slate-700/30 flex items-center justify-center">
+                      <Crosshair size={22} className="text-slate-600" />
+                    </div>
+                    <div className="text-center max-w-xs">
+                      <p className="text-[15px] font-bold text-slate-400 mb-2">Chart Replay</p>
+                      <p className="text-[12px] text-slate-600 leading-relaxed">
+                        Pick an instrument and timeframe, choose a start date, then hit{' '}
+                        <span className="text-amber-400/70 font-semibold">Load</span>.
                       </p>
+                      <p className="text-[11px] text-slate-700 mt-3 tracking-wide">Step through bars · Mark entries · Track R</p>
                     </div>
                   </>
                 )}
@@ -446,6 +456,22 @@ export function BacktestPage() {
                 </button>
               ))}
 
+              <div className="w-px h-4 bg-slate-800 mx-0.5" />
+
+              {/* Speed selector */}
+              <div className="flex items-center gap-0.5">
+                {SPEEDS.map(s => (
+                  <button key={s} onClick={() => setSpeed(s)}
+                    className={`px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                      speed === s
+                        ? 'bg-amber-500/15 border border-amber-500/30 text-amber-300'
+                        : 'text-slate-600 hover:text-slate-300'
+                    }`}>
+                    {s}x
+                  </button>
+                ))}
+              </div>
+
               {/* Bar info */}
               {barInfo && (
                 <div className="ml-auto flex items-center gap-2 text-[10.5px]" style={monoStyle}>
@@ -464,9 +490,14 @@ export function BacktestPage() {
 
           {!hasData ? (
             /* Empty state */
-            <div className="flex-1 flex flex-col items-center justify-center gap-3 px-6">
-              <Crosshair size={28} className="text-slate-800" />
-              <p className="text-[12px] text-slate-700 text-center">Load a session to start replaying and marking trades</p>
+            <div className="flex-1 flex flex-col items-center justify-center gap-3 px-6 text-center">
+              <div className="w-10 h-10 rounded-2xl bg-slate-800/30 border border-slate-700/20 flex items-center justify-center">
+                <Crosshair size={18} className="text-slate-700" />
+              </div>
+              <div>
+                <p className="text-[12px] font-semibold text-slate-600 mb-1">No session loaded</p>
+                <p className="text-[11px] text-slate-700 leading-relaxed">Load a session to replay bars and mark trades</p>
+              </div>
             </div>
           ) : (
             <div className="flex-1 overflow-y-auto">
@@ -474,16 +505,23 @@ export function BacktestPage() {
               {/* Current bar OHLC */}
               {currentBar && (
                 <div className="px-4 py-3 border-b border-slate-800/40">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-600">Current Bar</span>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
+                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">Current Bar</span>
+                    </div>
                     {barInfo && <span className="text-[9.5px] text-slate-600" style={monoStyle}>{barInfo.date} · {barInfo.time}</span>}
                   </div>
                   <div className="grid grid-cols-4 gap-1.5">
                     {(['open','high','low','close'] as const).map(k => (
                       <div key={k} className="bg-slate-900/60 rounded-lg px-2 py-1.5 text-center">
                         <p className="text-[8.5px] text-slate-600 uppercase">{k[0]}</p>
-                        <p className={`text-[11px] font-bold mt-0.5 ${k==='high'?'text-emerald-400/80':k==='low'?'text-red-400/80':'text-slate-300'}`}
-                           style={monoStyle}>
+                        <p className={`text-[11px] font-bold mt-0.5 ${
+                          k === 'high'  ? 'text-emerald-400' :
+                          k === 'low'   ? 'text-red-400' :
+                          k === 'close' ? (currentBar.close >= currentBar.open ? 'text-emerald-300' : 'text-red-300') :
+                          'text-slate-400'
+                        }`} style={monoStyle}>
                           {priceFmt(currentBar[k], instrument)}
                         </p>
                       </div>
@@ -495,11 +533,14 @@ export function BacktestPage() {
               {/* Active trade panel */}
               {activeTrade ? (
                 <div className="px-4 py-3 border-b border-slate-800/40">
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${activeTrade.dir==='long'?'bg-emerald-400':'bg-red-400'}`} />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">
-                      {activeTrade.dir === 'long' ? '↑ Long' : '↓ Short'} — Live
-                    </span>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-1.5 h-1.5 rounded-full animate-pulse ${activeTrade.dir==='long'?'bg-emerald-400':'bg-red-400'}`} />
+                      <span className={`text-[10px] font-black uppercase tracking-widest ${activeTrade.dir==='long'?'text-emerald-300':'text-red-300'}`}>
+                        {activeTrade.dir === 'long' ? '↑ Long' : '↓ Short'}
+                      </span>
+                    </div>
+                    <span className="text-[9px] font-bold text-slate-500 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/50">Live</span>
                   </div>
 
                   {/* Entry / SL / TP */}
@@ -555,7 +596,10 @@ export function BacktestPage() {
               ) : (
                 /* Mark trade form */
                 <div className="px-4 py-3 border-b border-slate-800/40 space-y-2.5">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-slate-600">Mark Trade</p>
+                  <div className="flex items-center gap-2">
+                    <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
+                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Mark Trade</p>
+                  </div>
 
                   {/* Direction */}
                   <div className="flex rounded-xl overflow-hidden border border-slate-800">
@@ -617,7 +661,12 @@ export function BacktestPage() {
 
               {/* Session stats */}
               {trades.length > 0 && (
-                <div className="px-4 py-3 border-b border-slate-800/40 grid grid-cols-4 gap-2">
+                <div className="px-4 pt-3 pb-2 border-b border-slate-800/40 bg-slate-900/20">
+                  <div className="flex items-center gap-2 mb-2.5">
+                    <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
+                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Session Stats</p>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
                   {[
                     { label:'W%',    val:`${stats.winRate}%`,   color: stats.winRate>=60?'text-emerald-400':stats.winRate>=40?'text-amber-400':'text-red-400' },
                     { label:'Avg R', val: stats.total>0?(stats.avgR>=0?`+${stats.avgR}`:String(stats.avgR)):'—', color: stats.avgR>=0?'text-emerald-400':'text-red-400' },
@@ -629,16 +678,22 @@ export function BacktestPage() {
                       <p className={`text-[12px] font-black mt-0.5 ${s.color}`} style={monoStyle}>{s.val}</p>
                     </div>
                   ))}
+                  </div>
                 </div>
               )}
 
               {/* Trade history */}
               <div className="px-4 py-3 space-y-2">
                 {trades.length === 0 ? (
-                  <p className="text-[11px] text-slate-700 text-center py-4">No trades yet — step through the chart and mark setups</p>
+                  <p className="text-[11px] text-slate-700 text-center py-6">No trades yet — step through the chart and mark setups</p>
                 ) : (
                   <>
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-700">{trades.length} Trade{trades.length!==1?'s':''}</p>
+                    <div className="flex items-center gap-2 pb-1">
+                      <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
+                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">
+                        {trades.length} Trade{trades.length !== 1 ? 's' : ''}
+                      </p>
+                    </div>
                     {trades.map(t => <TradeCard key={t.id} trade={t} onDelete={deleteTrade} />)}
                   </>
                 )}

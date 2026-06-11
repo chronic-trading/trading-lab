@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Smile, Trash2 } from 'lucide-react'
 import { useMindset, type MindsetEntry } from '../hooks/useMindset'
 import { useJournal } from '../hooks/useJournal'
+import { useModalBackButton } from '../hooks/useModalBackButton'
 
 // ── Score config ──────────────────────────────────────────────────────────────
 const SCORES: {
@@ -205,6 +206,7 @@ interface Props {
 }
 
 export function MindsetCheck({ open, onClose }: Props) {
+  useModalBackButton(open, onClose)
   const { entries, addEntry, deleteEntry } = useMindset()
   const { entries: journalEntries }        = useJournal()
   const [selected, setSelected] = useState<MindsetEntry['score'] | null>(null)

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Plus, Trash2, Shield, ToggleLeft, ToggleRight } from 'lucide-react'
 import { useRules, type RuleCategory } from '../hooks/useRules'
+import { useModalBackButton } from '../hooks/useModalBackButton'
 
 const catConfig: Record<RuleCategory, { label: string; color: string }> = {
   entry:   { label: 'Entry',   color: 'text-blue-400 bg-blue-500/10 border-blue-500/25'     },
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export function TradingRules({ open, onClose }: Props) {
+  useModalBackButton(open, onClose)
   const { rules, addRule, deleteRule, toggleActive, updateText } = useRules()
   const [newText,    setNewText]    = useState('')
   const [newCat,     setNewCat]     = useState<RuleCategory>('entry')

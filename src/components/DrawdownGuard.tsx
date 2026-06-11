@@ -4,6 +4,7 @@ import { X, ShieldAlert, Edit3, Check } from 'lucide-react'
 import { useJournal } from '../hooks/useJournal'
 import { useDrawdown } from '../hooks/useDrawdown'
 import { POINT_VALUES } from '../hooks/useSettings'
+import { useModalBackButton } from '../hooks/useModalBackButton'
 
 interface Props {
   open: boolean
@@ -13,6 +14,7 @@ interface Props {
 export function DrawdownGuard({ open, onClose }: Props) {
   const { entries } = useJournal()
   const { settings, update } = useDrawdown()
+  useModalBackButton(open, onClose)
   const [editingLimit,  setEditingLimit]  = useState(false)
   const [editingTarget, setEditingTarget] = useState(false)
   const [limitInput,    setLimitInput]    = useState('')

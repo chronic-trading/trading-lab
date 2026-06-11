@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, CheckCircle, XCircle, RotateCcw, Trophy, Brain, Zap } from 'lucide-react'
 import { concepts } from '../data/concepts'
 import { useAllMastery, MASTERY_LABELS, MASTERY_COLORS, MASTERY_TEXT, type MasteryLevel } from '../hooks/useMastery'
+import { useModalBackButton } from '../hooks/useModalBackButton'
 
 interface Question {
   type: 'name-to-desc' | 'desc-to-name' | 'synergy'
@@ -111,6 +112,7 @@ const OPTION_LABELS = ['A', 'B', 'C', 'D']
 interface Props { open: boolean; onClose: () => void }
 
 export function QuizModal({ open, onClose }: Props) {
+  useModalBackButton(open, onClose)
   const masteryData = useAllMastery()
 
   const ratedCount = concepts.filter(c => (masteryData[c.id] ?? 0) > 0).length
