@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHRON-OS</title>
+<style>
+  :root {
+    --cyan: #4ee1ff; --cyan-dim: rgba(78,225,255,0.35); --cyan-glow: rgba(78,225,255,0.12);
+    --bg: #010409; --text: #c9f3ff; --dim: #3a6b7d; --warn: #ffb84e;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    background: radial-gradient(ellipse at center, #03101c 0%, var(--bg) 70%);
+    color: var(--text); font-family: Consolas, 'Cascadia Code', monospace;
+    user-select: none;
+  }
+  #fx { position: fixed; inset: 0; z-index: 0; }
+
+  /* scanlines */
+  body::after {
+    content: ''; position: fixed; inset: 0; z-index: 30; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px);
+    mix-blend-mode: multiply;
+  }
+
+  .hud { position: fixed; z-index: 10; font-size: 11px; letter-spacing: 1px; }
+  .hud .h {
+    font-size: 9px; color: var(--dim); letter-spacing: 3px; margin-bottom: 4px;
+    border-bottom: 1px solid rgba(78,225,255,0.15); padding-bottom: 2px;
+  }
+  .hud .v { color: var(--cyan); text-shadow: 0 0 8px var(--cyan-dim); }
+  .hud .big { font-size: 26px; font-weight: 700; }
+
+  #tl { top: 18px; left: 22px; }
+  #tr { top: 18px; right: 22px; text-align: right; }
+  #bl { bottom: 86px; left: 22px; }
+  #br { bottom: 86px; right: 22px; text-align: right; }
+
+  /* status line under core */
+  #status {
+    position: fixed; left: 50%; top: calc(50% + 150px); transform: translateX(-50%);
+    z-index: 10; font-size: 11px; letter-spacing: 6px; color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan-dim); text-align: center;
+  }
+  #status .sub { font-size: 9px; letter-spacing: 2px; color: var(--dim); margin-top: 4px; }
+
+  /* transcript */
+  #log {
+    position: fixed; left: 50%; bottom: 64px; transform: translateX(-50%);
+    width: min(680px, 90vw); max-height: 180px; overflow: hidden;
+    z-index: 10; display: flex; flex-direction: column; justify-content: flex-end;
+    -webkit-mask-image: linear-gradient(transparent, black 30%);
+            mask-image: linear-gradient(transparent, black 30%);
+  }
+  .line { font-size: 12.5px; line-height: 1.7; white-space: pre-wrap; }
+  .line.user { color: #7ee8ff; opacity: 0.75; }
+  .line.user::before { content: '> '; color: var(--dim); }
+  .line.ai { color: var(--text); text-shadow: 0 0 6px rgba(78,225,255,0.18); }
+  .line.ai::before { content: '◈ '; color: var(--cyan); }
+
+  /* input bar */
+  #bar {
+    position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
+    width: min(680px, 90vw); display: flex; gap: 8px; z-index: 10;
+  }
+  #cmd {
+    flex: 1; background: rgba(3,16,28,0.8); border: 1px solid rgba(78,225,255,0.25);
+    border-radius: 6px; color: var(--cyan); font: inherit; font-size: 13px;
+    padding: 9px 14px; outline: none; letter-spacing: 0.5px;
+  }
+  #cmd:focus { border-color: var(--cyan-dim); box-shadow: 0 0 18px rgba(78,225,255,0.1); }
+  #cmd::placeholder { color: var(--dim); }
+  #micBtn {
+    background: rgba(3,16,28,0.8); border: 1px solid rgba(78,225,255,0.25);
+    border-radius: 6px; color: var(--cyan); cursor: pointer; font: inherit;
+    padding: 9px 16px; font-size: 13px;
+  }
+  #micBtn.live { border-color: var(--cyan); box-shadow: 0 0 18px var(--cyan-dim); animation: micPulse 1.2s infinite alternate; }
+  @keyframes micPulse { to { box-shadow: 0 0 30px var(--cyan-dim); } }
+
+  /* timer chip */
+  #timerChip {
+    position: fixed; top: 18px; left: 50%; transform: translateX(-50%);
+    z-index: 10; border: 1px solid rgba(255,184,78,0.4); border-radius: 6px;
+    color: var(--warn); padding: 6px 16px; font-size: 13px; letter-spacing: 2px;
+    background: rgba(28,18,3,0.7); display: none; text-shadow: 0 0 8px rgba(255,184,78,0.4);
+  }
+
+  /* boot overlay */
+  #boot {
+    position: fixed; inset: 0; z-index: 40; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+  }
+  #bootText { font-size: 12px; line-height: 2; color: var(--cyan); width: min(520px, 88vw); text-shadow: 0 0 8px var(--cyan-dim); white-space: pre-wrap; }
+  #boot.done { transition: opacity 0.9s; opacity: 0; pointer-events: none; }
+
+  #core { position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 5; cursor: pointer; }
+</style>
+</head>
+<body>
+  <canvas id="fx"></canvas>
+  <canvas id="core" width="460" height="460" title="click to speak"></canvas>
+
+  <div id="boot"><div id="bootText"></div></div>
+
+  <div class="hud" id="tl">
+    <div class="h">CHRONOMETER</div>
+    <div class="v big" id="clock">--:--:--</div>
+    <div class="v" id="date">—</div>
+  </div>
+  <div class="hud" id="tr">
+    <div class="h">SYSTEM</div>
+    <div>PWR <span class="v" id="batt">—</span></div>
+    <div>NET <span class="v" id="net">—</span></div>
+    <div>RES <span class="v" id="res">—</span></div>
+  </div>
+  <div class="hud" id="bl">
+    <div class="h">ENVIRONMENT</div>
+    <div class="v" id="wx">awaiting scan</div>
+  </div>
+  <div class="hud" id="br">
+    <div class="h">AUDIO MATRIX</div>
+    <div>STT <span class="v" id="sttState">—</span></div>
+    <div>TTS <span class="v" id="ttsState">—</span></div>
+  </div>
+
+  <div id="timerChip">⏱ 00:00</div>
+  <div id="status">IDLE<div class="sub">click the core or type below</div></div>
+  <div id="log"></div>
+
+  <div id="bar">
+    <input id="cmd" placeholder="speak or type a command — try 'help'" autocomplete="off">
+    <button id="micBtn">🎙</button>
+  </div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+
+  // ════════════════════════ VISUAL CORE ════════════════════════
+  const fx = $('fx'), fctx = fx.getContext('2d');
+  const core = $('core'), cctx = core.getContext('2d');
+  let amp = 0;            // mic amplitude 0..1 (drives ring agitation)
+  let mode = 'idle';      // idle | listening | speaking | processing
+  let t = 0;
+
+  function sizeFx() { fx.width = innerWidth; fx.height = innerHeight; }
+  addEventListener('resize', sizeFx); sizeFx();
+
+  const particles = Array.from({ length: 70 }, () => ({
+    x: Math.random(), y: Math.random(),
+    vx: (Math.random() - 0.5) * 0.0004, vy: (Math.random() - 0.5) * 0.0004,
+    r: Math.random() * 1.4 + 0.3, a: Math.random() * 0.5 + 0.1,
+  }));
+
+  function drawFx() {
+    const W = fx.width, H = fx.height;
+    fctx.clearRect(0, 0, W, H);
+    // particle field
+    for (const p of particles) {
+      p.x = (p.x + p.vx + 1) % 1; p.y = (p.y + p.vy + 1) % 1;
+      fctx.fillStyle = `rgba(78,225,255,${p.a * 0.5})`;
+      fctx.beginPath(); fctx.arc(p.x * W, p.y * H, p.r, 0, 7); fctx.fill();
+    }
+    // corner brackets
+    fctx.strokeStyle = 'rgba(78,225,255,0.25)'; fctx.lineWidth = 1;
+    const L = 26, M = 10;
+    for (const [x, y, dx, dy] of [[M,M,1,1],[W-M,M,-1,1],[M,H-M,1,-1],[W-M,H-M,-1,-1]]) {
+      fctx.beginPath();
+      fctx.moveTo(x + dx*L, y); fctx.lineTo(x, y); fctx.lineTo(x, y + dy*L);
+      fctx.stroke();
+    }
+  }
+
+  function ring(cx, cy, r, a0, a1, color, w, dash) {
+    cctx.strokeStyle = color; cctx.lineWidth = w;
+    cctx.setLineDash(dash || []);
+    cctx.beginPath(); cctx.arc(cx, cy, r, a0, a1); cctx.stroke();
+    cctx.setLineDash([]);
+  }
+
+  function drawCore() {
+    const W = core.width, H = core.height, cx = W/2, cy = H/2;
+    cctx.clearRect(0, 0, W, H);
+    const agitation = mode === 'speaking' ? 0.5 + amp : mode === 'listening' ? 0.3 + amp * 1.6 : mode === 'processing' ? 0.8 : 0.12;
+
+    // breathing glow
+    const breathe = 1 + Math.sin(t * 0.03) * 0.06 + agitation * 0.1;
+    const grad = cctx.createRadialGradient(cx, cy, 6, cx, cy, 120 * breathe);
+    grad.addColorStop(0, `rgba(160,240,255,${0.75 + agitation * 0.2})`);
+    grad.addColorStop(0.25, 'rgba(78,225,255,0.35)');
+    grad.addColorStop(1, 'rgba(78,225,255,0)');
+    cctx.fillStyle = grad;
+    cctx.beginPath(); cctx.arc(cx, cy, 120 * breathe, 0, 7); cctx.fill();
+
+    // inner solid core
+    cctx.fillStyle = `rgba(200,248,255,${0.85 + Math.sin(t*0.08) * 0.1})`;
+    cctx.beginPath(); cctx.arc(cx, cy, 14 + agitation * 5, 0, 7); cctx.fill();
+
+    // ring 1: segmented fast
+    for (let s = 0; s < 3; s++) {
+      const off = t * 0.02 + s * 2.094;
+      ring(cx, cy, 46, off, off + 1.5, 'rgba(78,225,255,0.85)', 2.5);
+    }
+    // ring 2: dashed slow reverse
+    ring(cx, cy, 72, -t * 0.008, -t * 0.008 + 6.28, 'rgba(78,225,255,0.3)', 1, [4, 9]);
+    // ring 3: tick marks
+    cctx.save(); cctx.translate(cx, cy); cctx.rotate(t * 0.004);
+    for (let i = 0; i < 60; i++) {
+      cctx.rotate(Math.PI / 30);
+      const len = i % 5 === 0 ? 9 : 4;
+      cctx.strokeStyle = `rgba(78,225,255,${i % 5 === 0 ? 0.6 : 0.25})`;
+      cctx.lineWidth = 1;
+      cctx.beginPath(); cctx.moveTo(96, 0); cctx.lineTo(96 + len, 0); cctx.stroke();
+    }
+    cctx.restore();
+    // ring 4: audio-reactive waveform ring
+    cctx.strokeStyle = `rgba(78,225,255,${0.35 + agitation * 0.5})`;
+    cctx.lineWidth = 1.5;
+    cctx.beginPath();
+    for (let i = 0; i <= 120; i++) {
+      const a = (i / 120) * Math.PI * 2;
+      const wob = Math.sin(a * 9 + t * 0.12) * agitation * 14 + Math.sin(a * 17 - t * 0.07) * agitation * 7;
+      const r = 128 + wob;
+      const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+      i ? cctx.lineTo(x, y) : cctx.moveTo(x, y);
+    }
+    cctx.closePath(); cctx.stroke();
+    // ring 5: outer arc trio
+    for (let s = 0; s < 2; s++) {
+      const off = -t * 0.012 + s * Math.PI;
+      ring(cx, cy, 152, off, off + 2.4, 'rgba(78,225,255,0.45)', 3);
+    }
+    // processing spinner
+    if (mode === 'processing') {
+      const off = t * 0.15;
+      ring(cx, cy, 30, off, off + 1, 'rgba(255,184,78,0.9)', 3);
+    }
+  }
+
+  setInterval(() => { t++; drawFx(); drawCore(); }, 33);
+
+  // ════════════════════════ VOICE OUT ════════════════════════
+  let voice = null;
+  function pickVoice() {
+    const vs = speechSynthesis.getVoices();
+    voice = vs.find(v => /en.(GB|UK)/i.test(v.lang) && /male|daniel|george|ryan/i.test(v.name))
+         || vs.find(v => /^en/i.test(v.lang) && /natural|neural|online/i.test(v.name))
+         || vs.find(v => /^en/i.test(v.lang)) || vs[0] || null;
+    $('ttsState').textContent = voice ? 'ONLINE' : 'UNAVAILABLE';
+  }
+  speechSynthesis.onvoiceschanged = pickVoice;
+  pickVoice();
+
+  function speak(text) {
+    return new Promise(res => {
+      if (!('speechSynthesis' in window) || !voice) return res();
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.voice = voice; u.rate = 1.04; u.pitch = 0.92;
+      u.onstart = () => setMode('speaking');
+      u.onend = () => { setMode('idle'); res(); };
+      u.onerror = () => { setMode('idle'); res(); };
+      speechSynthesis.speak(u);
+    });
+  }
+
+  // ════════════════════════ VOICE IN ════════════════════════
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let rec = null, listening = false;
+  if (SR) {
+    rec = new SR();
+    rec.lang = 'en-US'; rec.interimResults = false; rec.maxAlternatives = 1;
+    rec.onresult = e => {
+      const said = e.results[0][0].transcript;
+      stopListening();
+      handle(said);
+    };
+    rec.onend = () => stopListening();
+    rec.onerror = () => { stopListening(); };
+    $('sttState').textContent = 'ONLINE';
+  } else {
+    $('sttState').textContent = 'UNSUPPORTED';
+  }
+
+  function startListening() {
+    if (!rec || listening) return;
+    listening = true;
+    setMode('listening');
+    $('micBtn').classList.add('live');
+    try { rec.start(); } catch {}
+    initMicViz();
+  }
+  function stopListening() {
+    if (!listening) return;
+    listening = false;
+    if (mode === 'listening') setMode('idle');
+    $('micBtn').classList.remove('live');
+    try { rec.stop(); } catch {}
+  }
+
+  // mic amplitude → ring agitation
+  let micInit = false;
+  async function initMicViz() {
+    if (micInit) return; micInit = true;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const ac = new AudioContext();
+      const src = ac.createMediaStreamSource(stream);
+      const an = ac.createAnalyser(); an.fftSize = 256;
+      src.connect(an);
+      const buf = new Uint8Array(an.frequencyBinCount);
+      setInterval(() => {
+        an.getByteFrequencyData(buf);
+        let s = 0; for (const v of buf) s += v;
+        amp = Math.min(1, (s / buf.length) / 70);
+      }, 50);
+    } catch { /* mic denied — ambient animation only */ }
+  }
+
+  // ════════════════════════ UI helpers ════════════════════════
+  function setMode(m) {
+    mode = m;
+    $('status').firstChild.textContent =
+      m === 'listening' ? 'LISTENING' : m === 'speaking' ? 'RESPONDING' : m === 'processing' ? 'PROCESSING' : 'IDLE';
+  }
+
+  function logLine(cls, text, instant) {
+    const d = document.createElement('div');
+    d.className = 'line ' + cls;
+    $('log').appendChild(d);
+    while ($('log').children.length > 8) $('log').firstChild.remove();
+    if (instant) { d.textContent = text; return; }
+    let i = 0;
+    const t = setInterval(() => {
+      d.textContent = text.slice(0, ++i);
+      if (i >= text.length) clearInterval(t);
+    }, 12);
+  }
+
+  async function reply(text) {
+    logLine('ai', text);
+    await speak(text);
+  }
+
+  // ════════════════════════ WIDGETS ════════════════════════
+  setInterval(() => {
+    const n = new Date();
+    $('clock').textContent = n.toLocaleTimeString([], { hour12: false });
+    $('date').textContent = n.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+  }, 250);
+  $('res').textContent = `${screen.width || innerWidth}×${screen.height || innerHeight}`;
+  function netUpd() { $('net').textContent = navigator.onLine ? 'ONLINE' : 'OFFLINE'; }
+  addEventListener('online', netUpd); addEventListener('offline', netUpd); netUpd();
+  if (navigator.getBattery) navigator.getBattery().then(b => {
+    const f = () => $('batt').textContent = Math.round(b.level * 100) + '%' + (b.charging ? ' ⚡' : '');
+    b.onlevelchange = f; b.onchargingchange = f; f();
+  }); else $('batt').textContent = 'AC';
+
+  // ════════════════════════ WEATHER ════════════════════════
+  const WX_CODES = { 0:'clear skies',1:'mostly clear',2:'partly cloudy',3:'overcast',45:'fog',48:'freezing fog',51:'light drizzle',53:'drizzle',55:'heavy drizzle',61:'light rain',63:'rain',65:'heavy rain',66:'freezing rain',71:'light snow',73:'snow',75:'heavy snow',80:'rain showers',81:'rain showers',82:'violent rain showers',95:'a thunderstorm',96:'a thunderstorm with hail',99:'a severe thunderstorm' };
+
+  async function fetchWx(lat, lon, label) {
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,wind_speed_10m,relative_humidity_2m&temperature_unit=fahrenheit&wind_speed_unit=mph`);
+    const d = await r.json();
+    const c = d.current;
+    const desc = WX_CODES[c.weather_code] || 'unknown conditions';
+    $('wx').textContent = `${label.toUpperCase()} · ${Math.round(c.temperature_2m)}°F · ${desc}`;
+    return `Currently ${Math.round(c.temperature_2m)} degrees in ${label}, with ${desc}. Wind ${Math.round(c.wind_speed_10m)} miles per hour, humidity ${c.relative_humidity_2m} percent.`;
+  }
+
+  async function weatherByCity(city) {
+    const g = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`).then(r => r.json());
+    if (!g.results || !g.results.length) return `I couldn't find a place called ${city}.`;
+    const p = g.results[0];
+    return fetchWx(p.latitude, p.longitude, p.name);
+  }
+
+  function weatherHere() {
+    return new Promise(res => {
+      if (!navigator.geolocation) return res("I can't access your location. Try: weather in Dallas.");
+      navigator.geolocation.getCurrentPosition(
+        async pos => res(await fetchWx(pos.coords.latitude, pos.coords.longitude, 'your sector')),
+        () => res("Location access denied. Try: weather in Dallas."),
+        { timeout: 8000 }
+      );
+    });
+  }
+
+  // ════════════════════════ TIMER ════════════════════════
+  let timerEnd = null, timerTick = null;
+  function setTimer(ms, label) {
+    timerEnd = Date.now() + ms;
+    $('timerChip').style.display = 'block';
+    clearInterval(timerTick);
+    timerTick = setInterval(() => {
+      const left = timerEnd - Date.now();
+      if (left <= 0) {
+        clearInterval(timerTick);
+        $('timerChip').style.display = 'none';
+        beep();
+        reply(`Time's up. Your ${label} timer is done.`);
+        return;
+      }
+      const m = Math.floor(left / 60000), s = Math.floor((left % 60000) / 1000);
+      $('timerChip').textContent = `⏱ ${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }, 250);
+  }
+  function beep() {
+    try {
+      const ac = new AudioContext();
+      [0, 0.2, 0.4].forEach(dt => {
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.connect(g); g.connect(ac.destination);
+        o.frequency.value = 880; g.gain.setValueAtTime(0.12, ac.currentTime + dt);
+        g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + dt + 0.18);
+        o.start(ac.currentTime + dt); o.stop(ac.currentTime + dt + 0.2);
+      });
+    } catch {}
+  }
+
+  // ════════════════════════ INTENTS ════════════════════════
+  const JOKES = [
+    "I would tell you a UDP joke, but you might not get it.",
+    "There are only 10 kinds of people: those who understand binary, and those who don't.",
+    "I'm not lazy. I'm in low-power mode.",
+    "Artificial intelligence is no match for natural stupidity. Present company excluded, of course.",
+    "My therapist says I have attachment issues. I said: 404, feelings not found.",
+  ];
+  const SITES = { youtube:'https://youtube.com', google:'https://google.com', github:'https://github.com', gmail:'https://mail.google.com', reddit:'https://reddit.com', twitter:'https://x.com', x:'https://x.com', twitch:'https://twitch.tv', netflix:'https://netflix.com', spotify:'https://open.spotify.com', tradingview:'https://tradingview.com' };
+
+  function mathify(s) {
+    s = s.replace(/what is|what's|calculate|compute|equals?/g, '')
+         .replace(/plus/g, '+').replace(/minus/g, '-')
+         .replace(/times|multiplied by|x /g, '*').replace(/divided by|over/g, '/')
+         .replace(/to the power of|\^/g, '**').replace(/percent of/g, '/100*')
+         .replace(/,/g, '');
+    return /^[\d\s+\-*/().%*]+$/.test(s.trim()) && /\d/.test(s) ? s.trim() : null;
+  }
+
+  async function handle(raw) {
+    const q = raw.trim();
+    if (!q) return;
+    logLine('user', q, true);
+    setMode('processing');
+    const s = q.toLowerCase().replace(/[?!.]/g, '');
+    let m;
+
+    try {
+      // greetings / identity
+      if (/^(hi|hello|hey|yo|sup|good (morning|afternoon|evening))\b/.test(s))
+        return reply(greeting() + ' How can I help?');
+      if (/who are you|what are you|your name/.test(s))
+        return reply("I'm CHRON-OS — your personal heads-up system. Voice in, voice out, zero cloud. Everything I do runs right here in this window.");
+      if (/thank/.test(s)) return reply("Always, boss.");
+
+      // help
+      if (/^help|what can you do|commands/.test(s))
+        return reply("Try: what time is it. Set a timer for 5 minutes. Weather in Tokyo. What is 23 times 47. Open YouTube. Search for lofi beats. Run diagnostics. Flip a coin. Tell me a joke.");
+
+      // time & date
+      if (/\btime\b/.test(s) && !/timer/.test(s))
+        return reply('It is ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '.');
+      if (/date|day is it|today/.test(s))
+        return reply('Today is ' + new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) + '.');
+
+      // timer
+      if ((m = s.match(/timer.*?(\d+(?:\.\d+)?)\s*(second|minute|hour)/)) || (m = s.match(/(\d+(?:\.\d+)?)\s*(second|minute|hour).*timer/))) {
+        const n = parseFloat(m[1]);
+        const ms = n * (m[2] === 'second' ? 1e3 : m[2] === 'minute' ? 6e4 : 36e5);
+        setTimer(ms, `${n} ${m[2]}${n !== 1 ? 's' : ''}`);
+        return reply(`Timer set: ${n} ${m[2]}${n !== 1 ? 's' : ''}. I'll let you know.`);
+      }
+
+      // weather
+      if ((m = s.match(/weather (?:in|for|at) (.+)/))) return reply(await weatherByCity(m[1]));
+      if (/weather|temperature|forecast|cold|hot outside/.test(s)) return reply(await weatherHere());
+
+      // open site
+      if ((m = s.match(/open (\w+)/)) && SITES[m[1]]) {
+        window.open(SITES[m[1]], '_blank');
+        return reply('Opening ' + m[1] + '.');
+      }
+
+      // search
+      if ((m = s.match(/(?:search(?: for)?|google) (.+)/))) {
+        window.open('https://www.google.com/search?q=' + encodeURIComponent(m[1]), '_blank');
+        return reply(`Searching for ${m[1]}.`);
+      }
+      if ((m = s.match(/youtube (.+)/))) {
+        window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(m[1]), '_blank');
+        return reply(`Pulling up ${m[1]} on YouTube.`);
+      }
+
+      // randomness
+      if (/flip a coin|coin flip/.test(s)) return reply('It landed on ' + (Math.random() < 0.5 ? 'heads' : 'tails') + '.');
+      if ((m = s.match(/roll (?:a |an )?(?:(\d+)[- ]sided )?(?:die|dice|d(\d+))/))) {
+        const sides = +(m[1] || m[2] || 6);
+        return reply(`You rolled a ${1 + Math.floor(Math.random() * sides)} on a d${sides}.`);
+      }
+      if ((m = s.match(/(?:random number|number between) (\d+) and (\d+)/))) {
+        const a = +m[1], b = +m[2];
+        return reply('Your number is ' + (Math.min(a,b) + Math.floor(Math.random() * (Math.abs(b - a) + 1))) + '.');
+      }
+
+      // jokes
+      if (/joke|funny/.test(s)) return reply(JOKES[Math.floor(Math.random() * JOKES.length)]);
+
+      // diagnostics
+      if (/diagnostic|system (report|status|check)|status report|run a scan|scan/.test(s)) {
+        const b = $('batt').textContent, n2 = navigator.onLine ? 'connected' : 'offline';
+        return reply(`Running diagnostics. Power at ${b.replace(' ⚡',', charging')}. Network ${n2}. Display ${screen.width || innerWidth} by ${screen.height || innerHeight}. Audio matrix ${voice ? 'online' : 'offline'}. Speech recognition ${rec ? 'online' : 'unavailable'}. All systems nominal.`);
+      }
+
+      // math (keep low priority so it doesn't shadow other intents)
+      const expr = mathify(s);
+      if (expr) {
+        const val = Function('"use strict"; return (' + expr + ')')();
+        if (typeof val === 'number' && isFinite(val))
+          return reply('That comes to ' + (Math.round(val * 1e6) / 1e6).toLocaleString() + '.');
+      }
+
+      return reply("I didn't catch a command in that. Say 'help' to hear what I can do.");
+    } finally {
+      if (mode === 'processing') setMode('idle');
+    }
+  }
+
+  function greeting() {
+    const h = new Date().getHours();
+    return h < 5 ? 'Burning the midnight oil, I see.' : h < 12 ? 'Good morning.' : h < 18 ? 'Good afternoon.' : 'Good evening.';
+  }
+
+  // ════════════════════════ INPUT WIRING ════════════════════════
+  $('cmd').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && $('cmd').value.trim()) {
+      handle($('cmd').value);
+      $('cmd').value = '';
+    }
+  });
+  $('micBtn').addEventListener('click', () => listening ? stopListening() : startListening());
+  $('core').addEventListener('click', () => listening ? stopListening() : startListening());
+
+  // ════════════════════════ BOOT ════════════════════════
+  const BOOT_LINES = [
+    'CHRON-OS v1.0 — kernel init',
+    '▸ visual cortex ............ ONLINE',
+    '▸ particle field ........... ONLINE',
+    '▸ audio matrix ............. ONLINE',
+    '▸ speech recognition ....... ' + (SR ? 'ONLINE' : 'UNSUPPORTED'),
+    '▸ chronometer sync ......... LOCKED',
+    '▸ environment sensors ...... STANDBY',
+    '',
+    'ALL SYSTEMS NOMINAL',
+  ];
+  (async () => {
+    const bt = $('bootText');
+    for (const line of BOOT_LINES) {
+      await new Promise(r => setTimeout(r, 160));
+      bt.textContent += line + '\n';
+    }
+    await new Promise(r => setTimeout(r, 500));
+    $('boot').classList.add('done');
+    setTimeout(() => $('boot').remove(), 1000);
+    const hello = greeting() + ' CHRON-OS at your service.';
+    logLine('ai', hello);
+    speak(hello);
+  })();
+
+  window.__chronos = { handle, setMode, get mode() { return mode; } }; // debug handle
+})();
+</script>
+</body>
+</html>
