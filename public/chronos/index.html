@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHRON-OS</title>
+<title>KHA-OS</title>
 <style>
   :root {
     --cyan: #4ee1ff; --cyan-dim: rgba(78,225,255,0.35); --cyan-glow: rgba(78,225,255,0.12);
@@ -396,9 +396,9 @@
     return new Promise(res => {
       if (!('speechSynthesis' in window) || !voice) return res();
       speechSynthesis.cancel();
-      // visual branding stays "CHRON-OS", but TTS engines spell out
+      // visual branding stays "KHA-OS", but TTS engines spell out
       // hyphenated all-caps — hand the voice a phonetic version
-      const u = new SpeechSynthesisUtterance(text.replace(/CHRON[- ]?OS/gi, 'Chronos'));
+      const u = new SpeechSynthesisUtterance(text.replace(/K\.?H\.?A\.?[- ]?O\.?S\.?/gi, 'Chaos'));
       u.voice = voice; u.rate = 1.04; u.pitch = 0.92;
       u.onstart = () => setMode('speaking');
       u.onend = () => { setMode('idle'); res(); };
@@ -598,7 +598,7 @@
   // ════════════════════════ FREE AI BRAIN (Gemini free tier) ════════════════════════
   // Key is created free at https://aistudio.google.com/apikey (no card needed)
   // and stored only in this browser's localStorage.
-  const SYS = 'You are CHRON-OS, a JARVIS-style voice assistant. Match your length to the question: quick facts get a sentence or two, but explanations, opinions, advice, and anything the user wants detail on deserve a full answer of a paragraph or two. Plain spoken text only — no markdown, no bullet points, no emoji. Be sharp and a little dry.';
+  const SYS = 'You are KHA-OS, a JARVIS-style voice assistant. Match your length to the question: quick facts get a sentence or two, but explanations, opinions, advice, and anything the user wants detail on deserve a full answer of a paragraph or two. Plain spoken text only — no markdown, no bullet points, no emoji. Be sharp and a little dry.';
   const convo = [];
   let aiKey = localStorage.getItem('chronosAiKey') || '';
   if (aiKey) $('aiState').textContent = 'LINKED';
@@ -718,7 +718,7 @@
       if (/^(hi|hello|hey|yo|sup|good (morning|afternoon|evening))\b/.test(s))
         return reply(greeting() + ' How can I help?');
       if (/who are you|what are you|your name/.test(s))
-        return reply("I'm CHRON-OS — your personal heads-up system. Voice in, voice out, zero cloud. Everything I do runs right here in this window.");
+        return reply("I'm KHA-OS — Kinetic Heuristic Autonomous Operations System. Voice in, voice out, everything runs right here in this window.");
       if (/thank/.test(s)) return reply("Always, boss.");
 
       // help
@@ -835,7 +835,7 @@
 
   // ════════════════════════ BOOT ════════════════════════
   const BOOT_LINES = [
-    'CHRON-OS v1.0 — kernel init',
+    'KHA-OS v1.0 — kernel init',
     '▸ visual cortex ............ ONLINE',
     '▸ particle field ........... ONLINE',
     '▸ audio matrix ............. ONLINE',
@@ -854,7 +854,7 @@
     await new Promise(r => setTimeout(r, 500));
     $('boot').classList.add('done');
     setTimeout(() => $('boot').remove(), 1000);
-    const hello = greeting() + ' CHRON-OS at your service.';
+    const hello = greeting() + ' KHA-OS at your service.';
     logLine('ai', hello);
     speak(hello);
   })();
