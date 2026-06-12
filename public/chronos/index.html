@@ -773,6 +773,17 @@
   const SYS = 'You are KHA-OS, a JARVIS-style voice assistant. Match your length to the question: quick facts get a sentence or two, but explanations, opinions, advice, and anything the user wants detail on deserve a full answer of a paragraph or two. Plain spoken text only — no markdown, no bullet points, no emoji. Be sharp and a little dry.';
   const convo = [];
   let aiKey = localStorage.getItem('chronosAiKey') || '';
+  // a bookmarked link can carry the key: .../chronos/#k=AQ....
+  // the hash never reaches any server; we store it and scrub the URL
+  const hk = location.hash.match(/[#&]k=([^&]+)/);
+  if (hk) {
+    const k = decodeURIComponent(hk[1]);
+    if (/^(AIza[\w-]{30,45}|AQ\.[\w.-]{30,90})$/.test(k)) {
+      aiKey = k;
+      localStorage.setItem('chronosAiKey', k);
+    }
+    history.replaceState(null, '', location.pathname + location.search);
+  }
   if (aiKey) $('aiState').textContent = 'LINKED';
 
   function saveKey(k) {
@@ -797,14 +808,26 @@
       generationConfig: { maxOutputTokens: 1024, temperature: 0.8, thinkingConfig: { thinkingBudget: 0 } },
     };
     const ctl = new AbortController();
-    const kill = setTimeout(() => ctl.abort(), 25000);
+    const kill = setTimeout(() => ctl.abort(), 40000);
     try {
-      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent', {
+      const call = m => fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`, {
         method: 'POST', headers: { 'Content-Type': 'application/json', 'X-goog-api-key': aiKey },
         body: JSON.stringify(body), signal: ctl.signal,
       });
-      if (r.status === 400 || r.status === 403) { dropKey(); return 'The neural link rejected that key. ' + LINK_HELP; }
-      if (!r.ok) throw new Error('AI ' + r.status);
+      let r = await call('gemini-flash-latest');
+      if (r.status === 429 || r.status >= 500) {
+        // primary model busy or overloaded — brief pause, then backup model
+        await new Promise(w => setTimeout(w, 2500));
+        r = await call('gemini-2.0-flash');
+      }
+      if (!r.ok) {
+        let msg = '';
+        try { msg = (await r.json()).error?.message || ''; } catch {}
+        // only erase the key when Google says THE KEY is the problem —
+        // transient errors and rate limits must not unlink the brain
+        if (/api key|API_KEY/i.test(msg)) { dropKey(); return 'The neural link rejected that key. ' + LINK_HELP; }
+        const e = new Error('AI ' + r.status); e.status = r.status; throw e;
+      }
       const d = await r.json();
       const a = (d.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
       if (!a) throw new Error('empty');
@@ -900,7 +923,7 @@
       // time & date
       if (/\btime\b/.test(s) && !/timer/.test(s))
         return reply('It is ' + new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }) + '.');
-      if (/date|day is it|today/.test(s))
+      if (/\bdate\b|day is it|what day|today's date/.test(s))
         return reply('Today is ' + new Date().toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) + '.');
 
       // timer
@@ -989,7 +1012,11 @@
 
       // free AI brain — handles everything else as conversation
       try { return reply(await askAI(q)); }
-      catch { return reply("My neural link is down right now. Say 'help' for my built-in commands."); }
+      catch (err) {
+        if (err && (err.status === 429 || err.status >= 500 || err.name === 'AbortError'))
+          return reply("Google's AI service is overloaded or rate-limited at the moment. The link is fine — give it a minute and ask again.");
+        return reply("My neural link hit a snag. Say 'help' for my built-in commands, or try again.");
+      }
     } catch (err) {
       return reply('That feed is unreachable right now: ' + (err && err.message ? err.message : 'unknown error') + '.');
     } finally {
