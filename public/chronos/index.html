@@ -124,6 +124,7 @@
     <div class="h">AUDIO MATRIX</div>
     <div>STT <span class="v" id="sttState">—</span></div>
     <div>TTS <span class="v" id="ttsState">—</span></div>
+    <div>AI <span class="v" id="aiState">STANDBY</span></div>
   </div>
 
   <div id="timerChip">⏱ 00:00</div>
@@ -389,6 +390,101 @@
     });
   }
 
+  // ════════════════════════ FREE DATA FEEDS ════════════════════════
+  const COINS = { bitcoin:'BTC', btc:'BTC', ethereum:'ETH', eth:'ETH', solana:'SOL', sol:'SOL', xrp:'XRP', ripple:'XRP', dogecoin:'DOGE', doge:'DOGE', cardano:'ADA', ada:'ADA', litecoin:'LTC', ltc:'LTC', bnb:'BNB', avalanche:'AVAX', avax:'AVAX', chainlink:'LINK', link:'LINK', shiba:'SHIB', shib:'SHIB', pepe:'PEPE', sui:'SUI', polkadot:'DOT', dot:'DOT' };
+
+  async function cryptoPrice(name, sym) {
+    const r = await fetch(`https://data-api.binance.vision/api/v3/ticker/24hr?symbol=${sym}USDT`);
+    if (!r.ok) throw new Error('ticker');
+    const d = await r.json();
+    const p = +d.lastPrice, chg = +d.priceChangePercent;
+    const pStr = p >= 1000 ? Math.round(p).toLocaleString() : p >= 1 ? p.toFixed(2) : p.toPrecision(3);
+    return `${name} is trading at ${pStr} dollars, ${chg >= 0 ? 'up' : 'down'} ${Math.abs(chg).toFixed(1)} percent today.`;
+  }
+
+  async function wiki(topic) {
+    const r = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(topic.trim()));
+    if (!r.ok) throw new Error('no article');
+    const d = await r.json();
+    if (!d.extract || d.type === 'disambiguation') throw new Error('ambiguous');
+    const sentences = d.extract.match(/[^.!?]+[.!?]+/g) || [d.extract];
+    return sentences.slice(0, 2).join(' ').trim();
+  }
+
+  async function define(word) {
+    const r = await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word));
+    if (!r.ok) return `I couldn't find a definition for ${word}.`;
+    const d = await r.json();
+    const m = d[0]?.meanings?.[0];
+    const def = m?.definitions?.[0]?.definition;
+    return def ? `${word}, ${m.partOfSpeech}: ${def}` : `I couldn't find a definition for ${word}.`;
+  }
+
+  const CURR = { dollar:'USD', dollars:'USD', usd:'USD', buck:'USD', bucks:'USD', euro:'EUR', euros:'EUR', eur:'EUR', pound:'GBP', pounds:'GBP', gbp:'GBP', yen:'JPY', jpy:'JPY', cad:'CAD', aud:'AUD', franc:'CHF', francs:'CHF', chf:'CHF', peso:'MXN', pesos:'MXN', mxn:'MXN', won:'KRW', krw:'KRW', rupee:'INR', rupees:'INR', inr:'INR' };
+
+  async function convertCurrency(amount, from, to) {
+    if (from === to) return `That's still ${amount} ${from}.`;
+    const r = await fetch(`https://api.frankfurter.dev/v1/latest?amount=${amount}&base=${from}&symbols=${to}`);
+    if (!r.ok) throw new Error('fx');
+    const d = await r.json();
+    const v = d.rates[to];
+    if (v == null) throw new Error('fx pair');
+    return `${amount} ${from} is ${v.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${to} at today's rate.`;
+  }
+
+  async function newsHeadlines() {
+    const ids = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json').then(r => r.json());
+    const items = await Promise.all(ids.slice(0, 3).map(id =>
+      fetch(`https://hacker-news.firebaseio.com/v0/item/${id}.json`).then(r => r.json())));
+    return 'Top tech headlines right now: ' + items.map((it, i) => `${i + 1}. ${it.title}`).join('. ') + '.';
+  }
+
+  // ════════════════════════ FREE AI BRAIN (Gemini free tier) ════════════════════════
+  // Key is created free at https://aistudio.google.com/apikey (no card needed)
+  // and stored only in this browser's localStorage.
+  const SYS = 'You are CHRON-OS, a concise JARVIS-style voice assistant. Reply in 1-3 short plain-text sentences suitable for reading aloud. Be sharp, a little dry, never use markdown or emoji.';
+  const convo = [];
+  let aiKey = localStorage.getItem('chronosAiKey') || '';
+  if (aiKey) $('aiState').textContent = 'LINKED';
+
+  function saveKey(k) {
+    aiKey = k;
+    localStorage.setItem('chronosAiKey', k);
+    $('aiState').textContent = 'LINKED';
+  }
+  function dropKey() {
+    aiKey = '';
+    localStorage.removeItem('chronosAiKey');
+    $('aiState').textContent = 'STANDBY';
+  }
+
+  const LINK_HELP = "My neural core is on standby. To activate it free: open aistudio.google.com/apikey, sign in with any Google account, tap Create API Key, then paste the key here in the command bar. It stays on your device only.";
+
+  async function askAI(q) {
+    if (!aiKey) return LINK_HELP;
+    convo.push({ role: 'user', content: q });
+    const body = {
+      systemInstruction: { parts: [{ text: SYS }] },
+      contents: convo.slice(-10).map(m => ({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] })),
+      generationConfig: { maxOutputTokens: 200, temperature: 0.8 },
+    };
+    const ctl = new AbortController();
+    const kill = setTimeout(() => ctl.abort(), 25000);
+    try {
+      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${aiKey}`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body), signal: ctl.signal,
+      });
+      if (r.status === 400 || r.status === 403) { dropKey(); return 'The neural link rejected that key. ' + LINK_HELP; }
+      if (!r.ok) throw new Error('AI ' + r.status);
+      const d = await r.json();
+      const a = (d.candidates?.[0]?.content?.parts?.[0]?.text || '').trim();
+      if (!a) throw new Error('empty');
+      convo.push({ role: 'assistant', content: a });
+      return a;
+    } finally { clearTimeout(kill); }
+  }
+
   // ════════════════════════ TIMER ════════════════════════
   let timerEnd = null, timerTick = null;
   function setTimer(ms, label) {
@@ -443,10 +539,23 @@
   async function handle(raw) {
     const q = raw.trim();
     if (!q) return;
+
+    // pasted Gemini key (AIza...) — store it, never echo it to the log
+    if (/^AIza[\w-]{30,45}$/.test(q)) {
+      saveKey(q);
+      logLine('user', '••• api key •••', true);
+      return reply('Neural link established. Ask me anything.');
+    }
+
     logLine('user', q, true);
     setMode('processing');
     const s = q.toLowerCase().replace(/[?!.]/g, '');
     let m;
+
+    if (/forget (my |the )?key|unlink (the )?brain/.test(s)) {
+      dropKey();
+      return reply('Neural link severed and the key is erased from this device.');
+    }
 
     try {
       // greetings / identity
@@ -458,7 +567,7 @@
 
       // help
       if (/^help|what can you do|commands/.test(s))
-        return reply("Try: what time is it. Set a timer for 5 minutes. Weather in Tokyo. What is 23 times 47. Open YouTube. Search for lofi beats. Run diagnostics. Flip a coin. Tell me a joke.");
+        return reply("Built-ins: time, date, timers, weather in any city, math, crypto prices, definitions, currency conversion, news headlines, who-is and what-is lookups, open YouTube, search, diagnostics, coin flips, jokes. And anything else you say goes straight to my AI brain — just talk to me.");
 
       // time & date
       if (/\btime\b/.test(s) && !/timer/.test(s))
@@ -514,7 +623,23 @@
         return reply(`Running diagnostics. Power at ${b.replace(' ⚡',', charging')}. Network ${n2}. Display ${screen.width || innerWidth} by ${screen.height || innerHeight}. Audio matrix ${voice ? 'online' : 'offline'}. Speech recognition ${rec ? 'online' : 'unavailable'}. All systems nominal.`);
       }
 
-      // math (keep low priority so it doesn't shadow other intents)
+      // crypto prices
+      const coinWord = Object.keys(COINS).find(k => new RegExp(`\\b${k}\\b`).test(s));
+      if (coinWord && /price|worth|trading|how much|cost|\bat\b/.test(s))
+        return reply(await cryptoPrice(coinWord, COINS[coinWord]));
+
+      // definitions
+      if ((m = s.match(/(?:define|definition of) (\w+)/)) || (m = s.match(/what does (\w+) mean/)))
+        return reply(await define(m[1]));
+
+      // currency conversion
+      if ((m = s.match(/(\d+(?:\.\d+)?)\s*([a-z]+)\s*(?:to|into|in)\s*([a-z]+)/)) && CURR[m[2]] && CURR[m[3]])
+        return reply(await convertCurrency(parseFloat(m[1]), CURR[m[2]], CURR[m[3]]));
+
+      // news
+      if (/\bnews\b|headlines/.test(s)) return reply(await newsHeadlines());
+
+      // math (before wiki so numbers don't hit the encyclopedia)
       const expr = mathify(s);
       if (expr) {
         const val = Function('"use strict"; return (' + expr + ')')();
@@ -522,7 +647,16 @@
           return reply('That comes to ' + (Math.round(val * 1e6) / 1e6).toLocaleString() + '.');
       }
 
-      return reply("I didn't catch a command in that. Say 'help' to hear what I can do.");
+      // wikipedia lookups — fall through to the AI brain if no article
+      if ((m = s.match(/^(?:who is|who was|what is|what was|what are|tell me about) (.+)/))) {
+        try { return reply(await wiki(m[1])); } catch { /* fall through to AI */ }
+      }
+
+      // free AI brain — handles everything else as conversation
+      try { return reply(await askAI(q)); }
+      catch { return reply("My neural link is down right now. Say 'help' for my built-in commands."); }
+    } catch (err) {
+      return reply('That feed is unreachable right now: ' + (err && err.message ? err.message : 'unknown error') + '.');
     } finally {
       if (mode === 'processing') setMode('idle');
     }
