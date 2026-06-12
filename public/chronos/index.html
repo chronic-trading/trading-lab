@@ -471,8 +471,8 @@
     const ctl = new AbortController();
     const kill = setTimeout(() => ctl.abort(), 25000);
     try {
-      const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${aiKey}`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent', {
+        method: 'POST', headers: { 'Content-Type': 'application/json', 'X-goog-api-key': aiKey },
         body: JSON.stringify(body), signal: ctl.signal,
       });
       if (r.status === 400 || r.status === 403) { dropKey(); return 'The neural link rejected that key. ' + LINK_HELP; }
@@ -540,8 +540,8 @@
     const q = raw.trim();
     if (!q) return;
 
-    // pasted Gemini key (AIza...) — store it, never echo it to the log
-    if (/^AIza[\w-]{30,45}$/.test(q)) {
+    // pasted Gemini key (classic AIza... or newer AQ.... format) — store it, never echo it to the log
+    if (/^(AIza[\w-]{30,45}|AQ\.[\w.-]{30,90})$/.test(q)) {
       saveKey(q);
       logLine('user', '••• api key •••', true);
       return reply('Neural link established. Ask me anything.');
