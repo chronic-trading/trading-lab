@@ -147,6 +147,10 @@
   </div>
   <div class="hud" id="tr">
     <div class="h">SYSTEM</div>
+    <div>CPU <span class="v" id="cpuV">—</span></div>
+    <div>RAM <span class="v" id="ramV">—</span></div>
+    <div>GPU <span class="v" id="gpuV">—</span></div>
+    <div>FPS <span class="v" id="fpsV">—</span></div>
     <div>PWR <span class="v" id="batt">—</span></div>
     <div>NET <span class="v" id="net">—</span></div>
     <div>RES <span class="v" id="res">—</span></div>
@@ -495,7 +499,8 @@
     cctx.shadowBlur = 0;
   }
 
-  setInterval(() => { t++; drawFx(); drawCore(); }, 33);
+  let frames = 0;
+  setInterval(() => { t++; frames++; drawFx(); drawCore(); }, 33);
 
   // ════════════════════════ VOICE OUT ════════════════════════
   let voice = null;
@@ -624,6 +629,49 @@
     telLines[id][Math.floor(Math.random()*TEL_N)] = telLine();
     $(id).textContent = telLines[id].join('\n');
   }, 350);
+
+  // ════════════════════════ PERFORMANCE ════════════════════════
+  // Real stats come from the local perf agent (node perf-agent.js).
+  // Without it, fall back to what the browser itself can know.
+  const GB = 1024 ** 3;
+  let perf = { agent: false, data: null };
+
+  async function pollPerf() {
+    try {
+      const ctl = new AbortController();
+      const kill = setTimeout(() => ctl.abort(), 1500);
+      const r = await fetch('http://localhost:4525/', { signal: ctl.signal });
+      clearTimeout(kill);
+      const d = await r.json();
+      if (d.agent !== 'khaos') throw new Error('not agent');
+      perf = { agent: true, data: d };
+      $('cpuV').textContent = `${d.cpu}% · ${d.cores}c`;
+      $('ramV').textContent = `${((d.ramTotal - d.ramFree) / GB).toFixed(1)}/${(d.ramTotal / GB).toFixed(0)} GB`;
+    } catch {
+      perf = { agent: false, data: null };
+      $('cpuV').textContent = (navigator.hardwareConcurrency || '?') + ' cores';
+      $('ramV').textContent = navigator.deviceMemory ? `~${navigator.deviceMemory} GB` :
+        (performance.memory ? (performance.memory.usedJSHeapSize / GB * 1024).toFixed(0) + ' MB heap' : '—');
+    }
+  }
+  pollPerf();
+  setInterval(pollPerf, 2000);
+
+  // GPU model via WebGL (best the browser will admit to)
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    const ext = gl && gl.getExtension('WEBGL_debug_renderer_info');
+    const raw = ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : '';
+    const parts = raw.replace(/^ANGLE \(/, '').replace(/\)$/, '').split(',').map(s => s.trim());
+    // longest hardware-looking segment = the actual model name, not the vendor prefix
+    let gpu = parts.filter(s => /nvidia|amd|radeon|intel|apple|adreno|mali|geforce|rtx|gtx|uhd|iris|vega/i.test(s))
+                   .sort((a, b) => b.length - a.length)[0] || raw;
+    gpu = gpu.replace(/\(R\)|\(TM\)/g, '').replace(/\(0x[^)]*\)?/g, '').replace(/Direct3D.*$/i, '').replace(/NVIDIA GeForce |Intel |AMD /gi, '').trim();
+    $('gpuV').textContent = gpu.slice(0, 20) || '—';
+  } catch { $('gpuV').textContent = '—'; }
+
+  // real render FPS, counted in the main render loop
+  setInterval(() => { $('fpsV').textContent = frames; frames = 0; }, 1000);
 
   // ════════════════════════ WIDGETS ════════════════════════
   setInterval(() => {
@@ -897,9 +945,16 @@
       if (/joke|funny/.test(s)) return reply(JOKES[Math.floor(Math.random() * JOKES.length)], 'happy');
 
       // diagnostics
-      if (/diagnostic|system (report|status|check)|status report|run a scan|scan/.test(s)) {
+      if (/diagnostic|system (report|status|check)|status report|run a scan|scan|performance/.test(s)) {
         const b = $('batt').textContent, n2 = navigator.onLine ? 'connected' : 'offline';
-        return reply(`Running diagnostics. Power at ${b.replace(' ⚡',', charging')}. Network ${n2}. Display ${screen.width || innerWidth} by ${screen.height || innerHeight}. Audio matrix ${voice ? 'online' : 'offline'}. Speech recognition ${rec ? 'online' : 'unavailable'}. All systems nominal.`);
+        let hw;
+        if (perf.agent) {
+          const d = perf.data;
+          hw = `Processor at ${d.cpu} percent across ${d.cores} cores. Memory ${((d.ramTotal - d.ramFree) / GB).toFixed(1)} of ${(d.ramTotal / GB).toFixed(0)} gigabytes in use. Uptime ${Math.floor(d.uptime / 3600)} hours.`;
+        } else {
+          hw = `${navigator.hardwareConcurrency || 'unknown'} processor cores visible. Local agent offline — run the perf agent on your PC for live readings.`;
+        }
+        return reply(`Running diagnostics. ${hw} Power at ${b.replace(' ⚡',', charging')}. Network ${n2}. Rendering at ${$('fpsV').textContent} frames per second. Audio matrix ${voice ? 'online' : 'offline'}. All systems nominal.`);
       }
 
       // crypto prices
