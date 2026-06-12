@@ -311,15 +311,6 @@
     cctx.fillStyle = grad;
     cctx.beginPath(); cctx.arc(cx, cy, 120 * breathe, 0, 7); cctx.fill();
 
-    // inner solid core
-    cctx.fillStyle = `rgba(200,248,255,${0.85 + Math.sin(t*0.08) * 0.1})`;
-    cctx.beginPath(); cctx.arc(cx, cy, 14 + agitation * 5, 0, 7); cctx.fill();
-
-    // ring 1: segmented fast
-    for (let s = 0; s < 3; s++) {
-      const off = t * 0.02 + s * 2.094;
-      ring(cx, cy, 46, off, off + 1.5, 'rgba(78,225,255,0.85)', 2.5);
-    }
     // ring 2: dashed slow reverse
     ring(cx, cy, 72, -t * 0.008, -t * 0.008 + 6.28, 'rgba(78,225,255,0.3)', 1, [4, 9]);
     // ring 3: tick marks
@@ -374,8 +365,116 @@
     // processing spinner
     if (mode === 'processing') {
       const off = t * 0.15;
-      ring(cx, cy, 30, off, off + 1, 'rgba(255,184,78,0.9)', 3);
+      ring(cx, cy, 178, off, off + 1, 'rgba(255,184,78,0.9)', 3);
     }
+
+    drawFace(cx, cy, agitation);
+  }
+
+  // ───── the face: distorted bubble + eyes + mouth ─────
+  const face = { expr: 'neutral', mouthE: 0, blinkAt: 200, blink: 1, lx: 0, ly: 0, tx: 0, ty: 0 };
+
+  function sentiment(text) {
+    const s = text.toLowerCase();
+    if (/error|offline|down|rejected|unreachable|failed|can't|cannot|sorry|severed|denied|unfortunately|warning|wrong/.test(s)) return 'concerned';
+    if ((text.match(/!/g) || []).length >= 2) return 'excited';
+    if (/great|excellent|done|ready|confirmed|nominal|established|welcome|happy|glad|always|service|joke|haha|fun/.test(s)) return 'happy';
+    return 'neutral';
+  }
+
+  function drawFace(cx, cy, agitation) {
+    const speaking = mode === 'speaking';
+    const listening = mode === 'listening';
+    const thinking = mode === 'processing';
+    face.mouthE *= 0.82;
+
+    // blink: shut for the ~7 frames before each scheduled blink time
+    if (t > face.blinkAt) face.blinkAt = t + 90 + Math.random() * 170;
+    face.blink = face.blinkAt - t < 7 ? 0.1 : 1;
+
+    // idle gaze wander; locked center while speaking/listening
+    if (speaking || listening || thinking) { face.tx = 0; face.ty = thinking ? -5 : 0; }
+    else if (Math.random() < 0.004) { face.tx = (Math.random() - 0.5) * 12; face.ty = (Math.random() - 0.5) * 7; }
+    face.lx += (face.tx - face.lx) * 0.06;
+    face.ly += (face.ty - face.ly) * 0.06;
+
+    // ── bubble: layered-sine distorted blob ──
+    const R = 64 * (1 + agitation * 0.05);
+    const wob = a =>
+      R * (1
+        + 0.055 * Math.sin(3 * a + t * 0.045)
+        + 0.04  * Math.sin(5 * a - t * 0.033)
+        + 0.028 * Math.sin(8 * a + t * 0.07)
+        + 0.05  * face.mouthE * Math.sin(11 * a + t * 0.3)
+        + 0.04  * agitation * Math.sin(13 * a - t * 0.21));
+    cctx.beginPath();
+    for (let i = 0; i <= 90; i++) {
+      const a = (i / 90) * Math.PI * 2;
+      const r = wob(a);
+      const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+      i ? cctx.lineTo(x, y) : cctx.moveTo(x, y);
+    }
+    cctx.closePath();
+    const bg = cctx.createRadialGradient(cx, cy - 12, 8, cx, cy, R * 1.2);
+    bg.addColorStop(0, 'rgba(140,235,255,0.30)');
+    bg.addColorStop(0.65, 'rgba(78,225,255,0.13)');
+    bg.addColorStop(1, 'rgba(78,225,255,0.03)');
+    cctx.fillStyle = bg;
+    cctx.fill();
+    cctx.shadowColor = 'rgba(78,225,255,0.8)';
+    cctx.shadowBlur = 18 + agitation * 16;
+    cctx.strokeStyle = `rgba(150,240,255,${0.75 + agitation * 0.2})`;
+    cctx.lineWidth = 2;
+    cctx.stroke();
+    cctx.shadowBlur = 0;
+
+    // ── eyes ──
+    const ex = 25, ey = -13;
+    for (const side of [-1, 1]) {
+      const x = cx + side * ex + face.lx, y = cy + ey + face.ly;
+      cctx.fillStyle = 'rgba(225,252,255,0.96)';
+      cctx.strokeStyle = 'rgba(225,252,255,0.96)';
+      cctx.shadowColor = 'rgba(120,235,255,0.9)';
+      cctx.shadowBlur = 12;
+      if (face.expr === 'happy' && !thinking) {
+        // upturned crescent ^ ^
+        cctx.lineWidth = 4.5; cctx.lineCap = 'round';
+        cctx.beginPath(); cctx.arc(x, y + 5, 9, Math.PI * 1.15, Math.PI * 1.85); cctx.stroke();
+      } else {
+        let w = 8, h = 15;
+        if (face.expr === 'excited') { w = 10; h = 18; }
+        if (face.expr === 'concerned') { h = 11; }
+        if (listening) { w = 10; h = 18; }
+        if (thinking) { h = 7; }
+        h *= face.blink;
+        const tilt = face.expr === 'concerned' ? side * 0.28 : 0;
+        cctx.beginPath();
+        cctx.ellipse(x, y, w, Math.max(1.4, h), tilt, 0, 7);
+        cctx.fill();
+      }
+      cctx.shadowBlur = 0;
+    }
+
+    // ── mouth: waveform that talks ──
+    const mw = 46, my = cy + 27, segs = 26;
+    const pseudoTalk = speaking ? 0.35 + 0.65 * Math.abs(Math.sin(t * 0.31) * Math.sin(t * 0.13)) : 0;
+    const open = Math.max(face.mouthE, pseudoTalk, listening ? Math.min(1, amp * 1.5) : 0);
+    const curve = face.expr === 'happy' ? -5 : face.expr === 'concerned' ? 4 : -1;
+    cctx.strokeStyle = 'rgba(190,248,255,0.95)';
+    cctx.lineWidth = 3; cctx.lineCap = 'round';
+    cctx.shadowColor = 'rgba(120,235,255,0.9)';
+    cctx.shadowBlur = 10;
+    cctx.beginPath();
+    for (let i = 0; i <= segs; i++) {
+      const f = i / segs;
+      const x = cx - mw / 2 + f * mw + face.lx * 0.6;
+      const env = Math.sin(f * Math.PI); // taper at the corners
+      const wave = open * env * 11 * Math.sin(f * Math.PI * 4 + t * 0.55);
+      const y = my + face.ly * 0.6 + curve * env + wave;
+      i ? cctx.lineTo(x, y) : cctx.moveTo(x, y);
+    }
+    cctx.stroke();
+    cctx.shadowBlur = 0;
   }
 
   setInterval(() => { t++; drawFx(); drawCore(); }, 33);
@@ -392,6 +491,7 @@
   speechSynthesis.onvoiceschanged = pickVoice;
   pickVoice();
 
+  let curUtterance = null;
   function speak(text) {
     return new Promise(res => {
       if (!('speechSynthesis' in window) || !voice) return res();
@@ -399,10 +499,14 @@
       // visual branding stays "KHA-OS", but TTS engines spell out
       // hyphenated all-caps — hand the voice a phonetic version
       const u = new SpeechSynthesisUtterance(text.replace(/K\.?H\.?A\.?[- ]?O\.?S\.?/gi, 'Chaos'));
+      curUtterance = u;
+      // guards: a cancel()ed utterance's onend fires late and must not
+      // clobber the state of the utterance that replaced it
       u.voice = voice; u.rate = 1.04; u.pitch = 0.92;
-      u.onstart = () => setMode('speaking');
-      u.onend = () => { setMode('idle'); res(); };
-      u.onerror = () => { setMode('idle'); res(); };
+      u.onstart = () => { if (curUtterance === u) setMode('speaking'); };
+      u.onboundary = () => { if (curUtterance === u) face.mouthE = 1; }; // word-level lip sync
+      u.onend = () => { if (curUtterance === u) { setMode('idle'); face.expr = 'neutral'; } res(); };
+      u.onerror = () => { if (curUtterance === u) { setMode('idle'); face.expr = 'neutral'; } res(); };
       speechSynthesis.speak(u);
     });
   }
@@ -480,7 +584,8 @@
     }, 12);
   }
 
-  async function reply(text) {
+  async function reply(text, expr) {
+    face.expr = expr || sentiment(text);
     logLine('ai', text);
     await speak(text);
   }
@@ -771,7 +876,7 @@
       }
 
       // jokes
-      if (/joke|funny/.test(s)) return reply(JOKES[Math.floor(Math.random() * JOKES.length)]);
+      if (/joke|funny/.test(s)) return reply(JOKES[Math.floor(Math.random() * JOKES.length)], 'happy');
 
       // diagnostics
       if (/diagnostic|system (report|status|check)|status report|run a scan|scan/.test(s)) {
@@ -859,7 +964,7 @@
     speak(hello);
   })();
 
-  window.__chronos = { handle, setMode, get mode() { return mode; } }; // debug handle
+  window.__chronos = { handle, setMode, face, get mode() { return mode; } }; // debug handle
 })();
 </script>
 </body>
