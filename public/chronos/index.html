@@ -396,7 +396,9 @@
     return new Promise(res => {
       if (!('speechSynthesis' in window) || !voice) return res();
       speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
+      // visual branding stays "CHRON-OS", but TTS engines spell out
+      // hyphenated all-caps — hand the voice a phonetic version
+      const u = new SpeechSynthesisUtterance(text.replace(/CHRON[- ]?OS/gi, 'Chronos'));
       u.voice = voice; u.rate = 1.04; u.pitch = 0.92;
       u.onstart = () => setMode('speaking');
       u.onend = () => { setMode('idle'); res(); };
