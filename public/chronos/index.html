@@ -187,6 +187,17 @@
   let mode = 'idle';      // idle | listening | speaking | processing
   let t = 0;
 
+  // pointer tracking — the face watches and reaches for the cursor/finger
+  const ptr = { x: -9999, y: -9999, tm: 0, has: false };
+  addEventListener('pointermove', e => { ptr.x = e.clientX; ptr.y = e.clientY; ptr.tm = Date.now(); ptr.has = true; });
+  addEventListener('touchmove', e => { const t0 = e.touches[0]; if (t0) { ptr.x = t0.clientX; ptr.y = t0.clientY; ptr.tm = Date.now(); ptr.has = true; } }, { passive: true });
+  function pointerProx() {
+    if (!ptr.has || Date.now() - ptr.tm > 4000) return 0;
+    const r = core.getBoundingClientRect();
+    const d = Math.hypot(ptr.x - (r.left + r.width / 2), ptr.y - (r.top + r.height / 2));
+    return Math.max(0, 1 - d / 320);
+  }
+
   function sizeFx() { fx.width = innerWidth; fx.height = innerHeight; }
   addEventListener('resize', sizeFx); sizeFx();
 
@@ -320,7 +331,9 @@
   function drawCore() {
     const W = core.width, H = core.height, cx = W/2, cy = H/2;
     cctx.clearRect(0, 0, W, H);
-    const agitation = mode === 'speaking' ? 0.5 + amp : mode === 'listening' ? 0.3 + amp * 1.6 : mode === 'processing' ? 0.8 : 0.12;
+    const prox = pointerProx();
+    let agitation = mode === 'speaking' ? 0.5 + amp : mode === 'listening' ? 0.3 + amp * 1.6 : mode === 'processing' ? 0.8 : 0.12;
+    agitation = Math.max(agitation, prox * 0.75); // hovering near the core wakes everything up
 
     // breathing glow
     const breathe = 1 + Math.sin(t * 0.03) * 0.06 + agitation * 0.1;
@@ -410,15 +423,32 @@
     const thinking = mode === 'processing';
     face.mouthE *= 0.82;
 
+    // gentle idle float so the face never sits perfectly still
+    cx += Math.sin(t * 0.013) * 4;
+    cy += Math.sin(t * 0.021) * 3;
+
+    // where is the pointer relative to the face, in screen space?
+    const prox = pointerProx();
+    const rect = core.getBoundingClientRect();
+    const pdx = ptr.x - (rect.left + rect.width / 2);
+    const pdy = ptr.y - (rect.top + rect.height / 2);
+    const angTo = Math.atan2(pdy, pdx);
+
     // blink: shut for the ~7 frames before each scheduled blink time
     if (t > face.blinkAt) face.blinkAt = t + 90 + Math.random() * 170;
     face.blink = face.blinkAt - t < 7 ? 0.1 : 1;
 
-    // idle gaze wander; locked center while speaking/listening
+    // gaze: locked center while busy, tracks your pointer otherwise,
+    // wanders on its own when you've been away a few seconds
+    const ptrFresh = ptr.has && Date.now() - ptr.tm < 4000;
     if (speaking || listening || thinking) { face.tx = 0; face.ty = thinking ? -5 : 0; }
+    else if (ptrFresh) {
+      face.tx = Math.max(-16, Math.min(16, pdx / 26));
+      face.ty = Math.max(-9, Math.min(9, pdy / 26));
+    }
     else if (Math.random() < 0.004) { face.tx = (Math.random() - 0.5) * 12; face.ty = (Math.random() - 0.5) * 7; }
-    face.lx += (face.tx - face.lx) * 0.06;
-    face.ly += (face.ty - face.ly) * 0.06;
+    face.lx += (face.tx - face.lx) * 0.09;
+    face.ly += (face.ty - face.ly) * 0.09;
 
     // ── bubble: layered-sine distorted blob ──
     const R = 64 * (1 + agitation * 0.05);
@@ -428,7 +458,8 @@
         + 0.04  * Math.sin(5 * a - t * 0.033)
         + 0.028 * Math.sin(8 * a + t * 0.07)
         + 0.05  * face.mouthE * Math.sin(11 * a + t * 0.3)
-        + 0.04  * agitation * Math.sin(13 * a - t * 0.21));
+        + 0.04  * agitation * Math.sin(13 * a - t * 0.21)
+        + 0.22  * prox * Math.max(0, Math.cos(a - angTo)) ** 3); // reaches toward your pointer
     cctx.beginPath();
     for (let i = 0; i <= 90; i++) {
       const a = (i / 90) * Math.PI * 2;
@@ -469,6 +500,7 @@
         if (face.expr === 'concerned') { h = 11; }
         if (listening) { w = 10; h = 18; }
         if (thinking) { h = 7; }
+        w *= 1 + prox * 0.18; h *= 1 + prox * 0.35; // eyes widen as you approach
         h *= face.blink;
         const tilt = face.expr === 'concerned' ? side * 0.28 : 0;
         cctx.beginPath();
@@ -481,8 +513,9 @@
     // ── mouth: waveform that talks ──
     const mw = 46, my = cy + 27, segs = 26;
     const pseudoTalk = speaking ? 0.35 + 0.65 * Math.abs(Math.sin(t * 0.31) * Math.sin(t * 0.13)) : 0;
-    const open = Math.max(face.mouthE, pseudoTalk, listening ? Math.min(1, amp * 1.5) : 0);
-    const curve = face.expr === 'happy' ? -5 : face.expr === 'concerned' ? 4 : -1;
+    const open = Math.max(face.mouthE, pseudoTalk, listening ? Math.min(1, amp * 1.5) : 0, prox * 0.3);
+    let curve = face.expr === 'happy' ? -5 : face.expr === 'concerned' ? 4 : -1;
+    curve -= 3.5 * prox; // smiles when you come close
     cctx.strokeStyle = 'rgba(255,240,252,0.95)';
     cctx.lineWidth = 3; cctx.lineCap = 'round';
     cctx.shadowColor = `rgba(${moodC},0.95)`;
