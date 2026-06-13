@@ -6,10 +6,11 @@
 <title>KHA-OS</title>
 <style>
   :root {
-    /* pure synthwave: hot pink, neon cyan, deep purple, no warm colors */
+    /* evil synthwave: hot pink, crimson, neon cyan, deep purple — chaos protocol */
     --cyan: #ff3da6; --cyan-dim: rgba(255,61,166,0.35); --cyan-glow: rgba(255,61,166,0.12);
-    --bg: #0a0016; --text: #f5e3ff; --dim: #8a5a9e; --warn: #d946ef;
-    --magenta: #00d9ff; --violet: #d946ef; --gold: #06ffa5; --green: #00f5ff; --red: #ff5470;
+    --bg: #06000e; --text: #f5e3ff; --dim: #8a5a9e; --warn: #ff0050;
+    --magenta: #00d9ff; --violet: #d946ef; --gold: #06ffa5; --green: #00f5ff; --red: #ff1744;
+    --crimson: #cc0033; --evil: #ff0040; --glitch: #ff00ff;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; overflow: hidden; }
@@ -130,6 +131,48 @@
   #boot.done { transition: opacity 0.9s; opacity: 0; pointer-events: none; }
 
   #core { position: fixed; left: 50%; top: 50%; transform: translate(-50%,-50%); z-index: 5; cursor: pointer; }
+
+  /* neural sync & connection indicators */
+  #neuralSync {
+    position: fixed; bottom: 330px; left: 22px; z-index: 10;
+    font-size: 9px; letter-spacing: 2px; color: var(--dim);
+  }
+  .sync-label { margin-bottom: 6px; color: var(--dim); }
+  .sync-dots { display: flex; gap: 8px; }
+  .sync-dots .dot {
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: rgba(63,140,255,0.3); border: 1px solid rgba(63,140,255,0.6);
+    transition: all 0.3s; box-shadow: 0 0 4px rgba(63,140,255,0.2);
+  }
+  .sync-dots .dot.active {
+    background: rgba(0,255,165,1); border-color: rgba(0,255,165,1);
+    box-shadow: 0 0 12px rgba(0,255,165,0.8), inset 0 0 6px rgba(0,255,165,0.4);
+    animation: syncPulse 1.5s infinite alternate;
+  }
+  .sync-dots .dot.evil {
+    background: rgba(255,0,64,1); border-color: rgba(255,0,64,1);
+    box-shadow: 0 0 12px rgba(255,0,64,0.8), inset 0 0 6px rgba(255,0,64,0.4);
+    animation: syncPulse 1s infinite alternate;
+  }
+  @keyframes syncPulse { to { box-shadow: 0 0 18px currentColor, inset 0 0 8px currentColor; } }
+
+  /* threat level / chaos index */
+  #threatLevel {
+    position: fixed; bottom: 280px; left: 22px; z-index: 10;
+    font-size: 9px; letter-spacing: 2px; color: var(--dim);
+  }
+  .threat-label { margin-bottom: 6px; color: var(--dim); }
+  .threat-bar {
+    width: 100px; height: 8px; border: 1px solid rgba(255,0,64,0.4);
+    background: rgba(10,0,20,0.5); border-radius: 2px; overflow: hidden;
+  }
+  .threat-fill {
+    height: 100%; width: 0%; background: linear-gradient(90deg, rgba(0,255,165,0.6), rgba(255,0,64,1));
+    transition: width 0.3s; box-shadow: 0 0 8px rgba(255,0,64,0.6);
+  }
+  .threat-value {
+    margin-top: 4px; color: var(--evil); font-weight: bold; letter-spacing: 1px;
+  }
 </style>
 </head>
 <body>
@@ -169,6 +212,26 @@
 
   <div id="timerChip">⏱ 00:00</div>
   <div id="status">IDLE<div class="sub">click the core or type below</div></div>
+
+  <!-- Neural sync & connection indicators -->
+  <div id="neuralSync">
+    <div class="sync-label">NEURAL SYNC</div>
+    <div id="syncDots" class="sync-dots">
+      <span class="dot" id="dot-news"></span>
+      <span class="dot" id="dot-weather"></span>
+      <span class="dot" id="dot-crypto"></span>
+      <span class="dot" id="dot-ai"></span>
+    </div>
+  </div>
+
+  <div id="threatLevel">
+    <div class="threat-label">CHAOS INDEX</div>
+    <div id="threatBar" class="threat-bar">
+      <div id="threatFill" class="threat-fill"></div>
+    </div>
+    <div id="threatValue" class="threat-value">00%</div>
+  </div>
+
   <div id="log"></div>
 
   <div id="bar">
@@ -405,13 +468,13 @@
   }
 
   // ───── the face: distorted bubble + eyes + mouth ─────
-  const face = { expr: 'neutral', mouthE: 0, blinkAt: 200, blink: 1, lx: 0, ly: 0, tx: 0, ty: 0 };
-  // mood → glow color (rgb triplet)
-  const MOOD = { neutral: '255,61,166', happy: '0,217,255', concerned: '255,94,58', excited: '199,36,255', thinking: '120,110,255' };
+  const face = { expr: 'neutral', mouthE: 0, blinkAt: 200, blink: 1, lx: 0, ly: 0, tx: 0, ty: 0, glitch: 0 };
+  // mood → glow color (rgb triplet) — evil chaos theme
+  const MOOD = { neutral: '255,61,166', happy: '0,217,255', concerned: '255,0,64', excited: '255,0,100', thinking: '255,0,50', evil: '255,0,50' };
 
   function sentiment(text) {
     const s = text.toLowerCase();
-    if (/error|offline|down|rejected|unreachable|failed|can't|cannot|couldn't|unable|sorry|severed|denied|unfortunately|warning|wrong/.test(s)) return 'concerned';
+    if (/error|offline|down|rejected|unreachable|failed|can't|cannot|couldn't|unable|sorry|severed|denied|unfortunately|warning|wrong|chaos|breach|corrupt|attack/.test(s)) return 'evil';
     if ((text.match(/!/g) || []).length >= 2) return 'excited';
     if (/great|excellent|done|ready|confirmed|nominal|established|welcome|happy|glad|always|service|joke|haha|fun/.test(s)) return 'happy';
     return 'neutral';
@@ -482,44 +545,61 @@
     cctx.stroke();
     cctx.shadowBlur = 0;
 
-    // ── eyes ──
+    // ── eyes: menacing red/glowing pupils ──
     const ex = 25, ey = -13;
     for (const side of [-1, 1]) {
       const x = cx + side * ex + face.lx, y = cy + ey + face.ly;
-      cctx.fillStyle = 'rgba(255,240,252,0.96)';
-      cctx.strokeStyle = 'rgba(255,240,252,0.96)';
       cctx.shadowColor = `rgba(${moodC},0.95)`;
       cctx.shadowBlur = 12;
       if (face.expr === 'happy' && !thinking) {
-        // upturned crescent ^ ^
+        // happy: upturned crescent
+        cctx.strokeStyle = 'rgba(255,240,252,0.96)';
         cctx.lineWidth = 4.5; cctx.lineCap = 'round';
         cctx.beginPath(); cctx.arc(x, y + 5, 9, Math.PI * 1.15, Math.PI * 1.85); cctx.stroke();
       } else {
+        // evil mode: red glowing pupils with black sclera
         let w = 8, h = 15;
         if (face.expr === 'excited') { w = 10; h = 18; }
+        if (face.expr === 'evil') { w = 11; h = 16; } // wider, more menacing
         if (face.expr === 'concerned') { h = 11; }
         if (listening) { w = 10; h = 18; }
         if (thinking) { h = 7; }
-        w *= 1 + prox * 0.18; h *= 1 + prox * 0.35; // eyes widen as you approach
+        w *= 1 + prox * 0.18; h *= 1 + prox * 0.35;
         h *= face.blink;
-        const tilt = face.expr === 'concerned' ? side * 0.28 : 0;
+        const tilt = face.expr === 'concerned' || face.expr === 'evil' ? side * 0.28 : 0;
+
+        // black sclera (eye white is dark)
+        cctx.fillStyle = 'rgba(10,0,20,0.8)';
         cctx.beginPath();
-        cctx.ellipse(x, y, w, Math.max(1.4, h), tilt, 0, 7);
+        cctx.ellipse(x, y, w + 2, h + 1, tilt, 0, 7);
+        cctx.fill();
+
+        // red/evil pupil with glow
+        const pupilGlow = 0.6 + Math.sin(t * 0.08) * 0.3; // pulsing glow
+        cctx.shadowColor = 'rgba(255,0,64,' + pupilGlow + ')';
+        cctx.shadowBlur = 8 + pupilGlow * 6;
+        cctx.fillStyle = face.expr === 'evil' ? 'rgba(255,0,50,0.95)' : 'rgba(255,0,80,0.85)';
+        cctx.beginPath();
+        cctx.ellipse(x, y, w * 0.7, h * 0.8, tilt, 0, 7);
         cctx.fill();
       }
       cctx.shadowBlur = 0;
     }
 
-    // ── mouth: waveform that talks ──
+    // ── mouth: evil grin / waveform that talks ──
     const mw = 46, my = cy + 27, segs = 26;
     const pseudoTalk = speaking ? 0.35 + 0.65 * Math.abs(Math.sin(t * 0.31) * Math.sin(t * 0.13)) : 0;
     const open = Math.max(face.mouthE, pseudoTalk, listening ? Math.min(1, amp * 1.5) : 0, prox * 0.3);
-    let curve = face.expr === 'happy' ? -5 : face.expr === 'concerned' ? 4 : -1;
-    curve -= 3.5 * prox; // smiles when you come close
-    cctx.strokeStyle = 'rgba(255,240,252,0.95)';
-    cctx.lineWidth = 3; cctx.lineCap = 'round';
-    cctx.shadowColor = `rgba(${moodC},0.95)`;
-    cctx.shadowBlur = 10;
+    let curve = face.expr === 'happy' ? -5 : face.expr === 'evil' ? 3 : face.expr === 'concerned' ? 4 : -1;
+    curve -= 3.5 * prox; // evil smirk stays sinister even when you approach
+
+    // evil: menacing red grin, otherwise white
+    const mouthColor = face.expr === 'evil' ? 'rgba(255,0,64,0.9)' : 'rgba(255,240,252,0.95)';
+    cctx.strokeStyle = mouthColor;
+    cctx.lineWidth = face.expr === 'evil' ? 3.5 : 3;
+    cctx.lineCap = 'round';
+    cctx.shadowColor = face.expr === 'evil' ? 'rgba(255,0,64,0.8)' : `rgba(${moodC},0.95)`;
+    cctx.shadowBlur = face.expr === 'evil' ? 14 : 10;
     cctx.beginPath();
     for (let i = 0; i <= segs; i++) {
       const f = i / segs;
@@ -663,6 +743,45 @@
     telLines[id][Math.floor(Math.random()*TEL_N)] = telLine();
     $(id).textContent = telLines[id].join('\n');
   }, 350);
+
+  // ════════════════════════ NEURAL SYNC & THREAT LEVEL ════════════════════════
+  const connections = { news: false, weather: false, crypto: false, ai: false };
+  let chaosLevel = 0;
+
+  function updateNeuralSync() {
+    const isEvil = mode === 'processing' || mode === 'speaking';
+    const dotClass = isEvil ? 'evil' : 'active';
+
+    // Randomly activate/deactivate connections
+    if (Math.random() < 0.1) {
+      const conn = ['news', 'weather', 'crypto', 'ai'][Math.floor(Math.random() * 4)];
+      connections[conn] = !connections[conn];
+    }
+
+    // Update dot visibility
+    for (const [conn, active] of Object.entries(connections)) {
+      const dot = $(`dot-${conn}`);
+      if (active) {
+        dot.classList.add(dotClass);
+      } else {
+        dot.classList.remove('active', 'evil');
+      }
+    }
+
+    // Update chaos level based on activity
+    const activeConns = Object.values(connections).filter(v => v).length;
+    chaosLevel = Math.max(0, chaosLevel - 1); // decay
+    if (mode === 'listening') chaosLevel = Math.min(100, chaosLevel + 8);
+    if (mode === 'speaking') chaosLevel = Math.min(100, chaosLevel + 12);
+    if (mode === 'processing') chaosLevel = Math.min(100, chaosLevel + 15);
+    chaosLevel += activeConns * 5; // connections add chaos
+
+    const threatFill = $('threatFill');
+    threatFill.style.width = chaosLevel + '%';
+    $('threatValue').textContent = String(Math.floor(chaosLevel)).padStart(2, '0') + '%';
+    $('threatValue').style.color = chaosLevel > 70 ? 'rgba(255,0,64,1)' : chaosLevel > 40 ? 'rgba(255,165,0,1)' : 'rgba(0,255,165,1)';
+  }
+  setInterval(updateNeuralSync, 800);
 
   // ════════════════════════ PERFORMANCE ════════════════════════
   // Real stats come from the local perf agent (node perf-agent.js).
