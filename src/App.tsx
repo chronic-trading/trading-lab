@@ -251,6 +251,9 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
           {/* Desktop: full utility buttons */}
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+            <a href="https://chronic-trading.github.io/ict-replay/" target="_blank" rel="noopener noreferrer" title="ICT Replay Trainer" className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:border-cyan-500/40 hover:text-cyan-400 hover:bg-cyan-500/8 transition-all"><Crosshair size={12} /><span className="hidden xl:inline">Trainer</span></a>
+            <a href="https://chronic-trading.github.io/ict-glossary/" target="_blank" rel="noopener noreferrer" title="ICT Glossary" className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:border-teal-500/40 hover:text-teal-400 hover:bg-teal-500/8 transition-all"><BookOpen size={12} /><span className="hidden xl:inline">Glossary</span></a>
+            <div className="w-px h-4 bg-slate-800 mx-0.5" />
             <button onClick={() => setDrawdownOpen(true)}  title="Guard"    className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:border-orange-500/40 hover:text-orange-400 hover:bg-orange-500/8 transition-all"><ShieldAlert size={12} /><span className="hidden xl:inline">Guard</span></button>
             <button onClick={() => setMindsetOpen(true)}   title="Mindset"  className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:border-violet-500/40 hover:text-violet-400 hover:bg-violet-500/8 transition-all"><Smile size={12} /><span className="hidden xl:inline">Mindset</span></button>
             <button onClick={() => setPropsOpen(true)}     title="Props"    className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:border-emerald-500/40 hover:text-emerald-400 hover:bg-emerald-500/8 transition-all"><Building2 size={12} /><span className="hidden xl:inline">Props</span></button>
@@ -287,6 +290,8 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
                 { label: 'Rules',    Icon: Shield,      color: 'text-red-400',    onClick: () => { setRulesOpen(true);     setMobileToolsOpen(false) } },
                 { label: 'Notes',    Icon: StickyNote,  color: 'text-amber-400',  onClick: () => { setNotesOpen(true);     setMobileToolsOpen(false) } },
                 { label: 'Settings', Icon: Settings,    color: 'text-slate-400',  onClick: () => { setSettingsOpen(true);  setMobileToolsOpen(false) } },
+                { label: 'Trainer',  Icon: Crosshair,   color: 'text-cyan-400',   onClick: () => { window.open('https://chronic-trading.github.io/ict-replay/', '_blank');   setMobileToolsOpen(false) } },
+                { label: 'Glossary', Icon: BookOpen,    color: 'text-teal-400',   onClick: () => { window.open('https://chronic-trading.github.io/ict-glossary/', '_blank'); setMobileToolsOpen(false) } },
                 ...(signOut ? [{ label: 'Sign out', Icon: LogOut, color: 'text-red-400', onClick: () => { signOut(); setMobileToolsOpen(false) } }] : []),
               ].map(({ label, Icon, color, onClick }) => (
                 <button key={label} onClick={onClick}

@@ -1,5 +1,27 @@
 @import "tailwindcss";
 
+/* ═══ Chronic Trading — shared brand tokens ═══
+   Duplicated across trading-lab, ict-replay, ict-glossary. Keep in sync. */
+:root {
+  --ct-bg:        #05050a;
+  --ct-bg-deep:   #04040a;
+  --ct-surface:   #0b0b14;
+  --ct-border:    rgba(30, 41, 59, 0.8);
+  --ct-amber:     #f59e0b;
+  --ct-green:     #34d399;
+  --ct-red:       #f87171;
+  --ct-blue:      #60a5fa;
+  --ct-violet:    #c084fc;
+  --ct-orange:    #fb923c;
+  --ct-pink:      #f472b6;
+  --ct-teal:      #14b8a6;
+  --ct-text:       #e2e8f0;
+  --ct-text-dim:   rgba(148, 163, 184, 0.85);
+  --ct-text-faint: rgba(100, 116, 139, 0.6);
+  --ct-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --ct-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
