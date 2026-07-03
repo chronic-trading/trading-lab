@@ -1,25 +1,6 @@
+# The site is served by GitHub Pages (chronic-trading.github.io/trading-lab)
+# and license validation runs as a Supabase Edge Function (validate-whop).
+# Nothing is deployed on Netlify anymore — skip every build so pushes stop
+# consuming build credits. Safe to delete the Netlify site from the dashboard.
 [build]
-  command   = "npm run build"
-  publish   = "dist"
-  functions = "netlify/functions"
-
-[build.environment]
-  NODE_VERSION = "20"
-
-# SPA routing — all paths serve index.html
-[[redirects]]
-  from   = "/*"
-  to     = "/index.html"
-  status = 200
-
-# Never cache index.html — ensures phones always get the latest JS bundle hashes
-[[headers]]
-  for = "/index.html"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-
-# Cache hashed JS/CSS assets aggressively (filenames change on every build)
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
+  ignore = "exit 0"
