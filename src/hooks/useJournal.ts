@@ -5,6 +5,9 @@ import { getCurrentUserId } from '../lib/currentUser'
 
 export type JournalMode = 'live' | 'backtest'
 
+export const KILLZONES = ['Asian', 'London', 'NY AM', 'NY PM', 'Other'] as const
+export type Killzone = typeof KILLZONES[number]
+
 export interface JournalEntry {
   id: string
   date: string
@@ -12,6 +15,7 @@ export interface JournalEntry {
   direction: 'long' | 'short'
   result: 'win' | 'loss' | 'breakeven'
   mode: JournalMode
+  killzone?: Killzone | null
   conceptIds: string[]
   points: number | null
   notes: string
@@ -50,6 +54,7 @@ function toRow(e: JournalEntry, userId: string) {
     direction:   e.direction,
     result:      e.result,
     mode:        e.mode,
+    killzone:    e.killzone ?? null,
     concept_ids: e.conceptIds,
     points:      e.points,
     notes:       e.notes,

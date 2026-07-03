@@ -49,8 +49,8 @@ export async function syncOnLogin(userId: string): Promise<void> {
       if (ud.key_levels)    localStorage.setItem(LS.keyLevels,    JSON.stringify(ud.key_levels))
       if (ud.session_notes) localStorage.setItem(LS.sessionNotes, ud.session_notes)
     }
-    if (builds?.length)  localStorage.setItem(LS.builds,  JSON.stringify(builds.map(stripUserId)))
-    if (journal?.length) localStorage.setItem(LS.journal, JSON.stringify(journal.map(stripUserId)))
+    if (builds?.length)  localStorage.setItem(LS.builds,  JSON.stringify(builds.map(rowToLocal)))
+    if (journal?.length) localStorage.setItem(LS.journal, JSON.stringify(journal.map(rowToLocal)))
     if (plans?.length)   localStorage.setItem(LS.plans,   JSON.stringify(plans.map(p => p.data)))
   } else {
     // ── First login: upload localStorage data to Supabase ─────────────────────
@@ -87,7 +87,12 @@ export async function syncOnLogin(userId: string): Promise<void> {
   }
 }
 
-function stripUserId<T extends { user_id?: unknown }>(obj: T): Omit<T, 'user_id'> {
-  const { user_id: _, ...rest } = obj
-  return rest as Omit<T, 'user_id'>
+/** Supabase rows are snake_case; the app's localStorage shapes are camelCase */
+function rowToLocal(row: Record<string, unknown>): Record<string, unknown> {
+  const { user_id: _, concept_ids, created_at, ...rest } = row
+  return {
+    ...rest,
+    ...(concept_ids !== undefined ? { conceptIds: concept_ids ?? [] } : {}),
+    ...(created_at !== undefined ? { createdAt: created_at } : {}),
+  }
 }

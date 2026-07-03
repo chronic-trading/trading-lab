@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Trash2, TrendingUp, TrendingDown, Minus, BookOpen, X, Save, BarChart2, List, Radio, FlaskConical } from 'lucide-react'
-import { useJournal, type JournalEntry, type JournalMode } from '../hooks/useJournal'
+import { useJournal, KILLZONES, type JournalEntry, type JournalMode, type Killzone } from '../hooks/useJournal'
 import { JournalAnalytics } from '../components/JournalAnalytics'
 import { concepts, getConceptById } from '../data/concepts'
 import { useBuilds } from '../hooks/useBuilds'
@@ -19,6 +19,15 @@ const tierDot: Record<string, string> = {
   basic: 'bg-emerald-400', intermediate: 'bg-blue-400', advanced: 'bg-purple-400',
 }
 
+// Selected-state styling per killzone (matches KillZoneClock colors)
+const kzActive: Record<Killzone, string> = {
+  'Asian':  'bg-indigo-500/15 border-indigo-500/45 text-indigo-300',
+  'London': 'bg-blue-500/15 border-blue-500/45 text-blue-300',
+  'NY AM':  'bg-emerald-500/15 border-emerald-500/45 text-emerald-300',
+  'NY PM':  'bg-amber-500/15 border-amber-500/45 text-amber-300',
+  'Other':  'bg-slate-600/25 border-slate-500/45 text-slate-300',
+}
+
 // ── Log Trade Modal ──────────────────────────────────────────────────────────
 function LogModal({ open, onClose, onSave, existing }: {
   open: boolean; onClose: () => void; onSave: (e: JournalEntry) => void; existing?: JournalEntry | null
@@ -29,6 +38,7 @@ function LogModal({ open, onClose, onSave, existing }: {
   const [direction,  setDirection]  = useState<'long'|'short'>(existing?.direction ?? 'long')
   const [result,     setResult]     = useState<'win'|'loss'|'breakeven'>(existing?.result ?? 'win')
   const [mode,       setMode]       = useState<JournalMode>(existing?.mode ?? 'live')
+  const [killzone,   setKillzone]   = useState<Killzone | null>(existing?.killzone ?? null)
   const [conceptIds, setConceptIds] = useState<string[]>(existing?.conceptIds ?? [])
   const [points,     setPoints]     = useState<string>(existing?.points?.toString() ?? '')
   const [notes,      setNotes]      = useState(existing?.notes ?? '')
@@ -46,7 +56,7 @@ function LogModal({ open, onClose, onSave, existing }: {
   const handleSave = () => {
     onSave({
       id:        existing?.id ?? crypto.randomUUID(),
-      date, instrument, direction, result, mode, conceptIds,
+      date, instrument, direction, result, mode, killzone, conceptIds,
       points:    points ? parseFloat(points) : null,
       notes,
       createdAt: existing?.createdAt ?? new Date().toISOString(),
@@ -145,6 +155,20 @@ function LogModal({ open, onClose, onSave, existing }: {
                       )
                     })}
                   </div>
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-semibold text-slate-400">Kill Zone</label>
+                <div className="grid grid-cols-5 gap-1.5">
+                  {KILLZONES.map(kz => (
+                    <button key={kz} onClick={() => setKillzone(k => k === kz ? null : kz)}
+                      className={`py-2 rounded-xl border text-[10px] font-bold transition-all ${
+                        killzone === kz ? kzActive[kz] : 'border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300'
+                      }`}>
+                      {kz}
+                    </button>
+                  ))}
                 </div>
               </div>
 
@@ -355,6 +379,9 @@ export function Journal() {
                                 {/* Mode badge */}
                                 {entry.mode === 'backtest' && (
                                   <span className="text-[9px] font-bold text-purple-400 bg-purple-500/10 border border-purple-500/20 px-1.5 py-0.5 rounded-full">BT</span>
+                                )}
+                                {entry.killzone && (
+                                  <span className="text-[9px] font-bold text-slate-400 bg-slate-800/60 border border-slate-700/40 px-1.5 py-0.5 rounded-full">{entry.killzone}</span>
                                 )}
                                 {entry.points !== null && (
                                   <span className={`text-[11px] font-bold ml-auto ${(entry.points ?? 0) >= 0 ? 'text-emerald-400' : 'text-red-400'}`} style={{ fontFamily: "'JetBrains Mono', monospace" }}>

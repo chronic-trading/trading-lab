@@ -1,8 +1,8 @@
 import type { Instrument } from '../types'
-import type { JournalEntry } from '../hooks/useJournal'
+import { KILLZONES, type JournalEntry } from '../hooks/useJournal'
 import { getConceptById } from '../data/concepts'
 import { POINT_VALUES } from '../hooks/useSettings'
-import { BarChart2, TrendingUp, TrendingDown, Zap } from 'lucide-react'
+import { BarChart2, TrendingUp, TrendingDown, Zap, Clock } from 'lucide-react'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const TRADING_DAYS = [1, 2, 3, 4, 5] // Mon-Fri
@@ -17,6 +17,62 @@ function getStreak(entries: JournalEntry[]): { count: number; type: 'W' | 'L' | 
     else break
   }
   return { count, type }
+}
+
+function EquityCurve({ entries }: { entries: JournalEntry[] }) {
+  const chrono = [...entries].sort((a, b) => (a.date + a.createdAt).localeCompare(b.date + b.createdAt))
+
+  // Cumulative points, starting from 0
+  const pts: number[] = [0]
+  for (const e of chrono) pts.push(pts[pts.length - 1] + (e.points ?? 0))
+  if (pts.length < 3) return null
+
+  // Max drawdown (peak-to-trough in points)
+  let peak = 0, maxDD = 0
+  for (const v of pts) {
+    if (v > peak) peak = v
+    if (peak - v > maxDD) maxDD = peak - v
+  }
+
+  const W = 240, H = 72
+  const min = Math.min(...pts, 0)
+  const max = Math.max(...pts, 0)
+  const range = max - min || 1
+  const x = (i: number) => (i / (pts.length - 1)) * W
+  const y = (v: number) => H - 4 - ((v - min) / range) * (H - 8)
+  const path = pts.map((v, i) => `${i === 0 ? 'M' : 'L'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ')
+  const final = pts[pts.length - 1]
+  const color = final >= 0 ? '#34d399' : '#f87171'
+
+  return (
+    <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-4">
+      <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Equity Curve</p>
+        <div className="flex items-center gap-3">
+          <span className="text-[11px] font-bold" style={{ color, fontFamily: "'JetBrains Mono', monospace" }}>
+            {final >= 0 ? '+' : ''}{final}pt
+          </span>
+          {maxDD > 0 && (
+            <span className="text-[10px] font-semibold text-red-400/80" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+              max DD −{maxDD}pt
+            </span>
+          )}
+        </div>
+      </div>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-20" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="eq-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={color} stopOpacity="0.25" />
+            <stop offset="100%" stopColor={color} stopOpacity="0" />
+          </linearGradient>
+        </defs>
+        <line x1="0" y1={y(0)} x2={W} y2={y(0)} stroke="#1e2030" strokeWidth="0.8" strokeDasharray="3 3" />
+        <path d={`${path} L${W},${H} L0,${H} Z`} fill="url(#eq-fill)" />
+        <path d={path} fill="none" stroke={color} strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
+      </svg>
+      <p className="text-[9px] text-slate-700 mt-1">cumulative points across {chrono.length} trades, oldest → newest</p>
+    </div>
+  )
 }
 
 function PointsTimeline({ entries }: { entries: JournalEntry[] }) {
@@ -74,6 +130,15 @@ export function JournalAnalytics({ entries }: Props) {
     return { day: DAYS[d], wins: dWins, total: dayEntries.length, rate: dayEntries.length > 0 ? Math.round((dWins / dayEntries.length) * 100) : 0 }
   })
 
+  // Kill zone breakdown
+  const kzTagged = entries.filter(e => e.killzone)
+  const kzStats = KILLZONES.map(kz => {
+    const ke = kzTagged.filter(e => e.killzone === kz)
+    const kw = ke.filter(e => e.result === 'win').length
+    const kPts = ke.reduce((s, e) => s + (e.points ?? 0), 0)
+    return { kz, wins: kw, total: ke.length, pts: kPts, rate: ke.length > 0 ? Math.round((kw / ke.length) * 100) : 0 }
+  }).filter(s => s.total > 0)
+
   // Instrument breakdown
   const instruments = ['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]
   const instStats = instruments.map(inst => {
@@ -126,6 +191,9 @@ export function JournalAnalytics({ entries }: Props) {
         ))}
       </div>
 
+      {/* Equity curve */}
+      <EquityCurve entries={entries} />
+
       {/* Points timeline */}
       <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-4">
         <div className="flex items-center justify-between mb-3">
@@ -169,9 +237,45 @@ export function JournalAnalytics({ entries }: Props) {
           </div>
         </div>
 
-        {/* Direction + Instrument */}
-        <div className="space-y-4">
-          <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-4">
+        {/* Kill zone */}
+        <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-4">
+          <div className="flex items-center gap-2 mb-4">
+            <Clock size={12} className="text-slate-500" />
+            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kill Zone</p>
+            {kzTagged.length > 0 && kzTagged.length < entries.length && (
+              <span className="text-[9px] text-slate-700 ml-auto">{kzTagged.length}/{entries.length} tagged</span>
+            )}
+          </div>
+          {kzStats.length === 0 ? (
+            <p className="text-[11px] text-slate-600 leading-relaxed py-2">
+              Tag trades with a kill zone when logging them to see which session actually pays you.
+            </p>
+          ) : (
+            <div className="space-y-2.5">
+              {kzStats.map(({ kz, rate, total: t, pts }) => (
+                <div key={kz} className="flex items-center gap-2.5">
+                  <span className="text-[11px] font-semibold text-slate-500 w-14">{kz}</span>
+                  <div className="flex-1 h-2 bg-slate-800/80 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${rate >= 60 ? 'bg-emerald-500' : rate >= 40 ? 'bg-amber-500' : 'bg-red-500'}`}
+                      style={{ width: `${rate}%` }}
+                    />
+                  </div>
+                  <span className="text-[11px] font-bold text-slate-400 w-9 text-right">{rate}%</span>
+                  <span className={`text-[10px] w-12 text-right ${pts >= 0 ? 'text-emerald-500/70' : 'text-red-500/70'}`} style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+                    {pts >= 0 ? '+' : ''}{pts}pt
+                  </span>
+                  <span className="text-[10px] text-slate-700 w-6">{t}t</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Direction */}
+        <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-4">
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Direction</p>
             <div className="space-y-2.5">
               {[
@@ -191,9 +295,10 @@ export function JournalAnalytics({ entries }: Props) {
                 </div>
               ))}
             </div>
-          </div>
+        </div>
 
-          {instStats.length > 0 && (
+        {/* Instrument */}
+        {instStats.length > 0 && (
             <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-4">
               <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-4">Instrument</p>
               <div className="space-y-2.5">
@@ -209,8 +314,7 @@ export function JournalAnalytics({ entries }: Props) {
                 ))}
               </div>
             </div>
-          )}
-        </div>
+        )}
       </div>
 
       {/* Concept performance */}

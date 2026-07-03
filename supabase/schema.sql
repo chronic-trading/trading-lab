@@ -21,6 +21,7 @@ create table if not exists journal_entries (
   direction   text not null,
   result      text not null,
   mode        text default 'live',
+  killzone    text,
   concept_ids text[]  default '{}',
   points      float,
   notes       text    default '',
