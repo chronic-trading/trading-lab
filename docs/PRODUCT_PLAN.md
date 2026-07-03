@@ -9,6 +9,7 @@ Brand direction: the dark-terminal + amber identity all three apps already share
 
 > **Progress (2026-07-02):** Phase 1 fully shipped on all three sites (suite bar, shared tokens, Inter/JetBrains type, mobile fixes, SEO meta, OG/social preview images).
 > Phase 2 shipped so far: ict-replay Trade Mode (bar-by-bar replay, R-multiple scoring, Net R stat) with chart data backfilled for all 38 scenarios; ict-glossary diagram quiz mode. Glossary already had search + term-of-the-day from before.
+> trading-lab: spaced-repetition Daily Review tab shipped (SM-2 over all concepts, daily queue, streaks, synced via user_data.review). Supabase schema was found never-applied on the live project — applied 2026-07-02 (project also un-paused; free tier auto-pauses on inactivity, watch for this).
 
 ## Phase 1 — One brand, three sites (visual overhaul)
 

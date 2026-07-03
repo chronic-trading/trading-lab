@@ -4,12 +4,13 @@ import {
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
   ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical,
-  Gamepad2,
+  Gamepad2, Layers,
 } from 'lucide-react'
 import { Landing }        from './pages/Landing'
 import { Builder }        from './pages/Builder'
 import { MyBuilds }       from './pages/MyBuilds'
 import { ConceptMap }     from './pages/ConceptMap'
+import { Review }         from './pages/Review'
 import { Templates }      from './pages/Templates'
 import { Chart }          from './pages/Chart'
 import { Journal }        from './pages/Journal'
@@ -37,13 +38,14 @@ const SUPABASE_CONFIGURED = !!(
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY
 )
 
-type Tab  = 'builder' | 'chart' | 'map' | 'plan' | 'journal' | 'calendar' | 'templates' | 'builds' | 'recap' | 'playbook' | 'backtest' | 'arcade'
+type Tab  = 'builder' | 'chart' | 'map' | 'review' | 'plan' | 'journal' | 'calendar' | 'templates' | 'builds' | 'recap' | 'playbook' | 'backtest' | 'arcade'
 type View = 'landing' | 'login' | 'app'
 
 const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
   { id: 'builder',   label: 'Builder',   Icon: Beaker         },
   { id: 'chart',     label: 'Chart',     Icon: LineChart      },
   { id: 'map',       label: 'Map',       Icon: Network        },
+  { id: 'review',    label: 'Review',    Icon: Layers         },
   { id: 'plan',      label: 'Plan',      Icon: ClipboardCheck },
   { id: 'journal',   label: 'Journal',   Icon: BookOpen       },
   { id: 'calendar',  label: 'Calendar',  Icon: CalendarDays   },
@@ -326,6 +328,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         {tab === 'builder'   && <Builder   initialBuild={loadedBuild} />}
         {tab === 'chart'     && <Chart />}
         {tab === 'map'       && <ConceptMap />}
+        {tab === 'review'    && <Review />}
         {tab === 'plan'      && <Plan />}
         {tab === 'journal'   && <Journal />}
         {tab === 'calendar'  && <Calendar />}

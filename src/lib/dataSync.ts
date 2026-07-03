@@ -13,6 +13,7 @@ const LS = {
   journal:      'trading-lab-journal',
   plans:        'trading-lab-plans',
   mastery:      'trading-lab-mastery',
+  review:       'trading-lab-review',
   notes:        'trading-lab-concept-notes',
   rules:        'trading-lab-rules',
   settings:     'tl:settings',
@@ -40,6 +41,7 @@ export async function syncOnLogin(userId: string): Promise<void> {
     // ── Remote wins: write Supabase data into localStorage ────────────────────
     if (ud) {
       if (ud.mastery)       localStorage.setItem(LS.mastery,      JSON.stringify(ud.mastery))
+      if (ud.review)        localStorage.setItem(LS.review,       JSON.stringify(ud.review))
       if (ud.concept_notes) localStorage.setItem(LS.notes,        JSON.stringify(ud.concept_notes))
       if (ud.rules)         localStorage.setItem(LS.rules,        JSON.stringify(ud.rules))
       if (ud.settings)      localStorage.setItem(LS.settings,     JSON.stringify(ud.settings))
@@ -55,6 +57,7 @@ export async function syncOnLogin(userId: string): Promise<void> {
     const userData = {
       user_id:       userId,
       mastery:       ls(LS.mastery)      ?? {},
+      review:        ls(LS.review)       ?? {},
       concept_notes: ls(LS.notes)        ?? {},
       rules:         ls(LS.rules)        ?? [],
       settings:      ls(LS.settings)     ?? {},

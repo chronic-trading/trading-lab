@@ -39,6 +39,7 @@ create table if not exists plans (
 create table if not exists user_data (
   user_id       uuid primary key references auth.users(id) on delete cascade,
   mastery       jsonb default '{}',
+  review        jsonb default '{}',  -- spaced-repetition card states + daily log
   concept_notes jsonb default '{}',
   rules         jsonb default '[]',
   settings      jsonb default '{}',
