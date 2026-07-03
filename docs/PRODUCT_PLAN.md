@@ -9,6 +9,7 @@ Brand direction: the dark-terminal + amber identity all three apps already share
 
 > **Progress (2026-07-02):** Phase 1 fully shipped on all three sites (suite bar, shared tokens, Inter/JetBrains type, mobile fixes, SEO meta, OG/social preview images).
 > Phase 2 shipped so far: ict-replay Trade Mode (bar-by-bar replay, R-multiple scoring, Net R stat) with chart data backfilled for all 38 scenarios; ict-glossary diagram quiz mode. Glossary already had search + term-of-the-day from before.
+> **2026-07-03:** ict-replay scenario target HIT — 60 scenarios (22 new: inversion FVG, propulsion block, LRLR, IRL→ERL, failure swing, double Judas, seek & destroy, fractal AMD, and more; all with real chart data + Trade Mode), plus exam mode (10 random Qs, no feedback until the end) and daily streaks. ict-replay Phase 2 complete. Remaining in Phase 2: the CHRON-OS/Arcade keep-or-cut decision (user's call). Then Phase 3.
 > trading-lab: spaced-repetition Daily Review tab shipped (SM-2 over all concepts, daily queue, streaks, synced via user_data.review). Supabase schema was found never-applied on the live project — applied 2026-07-02 (project also un-paused; free tier auto-pauses on inactivity, watch for this).
 > trading-lab: journal analytics v2 shipped — equity curve with max drawdown, kill-zone tagging on trades + per-session win-rate/points breakdown. Cloud-restore row mapping fixed (snake_case → camelCase).
 > ict-glossary: per-term shareable links shipped (copy button on cards, ?t= deep link scrolls + flashes the term) — glossary Phase 2 complete.
