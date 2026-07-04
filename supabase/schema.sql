@@ -46,8 +46,13 @@ create table if not exists user_data (
   settings      jsonb default '{}',
   bookmarks     jsonb default '[]',
   key_levels    jsonb default '{}',
-  session_notes text  default ''
+  session_notes text  default '',
+  cross_site    jsonb default '{}'   -- Phase 3: shared progress from ict-replay + ict-glossary
 );
+
+-- Additive, idempotent — safe to run against the existing live table to enable
+-- cross-site progress sync (ict-replay scores/trades/streak, glossary learned terms).
+alter table user_data add column if not exists cross_site jsonb default '{}';
 
 -- ── Row Level Security ────────────────────────────────────────────────────────
 alter table builds         enable row level security;
