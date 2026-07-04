@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Flame, Layers, Sparkles, CheckCircle2, Eye, CalendarCheck2, Link2 } from 'lucide-react'
 import { concepts } from '../data/concepts'
+import { GlossaryText } from '../components/GlossaryText'
 import {
   useReviewData, buildQueue, gradeCard, previewInterval,
   currentStreak, dueTomorrow, todayStr, LEARNED_INTERVAL, type Grade,
@@ -172,10 +173,10 @@ export function Review() {
                   animate={{ opacity: 1 }}
                   className="border-t border-slate-800/60 px-5 py-4 space-y-4"
                 >
-                  <p className="text-[13.5px] text-slate-300 leading-relaxed">{concept.description}</p>
+                  <p className="text-[13.5px] text-slate-300 leading-relaxed"><GlossaryText text={concept.description} /></p>
                   <div className="bg-amber-500/5 border border-amber-500/15 rounded-2xl px-4 py-3">
                     <p className="text-[9px] font-black uppercase tracking-[0.18em] text-amber-500 mb-1.5">How to use</p>
-                    <p className="text-[13px] text-slate-300 leading-relaxed">{concept.howToUse}</p>
+                    <p className="text-[13px] text-slate-300 leading-relaxed"><GlossaryText text={concept.howToUse} /></p>
                   </div>
                   {strongSynergies.length > 0 && (
                     <div className="space-y-1.5">

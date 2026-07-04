@@ -5,6 +5,7 @@ import type { Concept, Category } from '../types'
 import { useNotes } from '../hooks/useNotes'
 import { useMastery, MASTERY_LABELS, type MasteryLevel } from '../hooks/useMastery'
 import { useBookmarks } from '../hooks/useBookmarks'
+import { GlossaryText } from './GlossaryText'
 
 const tierConfig = {
   basic: {
@@ -118,7 +119,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
         <h3 className="text-[15px] font-bold text-white leading-snug mb-2 pr-1 tracking-tight">{concept.name}</h3>
 
         {/* Description */}
-        <p className={`text-[12.5px] text-slate-300 leading-relaxed ${expanded ? '' : 'line-clamp-2'}`}>{concept.description}</p>
+        <p className={`text-[12.5px] text-slate-300 leading-relaxed ${expanded ? '' : 'line-clamp-2'}`}><GlossaryText text={concept.description} /></p>
 
         {/* Mastery rating */}
         <div className="flex items-center gap-2.5 mt-3">
@@ -193,7 +194,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
             <div className="relative px-5 pb-4 pt-3.5 border-t border-slate-800/60">
               <div className="absolute inset-0 bg-slate-900/40" />
               <div className="relative">
-                <p className="text-[12.5px] text-slate-200 leading-relaxed">{concept.howToUse}</p>
+                <p className="text-[12.5px] text-slate-200 leading-relaxed"><GlossaryText text={concept.howToUse} /></p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {concept.tags.map(t => (
                     <span key={t} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-800/70 text-slate-400 border border-slate-700/40">#{t}</span>

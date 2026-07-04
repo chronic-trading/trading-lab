@@ -3,6 +3,7 @@ import { ChevronDown, ChevronUp, ChevronLeft, ExternalLink, GraduationCap, Trend
 import { concepts, getConceptById } from '../data/concepts'
 import { setupLibrary, getSetupsForConcept, getConceptsWithSetups, type SetupExample } from '../data/setupLibrary'
 import { PlaybookDiagram } from '../components/PlaybookDiagram'
+import { GlossaryText } from '../components/GlossaryText'
 
 const CATEGORY_ORDER = ['structure', 'liquidity', 'entry', 'timing', 'bias', 'model'] as const
 
@@ -252,7 +253,7 @@ export function Playbook() {
                     {selected.name}
                   </h2>
                   <p className="text-[11px] md:text-[12px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2 md:line-clamp-none max-w-xl">
-                    {selected.description}
+                    <GlossaryText text={selected.description} />
                   </p>
                 </div>
                 <div className="flex-shrink-0 text-right">

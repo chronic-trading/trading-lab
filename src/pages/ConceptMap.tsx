@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { concepts, getConceptById } from '../data/concepts'
 import { useBuilds } from '../hooks/useBuilds'
 import { useAllMastery, MASTERY_LABELS, type MasteryLevel } from '../hooks/useMastery'
+import { GlossaryText } from '../components/GlossaryText'
 import type { Build } from '../types'
 
 // ── Layout ──────────────────────────────────────────────────────────────────
@@ -301,7 +302,7 @@ export function ConceptMap() {
 
             {/* Description — 3-line clamp, readable without dominating */}
             <p className="text-[12px] text-slate-300 leading-relaxed line-clamp-3 mb-3">
-              {activeConcept.description}
+              <GlossaryText text={activeConcept.description} />
             </p>
 
             {/* Synergies as compact pills */}
@@ -413,11 +414,11 @@ export function ConceptMap() {
                 <span className="text-[11px] text-slate-400 font-medium">{MASTERY_LABELS[activeLevel]}</span>
               </div>
 
-              <p className="text-[12px] text-slate-300 leading-relaxed">{activeConcept.description}</p>
+              <p className="text-[12px] text-slate-300 leading-relaxed"><GlossaryText text={activeConcept.description} /></p>
 
               <div>
                 <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">How to use</p>
-                <p className="text-[12px] text-slate-400 leading-relaxed">{activeConcept.howToUse}</p>
+                <p className="text-[12px] text-slate-400 leading-relaxed"><GlossaryText text={activeConcept.howToUse} /></p>
               </div>
 
               {activeConcept.synergies.length > 0 && (
