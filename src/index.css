@@ -1,25 +1,127 @@
 @import "tailwindcss";
 
-/* ═══ Chronic Trading — shared brand tokens ═══
-   Duplicated across trading-lab, ict-replay, ict-glossary. Keep in sync. */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Chronic Trading — semantic theme tokens
+   Warm & approachable LIGHT is the default; dark is opt-in via
+   <html data-theme="dark">. Components should use var(--…) (e.g.
+   bg-[var(--surface)] text-[var(--text)]) so both themes flow from here.
+   Keep this token contract in sync across trading-lab, ict-replay, ict-glossary.
+   ═══════════════════════════════════════════════════════════════════════════ */
 :root {
-  --ct-bg:        #05050a;
-  --ct-bg-deep:   #04040a;
-  --ct-surface:   #0b0b14;
-  --ct-border:    rgba(30, 41, 59, 0.8);
-  --ct-amber:     #f59e0b;
-  --ct-green:     #34d399;
-  --ct-red:       #f87171;
-  --ct-blue:      #60a5fa;
-  --ct-violet:    #c084fc;
-  --ct-orange:    #fb923c;
-  --ct-pink:      #f472b6;
-  --ct-teal:      #14b8a6;
-  --ct-text:       #e2e8f0;
-  --ct-text-dim:   rgba(148, 163, 184, 0.85);
-  --ct-text-faint: rgba(100, 116, 139, 0.6);
+  /* Surfaces — warm paper whites */
+  --bg:            #f7f4ee;   /* app background */
+  --bg-elev:       #fffdf9;   /* elevated panels */
+  --surface:       #ffffff;   /* cards */
+  --surface-2:     #f3eee4;   /* insets / secondary fills */
+  --surface-hover: #f6f1e8;
+
+  /* Lines */
+  --border:        #ece4d6;
+  --border-strong: #dccfb9;
+
+  /* Ink — warm near-black, never pure #000 */
+  --text:          #2c2720;
+  --text-dim:      #6d6456;
+  --text-faint:    #a99e8c;
+
+  /* Brand accent (amber) + friendly status colors tuned for light bg */
+  --accent:        #f59e0b;
+  --accent-ink:    #b45309;   /* amber text/icons that stay legible on light */
+  --accent-soft:   #fcf1dd;   /* amber tint fill */
+  --accent-ring:   rgba(245, 158, 11, 0.35);
+
+  --green:      #15a34a;  --green-soft: #e7f6ec;
+  --red:        #dc2626;  --red-soft:   #fdeaea;
+  --blue:       #2563eb;  --blue-soft:  #e8f0fe;
+  --orange:     #ea580c;  --orange-soft:#fdeee2;
+  --violet:     #7c3aed;
+  --amber-txt:  #b45309;
+
+  /* Warm, soft shadows */
+  --shadow-sm: 0 1px 2px rgba(74, 58, 28, 0.06), 0 1px 3px rgba(74, 58, 28, 0.05);
+  --shadow-md: 0 4px 14px rgba(74, 58, 28, 0.08);
+  --shadow-lg: 0 16px 40px rgba(74, 58, 28, 0.12);
+
   --ct-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ct-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --bg:            #0b0b10;
+  --bg-elev:       #111119;
+  --surface:       #15151f;
+  --surface-2:     #1c1c28;
+  --surface-hover: #20202d;
+
+  --border:        rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.15);
+
+  --text:          #eae6dd;
+  --text-dim:      #9aa0ac;
+  --text-faint:    #5e6570;
+
+  --accent:        #f59e0b;
+  --accent-ink:    #fbbf24;
+  --accent-soft:   rgba(245, 158, 11, 0.13);
+  --accent-ring:   rgba(245, 158, 11, 0.4);
+
+  --green:      #34d399;  --green-soft: rgba(52, 211, 153, 0.13);
+  --red:        #f87171;  --red-soft:   rgba(248, 113, 113, 0.13);
+  --blue:       #60a5fa;  --blue-soft:  rgba(96, 165, 250, 0.13);
+  --orange:     #fb923c;  --orange-soft:rgba(251, 146, 60, 0.13);
+  --violet:     #c084fc;
+  --amber-txt:  #fbbf24;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.55);
+
+  color-scheme: dark;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Light-mode compatibility layer.
+   The app's components hardcode a dark-tuned Tailwind palette (slate scale +
+   arbitrary dark hexes). Rather than edit every file, this remaps those
+   utilities to the warm-light tokens ONLY in light mode. Dark mode carries no
+   overrides here, so its look is exactly as originally built. Hero surfaces
+   (App shell, Review) are converted directly to var(--…) for full polish;
+   everything else is skinned coherently by the rules below.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html[data-theme="light"] {
+  /* Neutral text */
+  & [class*="text-slate-100"], & [class*="text-slate-200"], & .text-white { color: var(--text); }
+  & [class*="text-slate-300"], & [class*="text-slate-400"] { color: var(--text-dim); }
+  & [class*="text-slate-500"], & [class*="text-slate-600"],
+  & [class*="text-slate-700"], & [class*="text-slate-800"] { color: var(--text-faint); }
+
+  /* Neutral surfaces (slate scale) */
+  & [class*="bg-slate-900"] { background-color: var(--surface); }
+  & [class*="bg-slate-800"] { background-color: var(--surface-2); }
+  & [class*="bg-slate-700"] { background-color: var(--surface-hover); }
+  & [class*="bg-slate-600"], & [class*="bg-slate-500"] { background-color: var(--border-strong); }
+
+  /* Neutral surfaces (arbitrary dark hexes) */
+  & .bg-\[\#05050a\], & .bg-\[\#04040a\] { background-color: var(--bg); }
+  & .bg-\[\#06060d\], & .bg-\[\#08080f\], & .bg-\[\#0c0c15\], & .bg-\[\#0b0b13\] { background-color: var(--bg-elev); }
+  & .bg-\[\#0b0b12\], & .bg-\[\#0b0b14\], & .bg-\[\#0d0d16\], & .bg-\[\#0f0a0a\], & .bg-\[\#0a0f0d\] { background-color: var(--surface); }
+
+  /* Borders */
+  & [class*="border-slate-800"], & [class*="border-slate-700"] { border-color: var(--border); }
+  & [class*="border-slate-600"], & [class*="border-slate-500"] { border-color: var(--border-strong); }
+
+  /* Semantic accent text — darken the dark-tuned -300/-400 stops for legibility on light */
+  & [class*="text-amber-300"], & [class*="text-amber-400"], & [class*="text-amber-500"] { color: var(--accent-ink); }
+  & [class*="text-emerald-300"], & [class*="text-emerald-400"], & [class*="text-green-400"] { color: var(--green); }
+  & [class*="text-red-300"], & [class*="text-red-400"] { color: var(--red); }
+  & [class*="text-orange-300"], & [class*="text-orange-400"] { color: var(--orange); }
+  & [class*="text-blue-300"], & [class*="text-blue-400"] { color: var(--blue); }
+  & [class*="text-cyan-300"], & [class*="text-cyan-400"] { color: #0891b2; }
+  & [class*="text-teal-300"], & [class*="text-teal-400"] { color: #0d9488; }
+  & [class*="text-purple-300"], & [class*="text-purple-400"], & [class*="text-violet-400"] { color: var(--violet); }
+  & [class*="text-pink-300"], & [class*="text-pink-400"] { color: #db2777; }
 }
 
 * {
@@ -29,14 +131,15 @@
 }
 
 body {
-  background-color: #05050a;
-  color: #e2e8f0;
+  background-color: var(--bg);
+  color: var(--text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 13px;
   line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 code, .mono {
@@ -49,21 +152,21 @@ code, .mono {
 }
 
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d0d14;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2d2d3a;
-  border-radius: 3px;
+  background: var(--border-strong);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3d3d4a;
+  background: var(--text-faint);
 }
 
 .glow-gold {

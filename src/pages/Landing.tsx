@@ -237,6 +237,15 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
   useEffect(() => { const t = setTimeout(() => setVisible(true), 40); return () => clearTimeout(t) }, [])
 
+  // The marketing landing is designed dark — lock it regardless of the app theme,
+  // then restore the user's chosen theme when they enter the product.
+  useEffect(() => {
+    const html = document.documentElement
+    const prev = html.getAttribute('data-theme') ?? 'light'
+    html.setAttribute('data-theme', 'dark')
+    return () => html.setAttribute('data-theme', prev)
+  }, [])
+
   // Scroll parallax — each map container moves at 20% of scroll speed
   useEffect(() => {
     const onScroll = () => {

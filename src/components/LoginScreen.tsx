@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FlaskConical, Check, ArrowRight, ExternalLink } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
@@ -48,6 +48,14 @@ export function LoginScreen({ onBack }: { onBack?: () => void }) {
   const [error,   setError]   = useState('')
   const [loading, setLoading] = useState(false)
   const [done,    setDone]    = useState(false)
+
+  // Login screen is designed dark — lock it, restore the app theme on exit.
+  useEffect(() => {
+    const html = document.documentElement
+    const prev = html.getAttribute('data-theme') ?? 'light'
+    html.setAttribute('data-theme', 'dark')
+    return () => html.setAttribute('data-theme', prev)
+  }, [])
 
   const activate = async () => {
     const trimmed = key.trim()

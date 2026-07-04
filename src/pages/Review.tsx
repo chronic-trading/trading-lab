@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Flame, Layers, Sparkles, CheckCircle2, Eye, CalendarCheck2, Link2 } from 'lucide-react'
+import { Flame, Layers, Sparkles, CheckCircle2, Eye, Link2 } from 'lucide-react'
 import { concepts } from '../data/concepts'
 import { GlossaryText } from '../components/GlossaryText'
 import {
@@ -9,23 +9,22 @@ import {
 } from '../hooks/useReview'
 import { useAllMastery, MASTERY_COLORS, MASTERY_LABELS, MASTERY_TEXT, type MasteryLevel } from '../hooks/useMastery'
 
-const tierDot: Record<string, string>   = { basic: 'bg-emerald-400', intermediate: 'bg-blue-400', advanced: 'bg-purple-400' }
-const tierLabel: Record<string, string> = { basic: 'text-emerald-400', intermediate: 'text-blue-400', advanced: 'text-purple-400' }
+const tierColor: Record<string, string> = { basic: 'var(--green)', intermediate: 'var(--blue)', advanced: 'var(--violet)' }
 
-const GRADES: { g: Grade; label: string; key: string; cls: string }[] = [
-  { g: 0, label: 'Again', key: '1', cls: 'border-red-500/40 bg-red-500/10 text-red-300 hover:bg-red-500/20 active:bg-red-500/25' },
-  { g: 1, label: 'Hard',  key: '2', cls: 'border-orange-500/40 bg-orange-500/10 text-orange-300 hover:bg-orange-500/20 active:bg-orange-500/25' },
-  { g: 2, label: 'Good',  key: '3', cls: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 active:bg-emerald-500/25' },
-  { g: 3, label: 'Easy',  key: '4', cls: 'border-amber-500/40 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20 active:bg-amber-500/25' },
+const GRADES: { g: Grade; label: string; key: string; c: string; soft: string }[] = [
+  { g: 0, label: 'Again', key: '1', c: 'var(--red)',    soft: 'var(--red-soft)' },
+  { g: 1, label: 'Hard',  key: '2', c: 'var(--orange)', soft: 'var(--orange-soft)' },
+  { g: 2, label: 'Good',  key: '3', c: 'var(--green)',  soft: 'var(--green-soft)' },
+  { g: 3, label: 'Easy',  key: '4', c: 'var(--accent-ink)', soft: 'var(--accent-soft)' },
 ]
 
 function Stat({ value, label, icon, color }: { value: number | string; label: string; icon: React.ReactNode; color: string }) {
   return (
-    <div className="flex items-center gap-2.5 bg-slate-900/50 border border-slate-800/60 rounded-2xl px-3.5 py-2.5 flex-1 min-w-0">
-      <div className={`flex-shrink-0 ${color}`}>{icon}</div>
+    <div className="flex items-center gap-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-3.5 py-3 flex-1 min-w-0 shadow-[var(--shadow-sm)]">
+      <div className="flex-shrink-0" style={{ color }}>{icon}</div>
       <div className="min-w-0">
-        <p className="text-[16px] font-black text-white leading-none">{value}</p>
-        <p className="text-[9px] font-bold uppercase tracking-wider text-slate-600 mt-1 truncate">{label}</p>
+        <p className="text-[17px] font-extrabold text-[var(--text)] leading-none">{value}</p>
+        <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-faint)] mt-1 truncate">{label}</p>
       </div>
     </div>
   )
@@ -88,32 +87,32 @@ export function Review() {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      <div className="max-w-2xl mx-auto px-4 py-5 md:py-8 space-y-4 md:space-y-5">
+      <div className="max-w-2xl mx-auto px-4 py-6 md:py-9 space-y-5">
 
         {/* ── Header ── */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center flex-shrink-0">
-            <Layers size={17} className="text-amber-400" />
+          <div className="w-11 h-11 rounded-2xl bg-[var(--accent-soft)] flex items-center justify-center flex-shrink-0">
+            <Layers size={19} className="text-[var(--accent-ink)]" />
           </div>
           <div>
-            <h1 className="text-[17px] font-black text-white leading-none">Daily Review</h1>
-            <p className="text-[11px] text-slate-500 mt-1">Spaced repetition over the concept map — a few minutes a day keeps every concept sharp.</p>
+            <h1 className="text-[19px] font-extrabold text-[var(--text)] leading-tight tracking-tight">Daily Review</h1>
+            <p className="text-[12px] text-[var(--text-dim)] mt-0.5">A few minutes a day keeps every concept sharp.</p>
           </div>
         </div>
 
         {/* ── Stats strip ── */}
-        <div className="flex gap-2 md:gap-3">
-          <Stat value={queue.length} label="In queue"  color="text-amber-400"   icon={<Layers size={15} />} />
-          <Stat value={streak}       label="Day streak" color="text-orange-400" icon={<Flame size={15} />} />
-          <Stat value={learned}      label="Learned"   color="text-emerald-400" icon={<CheckCircle2 size={15} />} />
-          <Stat value={data.log[todayStr()]?.done ?? 0} label="Done today" color="text-blue-400" icon={<CalendarCheck2 size={15} />} />
+        <div className="flex gap-2.5">
+          <Stat value={queue.length} label="In queue"   color="var(--accent-ink)" icon={<Layers size={16} />} />
+          <Stat value={streak}       label="Day streak"  color="var(--orange)"     icon={<Flame size={16} />} />
+          <Stat value={learned}      label="Learned"     color="var(--green)"      icon={<CheckCircle2 size={16} />} />
         </div>
 
         {/* ── Progress bar ── */}
         {total > 0 && (
-          <div className="h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--surface-2)] rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-amber-500 to-amber-300"
+              className="h-full rounded-full"
+              style={{ background: 'linear-gradient(90deg, var(--accent), #fbbf24)' }}
               animate={{ width: `${(doneCount / total) * 100}%` }}
               transition={{ duration: 0.4 }}
             />
@@ -129,29 +128,32 @@ export function Review() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.18 }}
-              className="bg-[#0d0d16] border border-slate-700/60 rounded-3xl overflow-hidden"
+              className="bg-[var(--surface)] border border-[var(--border)] rounded-[26px] overflow-hidden shadow-[var(--shadow-md)]"
             >
               {/* Badge row */}
-              <div className="flex items-center justify-between gap-2 px-5 pt-4 flex-wrap">
+              <div className="flex items-center justify-between gap-2 px-6 pt-5 flex-wrap">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <div className={`w-2 h-2 rounded-full flex-shrink-0 ${tierDot[concept.tier]}`} />
-                  <span className={`text-[11px] font-bold uppercase tracking-wider ${tierLabel[concept.tier]}`}>{concept.tier}</span>
-                  <span className="text-slate-700 text-[10px]">·</span>
-                  <span className="text-[11px] text-slate-500 capitalize">{concept.category}</span>
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full"
+                    style={{ color: tierColor[concept.tier], background: 'var(--surface-2)' }}
+                  >
+                    {concept.tier}
+                  </span>
+                  <span className="text-[11px] text-[var(--text-faint)] capitalize">{concept.category}</span>
                   {isNew ? (
-                    <span className="flex items-center gap-1 text-[10px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/25 rounded-lg px-2 py-0.5 uppercase tracking-wide">
+                    <span className="flex items-center gap-1 text-[10px] font-bold text-[var(--accent-ink)] bg-[var(--accent-soft)] rounded-full px-2.5 py-1 uppercase tracking-wide">
                       <Sparkles size={9} /> New
                     </span>
                   ) : (
-                    <span className="text-[10px] font-semibold text-slate-600">
+                    <span className="text-[10px] font-semibold text-[var(--text-faint)]">
                       every {cardState!.interval <= 1 ? 'day' : `${cardState!.interval}d`} · seen {cardState!.reps + cardState!.lapses}×
                     </span>
                   )}
                 </div>
-                <div className="flex items-center gap-1 flex-shrink-0">
+                <div className="flex items-center gap-1.5 flex-shrink-0">
                   <div className="flex gap-0.5">
                     {[1, 2, 3, 4, 5].map(n => (
-                      <div key={n} className={`w-2 h-2 rounded-full border ${n <= mLevel ? MASTERY_COLORS[mLevel] + ' border-transparent' : 'border-slate-700/60'}`} />
+                      <div key={n} className={`w-2 h-2 rounded-full ${n <= mLevel ? MASTERY_COLORS[mLevel] : 'bg-[var(--surface-2)]'}`} />
                     ))}
                   </div>
                   <span className={`text-[9px] font-bold ml-1 ${MASTERY_TEXT[mLevel]}`}>{MASTERY_LABELS[mLevel]}</span>
@@ -159,10 +161,10 @@ export function Review() {
               </div>
 
               {/* Front — the prompt */}
-              <div className="px-5 py-6 md:py-8 text-center">
-                <p className="text-[26px] md:text-[30px] font-black text-white leading-tight">{concept.name}</p>
+              <div className="px-6 py-8 md:py-10 text-center">
+                <p className="text-[27px] md:text-[32px] font-extrabold text-[var(--text)] leading-tight tracking-tight">{concept.name}</p>
                 {!revealed && (
-                  <p className="text-[12px] text-slate-600 mt-3">Recall the definition and how you'd trade it — then reveal.</p>
+                  <p className="text-[12.5px] text-[var(--text-faint)] mt-3">Recall the definition and how you'd trade it — then reveal.</p>
                 )}
               </div>
 
@@ -171,21 +173,21 @@ export function Review() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="border-t border-slate-800/60 px-5 py-4 space-y-4"
+                  className="border-t border-[var(--border)] px-6 py-5 space-y-4"
                 >
-                  <p className="text-[13.5px] text-slate-300 leading-relaxed"><GlossaryText text={concept.description} /></p>
-                  <div className="bg-amber-500/5 border border-amber-500/15 rounded-2xl px-4 py-3">
-                    <p className="text-[9px] font-black uppercase tracking-[0.18em] text-amber-500 mb-1.5">How to use</p>
-                    <p className="text-[13px] text-slate-300 leading-relaxed"><GlossaryText text={concept.howToUse} /></p>
+                  <p className="text-[14px] text-[var(--text-dim)] leading-relaxed"><GlossaryText text={concept.description} /></p>
+                  <div className="bg-[var(--accent-soft)] rounded-2xl px-4 py-3.5">
+                    <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[var(--accent-ink)] mb-1.5">How to use</p>
+                    <p className="text-[13px] text-[var(--text-dim)] leading-relaxed"><GlossaryText text={concept.howToUse} /></p>
                   </div>
                   {strongSynergies.length > 0 && (
                     <div className="space-y-1.5">
-                      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-600">Essential pairings</p>
+                      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[var(--text-faint)]">Essential pairings</p>
                       {strongSynergies.map(s => (
-                        <div key={s.conceptId} className="flex items-start gap-2 bg-slate-900/50 border border-slate-800/60 rounded-xl px-3 py-2">
-                          <Link2 size={11} className="text-slate-600 mt-0.5 flex-shrink-0" />
-                          <p className="text-[12px] text-slate-400 leading-snug">
-                            <span className="font-bold text-slate-200">{s.partner!.shortName}</span> — {s.note}
+                        <div key={s.conceptId} className="flex items-start gap-2 bg-[var(--surface-2)] rounded-xl px-3 py-2.5">
+                          <Link2 size={11} className="text-[var(--text-faint)] mt-0.5 flex-shrink-0" />
+                          <p className="text-[12px] text-[var(--text-dim)] leading-snug">
+                            <span className="font-bold text-[var(--text)]">{s.partner!.shortName}</span> — {s.note}
                           </p>
                         </div>
                       ))}
@@ -194,22 +196,24 @@ export function Review() {
 
                   {/* Grade buttons */}
                   <div className="grid grid-cols-4 gap-2 pt-1">
-                    {GRADES.map(({ g, label, key, cls }) => (
+                    {GRADES.map(({ g, label, key, c, soft }) => (
                       <button key={g} onClick={() => onGrade(g)}
-                        className={`flex flex-col items-center gap-0.5 py-3 rounded-2xl border transition-all ${cls}`}>
-                        <span className="text-[13px] font-bold">{label}</span>
-                        <span className="text-[10px] opacity-70 font-semibold">{previewInterval(cardState, g)}</span>
+                        className="flex flex-col items-center gap-0.5 py-3.5 rounded-2xl font-bold transition-all hover:-translate-y-0.5"
+                        style={{ background: soft, color: c, border: '1px solid', borderColor: `color-mix(in srgb, ${c} 32%, transparent)` }}>
+                        <span className="text-[13px]">{label}</span>
+                        <span className="text-[10px] opacity-75 font-semibold">{previewInterval(cardState, g)}</span>
                         <span className="hidden md:block text-[9px] opacity-40 font-bold">{key}</span>
                       </button>
                     ))}
                   </div>
                 </motion.div>
               ) : (
-                <div className="border-t border-slate-800/60 p-4">
+                <div className="border-t border-[var(--border)] p-4">
                   <button onClick={() => setRevealed(true)}
-                    className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl bg-amber-500/15 border border-amber-500/35 text-amber-300 text-[14px] font-semibold hover:bg-amber-500/25 transition-all">
-                    <Eye size={15} /> Show answer
-                    <span className="hidden md:inline text-[10px] opacity-50 font-bold ml-1">space</span>
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-white text-[14.5px] font-bold shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
+                    style={{ background: 'var(--accent)' }}>
+                    <Eye size={16} /> Show answer
+                    <span className="hidden md:inline text-[10px] opacity-70 font-bold ml-1">space</span>
                   </button>
                 </div>
               )}
@@ -220,30 +224,30 @@ export function Review() {
               key="done"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-[#0d0d16] border border-slate-700/60 rounded-3xl px-6 py-10 text-center space-y-4"
+              className="bg-[var(--surface)] border border-[var(--border)] rounded-[26px] px-6 py-12 text-center space-y-4 shadow-[var(--shadow-md)]"
             >
-              <div className="w-16 h-16 mx-auto rounded-3xl bg-emerald-500/10 border border-emerald-500/25 flex items-center justify-center">
-                <CheckCircle2 size={28} className="text-emerald-400" />
+              <div className="w-16 h-16 mx-auto rounded-3xl bg-[var(--green-soft)] flex items-center justify-center">
+                <CheckCircle2 size={30} style={{ color: 'var(--green)' }} />
               </div>
               <div>
-                <p className="text-[20px] font-black text-white">
+                <p className="text-[21px] font-extrabold text-[var(--text)] tracking-tight">
                   {doneCount > 0 ? 'Session complete' : 'All caught up'}
                 </p>
-                <p className="text-[13px] text-slate-400 mt-1.5 leading-relaxed max-w-sm mx-auto">
+                <p className="text-[13px] text-[var(--text-dim)] mt-2 leading-relaxed max-w-sm mx-auto">
                   {doneCount > 0
                     ? `${todayLog?.done ?? doneCount} card${(todayLog?.done ?? doneCount) === 1 ? '' : 's'} reviewed today${streak > 1 ? ` — ${streak}-day streak` : ''}. The algorithm will bring each one back right before you'd forget it.`
                     : 'Nothing due right now. Come back tomorrow — reviews land daily.'}
                 </p>
               </div>
               {dueTomorrow(data) > 0 && (
-                <p className="text-[11px] font-semibold text-slate-600">
+                <p className="text-[11px] font-semibold text-[var(--text-faint)]">
                   {dueTomorrow(data)} card{dueTomorrow(data) === 1 ? '' : 's'} due tomorrow
                 </p>
               )}
               {streak > 0 && (
-                <div className="inline-flex items-center gap-1.5 bg-orange-500/10 border border-orange-500/25 rounded-xl px-3 py-1.5">
-                  <Flame size={13} className="text-orange-400" />
-                  <span className="text-[12px] font-bold text-orange-300">{streak}-day streak</span>
+                <div className="inline-flex items-center gap-1.5 bg-[var(--orange-soft)] rounded-full px-3.5 py-1.5">
+                  <Flame size={13} style={{ color: 'var(--orange)' }} />
+                  <span className="text-[12px] font-bold" style={{ color: 'var(--orange)' }}>{streak}-day streak</span>
                 </div>
               )}
             </motion.div>
