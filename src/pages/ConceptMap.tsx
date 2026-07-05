@@ -3,6 +3,7 @@ import { concepts, getConceptById } from '../data/concepts'
 import { useBuilds } from '../hooks/useBuilds'
 import { useAllMastery, MASTERY_LABELS, type MasteryLevel } from '../hooks/useMastery'
 import { GlossaryText } from '../components/GlossaryText'
+import { useTheme } from '../hooks/useTheme'
 import type { Build } from '../types'
 
 // ── Layout ──────────────────────────────────────────────────────────────────
@@ -94,8 +95,21 @@ export function ConceptMap() {
   const activeConcept = hovered ? getConceptById(hovered) : null
   const activeLevel   = activeConcept ? (masteryData[activeConcept.id] ?? 0) as MasteryLevel : 0
 
-  const getNodeFill   = (id: string) => colorMode === 'mastery' ? masteryFill[masteryData[id] ?? 0]   : tierFill[concepts.find(c => c.id === id)?.tier ?? 'basic']
-  const getNodeStroke = (id: string) => colorMode === 'mastery' ? masteryStroke[masteryData[id] ?? 0] : tierStroke[concepts.find(c => c.id === id)?.tier ?? 'basic']
+  // Structural map colors — themed so the canvas, rings, edges and idle nodes
+  // read correctly on the warm light background (node/tier hues stay vivid).
+  const { theme } = useTheme()
+  const light = theme === 'light'
+  const mapBgInner   = light ? '#fffdf9' : '#0d0d1a'
+  const mapBgOuter   = light ? '#f1ebe0' : '#05050a'
+  const ringStroke   = light ? '#e3dacb' : '#1e1e2e'
+  const edgeIdle     = light ? '#d8cfbe' : '#1e2030'
+  const edgeInBuild  = light ? '#a89e8b' : '#6b7280'
+  const labelIdle    = light ? '#6d6456' : '#94a3b8'
+  const notStarted   = light ? '#d8cfbe' : '#1e2030'
+  const notStartedSt = light ? '#c3b9a6' : '#2d2d45'
+
+  const getNodeFill   = (id: string) => colorMode === 'mastery' ? ((masteryData[id] ?? 0) === 0 ? notStarted : masteryFill[masteryData[id] ?? 0])   : tierFill[concepts.find(c => c.id === id)?.tier ?? 'basic']
+  const getNodeStroke = (id: string) => colorMode === 'mastery' ? ((masteryData[id] ?? 0) === 0 ? notStartedSt : masteryStroke[masteryData[id] ?? 0]) : tierStroke[concepts.find(c => c.id === id)?.tier ?? 'basic']
   const getNodeGlow   = (id: string) => colorMode === 'mastery' ? masteryGlow[masteryData[id] ?? 0]   : tierGlow[concepts.find(c => c.id === id)?.tier ?? 'basic']
 
   return (
@@ -118,15 +132,15 @@ export function ConceptMap() {
               <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
             </filter>
             <radialGradient id="bg-grad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%"   stopColor="#0d0d1a" />
-              <stop offset="100%" stopColor="#05050a" />
+              <stop offset="0%"   stopColor={mapBgInner} />
+              <stop offset="100%" stopColor={mapBgOuter} />
             </radialGradient>
           </defs>
 
           <circle cx="0" cy="0" r="510" fill="url(#bg-grad)" />
 
           {Object.values(RINGS).map(r => (
-            <circle key={r} cx="0" cy="0" r={r} fill="none" stroke="#1e1e2e" strokeWidth="1" strokeDasharray="4 6" />
+            <circle key={r} cx="0" cy="0" r={r} fill="none" stroke={ringStroke} strokeWidth="1" strokeDasharray="4 6" />
           ))}
 
           {/* Ring tier labels — only in tier mode */}
@@ -143,7 +157,7 @@ export function ConceptMap() {
             if (!a || !b) return null
             const active  = isEdgeActive(e)
             const inBuild = activeIds ? activeIds.includes(e.from) && activeIds.includes(e.to) : false
-            const strokeColor = active ? getNodeFill(e.from) : inBuild ? '#6b7280' : '#1e2030'
+            const strokeColor = active ? getNodeFill(e.from) : inBuild ? edgeInBuild : edgeIdle
             const opacity = active  ? (e.strength === 3 ? 0.9 : e.strength === 2 ? 0.7 : 0.5)
                           : inBuild ? 0.35
                           : hovered ? 0.04
@@ -193,7 +207,7 @@ export function ConceptMap() {
                 {/* Label — always visible; dims when something else is hovered */}
                 <text y={NODE_R + 14} textAnchor="middle" fontSize="9.5"
                   fontWeight={isHov ? '700' : '500'}
-                  fill={isHov ? fill : '#94a3b8'}
+                  fill={isHov ? fill : labelIdle}
                   opacity={isHov ? 1 : (isHighlit && !!hovered) ? 0.85 : hovered ? 0.05 : 0.5}
                   fontFamily="Inter, sans-serif"
                   style={{ pointerEvents: 'none', userSelect: 'none', transition: 'opacity 0.15s' }}>

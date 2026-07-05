@@ -124,10 +124,15 @@ html[data-theme="light"] {
   & [class*="text-pink-300"], & [class*="text-pink-400"] { color: #db2777; }
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* Reset lives in @layer base so Tailwind's utilities (mx-auto, m-*, p-*) still
+   win — an unlayered `* { margin:0 }` silently overrides margin-inline:auto and
+   breaks centering app-wide. */
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 body {
