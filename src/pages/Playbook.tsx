@@ -268,8 +268,8 @@ export function Playbook() {
               </div>
             </div>
 
-            {/* Cards */}
-            <div className="flex-1 overflow-y-auto px-3 md:px-6 py-4">
+            {/* Cards — match the header's px-4 md:px-6 so card and title left edges align */}
+            <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4">
               {setups.length > 0 ? (
                 <div className="space-y-3 max-w-3xl">
                   {setups.map(s => <SetupCard key={s.id} setup={s} />)}
