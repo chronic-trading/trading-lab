@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useRef } from 'react'
 import { concepts, getConceptById } from '../data/concepts'
 import { useBuilds } from '../hooks/useBuilds'
 import { useAllMastery, MASTERY_LABELS, type MasteryLevel } from '../hooks/useMastery'
@@ -112,13 +112,38 @@ export function ConceptMap() {
   const getNodeStroke = (id: string) => colorMode === 'mastery' ? ((masteryData[id] ?? 0) === 0 ? notStartedSt : masteryStroke[masteryData[id] ?? 0]) : tierStroke[concepts.find(c => c.id === id)?.tier ?? 'basic']
   const getNodeGlow   = (id: string) => colorMode === 'mastery' ? masteryGlow[masteryData[id] ?? 0]   : tierGlow[concepts.find(c => c.id === id)?.tier ?? 'basic']
 
+  // ── Hover model ────────────────────────────────────────────────────────────
+  // Single source of truth: hit-test the pointer against node centres in SVG
+  // space. This avoids the per-node pointerEnter/Leave races (and the dead zone
+  // between a node and its label) that made nodes flicker on hover. Nearest node
+  // wins within a radius; min centre gap is ~105, so it's never ambiguous.
+  const svgRef = useRef<SVGSVGElement>(null)
+  const nodeAt = (clientX: number, clientY: number): string | null => {
+    const svg = svgRef.current
+    const ctm = svg?.getScreenCTM()
+    if (!svg || !ctm) return null
+    const pt = new DOMPoint(clientX, clientY).matrixTransform(ctm.inverse())
+    let best: string | null = null
+    let bestD = Infinity
+    for (const c of concepts) {
+      const p = positions.get(c.id)
+      if (!p) continue
+      const d = Math.hypot(pt.x - p.x, pt.y - p.y)
+      if (d < bestD) { bestD = d; best = c.id }
+    }
+    return bestD <= 46 ? best : null
+  }
+
   return (
     <div className="flex h-full overflow-hidden bg-[#05050a] flex-col md:flex-row relative">
 
       {/* ── SVG Map ── */}
       <div className="flex-1 relative overflow-hidden">
-        <svg viewBox="-520 -520 1040 1040" className="w-full h-full" style={{ cursor: 'default' }}
-          onClick={() => setHovered(null)}
+        <svg ref={svgRef} viewBox="-520 -520 1040 1040" className="w-full h-full"
+          style={{ cursor: hovered ? 'pointer' : 'default', touchAction: 'manipulation' }}
+          onPointerMove={e => { if (e.pointerType === 'mouse') setHovered(nodeAt(e.clientX, e.clientY)) }}
+          onPointerLeave={e => { if (e.pointerType === 'mouse') setHovered(null) }}
+          onClick={e => { const id = nodeAt(e.clientX, e.clientY); setHovered(prev => (prev === id ? null : id)) }}
         >
           <defs>
             {['emerald', 'blue', 'purple'].map(c => (
@@ -187,7 +212,9 @@ export function ConceptMap() {
 
 
             return (
-              <g key={c.id} transform={`translate(${p.x},${p.y})`} style={{ cursor: 'pointer' }}>
+              // Pointer events are handled on the <svg> via hit-testing, so the
+              // node graphics never intercept them (no enter/leave races).
+              <g key={c.id} transform={`translate(${p.x},${p.y})`} style={{ pointerEvents: 'none' }}>
                 {/* Pulse ring — always rendered, opacity-transitioned to avoid pop-in */}
                 <circle r={NODE_R + 8} fill="none" stroke={fill} strokeWidth="1"
                   opacity={isHov ? 0.45 : (inBuild && !hovered) ? 0.2 : 0}
@@ -213,12 +240,6 @@ export function ConceptMap() {
                   style={{ pointerEvents: 'none', userSelect: 'none', transition: 'opacity 0.15s' }}>
                   {c.shortName}
                 </text>
-                {/* Fixed-size invisible hit target — prevents hover flicker when node visually grows */}
-                <circle r={NODE_R + 8} fill="transparent"
-                  onPointerEnter={e => { if (e.pointerType === 'mouse') setHovered(c.id) }}
-                  onPointerLeave={e => { if (e.pointerType === 'mouse') setHovered(null) }}
-                  onClick={e => { e.stopPropagation(); setHovered(prev => prev === c.id ? null : c.id) }}
-                />
               </g>
             )
           })}
