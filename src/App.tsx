@@ -232,7 +232,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
   return (
     <div className="flex flex-col h-screen bg-[var(--bg)] overflow-hidden">
-      <header className="relative flex-shrink-0 bg-[var(--bg-elev)] border-b border-[var(--border)]">
+      <header className="relative flex-shrink-0 bg-[var(--bg-elev)] border-b border-[var(--border)] shadow-[0_6px_20px_-14px_rgba(74,58,28,0.22)] z-20">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
         <div className="relative flex items-center px-4 md:px-6 h-12 md:h-16 gap-4">
 
