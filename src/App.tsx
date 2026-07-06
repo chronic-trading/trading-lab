@@ -39,10 +39,14 @@ const SUPABASE_CONFIGURED = !!(
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY
 )
 
-type Tab  = 'plan' | 'chart' | 'calendar' | 'journal' | 'recap' | 'review' | 'playbook' | 'map' | 'backtest' | 'builder' | 'templates' | 'builds' | 'arcade'
+type Tab  = 'builder' | 'templates' | 'builds' | 'plan' | 'chart' | 'calendar' | 'journal' | 'recap' | 'review' | 'playbook' | 'map' | 'backtest' | 'arcade'
 type View = 'landing' | 'login' | 'app'
 
 const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
+  // ── Build setups (primary workflow) ──
+  { id: 'builder',   label: 'Builder',   Icon: Beaker         },
+  { id: 'templates', label: 'Templates', Icon: LayoutTemplate },
+  { id: 'builds',    label: 'Builds',    Icon: Package        },
   // ── Prepare the session ──
   { id: 'plan',      label: 'Plan',      Icon: ClipboardCheck },
   { id: 'chart',     label: 'Chart',     Icon: LineChart      },
@@ -55,16 +59,12 @@ const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
   { id: 'playbook',  label: 'Playbook',  Icon: GraduationCap  },
   { id: 'map',       label: 'Map',       Icon: Network        },
   { id: 'backtest',  label: 'Replay',    Icon: Crosshair      },
-  // ── Build setups ──
-  { id: 'builder',   label: 'Builder',   Icon: Beaker         },
-  { id: 'templates', label: 'Templates', Icon: LayoutTemplate },
-  { id: 'builds',    label: 'Builds',    Icon: Package        },
   // ── Downtime ──
   { id: 'arcade',    label: 'Arcade',    Icon: Gamepad2       },
 ]
 
 // Primary tabs always visible on mobile bottom bar
-const MOBILE_PRIMARY: Tab[] = ['plan', 'chart', 'journal', 'review']
+const MOBILE_PRIMARY: Tab[] = ['builder', 'chart', 'journal', 'review']
 
 // Mobile bottom nav
 function MobileBottomNav({
@@ -198,7 +198,7 @@ function RootApp() {
 }
 
 function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: string }) {
-  const [tab,          setTab]          = useState<Tab>('plan')
+  const [tab,          setTab]          = useState<Tab>('builder')
   const mainRef = useRef<HTMLElement>(null)
   const [loadedBuild,  setLoadedBuild]  = useState<Build | null>(null)
   const [notesOpen,     setNotesOpen]     = useState(false)
