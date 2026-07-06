@@ -39,27 +39,32 @@ const SUPABASE_CONFIGURED = !!(
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY
 )
 
-type Tab  = 'builder' | 'chart' | 'map' | 'review' | 'plan' | 'journal' | 'calendar' | 'templates' | 'builds' | 'recap' | 'playbook' | 'backtest' | 'arcade'
+type Tab  = 'plan' | 'chart' | 'calendar' | 'journal' | 'recap' | 'review' | 'playbook' | 'map' | 'backtest' | 'builder' | 'templates' | 'builds' | 'arcade'
 type View = 'landing' | 'login' | 'app'
 
 const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
-  { id: 'builder',   label: 'Builder',   Icon: Beaker         },
-  { id: 'chart',     label: 'Chart',     Icon: LineChart      },
-  { id: 'map',       label: 'Map',       Icon: Network        },
-  { id: 'review',    label: 'Review',    Icon: Layers         },
+  // ── Prepare the session ──
   { id: 'plan',      label: 'Plan',      Icon: ClipboardCheck },
-  { id: 'journal',   label: 'Journal',   Icon: BookOpen       },
+  { id: 'chart',     label: 'Chart',     Icon: LineChart      },
   { id: 'calendar',  label: 'Calendar',  Icon: CalendarDays   },
+  // ── Record & analyze ──
+  { id: 'journal',   label: 'Journal',   Icon: BookOpen       },
+  { id: 'recap',     label: 'Recap',     Icon: BarChart2      },
+  // ── Learn & practice ──
+  { id: 'review',    label: 'Review',    Icon: Layers         },
+  { id: 'playbook',  label: 'Playbook',  Icon: GraduationCap  },
+  { id: 'map',       label: 'Map',       Icon: Network        },
+  { id: 'backtest',  label: 'Replay',    Icon: Crosshair      },
+  // ── Build setups ──
+  { id: 'builder',   label: 'Builder',   Icon: Beaker         },
   { id: 'templates', label: 'Templates', Icon: LayoutTemplate },
   { id: 'builds',    label: 'Builds',    Icon: Package        },
-  { id: 'recap',     label: 'Recap',     Icon: BarChart2      },
-  { id: 'playbook',  label: 'Playbook',  Icon: GraduationCap  },
-  { id: 'backtest',  label: 'Replay',    Icon: Crosshair      },
+  // ── Downtime ──
   { id: 'arcade',    label: 'Arcade',    Icon: Gamepad2       },
 ]
 
 // Primary tabs always visible on mobile bottom bar
-const MOBILE_PRIMARY: Tab[] = ['builder', 'playbook', 'journal', 'chart']
+const MOBILE_PRIMARY: Tab[] = ['plan', 'chart', 'journal', 'review']
 
 // Mobile bottom nav
 function MobileBottomNav({
@@ -193,7 +198,7 @@ function RootApp() {
 }
 
 function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: string }) {
-  const [tab,          setTab]          = useState<Tab>('builder')
+  const [tab,          setTab]          = useState<Tab>('plan')
   const mainRef = useRef<HTMLElement>(null)
   const [loadedBuild,  setLoadedBuild]  = useState<Build | null>(null)
   const [notesOpen,     setNotesOpen]     = useState(false)
