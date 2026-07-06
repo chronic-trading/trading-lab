@@ -3,7 +3,7 @@ import {
   FlaskConical, Package, Beaker, Network,
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
-  ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical,
+  ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical, MoreHorizontal, ChevronDown,
   Gamepad2, Layers, Sun, Moon,
 } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
@@ -39,32 +39,32 @@ const SUPABASE_CONFIGURED = !!(
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY
 )
 
-type Tab  = 'builder' | 'templates' | 'builds' | 'plan' | 'chart' | 'calendar' | 'journal' | 'recap' | 'review' | 'playbook' | 'map' | 'backtest' | 'arcade'
+type Tab  = 'builder' | 'map' | 'review' | 'journal' | 'backtest' | 'recap' | 'playbook' | 'plan' | 'chart' | 'calendar' | 'templates' | 'builds' | 'arcade'
 type View = 'landing' | 'login' | 'app'
 
 const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
-  // ── Build setups (primary workflow) ──
-  { id: 'builder',   label: 'Builder',   Icon: Beaker         },
+  // ── Showcase set (always visible on desktop; the build + signature tools) ──
+  { id: 'builder',   label: 'Builder',   Icon: Beaker         },  // build setups from concepts
+  { id: 'map',       label: 'Map',       Icon: Network        },  // interactive concept graph
+  { id: 'review',    label: 'Review',    Icon: Layers         },  // spaced-repetition mastery
+  { id: 'journal',   label: 'Journal',   Icon: BookOpen       },  // trades + analytics v2
+  { id: 'backtest',  label: 'Replay',    Icon: Crosshair      },  // scored bar-by-bar practice
+  { id: 'recap',     label: 'Recap',     Icon: BarChart2      },  // shareable trade montages
+  { id: 'playbook',  label: 'Playbook',  Icon: GraduationCap  },  // the ICT lessons
+  // ── Secondary (desktop "More" dropdown) — support + commodity tools ──
+  { id: 'plan',      label: 'Plan',      Icon: ClipboardCheck },
+  { id: 'chart',     label: 'Levels',    Icon: LineChart      },  // key levels (not full charting)
+  { id: 'calendar',  label: 'Calendar',  Icon: CalendarDays   },
   { id: 'templates', label: 'Templates', Icon: LayoutTemplate },
   { id: 'builds',    label: 'Builds',    Icon: Package        },
-  // ── Prepare the session ──
-  { id: 'plan',      label: 'Plan',      Icon: ClipboardCheck },
-  { id: 'chart',     label: 'Chart',     Icon: LineChart      },
-  { id: 'calendar',  label: 'Calendar',  Icon: CalendarDays   },
-  // ── Record & analyze ──
-  { id: 'journal',   label: 'Journal',   Icon: BookOpen       },
-  { id: 'recap',     label: 'Recap',     Icon: BarChart2      },
-  // ── Learn & practice ──
-  { id: 'review',    label: 'Review',    Icon: Layers         },
-  { id: 'playbook',  label: 'Playbook',  Icon: GraduationCap  },
-  { id: 'map',       label: 'Map',       Icon: Network        },
-  { id: 'backtest',  label: 'Replay',    Icon: Crosshair      },
-  // ── Downtime ──
   { id: 'arcade',    label: 'Arcade',    Icon: Gamepad2       },
 ]
 
+// Always-visible on the desktop tab bar; the rest live in a "More" dropdown.
+const DESKTOP_PRIMARY: Tab[] = ['builder', 'map', 'review', 'journal', 'backtest', 'recap', 'playbook']
+
 // Primary tabs always visible on mobile bottom bar
-const MOBILE_PRIMARY: Tab[] = ['builder', 'chart', 'journal', 'review']
+const MOBILE_PRIMARY: Tab[] = ['builder', 'map', 'review', 'journal']
 
 // Mobile bottom nav
 function MobileBottomNav({
@@ -209,6 +209,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
   const [drawdownOpen,  setDrawdownOpen]  = useState(false)
   const [mindsetOpen,   setMindsetOpen]   = useState(false)
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
+  const [moreOpen,      setMoreOpen]      = useState(false)
   const { loadSharedBuild }             = useBuilds()
   const { theme, toggle }               = useTheme()
 
@@ -319,16 +320,48 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
           <KillZoneClockCompact />
         </div>
 
-        {/* Desktop tab nav */}
-        <nav className="hidden md:flex border-t border-[var(--border)] overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {tabs.map(({ id, label, Icon }) => (
-            <button key={id} onClick={() => setTab(id)}
-              className={`flex-shrink-0 flex-1 min-w-[46px] flex items-center justify-center gap-1.5 py-3 text-[11.5px] font-semibold relative transition-all duration-150 border-b-2 px-2
+        {/* Desktop tab nav — curated primary set + a "More" dropdown for the rest */}
+        <nav className="hidden md:flex items-stretch border-t border-[var(--border)] relative">
+          {tabs.filter(t => DESKTOP_PRIMARY.includes(t.id)).map(({ id, label, Icon }) => (
+            <button key={id} onClick={() => { setTab(id); setMoreOpen(false) }}
+              className={`flex-1 min-w-[46px] flex items-center justify-center gap-1.5 py-3 text-[11.5px] font-semibold relative transition-all duration-150 border-b-2 px-2
                 ${tab === id ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
               <Icon size={12} />
               <span>{label}</span>
             </button>
           ))}
+
+          {/* More */}
+          {(() => {
+            const secondary = tabs.filter(t => !DESKTOP_PRIMARY.includes(t.id))
+            const activeInMore = secondary.some(t => t.id === tab)
+            return (
+              <div className="relative flex flex-shrink-0">
+                <button onClick={() => setMoreOpen(o => !o)}
+                  className={`flex items-center justify-center gap-1.5 py-3 px-4 text-[11.5px] font-semibold border-b-2 transition-all duration-150
+                    ${moreOpen || activeInMore ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
+                  <MoreHorizontal size={13} />
+                  <span>More</span>
+                  <ChevronDown size={11} className={`transition-transform duration-200 ${moreOpen ? 'rotate-180' : ''}`} />
+                </button>
+                {moreOpen && (
+                  <>
+                    <div className="fixed inset-0 z-30" onClick={() => setMoreOpen(false)} />
+                    <div className="absolute top-full right-0 mt-1.5 z-40 w-48 bg-[var(--bg-elev)] border border-[var(--border)] rounded-2xl shadow-[var(--shadow-lg)] p-1.5">
+                      {secondary.map(({ id, label, Icon }) => (
+                        <button key={id} onClick={() => { setTab(id); setMoreOpen(false) }}
+                          className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-semibold transition-all
+                            ${tab === id ? 'text-[var(--accent-ink)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
+                          <Icon size={13} className="flex-shrink-0" />
+                          <span>{label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )
+          })()}
         </nav>
       </header>
 
