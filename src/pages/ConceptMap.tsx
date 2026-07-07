@@ -42,12 +42,10 @@ function getEdges() {
 // ── Tier colors ───────────────────────────────────────────────────────────────
 const tierFill:   Record<string, string> = { basic: '#34d399', intermediate: '#60a5fa', advanced: '#c084fc' }
 const tierStroke: Record<string, string> = { basic: '#10b981', intermediate: '#3b82f6', advanced: '#a855f7' }
-const tierGlow:   Record<string, string> = { basic: 'emerald', intermediate: 'blue', advanced: 'purple' }
 
 // ── Mastery colors ────────────────────────────────────────────────────────────
 const masteryFill:   Record<number, string> = { 0: '#1e2030', 1: '#ef4444', 2: '#f97316', 3: '#eab308', 4: '#22c55e', 5: '#f59e0b' }
 const masteryStroke: Record<number, string> = { 0: '#2d2d45', 1: '#dc2626', 2: '#ea580c', 3: '#ca8a04', 4: '#16a34a', 5: '#d97706' }
-const masteryGlow:   Record<number, string> = { 0: 'blue', 1: 'blue', 2: 'blue', 3: 'blue', 4: 'emerald', 5: 'emerald' }
 
 const masteryLegend: { level: MasteryLevel; label: string; color: string }[] = [
   { level: 5, label: 'Mastered',   color: '#f59e0b' },
@@ -110,7 +108,6 @@ export function ConceptMap() {
 
   const getNodeFill   = (id: string) => colorMode === 'mastery' ? ((masteryData[id] ?? 0) === 0 ? notStarted : masteryFill[masteryData[id] ?? 0])   : tierFill[concepts.find(c => c.id === id)?.tier ?? 'basic']
   const getNodeStroke = (id: string) => colorMode === 'mastery' ? ((masteryData[id] ?? 0) === 0 ? notStartedSt : masteryStroke[masteryData[id] ?? 0]) : tierStroke[concepts.find(c => c.id === id)?.tier ?? 'basic']
-  const getNodeGlow   = (id: string) => colorMode === 'mastery' ? masteryGlow[masteryData[id] ?? 0]   : tierGlow[concepts.find(c => c.id === id)?.tier ?? 'basic']
 
   // ── Hover model ────────────────────────────────────────────────────────────
   // Single source of truth: hit-test the pointer against node centres in SVG
@@ -118,7 +115,7 @@ export function ConceptMap() {
   // between a node and its label) that made nodes flicker on hover. Nearest node
   // wins within a radius; min centre gap is ~105, so it's never ambiguous.
   const svgRef = useRef<SVGSVGElement>(null)
-  const nodeAt = (clientX: number, clientY: number): string | null => {
+  const nodeAt = (clientX: number, clientY: number, current: string | null): string | null => {
     const svg = svgRef.current
     const ctm = svg?.getScreenCTM()
     if (!svg || !ctm) return null
@@ -131,7 +128,10 @@ export function ConceptMap() {
       const d = Math.hypot(pt.x - p.x, pt.y - p.y)
       if (d < bestD) { bestD = d; best = c.id }
     }
-    return bestD <= 46 ? best : null
+    // Hysteresis: once a node is hovered, hold it until the pointer moves well
+    // clear (release 62 > acquire 40), so jitter near the edge can't strobe hover.
+    if (current && best === current) return bestD <= 62 ? current : null
+    return bestD <= 40 ? best : null
   }
 
   return (
@@ -141,21 +141,11 @@ export function ConceptMap() {
       <div className="flex-1 relative overflow-hidden">
         <svg ref={svgRef} viewBox="-520 -520 1040 1040" className="w-full h-full"
           style={{ cursor: hovered ? 'pointer' : 'default', touchAction: 'manipulation' }}
-          onPointerMove={e => { if (e.pointerType === 'mouse') setHovered(nodeAt(e.clientX, e.clientY)) }}
+          onPointerMove={e => { if (e.pointerType === 'mouse') setHovered(prev => nodeAt(e.clientX, e.clientY, prev)) }}
           onPointerLeave={e => { if (e.pointerType === 'mouse') setHovered(null) }}
-          onClick={e => { const id = nodeAt(e.clientX, e.clientY); setHovered(prev => (prev === id ? null : id)) }}
+          onClick={e => { const id = nodeAt(e.clientX, e.clientY, null); setHovered(prev => (prev === id ? null : id)) }}
         >
           <defs>
-            {['emerald', 'blue', 'purple'].map(c => (
-              <filter key={c} id={`glow-${c}`} x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
-                <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-              </filter>
-            ))}
-            <filter id="glow-line" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
-              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-            </filter>
             <radialGradient id="bg-grad" cx="50%" cy="50%" r="50%">
               <stop offset="0%"   stopColor={mapBgInner} />
               <stop offset="100%" stopColor={mapBgOuter} />
@@ -193,7 +183,6 @@ export function ConceptMap() {
               <line key={`${e.from}--${e.to}`}
                 x1={a.x} y1={a.y} x2={b.x} y2={b.y}
                 stroke={strokeColor} strokeWidth={sw} opacity={opacity}
-                filter={active ? 'url(#glow-line)' : undefined}
                 style={{ transition: 'opacity 0.2s, stroke 0.2s' }}
               />
             )
@@ -208,18 +197,22 @@ export function ConceptMap() {
             const dimmed    = hovered ? !isHighlit : activeIds ? !inBuild : false
             const fill      = getNodeFill(c.id)
             const stroke    = getNodeStroke(c.id)
-            const glow      = getNodeGlow(c.id)
 
 
             return (
               // Pointer events are handled on the <svg> via hit-testing, so the
               // node graphics never intercept them (no enter/leave races).
               <g key={c.id} transform={`translate(${p.x},${p.y})`} style={{ pointerEvents: 'none' }}>
-                {/* Pulse ring — always rendered, opacity-transitioned to avoid pop-in */}
-                <circle r={NODE_R + 8} fill="none" stroke={fill} strokeWidth="1"
-                  opacity={isHov ? 0.45 : (inBuild && !hovered) ? 0.2 : 0}
-                  filter={isHov ? `url(#glow-${glow})` : undefined}
+                {/* Soft flat halo on hover — no blur filter, so no repaint flicker */}
+                <circle r={NODE_R + 11} fill={fill}
+                  opacity={isHov ? 0.16 : 0}
                   style={{ transition: 'opacity 0.18s' }}
+                />
+                {/* Pulse ring — always rendered, opacity-transitioned to avoid pop-in */}
+                <circle r={NODE_R + 8} fill="none" stroke={fill}
+                  strokeWidth={isHov ? 1.5 : 1}
+                  opacity={isHov ? 0.6 : (inBuild && !hovered) ? 0.2 : 0}
+                  style={{ transition: 'opacity 0.18s, stroke-width 0.18s' }}
                 />
                 {/* Main node circle */}
                 <circle r={NODE_R}
@@ -228,7 +221,6 @@ export function ConceptMap() {
                   stroke={stroke}
                   strokeWidth={isHov ? 2 : inBuild ? 1.5 : 1}
                   strokeOpacity={isHov ? 1 : inBuild ? 0.8 : dimmed ? 0.08 : colorMode === 'mastery' ? 0.7 : 0.4}
-                  filter={isHov ? `url(#glow-${glow})` : undefined}
                   style={{ transition: 'fill-opacity 0.15s, stroke-opacity 0.15s, stroke-width 0.15s' }}
                 />
                 {/* Label — always visible; dims when something else is hovered */}
