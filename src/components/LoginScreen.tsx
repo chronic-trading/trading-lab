@@ -130,7 +130,7 @@ export function LoginScreen({ onBack }: { onBack?: () => void }) {
                   autoCorrect="off"
                   autoCapitalize="none"
                   data-form-type="other"
-                  className="w-full bg-slate-900/80 border border-slate-700/60 rounded-xl px-4 py-3.5 text-[13px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500/50 transition-colors tracking-widest"
+                  className="w-full bg-slate-900/80 border border-slate-700/60 rounded-xl px-4 py-3.5 text-[16px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500/50 transition-colors tracking-wide"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}
                 />
 
