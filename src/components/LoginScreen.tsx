@@ -6,8 +6,16 @@ const WHOP_BUY_URL = import.meta.env.VITE_WHOP_BUY_URL as string | undefined
 
 // Each Whop license key maps to one Supabase account.
 // We synthesise an email so Supabase can manage the session.
+// License keys are case/format-insensitive: canonicalise once so the same key
+// typed in any case (or with/without dashes) maps to the same account AND the
+// same password. (Previously the email was canonical but the password kept the
+// raw case, so a differently-cased key hit the same email with a wrong password
+// → sign-in failed → sign-up failed "user already registered".)
+function canonicalKey(key: string) {
+  return key.trim().toLowerCase().replace(/[^a-z0-9]/g, '')
+}
 function keyToEmail(key: string) {
-  return `${key.toLowerCase().replace(/[^a-z0-9]/g, '')}@license.tradinglab.app`
+  return `${canonicalKey(key)}@license.tradinglab.app`
 }
 
 async function validateWhopKey(key: string): Promise<{ valid: boolean; error?: string }> {
@@ -26,7 +34,7 @@ async function validateWhopKey(key: string): Promise<{ valid: boolean; error?: s
 
 async function signInWithKey(key: string): Promise<string | null> {
   const email    = keyToEmail(key)
-  const password = key
+  const password = canonicalKey(key)
 
   // Try sign-in first (returning user)
   const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password })
