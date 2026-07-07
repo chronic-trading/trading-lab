@@ -1,4 +1,4 @@
-import { useMemo, useState, useRef } from 'react'
+import { useMemo, useState, useRef, useEffect } from 'react'
 import { concepts, getConceptById } from '../data/concepts'
 import { useBuilds } from '../hooks/useBuilds'
 import { useAllMastery, MASTERY_LABELS, type MasteryLevel } from '../hooks/useMastery'
@@ -114,12 +114,32 @@ export function ConceptMap() {
   // space. This avoids the per-node pointerEnter/Leave races (and the dead zone
   // between a node and its label) that made nodes flicker on hover. Nearest node
   // wins within a radius; min centre gap is ~105, so it's never ambiguous.
-  const svgRef = useRef<SVGSVGElement>(null)
+  const svgRef    = useRef<SVGSVGElement>(null)
+  const invCtmRef = useRef<DOMMatrix | null>(null)   // cached inverse screen matrix
+  const rafRef    = useRef<number | null>(null)
+  const ptRef     = useRef({ x: 0, y: 0 })
+
+  // Cache the inverse screen matrix — querying getScreenCTM() on every pointer
+  // move forces a synchronous layout reflow and makes hover stutter. Refresh it
+  // only when the geometry can actually change (mount, resize, pointer enter).
+  const refreshCtm = () => {
+    const m = svgRef.current?.getScreenCTM()
+    invCtmRef.current = m ? m.inverse() : null
+  }
+  useEffect(() => {
+    refreshCtm()
+    window.addEventListener('resize', refreshCtm)
+    return () => {
+      window.removeEventListener('resize', refreshCtm)
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const nodeAt = (clientX: number, clientY: number, current: string | null): string | null => {
-    const svg = svgRef.current
-    const ctm = svg?.getScreenCTM()
-    if (!svg || !ctm) return null
-    const pt = new DOMPoint(clientX, clientY).matrixTransform(ctm.inverse())
+    const inv = invCtmRef.current
+    if (!inv) return null
+    const pt = new DOMPoint(clientX, clientY).matrixTransform(inv)
     let best: string | null = null
     let bestD = Infinity
     for (const c of concepts) {
@@ -134,6 +154,17 @@ export function ConceptMap() {
     return bestD <= 40 ? best : null
   }
 
+  // Coalesce rapid pointer moves into one hover update per animation frame.
+  const onHoverMove = (clientX: number, clientY: number) => {
+    ptRef.current = { x: clientX, y: clientY }
+    if (rafRef.current != null) return
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null
+      const { x, y } = ptRef.current
+      setHovered(prev => nodeAt(x, y, prev))
+    })
+  }
+
   return (
     <div className="flex h-full overflow-hidden bg-[#05050a] flex-col md:flex-row relative">
 
@@ -141,9 +172,10 @@ export function ConceptMap() {
       <div className="flex-1 relative overflow-hidden">
         <svg ref={svgRef} viewBox="-520 -520 1040 1040" className="w-full h-full"
           style={{ cursor: hovered ? 'pointer' : 'default', touchAction: 'manipulation' }}
-          onPointerMove={e => { if (e.pointerType === 'mouse') setHovered(prev => nodeAt(e.clientX, e.clientY, prev)) }}
+          onPointerEnter={refreshCtm}
+          onPointerMove={e => { if (e.pointerType === 'mouse') onHoverMove(e.clientX, e.clientY) }}
           onPointerLeave={e => { if (e.pointerType === 'mouse') setHovered(null) }}
-          onClick={e => { const id = nodeAt(e.clientX, e.clientY, null); setHovered(prev => (prev === id ? null : id)) }}
+          onClick={e => { refreshCtm(); const id = nodeAt(e.clientX, e.clientY, null); setHovered(prev => (prev === id ? null : id)) }}
         >
           <defs>
             <radialGradient id="bg-grad" cx="50%" cy="50%" r="50%">
@@ -183,7 +215,7 @@ export function ConceptMap() {
               <line key={`${e.from}--${e.to}`}
                 x1={a.x} y1={a.y} x2={b.x} y2={b.y}
                 stroke={strokeColor} strokeWidth={sw} opacity={opacity}
-                style={{ transition: 'opacity 0.2s, stroke 0.2s' }}
+                style={{ transition: 'opacity 0.2s' }}
               />
             )
           })}
@@ -224,8 +256,11 @@ export function ConceptMap() {
                   style={{ transition: 'fill-opacity 0.15s, stroke-opacity 0.15s, stroke-width 0.15s' }}
                 />
                 {/* Label — always visible; dims when something else is hovered */}
+                {/* Constant weight — changing font-weight on hover reflows the
+                    text (bold is wider) and makes labels visibly jump. Emphasis
+                    comes from fill + opacity instead. */}
                 <text y={NODE_R + 14} textAnchor="middle" fontSize="9.5"
-                  fontWeight={isHov ? '700' : '500'}
+                  fontWeight="600"
                   fill={isHov ? fill : labelIdle}
                   opacity={isHov ? 1 : (isHighlit && !!hovered) ? 0.85 : hovered ? 0.05 : 0.5}
                   fontFamily="Inter, sans-serif"
