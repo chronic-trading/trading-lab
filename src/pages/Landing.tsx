@@ -6,7 +6,7 @@ const WHOP_URL = import.meta.env.VITE_WHOP_BUY_URL as string | undefined
 
 // Set your Whop price here to show it on the pricing card (e.g. '$97').
 // Leave empty to show the offer terms without a number and send buyers to Whop.
-const PRICE = (import.meta.env.VITE_PRICE as string | undefined) ?? ''
+const PRICE = (import.meta.env.VITE_PRICE as string | undefined) ?? '$9.99'
 
 // Your money-back guarantee wording (e.g. '7-day money-back guarantee').
 // Leave empty to omit the guarantee entirely — nothing false is ever shown.
