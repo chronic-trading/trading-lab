@@ -138,7 +138,7 @@ export function ConceptMap() {
 
   const nodeAt = (clientX: number, clientY: number, current: string | null): string | null => {
     const inv = invCtmRef.current
-    if (!inv) return null
+    if (!inv) return current
     const pt = new DOMPoint(clientX, clientY).matrixTransform(inv)
     let best: string | null = null
     let bestD = Infinity
@@ -148,10 +148,12 @@ export function ConceptMap() {
       const d = Math.hypot(pt.x - p.x, pt.y - p.y)
       if (d < bestD) { bestD = d; best = c.id }
     }
-    // Hysteresis: once a node is hovered, hold it until the pointer moves well
-    // clear (release 62 > acquire 40), so jitter near the edge can't strobe hover.
-    if (current && best === current) return bestD <= 62 ? current : null
-    return bestD <= 40 ? best : null
+    // Sticky hover: acquire the nearest node when the pointer is over it (<=40).
+    // When the pointer sits in empty space, KEEP the current selection rather than
+    // clearing it — the concept stays on screen until a *different* node is hovered.
+    // (A click on empty space passes current=null, which clears — see onClick.)
+    if (best && bestD <= 40) return best
+    return current
   }
 
   // Coalesce rapid pointer moves into one hover update per animation frame.
@@ -174,7 +176,8 @@ export function ConceptMap() {
           style={{ cursor: hovered ? 'pointer' : 'default', touchAction: 'manipulation' }}
           onPointerEnter={refreshCtm}
           onPointerMove={e => { if (e.pointerType === 'mouse') onHoverMove(e.clientX, e.clientY) }}
-          onPointerLeave={e => { if (e.pointerType === 'mouse') setHovered(null) }}
+          // No onPointerLeave clear — the hovered concept stays until a different
+          // node is hovered (sticky). Click empty space to dismiss it.
           onClick={e => { refreshCtm(); const id = nodeAt(e.clientX, e.clientY, null); setHovered(prev => (prev === id ? null : id)) }}
         >
           <defs>
