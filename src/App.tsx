@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense } from 'react'
 import {
   FlaskConical, Package, Beaker, Network,
   LayoutTemplate, BookOpen, LineChart, StickyNote,
@@ -8,21 +8,23 @@ import {
 } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
 import { Landing }        from './pages/Landing'
-import { Builder }        from './pages/Builder'
-import { MyBuilds }       from './pages/MyBuilds'
-import { ConceptMap }     from './pages/ConceptMap'
-import { Review }         from './pages/Review'
-import { Templates }      from './pages/Templates'
-import { Chart }          from './pages/Chart'
-import { Journal }        from './pages/Journal'
-import { Plan }           from './pages/Plan'
-import { Calendar }       from './pages/Calendar'
-import { RecapPage }      from './recap/RecapPage'
-import { Playbook }       from './pages/Playbook'
-import { BacktestPage }   from './pages/BacktestPage'
-import { PropFirms }      from './pages/PropFirms'
-import { Arcade }         from './pages/Arcade'
-import { TradeGrader }    from './pages/TradeGrader'
+// Tab pages are code-split so the initial load (landing + shell) stays light —
+// each tool's JS only downloads when the user actually opens that tab.
+const Builder      = lazy(() => import('./pages/Builder').then(m => ({ default: m.Builder })))
+const MyBuilds     = lazy(() => import('./pages/MyBuilds').then(m => ({ default: m.MyBuilds })))
+const ConceptMap   = lazy(() => import('./pages/ConceptMap').then(m => ({ default: m.ConceptMap })))
+const Review       = lazy(() => import('./pages/Review').then(m => ({ default: m.Review })))
+const Templates    = lazy(() => import('./pages/Templates').then(m => ({ default: m.Templates })))
+const Chart        = lazy(() => import('./pages/Chart').then(m => ({ default: m.Chart })))
+const Journal      = lazy(() => import('./pages/Journal').then(m => ({ default: m.Journal })))
+const Plan         = lazy(() => import('./pages/Plan').then(m => ({ default: m.Plan })))
+const Calendar     = lazy(() => import('./pages/Calendar').then(m => ({ default: m.Calendar })))
+const RecapPage    = lazy(() => import('./recap/RecapPage').then(m => ({ default: m.RecapPage })))
+const Playbook     = lazy(() => import('./pages/Playbook').then(m => ({ default: m.Playbook })))
+const BacktestPage = lazy(() => import('./pages/BacktestPage').then(m => ({ default: m.BacktestPage })))
+const PropFirms    = lazy(() => import('./pages/PropFirms').then(m => ({ default: m.PropFirms })))
+const Arcade       = lazy(() => import('./pages/Arcade').then(m => ({ default: m.Arcade })))
+const TradeGrader  = lazy(() => import('./pages/TradeGrader').then(m => ({ default: m.TradeGrader })))
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
 import { SessionNotes }   from './components/SessionNotes'
 import { TradingRules }   from './components/TradingRules'
@@ -142,6 +144,16 @@ function MobileBottomNav({
         </div>
       )}
     </>
+  )
+}
+
+// Shown briefly while a code-split tab's JS loads.
+function PageFallback() {
+  return (
+    <div className="flex-1 flex items-center justify-center gap-3">
+      <div className="w-5 h-5 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
+      <span className="text-[13px] text-[var(--text-faint)] font-medium">Loading…</span>
+    </div>
   )
 }
 
@@ -378,6 +390,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
       {/* Main content — extra bottom padding on mobile for the bottom nav */}
       <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden md:pb-0 pb-14">
         <div key={tab} className="flex-1 flex flex-col overflow-hidden animate-tab-in">
+        <Suspense fallback={<PageFallback />}>
         {tab === 'builder'   && <Builder   initialBuild={loadedBuild} />}
         {tab === 'grader'    && <TradeGrader />}
         {tab === 'chart'     && <Chart />}
@@ -392,6 +405,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         {tab === 'playbook'  && <Playbook />}
         {tab === 'backtest'  && <BacktestPage />}
         {tab === 'arcade'    && <Arcade />}
+        </Suspense>
         </div>
       </main>
 
@@ -419,7 +433,9 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             </button>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <PropFirms />
+            <Suspense fallback={<PageFallback />}>
+              <PropFirms />
+            </Suspense>
           </div>
         </div>
       )}

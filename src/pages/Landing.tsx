@@ -1,11 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
 import { FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target } from 'lucide-react'
+import { GraderDemo } from '../components/GraderDemo'
 
 const WHOP_URL = import.meta.env.VITE_WHOP_BUY_URL as string | undefined
 
 // Set your Whop price here to show it on the pricing card (e.g. '$97').
 // Leave empty to show the offer terms without a number and send buyers to Whop.
 const PRICE = (import.meta.env.VITE_PRICE as string | undefined) ?? ''
+
+// Your money-back guarantee wording (e.g. '7-day money-back guarantee').
+// Leave empty to omit the guarantee entirely — nothing false is ever shown.
+const GUARANTEE = (import.meta.env.VITE_GUARANTEE as string | undefined) ?? ''
 
 interface Props {
   isAuthenticated?: boolean
@@ -326,8 +331,17 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
   const handleCTA = isAuthenticated ? onLaunch : onSignIn
   const ctaLabel  = isAuthenticated ? 'Launch Trading Lab' : 'Sign In with License Key'
 
+  // Purchase-intent CTA: signed-in users launch; cold visitors go to Whop to buy
+  // (falling back to the license sign-in if no Whop URL is configured).
+  const goBuy = () => {
+    if (isAuthenticated) { onLaunch?.(); return }
+    if (WHOP_URL) { window.open(WHOP_URL, '_blank', 'noopener,noreferrer'); return }
+    onSignIn?.()
+  }
+  const buyLabel = isAuthenticated ? 'Launch the full Grader' : 'Get instant access'
+
   return (
-    <div className="min-h-screen bg-[#05050a] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#05050a] text-white overflow-x-hidden pb-[76px] sm:pb-0">
 
       {/* ── CSS Animations ────────────────────────────────────────── */}
       <style>{`
@@ -558,6 +572,26 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           ))}
         </div>
       </div>
+
+      {/* ── Live demo — the real Trade Grader, no login ───────────── */}
+      <section className="px-5 pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-24">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{ boxShadow: '0 0 6px #34d399' }} />
+              <span className="text-[10.5px] font-bold tracking-[0.2em] uppercase text-emerald-400/90">Try it now · no login</span>
+            </div>
+            <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+              Grade a setup in ten seconds.
+            </h2>
+            <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
+              This is the <span className="text-slate-300 font-semibold">real Trade Grader</span> — the exact tool inside the Lab.
+              Tap what your setup has and watch the grade move.
+            </p>
+          </div>
+          <GraderDemo onCTA={goBuy} ctaLabel={buyLabel} />
+        </div>
+      </section>
 
       {/* ── The Foundation ────────────────────────────────────────── */}
       <section className="px-5 pb-28 border-t border-slate-800/30">
@@ -806,6 +840,32 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         </div>
       </section>
 
+      {/* ── Why pay (trust band) ──────────────────────────────────── */}
+      <section className="px-5 py-24 border-t border-slate-800/30">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Why pay for it</p>
+            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+              Free knowledge isn't a system.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              { icon: '🧩', title: 'Concepts → system', body: 'YouTube hands you 50 disconnected ideas. This connects them into one framework, grades your setups against it, and tracks whether it actually works.' },
+              { icon: '🎯', title: 'You keep your edge', body: 'No signals, no guru calls, no group to follow. It sharpens your own reads so you stay independent — the only kind of edge that lasts.' },
+              { icon: '♾️', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
+            ].map(c => (
+              <div key={c.title} className="rounded-2xl p-7 text-center flex flex-col items-center"
+                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <span className="text-[30px] leading-none mb-4">{c.icon}</span>
+                <h3 className="text-[14.5px] font-bold text-white mb-2.5">{c.title}</h3>
+                <p className="text-[12.5px] text-slate-500 leading-relaxed">{c.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Pricing ───────────────────────────────────────────────── */}
       <section className="relative px-5 py-28 border-t border-slate-800/30 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none"
@@ -864,6 +924,18 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 className="mt-3 flex items-center justify-center gap-2 text-[12.5px] font-semibold text-slate-500 hover:text-amber-300 transition-colors">
                 See full details on Whop <ExternalLink size={12} />
               </a>
+            )}
+
+            {/* Reassurance row */}
+            <div className="mt-6 pt-5 border-t border-slate-800/50 flex items-center justify-center gap-x-5 gap-y-2 flex-wrap text-[11px] text-slate-600">
+              <span className="flex items-center gap-1.5">🔒 Secure checkout on Whop</span>
+              <span className="flex items-center gap-1.5">⚡ Instant access</span>
+              <span className="flex items-center gap-1.5">📱 Web &amp; mobile</span>
+            </div>
+            {GUARANTEE && (
+              <p className="mt-3 text-center text-[12px] font-semibold text-emerald-400/90 flex items-center justify-center gap-1.5">
+                <span>🛡️</span> {GUARANTEE}
+              </p>
             )}
           </div>
         </div>
@@ -967,6 +1039,17 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <p className="text-[11px] text-slate-800 tracking-[0.15em] uppercase">ICT · SMC · Futures</p>
         </div>
       </footer>
+
+      {/* ── Sticky mobile buy bar ─────────────────────────────────── */}
+      <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 border-t border-slate-800/60 bg-[#05050a]/95 backdrop-blur-xl px-4 pt-3"
+        style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+        <button onClick={goBuy}
+          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-[15px] active:scale-[0.98] transition-transform"
+          style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
+          {isAuthenticated ? 'Launch Trading Lab' : PRICE ? `Get instant access — ${PRICE}` : 'Get instant access'}
+          <ArrowRight size={16} />
+        </button>
+      </div>
     </div>
   )
 }
