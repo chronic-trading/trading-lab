@@ -4,7 +4,7 @@ import {
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
   ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical, MoreHorizontal, ChevronDown,
-  Gamepad2, Layers, Sun, Moon,
+  Gamepad2, Layers, Sun, Moon, Gauge,
 } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
 import { Landing }        from './pages/Landing'
@@ -22,6 +22,7 @@ import { Playbook }       from './pages/Playbook'
 import { BacktestPage }   from './pages/BacktestPage'
 import { PropFirms }      from './pages/PropFirms'
 import { Arcade }         from './pages/Arcade'
+import { TradeGrader }    from './pages/TradeGrader'
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
 import { SessionNotes }   from './components/SessionNotes'
 import { TradingRules }   from './components/TradingRules'
@@ -39,12 +40,13 @@ const SUPABASE_CONFIGURED = !!(
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY
 )
 
-type Tab  = 'builder' | 'map' | 'review' | 'journal' | 'backtest' | 'recap' | 'playbook' | 'plan' | 'chart' | 'calendar' | 'templates' | 'builds' | 'arcade'
+type Tab  = 'builder' | 'grader' | 'map' | 'review' | 'journal' | 'backtest' | 'recap' | 'playbook' | 'plan' | 'chart' | 'calendar' | 'templates' | 'builds' | 'arcade'
 type View = 'landing' | 'login' | 'app'
 
-const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
+const tabs: { id: Tab; label: string; Icon: React.ElementType; badge?: string }[] = [
   // ── Showcase set (always visible on desktop; the build + signature tools) ──
   { id: 'builder',   label: 'Builder',   Icon: Beaker         },  // build setups from concepts
+  { id: 'grader',    label: 'Grader',    Icon: Gauge, badge: 'NEW' },  // score a setup's confluence
   { id: 'map',       label: 'Map',       Icon: Network        },  // interactive concept graph
   { id: 'review',    label: 'Review',    Icon: Layers         },  // spaced-repetition mastery
   { id: 'journal',   label: 'Journal',   Icon: BookOpen       },  // trades + analytics v2
@@ -61,10 +63,10 @@ const tabs: { id: Tab; label: string; Icon: React.ElementType }[] = [
 ]
 
 // Always-visible on the desktop tab bar; the rest live in a "More" dropdown.
-const DESKTOP_PRIMARY: Tab[] = ['builder', 'map', 'review', 'journal', 'backtest', 'recap', 'playbook']
+const DESKTOP_PRIMARY: Tab[] = ['builder', 'grader', 'map', 'review', 'journal', 'backtest', 'recap', 'playbook']
 
 // Primary tabs always visible on mobile bottom bar
-const MOBILE_PRIMARY: Tab[] = ['builder', 'map', 'review', 'journal']
+const MOBILE_PRIMARY: Tab[] = ['builder', 'grader', 'map', 'journal']
 
 // Mobile bottom nav
 function MobileBottomNav({
@@ -81,7 +83,7 @@ function MobileBottomNav({
       <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#06060d]/95 backdrop-blur-md border-t border-slate-800/60"
            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-stretch">
-          {primary.map(({ id, label, Icon }) => (
+          {primary.map(({ id, label, Icon, badge }) => (
             <button key={id}
               onClick={() => { setTab(id); setMoreOpen(false) }}
               className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 transition-all relative ${
@@ -90,7 +92,10 @@ function MobileBottomNav({
               {tab === id && !moreOpen && (
                 <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-amber-400 rounded-full" />
               )}
-              <Icon size={19} />
+              <span className="relative">
+                <Icon size={19} />
+                {badge && <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: '0 0 5px #f59e0b' }} />}
+              </span>
               <span className="text-[9px] font-bold tracking-wide">{label}</span>
             </button>
           ))}
@@ -322,12 +327,17 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
         {/* Desktop tab nav — curated primary set + a "More" dropdown for the rest */}
         <nav className="hidden md:flex items-stretch border-t border-[var(--border)] relative">
-          {tabs.filter(t => DESKTOP_PRIMARY.includes(t.id)).map(({ id, label, Icon }) => (
+          {tabs.filter(t => DESKTOP_PRIMARY.includes(t.id)).map(({ id, label, Icon, badge }) => (
             <button key={id} onClick={() => { setTab(id); setMoreOpen(false) }}
               className={`flex-1 min-w-[46px] flex items-center justify-center gap-1.5 py-3 text-[11.5px] font-semibold relative transition-all duration-150 border-b-2 px-2
                 ${tab === id ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
               <Icon size={12} />
               <span>{label}</span>
+              {badge && (
+                <span className="absolute top-1.5 right-1.5 text-[7px] font-black tracking-wide px-1 py-px rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 leading-none">
+                  {badge}
+                </span>
+              )}
             </button>
           ))}
 
@@ -367,7 +377,9 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
       {/* Main content — extra bottom padding on mobile for the bottom nav */}
       <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden md:pb-0 pb-14">
+        <div key={tab} className="flex-1 flex flex-col overflow-hidden animate-tab-in">
         {tab === 'builder'   && <Builder   initialBuild={loadedBuild} />}
+        {tab === 'grader'    && <TradeGrader />}
         {tab === 'chart'     && <Chart />}
         {tab === 'map'       && <ConceptMap />}
         {tab === 'review'    && <Review />}
@@ -380,6 +392,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         {tab === 'playbook'  && <Playbook />}
         {tab === 'backtest'  && <BacktestPage />}
         {tab === 'arcade'    && <Arcade />}
+        </div>
       </main>
 
       <SessionNotes  open={notesOpen}    onClose={() => setNotesOpen(false)} />

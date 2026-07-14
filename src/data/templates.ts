@@ -83,4 +83,22 @@ export const templates: Template[] = [
     conceptIds: ['ipda', 'quarterly-theory', 'daily-bias', 'market-structure', 'liquidity', 'equal-highs-lows', 'engineered-liquidity', 'amd', 'judas-swing', 'kill-zones', 'ict-macros', 'market-maker-buy', 'market-maker-sell', 'opening-gaps'],
     notes: 'This is context, not entry. Layer your entry model on top of this framework. Without the macro read, every entry is reactive. With it, you see the move before it happens.',
   },
+  {
+    id: 'smt-reversal-sniper',
+    name: 'SMT Reversal Sniper',
+    instrument: 'NQ',
+    difficulty: 'advanced',
+    description: 'A correlation-confirmed reversal model. NQ sweeps a liquidity extreme while ES fails to confirm — that SMT divergence, paired with a Turtle Soup sweep and a displacement FVG, pinpoints the turn. One of the highest-conviction reversals in the methodology.',
+    conceptIds: ['daily-bias', 'market-structure', 'liquidity', 'smt-divergence', 'turtle-soup', 'kill-zones', 'displacement', 'fvg'],
+    notes: 'Requires a correlated chart (ES against NQ) open beside your entry chart. No SMT, no trade — the divergence is the entire edge. Time it inside a kill zone.',
+  },
+  {
+    id: 'unicorn-precision',
+    name: 'Unicorn Precision',
+    instrument: 'NQ',
+    difficulty: 'advanced',
+    description: 'Built around the Unicorn Model — a breaker block overlapping an FVG in the same zone. After a CHoCH and displacement, the overlap of two independent PD arrays gives an A+ entry with a tight stop. Standard-deviation projections define the targets.',
+    conceptIds: ['market-structure', 'displacement', 'breaker-block', 'fvg', 'unicorn-model', 'standard-deviation', 'ote', 'kill-zones'],
+    notes: 'Only valid when the breaker and FVG genuinely overlap. If they do not share price, this is an ordinary breaker retest — size down. Project SD levels off the CE for exits.',
+  },
 ]

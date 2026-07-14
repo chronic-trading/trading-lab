@@ -894,6 +894,168 @@ export const concepts: Concept[] = [
       { conceptId: 'daily-bias', strength: 2, note: 'Daily bias determines whether the London close sweep targets the AM high (bearish day) or AM low (bullish day).' },
     ],
   },
+
+  // ─── EXPANSION SET (2026-07-14) ────────────────────────────────────────────
+  {
+    id: 'smt-divergence',
+    name: 'SMT Divergence',
+    shortName: 'SMT Divergence',
+    tier: 'advanced',
+    category: 'bias',
+    description:
+      'Smart Money Technique divergence. Correlated instruments — ES & NQ, EUR & GBP, GC & SI — are delivered by the same algorithm and should move in lockstep. When one makes a higher high (or lower low) into a liquidity level and its pair FAILS to confirm, that non-confirmation exposes smart money\'s hand: the asset that could not make the new extreme is the weak one, and the divergence prints right at the reversal.',
+    howToUse:
+      'Overlay a correlated pair (NQ against ES is the cleanest on index futures). At a key BSL/SSL level, check whether both instruments swept liquidity or only one. If NQ makes a higher high but ES makes a lower high, that bearish SMT is your reversal signal — trade short in the direction of the non-confirming asset. SMT is confirmation, not an entry: pair it with a CHoCH and an FVG to time the trade.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['SMT', 'divergence', 'correlation', 'smart money technique', 'ES NQ', 'confirmation'],
+    synergies: [
+      { conceptId: 'liquidity', strength: 3, note: 'SMT prints when one asset sweeps a liquidity pool and its correlated pair refuses to — the divergence is a liquidity story.' },
+      { conceptId: 'turtle-soup', strength: 3, note: 'A Turtle Soup sweep confirmed by SMT divergence on the correlated pair is one of the highest-conviction reversals in ICT.' },
+      { conceptId: 'market-structure', strength: 2, note: 'SMT flags the reversal; the following CHoCH confirms structure has actually shifted.' },
+      { conceptId: 'judas-swing', strength: 2, note: 'The Judas swing on one index frequently fails to be confirmed by its pair — that failure is the SMT.' },
+      { conceptId: 'daily-bias', strength: 2, note: 'SMT at a HTF PD array is a powerful tell for the day\'s true directional bias.' },
+    ],
+  },
+  {
+    id: 'unicorn-model',
+    name: 'Unicorn Model (Breaker + FVG)',
+    shortName: 'Unicorn Model',
+    tier: 'advanced',
+    category: 'model',
+    description:
+      'The Unicorn is a Breaker Block that overlaps a Fair Value Gap in the exact same price zone. When a breaker (a failed order block that price has reclaimed) sits on top of an unfilled FVG, two independent PD arrays confirm the same level — a rare, A+ confluence. The overlap zone is defended aggressively because institutional orders sit there for two reasons at once.',
+    howToUse:
+      'After a liquidity sweep and displacement, identify the breaker block formed by the failed swing. Then look for an FVG left by that same displacement leg. Where the breaker and FVG overlap is the Unicorn entry — enter on the first tap of the overlap, stop beyond the breaker origin, and target the opposing liquidity. Best taken during a kill zone with SMT confirmation.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['unicorn', 'breaker', 'FVG', 'overlap', 'confluence', 'A+ setup'],
+    synergies: [
+      { conceptId: 'breaker-block', strength: 3, note: 'The breaker is half of the Unicorn — no breaker, no unicorn.' },
+      { conceptId: 'fvg', strength: 3, note: 'The FVG overlapping the breaker is the other half — the overlap itself is the edge.' },
+      { conceptId: 'displacement', strength: 2, note: 'The same displacement leg that forms the breaker leaves the FVG — displacement is what creates both.' },
+      { conceptId: 'smt-divergence', strength: 2, note: 'A Unicorn confirmed by SMT on the correlated pair is about as high-conviction as an entry gets.' },
+      { conceptId: 'market-structure', strength: 2, note: 'The Unicorn forms on the CHoCH leg — structure context tells you which direction the overlap defends.' },
+    ],
+  },
+  {
+    id: 'standard-deviation',
+    name: 'Standard Deviation Projections',
+    shortName: 'Std Dev Projections',
+    tier: 'advanced',
+    category: 'model',
+    description:
+      'A targeting tool. Once a liquidity sweep and displacement create a manipulation leg, that leg can be projected forward in standard-deviation multiples (-1, -2, -2.5, -4 SD) to forecast where price is drawn. The algorithm delivers price in measured, symmetrical legs, so the SD projections off the CE of the setup mark the liquidity the move is reaching for.',
+    howToUse:
+      'Measure from the swing origin to the Consequent Encroachment (50%) of the FVG or setup. Project standard-deviation extensions in the trade direction. The -2 and -2.5 SD levels are the most common terminus for an intraday leg; -4 SD marks an exhaustion draw. Use these as profit targets and to confirm whether a resting liquidity pool aligns with a natural projection.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['standard deviation', 'projection', 'targets', 'symmetry', 'measured move', 'SD'],
+    synergies: [
+      { conceptId: 'consequent-encroachment', strength: 3, note: 'SD projections are anchored to the CE of the setup — the 50% level is the pivot the deviations extend from.' },
+      { conceptId: 'draw-on-liquidity', strength: 3, note: 'When an SD projection lands exactly on a resting liquidity pool, that pool becomes the highest-probability draw.' },
+      { conceptId: 'displacement', strength: 2, note: 'The displacement leg is what you measure — no clean impulse, no reliable projection.' },
+      { conceptId: 'fvg', strength: 2, note: 'The FVG defines the leg being projected; its CE is the anchor for the deviations.' },
+      { conceptId: 'quarterly-theory', strength: 1, note: 'SD legs often align with quarterly-theory expansion phases — the projection times as well as targets.' },
+    ],
+  },
+  {
+    id: 'propulsion-block',
+    name: 'Propulsion Block',
+    shortName: 'Propulsion Block',
+    tier: 'intermediate',
+    category: 'entry',
+    description:
+      'An order block that forms inside the range of a prior order block and pushes price further in the original OB\'s direction. When price returns to an OB and, instead of reversing cleanly, builds a fresh OB nested within it before continuing, that nested block is the Propulsion Block — it reinforces the parent OB and offers a tighter, later re-entry with a smaller stop.',
+    howToUse:
+      'Mark your primary OB. On the retracement into it, watch for a smaller opposing candle that forms within the OB\'s range and then displaces onward — that is the propulsion block. Enter from the propulsion block rather than the full OB for a tighter stop and better R. It is a continuation tool, not a reversal tool.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['propulsion', 'order block', 'nested', 'continuation', 're-entry', 'PD array'],
+    synergies: [
+      { conceptId: 'order-block', strength: 3, note: 'A propulsion block is an OB nested inside another OB — it only exists in relation to its parent.' },
+      { conceptId: 'displacement', strength: 2, note: 'The propulsion block is validated by the displacement that leaves it — same rule as any OB.' },
+      { conceptId: 'fvg', strength: 2, note: 'Propulsion blocks frequently pair with a small FVG from the same continuation leg for a tighter entry.' },
+      { conceptId: 'mitigation-block', strength: 2, note: 'Know the difference: a mitigation block re-tests a failed move; a propulsion block reinforces a working one.' },
+      { conceptId: 'market-structure', strength: 1, note: 'Propulsion blocks form mid-trend after a BOS — structure tells you the continuation is valid.' },
+    ],
+  },
+  {
+    id: 'power-of-three',
+    name: 'Power of Three (PO3)',
+    shortName: 'Power of Three',
+    tier: 'intermediate',
+    category: 'model',
+    description:
+      'The accumulation → manipulation → distribution cycle compressed into a single candle (daily or weekly). The candle opens near one extreme (accumulation), wicks against the true direction to grab liquidity (manipulation — the "Judas" leg), then expands and closes toward the opposite extreme (distribution). Where AMD describes the intraday session framework, PO3 is the same logic read on one higher-timeframe candle.',
+    howToUse:
+      'On the daily candle, treat the open as the reference. Expect the open to be manipulated AGAINST the intended close first: on a bullish day, price typically dips below the open to sweep sell-side before expanding up. Use midnight/8:30 opens to frame accumulation, wait for the manipulation sweep, then position toward the projected close. Bias determines which side gets manipulated.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['power of three', 'PO3', 'accumulation', 'manipulation', 'distribution', 'daily candle'],
+    synergies: [
+      { conceptId: 'amd', strength: 3, note: 'PO3 and AMD are the same three-phase logic — AMD across a session, PO3 within one HTF candle.' },
+      { conceptId: 'judas-swing', strength: 3, note: 'The manipulation leg of PO3 IS the Judas swing — the false move against the true daily direction.' },
+      { conceptId: 'key-opens', strength: 2, note: 'The candle open (midnight, 8:30) is the accumulation reference PO3 is measured from.' },
+      { conceptId: 'daily-bias', strength: 2, note: 'Daily bias tells you which extreme is accumulation and which is the distribution target.' },
+      { conceptId: 'quarterly-theory', strength: 2, note: 'Quarterly theory nests PO3 — each quarter of the candle plays its own accumulation/manipulation/distribution role.' },
+    ],
+  },
+  {
+    id: 'vacuum-block',
+    name: 'Vacuum Block',
+    shortName: 'Vacuum Block',
+    tier: 'advanced',
+    category: 'entry',
+    description:
+      'The price void left by a runaway open-to-open gap — most often a news-driven or session-open gap where price jumps with no traded liquidity in between. Unlike a normal FVG (formed by three-candle displacement inside a session), a Vacuum Block is created by an actual gap in delivery. The market treats it as an obligation and is drawn back to fill the vacuum.',
+    howToUse:
+      'Mark the gap from the prior close/last traded level to the reopen. Treat the unfilled vacuum as a magnet — a draw on liquidity. On the return, the edge of the vacuum block often provides a clean reversal or continuation entry as the gap rebalances. Vacuum blocks around high-impact news require the algorithm to eventually revisit the untraded prices.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['vacuum block', 'runaway gap', 'news gap', 'rebalance', 'draw', 'must fill'],
+    synergies: [
+      { conceptId: 'opening-gaps', strength: 3, note: 'A vacuum block is an opening gap in its most aggressive form — the same rebalancing logic on a runaway move.' },
+      { conceptId: 'liquidity-void', strength: 2, note: 'Both are must-fill voids; the vacuum block is created by an actual gap rather than one-sided candle delivery.' },
+      { conceptId: 'draw-on-liquidity', strength: 2, note: 'An unfilled vacuum block is unconditionally a DOL — the algorithm is drawn to revisit untraded prices.' },
+      { conceptId: 'displacement', strength: 2, note: 'The velocity that creates the vacuum is extreme displacement — the fill often displaces just as hard.' },
+      { conceptId: 'fvg', strength: 1, note: 'Read the vacuum block like a large FVG: consequent encroachment and edges act as the same reaction levels.' },
+    ],
+  },
+  {
+    id: 'reference-levels',
+    name: 'Institutional Reference Levels',
+    shortName: 'Reference Levels',
+    tier: 'intermediate',
+    category: 'structure',
+    description:
+      'The round-number "banking" levels institutions reference — the 00, 20, 50, 80 handles and their .50 midpoints on index futures. Liquidity clusters and reactions concentrate around these levels because they are the coordinates algorithms and desks anchor to. They are not a standalone signal but a lens that sharpens every other PD array landing near them.',
+    howToUse:
+      'Note the nearest quarter levels (e.g. NQ 20050, 20080, 20100). When a PD array — an OB, FVG, or breaker — lands on or near a reference level, treat that confluence as higher quality. Equal highs/lows and session opens that sit on reference levels are especially clean liquidity. Use them to refine targets and stop placement, never in isolation.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['reference levels', 'quarter levels', 'round numbers', 'banking levels', 'handles', 'confluence'],
+    synergies: [
+      { conceptId: 'liquidity', strength: 2, note: 'Stops pool at round numbers — reference levels mark where engineered liquidity naturally builds.' },
+      { conceptId: 'premium-discount', strength: 2, note: 'A reference level that coincides with range equilibrium is a high-confidence pivot for premium/discount reads.' },
+      { conceptId: 'order-block', strength: 2, note: 'An OB sitting on a reference level is materially higher quality than one in open air.' },
+      { conceptId: 'key-opens', strength: 2, note: 'Session opens landing on a reference level compound the significance of both.' },
+      { conceptId: 'consequent-encroachment', strength: 1, note: 'When a PD array\'s CE aligns with a reference level, the reaction zone tightens to a precise price.' },
+    ],
+  },
+  {
+    id: 'lrlr-hrlr',
+    name: 'Low / High Resistance Liquidity Runs',
+    shortName: 'LRLR / HRLR',
+    tier: 'intermediate',
+    category: 'liquidity',
+    description:
+      'A read on the QUALITY of the path to a draw on liquidity. A Low Resistance Liquidity Run (LRLR) has a clean path — few opposing order blocks or FVGs between price and the target — so the algorithm runs to it easily. A High Resistance Liquidity Run (HRLR) is a messy path littered with opposing PD arrays, so the run stalls, chops, and often fails. The distinction tells you which liquidity targets to trust.',
+    howToUse:
+      'Before targeting a liquidity pool, inspect the space between price and that pool. If it is clean (LRLR), take the target with confidence and hold for the full run. If opposing arrays clutter the path (HRLR), expect a grind — reduce size, tighten targets, or stand aside. LRLR toward a HTF draw during a kill zone is the ideal trend day condition.',
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
+    tags: ['LRLR', 'HRLR', 'low resistance', 'high resistance', 'liquidity run', 'path'],
+    synergies: [
+      { conceptId: 'draw-on-liquidity', strength: 3, note: 'LRLR/HRLR grades the path to the DOL — they answer "how cleanly will price reach the draw?"' },
+      { conceptId: 'liquidity', strength: 3, note: 'The run targets a liquidity pool; resistance level tells you how reliably it gets there.' },
+      { conceptId: 'engineered-liquidity', strength: 2, note: 'Engineered liquidity at the end of a low-resistance path is a prime trend-day target.' },
+      { conceptId: 'market-structure', strength: 2, note: 'A clean LRLR usually accompanies a fresh BOS with no opposing structure in the way.' },
+      { conceptId: 'fvg', strength: 1, note: 'Unfilled opposing FVGs in the path are exactly what turns an LRLR into an HRLR.' },
+    ],
+  },
 ]
 
 export const getConceptById = (id: string) => concepts.find(c => c.id === id)

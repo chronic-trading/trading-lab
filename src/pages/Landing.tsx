@@ -3,6 +3,10 @@ import { FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target } fro
 
 const WHOP_URL = import.meta.env.VITE_WHOP_BUY_URL as string | undefined
 
+// Set your Whop price here to show it on the pricing card (e.g. '$97').
+// Leave empty to show the offer terms without a number and send buyers to Whop.
+const PRICE = (import.meta.env.VITE_PRICE as string | undefined) ?? ''
+
 interface Props {
   isAuthenticated?: boolean
   onSignIn?: () => void
@@ -86,6 +90,7 @@ function ConceptMapBg({ opacity = 0.09 }: { opacity?: number }) {
 
 // ── Static data ───────────────────────────────────────────────────────────────
 const TOOLS = [
+  { emoji: '🎯', name: 'Trade Grader',      desc: 'Score any setup against 13 weighted ICT confluences and your own saved system. Get a letter grade, the missing essentials, and a position-size suggestion — before you risk a dollar.', color: '#f59e0b', tag: 'New' },
   { emoji: '🏗️', name: 'Strategy Builder',  desc: 'Stack ICT/SMC concepts into a living trading system. Real-time synergy detection shows you how your setups connect.', color: '#f59e0b', tag: 'Build' },
   { emoji: '📈', name: 'Live Chart',         desc: 'Full TradingView integration. Concept-specific drawing guides keep you aligned with the methodology on every timeframe.', color: '#60a5fa', tag: 'Execute' },
   { emoji: '🧠', name: 'Synergy Map',        desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map — hover any node to trace connections.', color: '#c084fc', tag: 'Study' },
@@ -98,7 +103,7 @@ const TOOLS = [
 ]
 
 const STEPS = [
-  { n: '01', title: 'Get Your License',  body: 'Buy on Whop. Your key unlocks everything — all nine tools, cross-device sync, lifetime access. No subscriptions.',        icon: Target },
+  { n: '01', title: 'Get Your License',  body: 'Buy on Whop. Your key unlocks everything — all thirteen tools, cross-device sync, lifetime access. No subscriptions.',        icon: Target },
   { n: '02', title: 'Build Your System', body: 'Open the Builder. Stack your concepts, watch synergies fire, and lock in a playbook you actually understand.',             icon: Brain },
   { n: '03', title: 'Execute & Review',  body: 'Trade with a plan. Log every entry. Recap each week with visual trade cards. Watch your edge compound over time.',        icon: TrendingUp },
 ]
@@ -141,6 +146,58 @@ const PILLS = [
   { label: 'PDH / PDL',        color: '#34d399' },
   { label: 'Swing H&L',        color: '#34d399' },
 ]
+
+// ── Who it's for ──────────────────────────────────────────────────────────────
+const PERSONAS = [
+  { emoji: '📚', title: 'The self-taught ICT trader', color: '#c084fc',
+    body: "You've watched every mentorship video but your notes live in twelve Discord bookmarks. This turns scattered knowledge into one connected, testable system." },
+  { emoji: '🏦', title: 'The prop-firm challenger', color: '#34d399',
+    body: 'Passing an eval is a discipline game. Kill-zone timing, a drawdown guard, and a setup grader keep you from the one impulsive trade that blows the account.' },
+  { emoji: '📈', title: 'The trader who journals', color: '#60a5fa',
+    body: 'You already know review is the edge. Equity curve, kill-zone win rates, R-multiples, and shareable recaps make the review actually happen every week.' },
+]
+
+// ── The old way vs Trading Lab ────────────────────────────────────────────────
+const COMPARISON = [
+  { old: 'Notes scattered across Discord, PDFs, and screenshots', now: 'One connected map of 50+ ICT concepts and their synergies' },
+  { old: 'Guessing whether a setup is actually A+ or just tempting', now: 'A weighted confluence grade with the missing essentials called out' },
+  { old: 'A spreadsheet journal you stopped updating in week two', now: 'Fast logging with equity curve, R-multiples, and kill-zone stats' },
+  { old: 'Missing the kill zone because you lost track of time', now: 'A live NY-time clock for every kill zone, macro, and red-folder event' },
+  { old: 'Re-buying the same course concepts on three platforms', now: 'One license, every tool, lifetime access, synced across devices' },
+]
+
+// ── FAQ ───────────────────────────────────────────────────────────────────────
+const FAQS = [
+  { q: 'Is this a signals or alerts service?',
+    a: 'No — and that\'s the point. Trading Lab gives you no signals, no calls, and no "trust me" entries. It\'s a system-building, grading, and review platform that makes YOUR reads sharper. You stay the trader.' },
+  { q: 'Do I need to be advanced at ICT already?',
+    a: 'No. The concept map, playbook lessons, and mastery quiz start from the six basics and build up. If you already know the framework, the Builder, Grader, and journal analytics go as deep as you want.' },
+  { q: 'One-time payment or a subscription?',
+    a: 'One license unlocks every tool with lifetime access and free updates — no recurring subscription. Your progress syncs across all your devices.' },
+  { q: 'Which markets and instruments does it cover?',
+    a: 'It\'s built for ICT / SMC on futures (NQ, ES, GC, SI) and the major forex pairs, with kill-zone timing tuned to the New York session. The concepts apply to any market the methodology is traded on.' },
+  { q: 'Does it work on my phone?',
+    a: 'Yes. Every tool is built mobile-first and feels native on a phone, so you can build, grade, and journal from anywhere — the same login works across web and mobile.' },
+  { q: 'Is my data private?',
+    a: 'Your builds and journal are yours. Analytics are privacy-first with no ad tracking, and your trading data syncs only to your own account.' },
+]
+
+function FaqItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false)
+  return (
+    <button onClick={() => setOpen(o => !o)}
+      className="w-full text-left rounded-2xl p-5 transition-all"
+      style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-[14px] font-bold text-white">{q}</span>
+        <span className={`flex-shrink-0 w-6 h-6 rounded-lg border border-amber-500/25 bg-amber-500/8 flex items-center justify-center text-amber-400 text-[15px] leading-none transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>+</span>
+      </div>
+      <div className="overflow-hidden transition-all duration-300" style={{ maxHeight: open ? '240px' : '0px', opacity: open ? 1 : 0 }}>
+        <p className="text-[13px] text-slate-500 leading-relaxed mt-3">{a}</p>
+      </div>
+    </button>
+  )
+}
 
 // ── Terminal boot sequence ────────────────────────────────────────────────────
 const BOOT_LINES = [
@@ -436,8 +493,8 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div {...anim(200)} className={`${anim(200).className} mb-11`} style={anim(200).style}>
             <p className="text-slate-400 max-w-lg mx-auto leading-relaxed text-center"
               style={{ fontSize: 'clamp(15px, 2vw, 18px)' }}>
-              Twelve precision-built tools for ICT and SMC traders.<br className="hidden sm:block" />
-              Build your system. Journal your edge. Recap every week.
+              Thirteen precision-built tools for ICT and SMC traders.<br className="hidden sm:block" />
+              Build your system. Grade every setup. Journal your edge.
             </p>
           </div>
 
@@ -461,7 +518,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div {...anim(350)} className={`${anim(350).className} flex items-center justify-center`} style={anim(350).style}>
             {[
               { val: '50+', sub: 'ICT Concepts' },
-              { val: '12',  sub: 'Pro Tools'    },
+              { val: '13',  sub: 'Pro Tools'    },
               { val: '1',   sub: 'Platform'     },
             ].map((s, i) => (
               <div key={s.sub} className="flex items-stretch">
@@ -593,7 +650,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
               Every tool you need. Nothing you don't.
             </h2>
-            <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Twelve precision-built tools in one dark, focused platform.</p>
+            <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Thirteen precision-built tools in one dark, focused platform.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {TOOLS.map(t => (
@@ -621,6 +678,59 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         </div>
       </section>
 
+      {/* ── Who it's for ──────────────────────────────────────────── */}
+      <section className="px-5 pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-24">
+          <div className="text-center mb-16">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Who it's for</p>
+            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+              Built for the trader who's serious.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {PERSONAS.map(p => (
+              <div key={p.title} className="relative rounded-2xl p-7 overflow-hidden text-center flex flex-col items-center"
+                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="absolute top-0 inset-x-0 h-[1px]" style={{ background: `linear-gradient(90deg,transparent,${p.color}55,transparent)` }} />
+                <span className="text-[34px] leading-none mb-4">{p.emoji}</span>
+                <h3 className="text-[15px] font-bold text-white mb-3">{p.title}</h3>
+                <p className="text-[12.5px] text-slate-500 leading-relaxed">{p.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── The old way vs Trading Lab ─────────────────────────────── */}
+      <section className="px-5 pb-28 border-t border-slate-800/30">
+        <div className="max-w-4xl mx-auto pt-24">
+          <div className="text-center mb-16">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The difference</p>
+            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+              Stop duct-taping your process together.
+            </h2>
+          </div>
+          <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="grid grid-cols-2 text-[10px] font-black uppercase tracking-[0.16em]">
+              <div className="px-5 md:px-7 py-4 text-slate-600 border-b border-slate-800/50">The old way</div>
+              <div className="px-5 md:px-7 py-4 text-amber-400 border-b border-l border-slate-800/50 bg-amber-500/[0.03]">With Trading Lab</div>
+            </div>
+            {COMPARISON.map((row, i) => (
+              <div key={i} className="grid grid-cols-2">
+                <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
+                  <span className="text-slate-700 mt-0.5 flex-shrink-0">✕</span>
+                  <span className="text-[12.5px] text-slate-500 leading-snug">{row.old}</span>
+                </div>
+                <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 border-l border-slate-800/40 bg-amber-500/[0.02] ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
+                  <span className="text-emerald-400 mt-0.5 flex-shrink-0">✓</span>
+                  <span className="text-[12.5px] text-slate-300 leading-snug">{row.now}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Pull quote numbers ────────────────────────────────────── */}
       <section className="relative px-5 py-24 border-t border-slate-800/30 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none"
@@ -630,7 +740,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
             {[
               { val: '50+', label: 'Mapped Concepts', color: '#34d399' },
-              { val: '12',  label: 'Pro Tools',        color: '#f59e0b' },
+              { val: '13',  label: 'Pro Tools',        color: '#f59e0b' },
               { val: '∞',   label: 'Synergy Links',    color: '#c084fc' },
               { val: '1',   label: 'Platform',         color: '#60a5fa' },
             ].map(s => (
@@ -693,6 +803,84 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             </h2>
           </div>
           <Terminal />
+        </div>
+      </section>
+
+      {/* ── Pricing ───────────────────────────────────────────────── */}
+      <section className="relative px-5 py-28 border-t border-slate-800/30 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 60% 70% at 50% 40%, rgba(245,158,11,0.05) 0%, transparent 70%)' }} />
+        <div className="relative max-w-lg mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">One license</p>
+            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+              Everything. Forever.
+            </h2>
+          </div>
+
+          <div className="relative rounded-3xl p-8 md:p-10 overflow-hidden"
+            style={{ background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(245,158,11,0.22)', boxShadow: '0 0 60px rgba(245,158,11,0.08)' }}>
+            <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.7),transparent)' }} />
+
+            <div className="flex items-center justify-between mb-7">
+              <div>
+                <p className="text-[13px] font-black tracking-widest text-white uppercase">Trading Lab</p>
+                <p className="text-[11px] text-slate-600 tracking-[0.12em] uppercase mt-0.5">Full access</p>
+              </div>
+              <div className="text-right">
+                {PRICE ? (
+                  <p className="font-black text-white leading-none" style={{ fontSize: '40px', fontFamily: "'JetBrains Mono',monospace" }}>{PRICE}</p>
+                ) : (
+                  <p className="font-black text-amber-400 leading-none" style={{ fontSize: '22px' }}>One-time</p>
+                )}
+                <p className="text-[10px] text-slate-600 uppercase tracking-[0.15em] mt-1.5">Lifetime · no subscription</p>
+              </div>
+            </div>
+
+            <div className="space-y-2.5 mb-8">
+              {[
+                'All 13 professional tools unlocked',
+                '50+ ICT / SMC concepts, mapped & testable',
+                'The new Trade Grader + full journal analytics',
+                'Cross-device sync — web and mobile',
+                'Lifetime access with free updates',
+                'No signals. No subscription. Your system, your calls.',
+              ].map(item => (
+                <div key={item} className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-md bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 text-[11px] mt-0.5">✓</span>
+                  <span className="text-[13px] text-slate-300 leading-relaxed">{item}</span>
+                </div>
+              ))}
+            </div>
+
+            <button onClick={handleCTA}
+              className="group w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-[15px] transition-all hover:scale-[1.02] active:scale-[0.98] animate-cta-pulse"
+              style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
+              {ctaLabel}
+              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+            </button>
+            {WHOP_URL && !isAuthenticated && (
+              <a href={WHOP_URL} target="_blank" rel="noopener noreferrer"
+                className="mt-3 flex items-center justify-center gap-2 text-[12.5px] font-semibold text-slate-500 hover:text-amber-300 transition-colors">
+                See full details on Whop <ExternalLink size={12} />
+              </a>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ── FAQ ───────────────────────────────────────────────────── */}
+      <section className="px-5 py-28 border-t border-slate-800/30">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-14">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Questions</p>
+            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+              Everything you're wondering.
+            </h2>
+          </div>
+          <div className="space-y-3">
+            {FAQS.map(f => <FaqItem key={f.q} q={f.q} a={f.a} />)}
+          </div>
         </div>
       </section>
 
