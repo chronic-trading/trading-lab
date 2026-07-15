@@ -811,11 +811,12 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-400/90">See inside · live</span>
             </div>
             <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              The whole framework, connected.
+              Start with the ten foundations.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
-              This is the <span className="text-slate-300 font-semibold">real Concept Map</span> from inside the Lab —
-              all 52 concepts and every synergy between them. Hover a node to trace its connections.
+              This is the <span className="text-slate-300 font-semibold">real Concept Map</span> from inside the Lab,
+              showing the ten basics every ICT trader learns first. Hover one to see what it connects to.
+              The other 42 concepts build on top of these.
             </p>
           </div>
           <LazyOnVisible minHeight={460}>

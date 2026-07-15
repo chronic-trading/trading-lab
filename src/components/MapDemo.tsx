@@ -6,32 +6,37 @@ import { trackOnce } from '../lib/track'
 // A live, no-login preview of the Concept Map built from the REAL concept data.
 // Deliberately self-contained (no app hooks) so it can run on the marketing page.
 // Lazy-loaded by Landing so the concept dataset never weighs down first paint.
+//
+// Scope: the BASIC tier only. This is the first thing someone new to ICT sees,
+// and all 52 nodes read as noise to a beginner — the ten foundations and how they
+// connect is the actual pitch. The intermediate/advanced tiers live in the app.
 
-const RINGS: Record<string, number> = { basic: 170, intermediate: 305, advanced: 430 }
-const NODE_R = 13
+const RING = 300          // single ring — one tier, so it can use the whole canvas
+const NODE_R = 15
+const BASIC_FILL = '#34d399'
 
-const tierFill: Record<string, string> = { basic: '#34d399', intermediate: '#60a5fa', advanced: '#c084fc' }
+const basics = concepts.filter(c => c.tier === 'basic')
+const basicIds = new Set(basics.map(c => c.id))
 
 function getPositions() {
   const pos = new Map<string, { x: number; y: number }>()
-  for (const tier of ['basic', 'intermediate', 'advanced'] as const) {
-    const group = concepts.filter(c => c.tier === tier)
-    const r = RINGS[tier]
-    group.forEach((c, i) => {
-      const angle = (i / group.length) * 2 * Math.PI - Math.PI / 2
-      pos.set(c.id, { x: Math.cos(angle) * r, y: Math.sin(angle) * r })
-    })
-  }
+  basics.forEach((c, i) => {
+    const angle = (i / basics.length) * 2 * Math.PI - Math.PI / 2
+    pos.set(c.id, { x: Math.cos(angle) * RING, y: Math.sin(angle) * RING })
+  })
   return pos
 }
 
+// Only synergies where BOTH ends are basic — an edge pointing at a node that
+// isn't drawn would render as a line into empty space.
 function getEdges() {
   const seen = new Set<string>()
   const edges: { from: string; to: string; strength: number }[] = []
-  for (const c of concepts) {
+  for (const c of basics) {
     for (const syn of c.synergies) {
+      if (!basicIds.has(syn.conceptId)) continue
       const key = [c.id, syn.conceptId].sort().join('--')
-      if (!seen.has(key) && getConceptById(syn.conceptId)) {
+      if (!seen.has(key)) {
         seen.add(key)
         edges.push({ from: c.id, to: syn.conceptId, strength: syn.strength })
       }
@@ -57,6 +62,10 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
   }
 
   const concept = getConceptById(active)
+  const basicSynergies = useMemo(
+    () => concept?.synergies.filter(s => basicIds.has(s.conceptId)) ?? [],
+    [concept],
+  )
 
   const linked = useMemo(() => {
     const s = new Set<string>()
@@ -76,17 +85,15 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
 
         {/* Map */}
         <div className="md:col-span-3 p-4 md:p-6 md:border-r border-slate-800/50">
-          <svg viewBox="-520 -520 1040 1040" className="w-full h-auto" style={{ maxHeight: 460 }}>
+          <svg viewBox="-420 -420 840 840" className="w-full h-auto" style={{ maxHeight: 460 }}>
             <defs>
               <radialGradient id="map-demo-bg" cx="50%" cy="50%" r="50%">
                 <stop offset="0%"   stopColor="#0d0d1a" />
                 <stop offset="100%" stopColor="#05050a" />
               </radialGradient>
             </defs>
-            <circle cx="0" cy="0" r="510" fill="url(#map-demo-bg)" />
-            {Object.values(RINGS).map(r => (
-              <circle key={r} cx="0" cy="0" r={r} fill="none" stroke="#1e1e2e" strokeWidth="1" strokeDasharray="4 6" />
-            ))}
+            <circle cx="0" cy="0" r="410" fill="url(#map-demo-bg)" />
+            <circle cx="0" cy="0" r={RING} fill="none" stroke="#1e1e2e" strokeWidth="1" strokeDasharray="4 6" />
 
             {/* Edges */}
             {edges.map(e => {
@@ -95,20 +102,20 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
               const on = e.from === active || e.to === active
               return (
                 <line key={`${e.from}--${e.to}`} x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-                  stroke={on ? tierFill[concepts.find(c => c.id === e.from)?.tier ?? 'basic'] : '#1e2030'}
+                  stroke={on ? BASIC_FILL : '#1e2030'}
                   strokeWidth={on ? (e.strength === 3 ? 2 : 1.4) : 0.6}
-                  opacity={on ? (e.strength === 3 ? 0.9 : 0.6) : 0.05}
+                  opacity={on ? (e.strength === 3 ? 0.9 : 0.6) : 0.07}
                   style={{ transition: 'opacity 0.2s' }} />
               )
             })}
 
             {/* Nodes */}
-            {concepts.map(c => {
+            {basics.map(c => {
               const p = positions.get(c.id); if (!p) return null
               const isActive = active === c.id
               const isLinked = linked.has(c.id)
               const dim = !isActive && !isLinked
-              const fill = tierFill[c.tier]
+              const fill = BASIC_FILL
               return (
                 <g key={c.id} transform={`translate(${p.x},${p.y})`}
                   style={{ cursor: 'pointer' }}
@@ -123,7 +130,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
                     strokeWidth={isActive ? 2 : 1}
                     strokeOpacity={isActive ? 1 : dim ? 0.12 : 0.5}
                     style={{ transition: 'fill-opacity 0.15s, stroke-opacity 0.15s' }} />
-                  <text y={NODE_R + 13} textAnchor="middle" fontSize="10" fontWeight="600"
+                  <text y={NODE_R + 15} textAnchor="middle" fontSize="12" fontWeight="600"
                     fill={isActive ? fill : '#94a3b8'}
                     opacity={isActive ? 1 : isLinked ? 0.8 : 0.12}
                     fontFamily="Inter, sans-serif"
@@ -135,42 +142,40 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
             })}
           </svg>
 
-          {/* Legend */}
-          <div className="flex items-center justify-center gap-5 mt-1">
-            {(['basic', 'intermediate', 'advanced'] as const).map(t => (
-              <div key={t} className="flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full" style={{ background: tierFill[t] }} />
-                <span className="text-[10px] text-slate-500 capitalize">{t}</span>
-              </div>
-            ))}
-          </div>
+          {/* A tier legend would be noise here — every node is the same tier. */}
+          <p className="text-center text-[11px] text-slate-600 mt-1">
+            The {basics.length} foundations. Every other concept builds on these.
+          </p>
         </div>
 
         {/* Detail */}
         <div className="md:col-span-2 p-6 md:p-8 flex flex-col"
           style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 0%, rgba(96,165,250,0.04), transparent 70%)' }}>
           <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-4">
-            Hover any node · {concepts.length} concepts
+            Hover any node · {basics.length} foundations
           </p>
 
           {concept && (
             <>
               <div className="flex items-center gap-2 mb-2">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: tierFill[concept.tier] }} />
-                <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: tierFill[concept.tier] }}>{concept.tier}</span>
+                <span className="w-2.5 h-2.5 rounded-full" style={{ background: BASIC_FILL }} />
+                <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: BASIC_FILL }}>{concept.tier}</span>
                 <span className="text-slate-700 text-[10px]">·</span>
                 <span className="text-[10px] text-slate-500 capitalize">{concept.category}</span>
               </div>
               <h3 className="text-[18px] font-bold text-white leading-snug mb-2.5">{concept.name}</h3>
               <p className="text-[13px] text-slate-500 leading-relaxed line-clamp-5">{concept.description}</p>
 
-              {concept.synergies.length > 0 && (
+              {/* Only basic partners: a pill for an intermediate/advanced concept
+                  would select a node this map doesn't draw, leaving the graph with
+                  nothing highlighted. */}
+              {basicSynergies.length > 0 && (
                 <div className="mt-4">
                   <p className="text-[10px] font-black uppercase tracking-wider text-slate-600 mb-2">
-                    Connects to {concept.synergies.length}
+                    Connects to {basicSynergies.length}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {concept.synergies.slice(0, 5).map(syn => {
+                    {basicSynergies.slice(0, 5).map(syn => {
                       const partner = getConceptById(syn.conceptId)
                       if (!partner) return null
                       return (
