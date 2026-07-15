@@ -19,14 +19,15 @@ export function KillZoneClock() {
   const zoneText = useZoneText()
 
   return (
-    <div className="flex items-center gap-5">
+    // nowrap: this sits in a flex-1 slot that can shrink below the clock's width.
+    // Without it the labels wrap and, with leading-none, clip against the header.
+    <div className="flex items-center gap-5 whitespace-nowrap">
 
       {/* NY Clock */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2.5 flex-shrink-0">
         <Clock size={13} className="text-slate-600 flex-shrink-0" />
         <div>
-          <p className="text-[17px] font-bold text-slate-100 tabular-nums leading-none"
-            style={{ fontFamily: "'JetBrains Mono', monospace" }}>
+          <p className="text-[17px] font-bold text-slate-100 tabular-nums leading-none font-mono">
             {time.display}
           </p>
           <p className="text-[10px] font-bold text-slate-600 tracking-widest mt-0.5">NEW YORK</p>
@@ -36,7 +37,7 @@ export function KillZoneClock() {
       <div className="w-px h-8 bg-slate-800/80" />
 
       {/* Kill zone status */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2.5 flex-shrink-0">
         {active ? (
           <>
             <div className="relative flex-shrink-0">
@@ -67,7 +68,7 @@ export function KillZoneClock() {
       <div className="w-px h-8 bg-slate-800/80" />
 
       {/* Next ICT Macro */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-shrink-0">
         <Zap size={12} className="text-amber-500/60 flex-shrink-0" />
         <div>
           <p className="text-[11px] font-semibold text-slate-400 leading-none">

@@ -276,15 +276,16 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             </div>
           </div>
 
-          {/* Desktop clock — only from lg up. Between md and lg the logo, clock and
-              nine utility buttons don't fit on one row: the clock overflowed its
-              flex-1 slot and rendered on top of the "TRADING LAB" logo. Below lg
-              the compact clock gets its own row instead (see below). */}
-          <div className="hidden lg:flex flex-1 justify-center items-center min-w-0">
+          {/* Desktop clock — only once it actually fits. The logo and the nine
+              utility buttons leave the clock a slot of (viewport - 1150)px, and the
+              clock needs 410px, so it only fits from ~1560px up. Below that it used
+              to wrap: "Next Macro" broke onto four lines and clipped against the
+              header edge. Anything narrower gets the compact clock row instead. */}
+          <div className="hidden min-[1560px]:flex flex-1 justify-center items-center min-w-0">
             <KillZoneClock />
           </div>
           {/* Keeps the utility buttons right-aligned once the clock is hidden */}
-          <div className="flex-1 lg:hidden" />
+          <div className="flex-1 min-[1560px]:hidden" />
 
           {/* Desktop: full utility buttons */}
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
@@ -342,9 +343,9 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             </div>
           </div>
         )}
-        {/* Compact clock row — used below lg, where the full clock can't share the
-            header row with the logo + utility buttons. */}
-        <div className="lg:hidden flex items-center px-4 pb-2 pt-0.5 gap-2">
+        {/* Compact clock row — used below 1560px, where the full clock can't share
+            the header row with the logo + utility buttons. */}
+        <div className="min-[1560px]:hidden flex items-center px-4 pb-2 pt-0.5 gap-2">
           <KillZoneClockCompact />
         </div>
 
