@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useMemo } from 'react'
+import { useState, useRef, useCallback, useMemo, useEffect } from 'react'
 import { parseCSV, detectColumns, buildTrades, combineTrades } from './lib/csvParser'
 import type { Trade, ColumnMap } from './lib/csvParser'
 import { exportToPng, exportAllCardsToPng } from './lib/export'
@@ -24,6 +24,19 @@ interface TradeEntry {
 }
 
 export function RecapPage() {
+  // Recap is a dark studio: all ten card themes are dark, and this page paints no
+  // background of its own — it draws its text straight from the card theme
+  // (e.g. textPrimary '#e8f4ff') via inline styles. In the app's light theme that
+  // near-white text landed on the warm-paper shell background at ~1.02 contrast,
+  // i.e. invisible. Pin dark while the tab is mounted and restore on exit, the
+  // same way the marketing Landing does.
+  useEffect(() => {
+    const html = document.documentElement
+    const prev = html.getAttribute('data-theme') ?? 'light'
+    html.setAttribute('data-theme', 'dark')
+    return () => html.setAttribute('data-theme', prev)
+  }, [])
+
   const [step, setStep]               = useState<Step>('upload')
   const [view, setView]               = useState<View>('cards')
   const [isDragging, setIsDragging]   = useState(false)

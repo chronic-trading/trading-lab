@@ -4,17 +4,19 @@ export interface KillZone {
   name: string
   shortName: string
   color: string
-  textColor: string
+  textColor: string       // tuned for dark surfaces
+  textColorLight: string  // darker twin for the light theme (inline styles skip
+                          // index.css's class-based remap, so these must be explicit)
   bgColor: string
   start: number  // minutes from midnight NY time
   end: number
 }
 
 export const KILL_ZONES: KillZone[] = [
-  { name: 'Asian Session', shortName: 'Asian',  color: '#4f46e5', textColor: '#a5b4fc', bgColor: 'rgba(79,70,229,0.12)', start: 19 * 60,      end: 21 * 60 },
-  { name: 'London Open',   shortName: 'London', color: '#2563eb', textColor: '#60a5fa', bgColor: 'rgba(37,99,235,0.12)',  start:  2 * 60,      end:  5 * 60 },
-  { name: 'NY AM',         shortName: 'NY AM',  color: '#059669', textColor: '#34d399', bgColor: 'rgba(5,150,105,0.12)',  start:  8 * 60 + 30, end: 11 * 60 },
-  { name: 'NY PM',         shortName: 'NY PM',  color: '#d97706', textColor: '#fbbf24', bgColor: 'rgba(217,119,6,0.12)',  start: 13 * 60 + 30, end: 16 * 60 },
+  { name: 'Asian Session', shortName: 'Asian',  color: '#4f46e5', textColor: '#a5b4fc', textColorLight: '#4338ca', bgColor: 'rgba(79,70,229,0.12)', start: 19 * 60,      end: 21 * 60 },
+  { name: 'London Open',   shortName: 'London', color: '#2563eb', textColor: '#60a5fa', textColorLight: '#1d4ed8', bgColor: 'rgba(37,99,235,0.12)',  start:  2 * 60,      end:  5 * 60 },
+  { name: 'NY AM',         shortName: 'NY AM',  color: '#059669', textColor: '#34d399', textColorLight: '#047857', bgColor: 'rgba(5,150,105,0.12)',  start:  8 * 60 + 30, end: 11 * 60 },
+  { name: 'NY PM',         shortName: 'NY PM',  color: '#d97706', textColor: '#fbbf24', textColorLight: '#b45309', bgColor: 'rgba(217,119,6,0.12)',  start: 13 * 60 + 30, end: 16 * 60 },
 ]
 
 // ICT Macro windows (start times in NY minutes-from-midnight)

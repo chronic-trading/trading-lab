@@ -8,7 +8,7 @@ import { useBuilds } from '../hooks/useBuilds'
 import { useTheme } from '../hooks/useTheme'
 import { useTradeGrades } from '../hooks/useTradeGrades'
 import { getConceptById } from '../data/concepts'
-import { GROUPS, ALL_FACTORS, TOTAL_WEIGHT, letterFor, rrAdjust, verdictFor } from '../lib/grader'
+import { GROUPS, ALL_FACTORS, TOTAL_WEIGHT, letterFor, rrAdjust, verdictFor, groupColor } from '../lib/grader'
 import type { Instrument } from '../types'
 
 const INSTRUMENTS: Instrument[] = ['NQ', 'ES', 'GC', 'SI', 'EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDUSD', 'NZDUSD']
@@ -212,11 +212,13 @@ export function TradeGrader() {
                 <span className="text-[10px] text-slate-600 font-semibold">{checked.size}/{ALL_FACTORS.length} checked</span>
               </div>
 
-              {GROUPS.map(group => (
+              {GROUPS.map(group => {
+                const gc = groupColor(group, lightTheme)
+                return (
                 <div key={group.key} className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-[3px] h-3.5 rounded-full" style={{ background: group.color }} />
-                    <span className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: group.color }}>{group.title}</span>
+                    <div className="w-[3px] h-3.5 rounded-full" style={{ background: gc }} />
+                    <span className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: gc }}>{group.title}</span>
                   </div>
                   {group.factors.map(f => {
                     const on = checked.has(f.id)
@@ -227,7 +229,7 @@ export function TradeGrader() {
                         }`}>
                         <span className={`w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 border transition-all ${
                           on ? 'border-transparent' : 'border-slate-700'
-                        }`} style={on ? { background: group.color } : undefined}>
+                        }`} style={on ? { background: gc } : undefined}>
                           {on && <Check size={13} className="text-[#0b0b12]" strokeWidth={3} />}
                         </span>
                         <span className={`text-[12.5px] leading-snug ${on ? 'text-slate-200 font-medium' : 'text-slate-400'}`}>{f.label}</span>
@@ -238,7 +240,8 @@ export function TradeGrader() {
                     )
                   })}
                 </div>
-              ))}
+                )
+              })}
 
               <button onClick={reset}
                 className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-slate-300 transition-colors pt-1">

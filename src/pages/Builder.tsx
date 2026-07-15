@@ -394,8 +394,11 @@ export function Builder({ initialBuild }: Props) {
   return (
     <div className="flex flex-col h-full overflow-hidden">
 
-      {/* ── Mobile tab bar ─── (hidden on md+) */}
-      <div className="flex md:hidden border-b border-slate-800/50 bg-[#06060d] flex-shrink-0">
+      {/* ── Panel tab bar ─── (hidden once the 3-column layout fits, at xl)
+          The three columns need ~1280px (540 library + 270 synergies + a usable
+          workbench). Below xl they don't fit: the workbench collapsed to ~48px
+          and the synergies panel ran off-screen. Use the tabbed layout instead. */}
+      <div className="flex xl:hidden border-b border-slate-800/50 bg-[#06060d] flex-shrink-0">
         {([
           { id: 'library',  label: 'Library',  icon: Library    },
           { id: 'build',    label: 'Build',     icon: Zap        },
@@ -412,21 +415,21 @@ export function Builder({ initialBuild }: Props) {
         ))}
       </div>
 
-      {/* ── Desktop 3-column | Mobile single panel ── */}
+      {/* ── 3-column from xl | single tabbed panel below ── */}
       <div className="flex flex-1 overflow-hidden">
 
-        {/* Left: Library (desktop always visible / mobile only when library tab active) */}
-        <div className={`${mobileTab === 'library' ? 'flex' : 'hidden'} md:flex flex-col md:w-[540px] lg:w-[560px] flex-shrink-0 border-r border-slate-800/50 bg-[#06060d] w-full`}>
+        {/* Left: Library (all three visible from xl / below xl only the active tab) */}
+        <div className={`${mobileTab === 'library' ? 'flex' : 'hidden'} xl:flex flex-col xl:w-[540px] 2xl:w-[560px] flex-shrink-0 border-r border-slate-800/50 bg-[#06060d] w-full`}>
           {LibraryPanel}
         </div>
 
-        {/* Center: Workbench (desktop always visible / mobile only when build tab active) */}
-        <div className={`${mobileTab === 'build' ? 'flex' : 'hidden'} md:flex flex-col flex-1 overflow-hidden min-w-0`}>
+        {/* Center: Workbench */}
+        <div className={`${mobileTab === 'build' ? 'flex' : 'hidden'} xl:flex flex-col flex-1 overflow-hidden min-w-0`}>
           {WorkbenchPanel}
         </div>
 
-        {/* Right: Synergies (desktop always visible / mobile only when synergy tab active) */}
-        <div className={`${mobileTab === 'synergy' ? 'flex' : 'hidden'} md:flex flex-col md:w-[270px] flex-shrink-0 border-l border-slate-800/50 bg-[#06060d] w-full`}>
+        {/* Right: Synergies */}
+        <div className={`${mobileTab === 'synergy' ? 'flex' : 'hidden'} xl:flex flex-col xl:w-[270px] flex-shrink-0 border-l border-slate-800/50 bg-[#06060d] w-full`}>
           {SynergyPanelContent}
         </div>
       </div>

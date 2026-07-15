@@ -14,13 +14,23 @@ export interface Factor {
 export interface Group {
   key: string
   title: string
-  color: string
+  color: string       // dark-theme hue (used on the dark landing + dark app)
+  colorLight: string  // darker hue for the light theme — see groupColor()
   factors: Factor[]
+}
+
+/**
+ * Group hues are applied inline (label text, chip fills, checkbox), so the
+ * class-based light remap in index.css can't reach them and the dark-tuned hues
+ * sit at ~1.9–2.6:1 on the light card. Pick the readable one per theme.
+ */
+export function groupColor(g: Group, light = false): string {
+  return light ? g.colorLight : g.color
 }
 
 export const GROUPS: Group[] = [
   {
-    key: 'draw', title: 'Bias & Draw', color: '#c084fc',
+    key: 'draw', title: 'Bias & Draw', color: '#c084fc', colorLight: '#7c3aed',
     factors: [
       { id: 'htf-bias', label: 'Aligns with my HTF daily bias', weight: 14, essential: true,
         why: 'Trading against the higher-timeframe bias flips the odds against you before you even enter.',
@@ -31,7 +41,8 @@ export const GROUPS: Group[] = [
     ],
   },
   {
-    key: 'liquidity', title: 'Liquidity', color: '#34d399',
+    // green needs to go a stop darker than the other hues to clear 4.5:1 at 10px
+    key: 'liquidity', title: 'Liquidity', color: '#34d399', colorLight: '#15803d',
     factors: [
       { id: 'sweep', label: 'Liquidity swept before entry (raid / stop hunt)', weight: 12, essential: true,
         why: 'Entries taken before the sweep get run over — the sweep is the fuel for the move.',
@@ -42,7 +53,7 @@ export const GROUPS: Group[] = [
     ],
   },
   {
-    key: 'structure', title: 'Structure', color: '#60a5fa',
+    key: 'structure', title: 'Structure', color: '#60a5fa', colorLight: '#2563eb',
     factors: [
       { id: 'choch', label: 'Structure confirms direction (CHoCH / BOS)', weight: 10, essential: true,
         why: 'No structural shift means you are guessing the turn instead of trading it.',
@@ -53,7 +64,7 @@ export const GROUPS: Group[] = [
     ],
   },
   {
-    key: 'entry', title: 'Entry', color: '#f59e0b',
+    key: 'entry', title: 'Entry', color: '#f59e0b', colorLight: '#b45309',
     factors: [
       { id: 'pd-array', label: 'Entry from a defined PD array (FVG / OB / breaker)', weight: 11, essential: true,
         why: 'An entry with no PD array is a market order on hope — define the zone.',
@@ -64,7 +75,7 @@ export const GROUPS: Group[] = [
     ],
   },
   {
-    key: 'timing', title: 'Timing', color: '#fb923c',
+    key: 'timing', title: 'Timing', color: '#fb923c', colorLight: '#c2410c',
     factors: [
       { id: 'killzone', label: 'Entry inside a kill zone / macro window', weight: 9, essential: true,
         why: "Outside the kill zones the algorithm isn't delivering — you're trading dead time.",
@@ -75,7 +86,7 @@ export const GROUPS: Group[] = [
     ],
   },
   {
-    key: 'risk', title: 'Risk & Discipline', color: '#f472b6',
+    key: 'risk', title: 'Risk & Discipline', color: '#f472b6', colorLight: '#be185d',
     factors: [
       { id: 'invalidation', label: 'Invalidation level defined before entry', weight: 8, essential: true,
         why: "If you can't say where you're wrong, you can't manage the trade — non-negotiable." },

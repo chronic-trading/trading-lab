@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Plus, X, Zap, Radio, Clock, TrendingUp, TrendingDown, Minus, Target, BarChart2, Package, Trash2 } from 'lucide-react'
 import { useKillZone } from '../hooks/useKillZone'
+import { useTheme } from '../hooks/useTheme'
 import { useJournal } from '../hooks/useJournal'
 import { useBuilds } from '../hooks/useBuilds'
 import { useAllMastery } from '../hooks/useMastery'
@@ -164,6 +165,10 @@ function KeyLevelsPanel() {
 // ── Main Home Page ────────────────────────────────────────────────────────────
 export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
   const { time, active, next, timeLeft, timeToNext, timeToMacro, nextMacro } = useKillZone()
+  // Zone hues are inline-styled, so the light theme needs the darker twin.
+  const { theme } = useTheme()
+  const zoneText = (z: { textColor: string; textColorLight: string }) =>
+    theme === 'light' ? z.textColorLight : z.textColor
   const { entries, wins, total, winRate, totalPoints } = useJournal()
   const { builds } = useBuilds()
   const masteryData = useAllMastery()
@@ -222,10 +227,10 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
               <div className="rounded-xl border px-3.5 py-3" style={{ borderColor: active.color + '50', background: active.bgColor }}>
                 <div className="flex items-center gap-2 mb-0.5">
                   <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: active.color }} />
-                  <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: active.textColor }}>Active Now</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider" style={{ color: zoneText(active) }}>Active Now</span>
                 </div>
                 <p className="text-[15px] font-bold text-white">{active.name}</p>
-                {timeLeft && <p className="text-[11px] mt-0.5" style={{ color: active.textColor }}>ends in {timeLeft}</p>}
+                {timeLeft && <p className="text-[11px] mt-0.5" style={{ color: zoneText(active) }}>ends in {timeLeft}</p>}
               </div>
             ) : (
               <div className="rounded-xl border border-slate-800/50 px-3.5 py-3 bg-slate-900/30">

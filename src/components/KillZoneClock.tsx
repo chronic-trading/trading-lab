@@ -1,9 +1,22 @@
 import { useKillZone } from '../hooks/useKillZone'
+import { useTheme } from '../hooks/useTheme'
 import { Clock, Zap } from 'lucide-react'
+
+/**
+ * Zone hues are applied inline, so index.css's class-based light remap can't
+ * reach them — the dark-tuned textColor sat at ~1.9:1 on the light header.
+ * This clock is in the header on every page, so pick the right twin per theme.
+ */
+function useZoneText() {
+  const { theme } = useTheme()
+  return (z: { textColor: string; textColorLight: string }) =>
+    theme === 'light' ? z.textColorLight : z.textColor
+}
 
 /** Full-width clock for desktop header centre */
 export function KillZoneClock() {
   const { time, active, next, nextMacro, timeLeft, timeToNext, timeToMacro } = useKillZone()
+  const zoneText = useZoneText()
 
   return (
     <div className="flex items-center gap-5">
@@ -31,7 +44,7 @@ export function KillZoneClock() {
               <div className="absolute inset-0 rounded-full animate-ping opacity-50" style={{ backgroundColor: active.color }} />
             </div>
             <div>
-              <p className="text-[13px] font-bold leading-none" style={{ color: active.textColor }}>
+              <p className="text-[13px] font-bold leading-none" style={{ color: zoneText(active) }}>
                 {active.name}
               </p>
               <p className="text-[10px] text-slate-500 mt-0.5">{timeLeft} left</p>
@@ -43,7 +56,7 @@ export function KillZoneClock() {
             <div>
               <p className="text-[12px] font-semibold text-slate-500 leading-none">Off Session</p>
               <p className="text-[10px] text-slate-600 mt-0.5">
-                <span style={{ color: next.zone.textColor }}>{next.zone.shortName}</span>
+                <span style={{ color: zoneText(next.zone) }}>{next.zone.shortName}</span>
                 {' '}in {timeToNext}
               </p>
             </div>
@@ -71,12 +84,13 @@ export function KillZoneClock() {
 /** Compact single-line clock strip for mobile header */
 export function KillZoneClockCompact() {
   const { active, next, nextMacro, timeLeft, timeToNext, timeToMacro } = useKillZone()
+  const zoneText = useZoneText()
 
   return (
     <div className="flex items-center gap-2 text-[10px] font-semibold">
       {/* Zone pill */}
       {active ? (
-        <span className="flex items-center gap-1" style={{ color: active.textColor }}>
+        <span className="flex items-center gap-1" style={{ color: zoneText(active) }}>
           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse" style={{ backgroundColor: active.color }} />
           {active.shortName ?? active.name}
           <span className="text-slate-600 font-normal">{timeLeft}</span>
@@ -84,7 +98,7 @@ export function KillZoneClockCompact() {
       ) : (
         <span className="flex items-center gap-1 text-slate-600">
           <span className="w-1.5 h-1.5 rounded-full bg-slate-700 flex-shrink-0" />
-          <span style={{ color: next.zone.textColor }}>{next.zone.shortName}</span>
+          <span style={{ color: zoneText(next.zone) }}>{next.zone.shortName}</span>
           <span className="text-slate-700">in {timeToNext}</span>
         </span>
       )}
