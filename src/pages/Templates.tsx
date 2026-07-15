@@ -67,7 +67,7 @@ function TemplateCard({ t, i, onLoad }: CardProps) {
           {conceptList.map(c => c && (
             <div key={c.id} className="flex items-center gap-1 bg-slate-900/60 border border-slate-800/50 rounded-lg px-1.5 py-1">
               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierBar[c.tier]}`} />
-              <span className="flex items-center text-[9px] text-slate-600">{catIcons[c.category]}</span>
+              <span className="flex items-center text-[10px] text-slate-600">{catIcons[c.category]}</span>
               <span className="text-[10.5px] font-medium text-slate-300">{c.shortName}</span>
             </div>
           ))}

@@ -759,7 +759,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{ background: `radial-gradient(ellipse 90% 55% at 50% 0%,${t.color}0c,transparent 70%)` }} />
                 <span className="text-[34px] leading-none mb-3 transition-transform duration-300 group-hover:scale-110">{t.emoji}</span>
-                <span className="text-[9px] font-bold tracking-[0.2em] uppercase px-2.5 py-0.5 rounded-full mb-4"
+                <span className="text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-0.5 rounded-full mb-4"
                   style={{ color: t.color, background: `${t.color}12`, border: `1px solid ${t.color}25` }}>
                   {t.tag}
                 </span>

@@ -129,12 +129,12 @@ export function TradeGrader() {
           {gradedCount > 0 && (
             <div className="flex items-center gap-4 bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-4 py-2.5">
               <div className="text-center">
-                <p className="text-[9px] text-slate-600 uppercase tracking-wider font-semibold">Graded</p>
+                <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Graded</p>
                 <p className="text-[15px] font-bold text-slate-200" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{gradedCount}</p>
               </div>
               <div className="w-px h-7 bg-slate-800" />
               <div className="text-center">
-                <p className="text-[9px] text-slate-600 uppercase tracking-wider font-semibold">Avg Score</p>
+                <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Avg Score</p>
                 <p className="text-[15px] font-bold text-amber-400" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{avgScore}</p>
               </div>
             </div>
@@ -278,7 +278,7 @@ export function TradeGrader() {
                 {/* Risk suggestion */}
                 <div className="mt-5 flex items-center justify-between bg-slate-900/50 border border-slate-800/50 rounded-xl px-4 py-3">
                   <div>
-                    <p className="text-[9px] text-slate-600 uppercase tracking-wider font-semibold">Suggested risk</p>
+                    <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Suggested risk</p>
                     <p className="text-[10px] text-slate-500 mt-0.5">{Math.round(result.verdict.riskMult * 100)}% of your ${Math.round(baseRisk).toLocaleString()} plan</p>
                   </div>
                   <p className="text-[20px] font-black" style={{ color: result.color, fontFamily: "'JetBrains Mono', monospace" }}>

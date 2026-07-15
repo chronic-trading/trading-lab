@@ -70,7 +70,7 @@ function EquityCurve({ entries }: { entries: JournalEntry[] }) {
         <path d={`${path} L${W},${H} L0,${H} Z`} fill="url(#eq-fill)" />
         <path d={path} fill="none" stroke={color} strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
       </svg>
-      <p className="text-[9px] text-slate-700 mt-1">cumulative points across {chrono.length} trades, oldest → newest</p>
+      <p className="text-[10px] text-slate-700 mt-1">cumulative points across {chrono.length} trades, oldest → newest</p>
     </div>
   )
 }
@@ -205,7 +205,7 @@ export function JournalAnalytics({ entries }: Props) {
           {[['#34d399','Win'], ['#f87171','Loss'], ['#64748b','BE']].map(([c,l]) => (
             <div key={l} className="flex items-center gap-1">
               <div className="w-2 h-2 rounded-sm" style={{ background: c }} />
-              <span className="text-[9px] text-slate-600">{l}</span>
+              <span className="text-[10px] text-slate-600">{l}</span>
             </div>
           ))}
         </div>
@@ -243,7 +243,7 @@ export function JournalAnalytics({ entries }: Props) {
             <Clock size={12} className="text-slate-500" />
             <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kill Zone</p>
             {kzTagged.length > 0 && kzTagged.length < entries.length && (
-              <span className="text-[9px] text-slate-700 ml-auto">{kzTagged.length}/{entries.length} tagged</span>
+              <span className="text-[10px] text-slate-700 ml-auto">{kzTagged.length}/{entries.length} tagged</span>
             )}
           </div>
           {kzStats.length === 0 ? (

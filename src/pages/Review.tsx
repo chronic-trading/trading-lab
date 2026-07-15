@@ -24,7 +24,7 @@ function Stat({ value, label, icon, color }: { value: number | string; label: st
       <div className="flex-shrink-0" style={{ color }}>{icon}</div>
       <div className="min-w-0">
         <p className="text-[17px] font-extrabold text-[var(--text)] leading-none">{value}</p>
-        <p className="text-[9px] font-bold uppercase tracking-wider text-[var(--text-faint)] mt-1 truncate">{label}</p>
+        <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-faint)] mt-1 truncate">{label}</p>
       </div>
     </div>
   )
@@ -156,7 +156,7 @@ export function Review() {
                       <div key={n} className={`w-2 h-2 rounded-full ${n <= mLevel ? MASTERY_COLORS[mLevel] : 'bg-[var(--surface-2)]'}`} />
                     ))}
                   </div>
-                  <span className={`text-[9px] font-bold ml-1 ${MASTERY_TEXT[mLevel]}`}>{MASTERY_LABELS[mLevel]}</span>
+                  <span className={`text-[10px] font-bold ml-1 ${MASTERY_TEXT[mLevel]}`}>{MASTERY_LABELS[mLevel]}</span>
                 </div>
               </div>
 
@@ -177,12 +177,12 @@ export function Review() {
                 >
                   <p className="text-[14px] text-[var(--text-dim)] leading-relaxed"><GlossaryText text={concept.description} /></p>
                   <div className="bg-[var(--accent-soft)] rounded-2xl px-4 py-3.5">
-                    <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[var(--accent-ink)] mb-1.5">How to use</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--accent-ink)] mb-1.5">How to use</p>
                     <p className="text-[13px] text-[var(--text-dim)] leading-relaxed"><GlossaryText text={concept.howToUse} /></p>
                   </div>
                   {strongSynergies.length > 0 && (
                     <div className="space-y-1.5">
-                      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[var(--text-faint)]">Essential pairings</p>
+                      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--text-faint)]">Essential pairings</p>
                       {strongSynergies.map(s => (
                         <div key={s.conceptId} className="flex items-start gap-2 bg-[var(--surface-2)] rounded-xl px-3 py-2.5">
                           <Link2 size={11} className="text-[var(--text-faint)] mt-0.5 flex-shrink-0" />
@@ -202,7 +202,7 @@ export function Review() {
                         style={{ background: soft, color: c, border: '1px solid', borderColor: `color-mix(in srgb, ${c} 32%, transparent)` }}>
                         <span className="text-[13px]">{label}</span>
                         <span className="text-[10px] opacity-75 font-semibold">{previewInterval(cardState, g)}</span>
-                        <span className="hidden md:block text-[9px] opacity-40 font-bold">{key}</span>
+                        <span className="hidden md:block text-[10px] opacity-40 font-bold">{key}</span>
                       </button>
                     ))}
                   </div>

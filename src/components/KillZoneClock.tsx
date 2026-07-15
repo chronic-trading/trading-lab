@@ -29,7 +29,7 @@ export function KillZoneClock() {
             style={{ fontFamily: "'JetBrains Mono', monospace" }}>
             {time.display}
           </p>
-          <p className="text-[9px] font-bold text-slate-600 tracking-widest mt-0.5">NEW YORK</p>
+          <p className="text-[10px] font-bold text-slate-600 tracking-widest mt-0.5">NEW YORK</p>
         </div>
       </div>
 

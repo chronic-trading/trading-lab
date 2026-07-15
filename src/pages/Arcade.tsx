@@ -428,9 +428,9 @@ function Liquidation({ onBack }: { onBack: () => void }) {
                 <Skull size={28} className="text-red-400 mb-2" />
                 <p className="text-[15px] font-black tracking-widest text-red-400 mb-2">LIQUIDATED</p>
                 <div className="grid grid-cols-3 gap-4 mb-3">
-                  <div><p className="text-[9px] font-bold uppercase tracking-widest text-slate-600">Peak equity</p><p className="text-[15px] font-black text-amber-400">{fmt(stats.peak)}</p></div>
-                  <div><p className="text-[9px] font-bold uppercase tracking-widest text-slate-600">Trades closed</p><p className="text-[15px] font-black text-slate-200">{stats.trades}</p></div>
-                  <div><p className="text-[9px] font-bold uppercase tracking-widest text-slate-600">Best trade</p><p className="text-[15px] font-black text-emerald-400">{signed(stats.bestTrade)}</p></div>
+                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Peak equity</p><p className="text-[15px] font-black text-amber-400">{fmt(stats.peak)}</p></div>
+                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Trades closed</p><p className="text-[15px] font-black text-slate-200">{stats.trades}</p></div>
+                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Best trade</p><p className="text-[15px] font-black text-emerald-400">{signed(stats.bestTrade)}</p></div>
                 </div>
               </>
             )}
@@ -445,7 +445,7 @@ function Liquidation({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="flex items-center gap-2 mt-3 mb-2">
-        <span className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-600">Leverage</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600">Leverage</span>
         {LEVERAGES.map(l => (
           <button key={l} onClick={() => setLev(l)} disabled={!!hud.pos}
             className={`px-3 py-1 rounded-lg text-[11px] font-black transition-all disabled:opacity-40 ${
@@ -486,7 +486,7 @@ function Liquidation({ onBack }: { onBack: () => void }) {
 function Stat({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
     <div className="rounded-xl border border-slate-800/60 bg-slate-900/40 px-3 py-2 text-center">
-      <p className="text-[8px] font-black uppercase tracking-[0.18em] text-slate-600">{label}</p>
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600">{label}</p>
       <p className="text-[14px] md:text-[16px] font-black tabular-nums text-slate-100" style={color ? { color } : undefined}>{value}</p>
     </div>
   )
@@ -532,7 +532,7 @@ export function Arcade() {
                 <p className="text-[13px] font-black tracking-widest text-white group-hover:text-amber-400 transition-colors">TAPE READER</p>
               </div>
               <p className="text-[11px] text-slate-500 leading-relaxed mb-3">60-second scalping sprint. Read the trend, go long or short with your whole stack, and bank as much as you can before the bell.</p>
-              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-600">No leverage · Timed · Pure tape reading</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600">No leverage · Timed · Pure tape reading</p>
             </button>
 
             <button onClick={() => setGame('liq')}
@@ -542,7 +542,7 @@ export function Arcade() {
                 <p className="text-[13px] font-black tracking-widest text-white group-hover:text-red-400 transition-colors">LIQUIDATION</p>
               </div>
               <p className="text-[11px] text-slate-500 leading-relaxed mb-3">Leveraged perps with a live news feed. Up to 50x, a liquidation line that hunts your wicks, and no timer — compound until you blow up.</p>
-              <p className="text-[9px] font-black uppercase tracking-[0.18em] text-red-400/70">5–50x leverage · News events · Survival</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-red-400/70">5–50x leverage · News events · Survival</p>
             </button>
           </div>
         </div>

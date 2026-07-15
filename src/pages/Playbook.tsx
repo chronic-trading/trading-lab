@@ -64,9 +64,9 @@ function SetupCard({ setup }: { setup: SetupExample }) {
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               {setup.instrument}
             </span>
-            <span className="text-slate-700 text-[9px]">·</span>
+            <span className="text-slate-700 text-[10px]">·</span>
             <span className={`text-[10px] font-bold ${tfColor[setup.timeframe]}`}>{setup.timeframe}</span>
-            <span className="text-slate-700 text-[9px]">·</span>
+            <span className="text-slate-700 text-[10px]">·</span>
             <span className={`text-[10px] font-semibold ${sessionColor[setup.session]}`}>{setup.session}</span>
             <span className="ml-auto flex-shrink-0">
               <span className={`inline-flex items-center gap-1 text-[9.5px] font-bold px-2 py-0.5 rounded-full border ${res.bg} ${res.color}`}>
@@ -105,7 +105,7 @@ function SetupCard({ setup }: { setup: SetupExample }) {
               { label: 'Invalidation', text: setup.invalidation, color: 'border-red-500/20 bg-red-500/5',         tc: 'text-red-300'     },
             ].map(row => (
               <div key={row.label} className={`rounded-xl border px-3 py-2.5 ${row.color}`}>
-                <p className={`text-[9px] font-black uppercase tracking-wider mb-1 ${row.tc}`}>{row.label}</p>
+                <p className={`text-[10px] font-black uppercase tracking-wider mb-1 ${row.tc}`}>{row.label}</p>
                 <p className="text-[11px] text-slate-300 leading-relaxed">{row.text}</p>
               </div>
             ))}
@@ -113,7 +113,7 @@ function SetupCard({ setup }: { setup: SetupExample }) {
 
           {/* Key lesson */}
           <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 px-4 py-3">
-            <p className="text-[9px] font-black uppercase tracking-wider text-amber-400 mb-1.5">Key Lesson</p>
+            <p className="text-[10px] font-black uppercase tracking-wider text-amber-400 mb-1.5">Key Lesson</p>
             <p className="text-[12px] text-amber-200/80 leading-relaxed">{setup.keyLesson}</p>
           </div>
 
@@ -155,7 +155,7 @@ function ConceptList({
     <div className="flex-1 overflow-y-auto py-2">
       {grouped.map(({ cat, items }) => (
         <div key={cat}>
-          <p className={`px-4 py-1.5 text-[9px] font-black uppercase tracking-[0.18em] ${categoryColor[cat]}`}>
+          <p className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] ${categoryColor[cat]}`}>
             {categoryLabel[cat]}
           </p>
           {items.map(concept => {
@@ -246,7 +246,7 @@ export function Playbook() {
 
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <span className={`text-[9px] font-black uppercase tracking-widest ${categoryColor[selected.category]}`}>
+                  <span className={`text-[10px] font-black uppercase tracking-widest ${categoryColor[selected.category]}`}>
                     {categoryLabel[selected.category]}
                   </span>
                   <h2 className="text-[16px] md:text-[18px] font-black text-white leading-tight mt-0.5">
@@ -261,7 +261,7 @@ export function Playbook() {
                      style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                     {setups.length}
                   </p>
-                  <p className="text-[9px] text-slate-600 uppercase tracking-wider mt-0.5">
+                  <p className="text-[10px] text-slate-600 uppercase tracking-wider mt-0.5">
                     setup{setups.length !== 1 ? 's' : ''}
                   </p>
                 </div>

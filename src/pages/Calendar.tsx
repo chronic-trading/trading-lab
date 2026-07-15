@@ -166,7 +166,7 @@ export function Calendar() {
                       <p className="text-[10px] text-slate-600 mt-0.5">2:00 PM EST</p>
                     </div>
                     {isNext && (
-                      <span className="text-[9px] font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-full">NEXT</span>
+                      <span className="text-[10px] font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-full">NEXT</span>
                     )}
                   </div>
                 )
@@ -231,7 +231,7 @@ export function Calendar() {
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${ev.impact === 'extreme' ? 'bg-red-500' : 'bg-orange-500/80'}`} />
-                        <span className={`text-[9px] font-bold uppercase tracking-wider ${ev.impact === 'extreme' ? 'text-red-400' : 'text-orange-400'}`}>
+                        <span className={`text-[10px] font-bold uppercase tracking-wider ${ev.impact === 'extreme' ? 'text-red-400' : 'text-orange-400'}`}>
                           {ev.impact === 'extreme' ? 'Extreme Impact' : 'High Impact'}
                         </span>
                       </div>

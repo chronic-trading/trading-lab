@@ -378,10 +378,10 @@ export function Journal() {
                                 <span className={`text-[11px] font-semibold capitalize ${entry.direction === 'long' ? 'text-emerald-400/70' : 'text-red-400/70'}`}>{entry.direction}</span>
                                 {/* Mode badge */}
                                 {entry.mode === 'backtest' && (
-                                  <span className="text-[9px] font-bold text-purple-400 bg-purple-500/10 border border-purple-500/20 px-1.5 py-0.5 rounded-full">BT</span>
+                                  <span className="text-[10px] font-bold text-purple-400 bg-purple-500/10 border border-purple-500/20 px-1.5 py-0.5 rounded-full">BT</span>
                                 )}
                                 {entry.killzone && (
-                                  <span className="text-[9px] font-bold text-slate-400 bg-slate-800/60 border border-slate-700/40 px-1.5 py-0.5 rounded-full">{entry.killzone}</span>
+                                  <span className="text-[10px] font-bold text-slate-400 bg-slate-800/60 border border-slate-700/40 px-1.5 py-0.5 rounded-full">{entry.killzone}</span>
                                 )}
                                 {entry.points !== null && (
                                   <span className={`text-[11px] font-bold ml-auto ${(entry.points ?? 0) >= 0 ? 'text-emerald-400' : 'text-red-400'}`} style={{ fontFamily: "'JetBrains Mono', monospace" }}>

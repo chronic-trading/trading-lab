@@ -299,7 +299,7 @@ export function ConceptMap() {
                   <div key={level} className="flex items-center gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
                     <span className="text-[10px] text-slate-400">{label}</span>
-                    <span className="text-[9px] text-slate-600">({count})</span>
+                    <span className="text-[10px] text-slate-600">({count})</span>
                   </div>
                 )
               })}
@@ -337,7 +337,7 @@ export function ConceptMap() {
                 style={{ color: colorMode === 'tier' ? tierFill[activeConcept.tier] : masteryFill[activeLevel] }}>
                 {colorMode === 'tier' ? activeConcept.tier : MASTERY_LABELS[activeLevel]}
               </span>
-              <span className="text-slate-700 text-[9px]">·</span>
+              <span className="text-slate-700 text-[10px]">·</span>
               <span className="text-[10px] text-slate-500 capitalize truncate">{activeConcept.category}</span>
             </div>
             <button

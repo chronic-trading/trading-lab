@@ -124,7 +124,7 @@ export function TradingRules({ open, onClose }: Props) {
                             {rule.text}
                           </p>
                         )}
-                        <span className={`inline-block mt-1.5 text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md border ${catConfig[rule.category].color}`}>
+                        <span className={`inline-block mt-1.5 text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-md border ${catConfig[rule.category].color}`}>
                           {catConfig[rule.category].label}
                         </span>
                       </div>

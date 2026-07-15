@@ -183,7 +183,7 @@ function VerdictCard({
       {/* Historical data — your own numbers */}
       {historical && (
         <div className={`rounded-xl border ${v.borderColor} px-3 py-2.5`}>
-          <p className="text-[9px] font-black uppercase tracking-widest text-slate-600 mb-1">Your data</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1">Your data</p>
           <p className="text-[12px] text-slate-300">
             When you've rated{' '}
             <span className={`font-bold ${v.textColor}`}>{score}/5</span>
@@ -301,7 +301,7 @@ export function MindsetCheck({ open, onClose }: Props) {
                           }`}
                         >
                           <span className="text-[22px] leading-none">{s.emoji}</span>
-                          <span className={`text-[9px] font-bold uppercase tracking-wide ${selected === s.score ? s.color : 'text-slate-600'}`}>
+                          <span className={`text-[10px] font-bold uppercase tracking-wide ${selected === s.score ? s.color : 'text-slate-600'}`}>
                             {s.label}
                           </span>
                         </button>
@@ -352,7 +352,7 @@ export function MindsetCheck({ open, onClose }: Props) {
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className={`text-[11px] font-bold ${s.color}`}>{s.label}</span>
                               <span className="text-[10px] text-slate-600">{dateLabel}</span>
-                              <span className={`text-[9px] font-bold ml-auto ${v.textColor}`}>{v.verdict}</span>
+                              <span className={`text-[10px] font-bold ml-auto ${v.textColor}`}>{v.verdict}</span>
                             </div>
                             {e.note && <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{e.note}</p>}
                           </div>

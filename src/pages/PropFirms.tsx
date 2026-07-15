@@ -20,7 +20,7 @@ function DrawdownBadge({ type }: { type: PropFirm['drawdownType'] }) {
   const map = { eod: { label: 'EOD', color: '#34d399' }, static: { label: 'Static', color: '#f59e0b' }, trailing: { label: 'Trailing', color: '#f87171' } }
   const { label, color } = map[type]
   return (
-    <span className="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wide"
+    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide"
       style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>{label}</span>
   )
 }
@@ -47,7 +47,7 @@ function Podium({ selectedSize }: { selectedSize: number }) {
             <div className="absolute top-0 inset-x-0 h-[1px] rounded-t-2xl"
               style={{ background: `linear-gradient(90deg,transparent,${border},transparent)` }} />
             <div className="text-2xl mb-1">{crown}</div>
-            <p className="text-[9px] font-black tracking-[0.25em] uppercase mb-2"
+            <p className="text-[10px] font-black tracking-[0.25em] uppercase mb-2"
               style={{ background: grad, backgroundSize: '200% auto', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               #{rank} Ranked
             </p>
@@ -116,16 +116,16 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
           <p className="text-[13px] font-bold text-white">{firm.name}</p>
           <div className="flex items-center gap-1 mt-0.5 flex-wrap">
             <DrawdownBadge type={firm.drawdownType} />
-            {firm.liveAccount    && <span className="px-1.5 py-0.5 rounded text-[8px] font-bold" style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399', border: '1px solid rgba(52,211,153,0.2)' }}>LIVE</span>}
-            {firm.hasPricePromos && <span className="px-1.5 py-0.5 rounded text-[8px] font-bold" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.2)' }}>PROMO</span>}
+            {firm.liveAccount    && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399', border: '1px solid rgba(52,211,153,0.2)' }}>LIVE</span>}
+            {firm.hasPricePromos && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.2)' }}>PROMO</span>}
           </div>
         </div>
         <div className="hidden md:block flex-shrink-0 text-center min-w-[80px]">
-          {plan ? <><p className="text-[15px] font-black text-white">{formatPrice(plan.price)}</p><p className="text-[9px] text-slate-600">/month</p></> : <p className="text-[11px] text-slate-600">—</p>}
+          {plan ? <><p className="text-[15px] font-black text-white">{formatPrice(plan.price)}</p><p className="text-[10px] text-slate-600">/month</p></> : <p className="text-[11px] text-slate-600">—</p>}
         </div>
         <div className="hidden md:block flex-shrink-0 text-center min-w-[60px]">
           <p className="text-[15px] font-black" style={{ color: firm.color }}>{firm.profitSplit}%</p>
-          <p className="text-[9px] text-slate-600">split</p>
+          <p className="text-[10px] text-slate-600">split</p>
         </div>
         <div className="hidden lg:flex flex-wrap gap-1 flex-1">
           <Tag yes={firm.newsTrading} label="News" />
@@ -134,7 +134,7 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
         </div>
         <div className="hidden md:block flex-shrink-0 text-center min-w-[50px]">
           <p className="text-[15px] font-black text-slate-300">{firm.minTradingDays}</p>
-          <p className="text-[9px] text-slate-600">min days</p>
+          <p className="text-[10px] text-slate-600">min days</p>
         </div>
         <div className="flex-shrink-0 ml-auto text-slate-600 text-[12px]">{isSelected ? '▲' : '▼'}</div>
       </div>
@@ -150,7 +150,7 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
                   <span className="text-[12px] font-bold text-white">{formatSize(a.size)}</span>
                   <div className="flex items-center gap-3">
                     <span className="text-[11px] text-slate-400">{formatPrice(a.price)}/mo</span>
-                    <span className="text-[9px] text-slate-600">Reset: {formatPrice(a.resetPrice)}</span>
+                    <span className="text-[10px] text-slate-600">Reset: {formatPrice(a.resetPrice)}</span>
                   </div>
                 </div>
               ))}
@@ -184,7 +184,7 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
             </div>
           )}
           <div className="col-span-full flex items-center justify-between flex-wrap gap-2">
-            <p className="text-[9px] text-slate-700">Last verified {firm.lastVerified} — confirm on official site.</p>
+            <p className="text-[10px] text-slate-700">Last verified {firm.lastVerified} — confirm on official site.</p>
             <a href={firm.website} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-bold text-[11px] transition-all hover:opacity-80"
               style={{ background: `${firm.color}18`, border: `1px solid ${firm.color}30`, color: firm.color }}>
@@ -272,7 +272,7 @@ export function PropFirms() {
       <div className="rounded-xl p-3" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider w-8">Size</span>
+            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider w-8">Size</span>
             {ACCOUNT_SIZES.map(s => (
               <button key={s} onClick={() => setSelectedSize(s)}
                 className="px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all"
@@ -282,7 +282,7 @@ export function PropFirms() {
             ))}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider w-8">Sort</span>
+            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider w-8">Sort</span>
             {(['score', 'price', 'split', 'days'] as const).map(s => (
               <button key={s} onClick={() => setSortBy(s)}
                 className="px-2.5 py-1 rounded-lg text-[10px] font-bold capitalize transition-all"

@@ -141,7 +141,7 @@ export function Builder({ initialBuild }: Props) {
                   <X size={11} />
                 </button>
               ) : (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-slate-700 tracking-wider select-none">⌘K</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-700 tracking-wider select-none">⌘K</span>
               )}
             </div>
 

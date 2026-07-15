@@ -279,7 +279,7 @@ export function QuizModal({ open, onClose }: Props) {
                                     <div key={n} className={`w-2 h-2 rounded-full border ${n <= lvl ? MASTERY_COLORS[lvl] + ' border-transparent' : 'border-slate-700'}`} />
                                   ))}
                                 </div>
-                                <span className={`text-[9px] font-bold ${MASTERY_TEXT[lvl]}`}>{MASTERY_LABELS[lvl]}</span>
+                                <span className={`text-[10px] font-bold ${MASTERY_TEXT[lvl]}`}>{MASTERY_LABELS[lvl]}</span>
                               </div>
                             </div>
                           )
@@ -319,7 +319,7 @@ export function QuizModal({ open, onClose }: Props) {
                             <div key={n} className={`w-2 h-2 rounded-full border transition-all ${n <= cLevel ? MASTERY_COLORS[cLevel] + ' border-transparent' : 'border-slate-700/60'}`} />
                           ))}
                         </div>
-                        <span className={`text-[9px] font-bold ml-1 ${MASTERY_TEXT[cLevel]}`}>{MASTERY_LABELS[cLevel]}</span>
+                        <span className={`text-[10px] font-bold ml-1 ${MASTERY_TEXT[cLevel]}`}>{MASTERY_LABELS[cLevel]}</span>
                       </div>
                     </div>
                   )}

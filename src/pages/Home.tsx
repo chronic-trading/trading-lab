@@ -142,7 +142,7 @@ function KeyLevelsPanel() {
               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${typeConfig[lv.type].dot}`} />
               <span className="text-[11.5px] font-semibold text-slate-300 flex-1">{lv.label}</span>
               <span className="text-[11.5px] font-bold text-slate-200" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{lv.price}</span>
-              <span className={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
+              <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
                 lv.type === 'resistance' ? 'text-red-400 bg-red-500/10' : lv.type === 'support' ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-500 bg-slate-800'
               }`}>{typeConfig[lv.type].label}</span>
               <button onClick={() => remove(inst, lv.id)} className="w-5 h-5 flex items-center justify-center text-slate-700 hover:text-red-400 transition-colors flex-shrink-0">
@@ -272,7 +272,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
                     </span>
                     <span className="text-[10px] text-slate-700">{new Date(dateStr + 'T12:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
                     {isFOMC && (
-                      <span className="text-[9px] font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 rounded-full ml-auto">FOMC</span>
+                      <span className="text-[10px] font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 rounded-full ml-auto">FOMC</span>
                     )}
                   </div>
                   <div className="flex flex-wrap gap-1.5">
@@ -347,7 +347,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
                     { label: 'Streak',  value: streak.type ? `${streak.count}${streak.type}` : '—', color: streak.type === 'W' ? 'text-emerald-400' : streak.type === 'L' ? 'text-red-400' : 'text-slate-500' },
                   ].map(s => (
                     <div key={s.label} className="text-center">
-                      <p className="text-[9px] text-slate-600 uppercase tracking-wider">{s.label}</p>
+                      <p className="text-[10px] text-slate-600 uppercase tracking-wider">{s.label}</p>
                       <p className={`text-[13px] font-bold mt-0.5 ${s.color}`} style={{ fontFamily: s.mono ? "'JetBrains Mono', monospace" : undefined }}>{s.value}</p>
                     </div>
                   ))}
@@ -396,7 +396,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
               ].map(s => (
                 <div key={s.label} className="text-center">
                   <p className={`text-[18px] font-bold leading-none ${s.color}`}>{s.val}</p>
-                  <p className="text-[9px] text-slate-600 mt-1 uppercase tracking-wider">{s.label}</p>
+                  <p className="text-[10px] text-slate-600 mt-1 uppercase tracking-wider">{s.label}</p>
                 </div>
               ))}
             </div>
@@ -444,7 +444,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
                   ].map(s => (
                     <div key={s.label} className="bg-slate-900/50 border border-slate-800/50 rounded-xl px-3 py-2.5 text-center">
                       <p className="text-[18px] font-bold text-slate-200">{s.value}</p>
-                      <p className="text-[9px] text-slate-600 uppercase tracking-wider mt-0.5">{s.label}</p>
+                      <p className="text-[10px] text-slate-600 uppercase tracking-wider mt-0.5">{s.label}</p>
                     </div>
                   ))}
                 </div>
@@ -468,19 +468,19 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-5 py-4 flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-5 flex-wrap">
             <div>
-              <p className="text-[9px] text-slate-600 uppercase tracking-wider font-semibold">Account Size</p>
+              <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Account Size</p>
               <p className="text-[14px] font-bold text-slate-200 mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                 ${settings.accountSize.toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-[9px] text-slate-600 uppercase tracking-wider font-semibold">Risk / Trade</p>
+              <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Risk / Trade</p>
               <p className="text-[14px] font-bold text-slate-200 mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                 {settings.riskPercent}% · ${(settings.accountSize * settings.riskPercent / 100).toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-[9px] text-slate-600 uppercase tracking-wider font-semibold">Default Instrument</p>
+              <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Default Instrument</p>
               <p className="text-[14px] font-bold text-amber-400 mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                 {settings.defaultInstrument}
               </p>

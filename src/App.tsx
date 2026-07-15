@@ -103,7 +103,7 @@ function MobileBottomNav({
                 <Icon size={19} />
                 {badge && <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: '0 0 5px #f59e0b' }} />}
               </span>
-              <span className="text-[9px] font-bold tracking-wide">{label}</span>
+              <span className="text-[10px] font-bold tracking-wide">{label}</span>
             </button>
           ))}
           {/* More button */}
@@ -116,7 +116,7 @@ function MobileBottomNav({
               <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-amber-400 rounded-full" />
             )}
             {moreOpen ? <X size={19} /> : <Grid3X3 size={19} />}
-            <span className="text-[9px] font-bold tracking-wide">More</span>
+            <span className="text-[10px] font-bold tracking-wide">More</span>
           </button>
         </div>
       </nav>
@@ -130,7 +130,7 @@ function MobileBottomNav({
             className="absolute inset-x-0 bg-[#08080f] border-t border-slate-800/60 p-4 pb-2 shadow-2xl"
             style={{ bottom: `calc(56px + env(safe-area-inset-bottom))` }}
             onClick={e => e.stopPropagation()}>
-            <p className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-600 mb-3 px-1">All tabs</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-3 px-1">All tabs</p>
             <div className="grid grid-cols-4 gap-2 pb-2">
               {secondary.map(({ id, label, Icon }) => (
                 <button key={id}
@@ -141,7 +141,7 @@ function MobileBottomNav({
                       : 'border-slate-800/60 bg-slate-900/50 text-slate-500 active:text-slate-200 active:border-slate-600'
                   }`}>
                   <Icon size={17} />
-                  <span className="text-[9px] font-bold">{label}</span>
+                  <span className="text-[10px] font-bold">{label}</span>
                 </button>
               ))}
             </div>
@@ -272,7 +272,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             </div>
             <div>
               <p className="text-[12px] md:text-[15px] font-black tracking-widest text-[var(--text)] leading-none">TRADING LAB</p>
-              <p className="hidden md:block text-[9px] font-bold text-[var(--text-faint)] tracking-[0.15em] mt-0.5">ICT · SMC · FUTURES</p>
+              <p className="hidden md:block text-[10px] font-bold text-[var(--text-faint)] tracking-[0.15em] mt-0.5">ICT · SMC · FUTURES</p>
             </div>
           </div>
 
@@ -336,7 +336,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
                 <button key={label} onClick={onClick}
                   className="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] transition-all active:border-[var(--border-strong)]">
                   <Icon size={16} className={color} />
-                  <span className={`text-[9px] font-bold ${color}`}>{label}</span>
+                  <span className={`text-[10px] font-bold ${color}`}>{label}</span>
                 </button>
               ))}
             </div>

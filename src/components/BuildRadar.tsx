@@ -145,7 +145,7 @@ export function BuildRadar({ selectedIds }: Props) {
         {CATEGORIES.map(cat => (
           <div key={cat} className="flex items-center gap-1">
             <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: selected[cat] > 0 ? CAT_COLORS[cat] : '#334155' }} />
-            <span className="text-[9px] font-medium" style={{ color: selected[cat] > 0 ? CAT_COLORS[cat] : '#475569' }}>
+            <span className="text-[10px] font-medium" style={{ color: selected[cat] > 0 ? CAT_COLORS[cat] : '#475569' }}>
               {selected[cat]} {CAT_LABELS[cat]}
             </span>
           </div>

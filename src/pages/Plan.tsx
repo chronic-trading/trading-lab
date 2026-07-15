@@ -182,11 +182,11 @@ function RiskCalc({ defaultInstrument }: { defaultInstrument: Instrument }) {
         </div>
         <div className="border-t border-slate-800/40 pt-3 grid grid-cols-2 gap-2">
           <div className="bg-emerald-500/8 border border-emerald-500/20 rounded-xl px-3 py-2 text-center">
-            <p className="text-[9px] text-emerald-600 font-bold uppercase tracking-wider">2R Target</p>
+            <p className="text-[10px] text-emerald-600 font-bold uppercase tracking-wider">2R Target</p>
             <p className="text-[14px] font-bold text-emerald-400 mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{fmt(twoR)}</p>
           </div>
           <div className="bg-amber-500/8 border border-amber-500/20 rounded-xl px-3 py-2 text-center">
-            <p className="text-[9px] text-amber-600 font-bold uppercase tracking-wider">3R Target</p>
+            <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider">3R Target</p>
             <p className="text-[14px] font-bold text-amber-300 mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{fmt(threeR)}</p>
           </div>
         </div>
@@ -591,7 +591,7 @@ function KeyLevelsWidget({ currentInstrument }: { currentInstrument: Instrument 
         <div className="flex gap-1">
           {(['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]).map(i => (
             <button key={i} onClick={() => setInst(i)}
-              className={`px-1.5 py-0.5 rounded-lg border text-[9px] font-bold transition-all ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-slate-800 text-slate-600 hover:text-slate-400'}`}
+              className={`px-1.5 py-0.5 rounded-lg border text-[10px] font-bold transition-all ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-slate-800 text-slate-600 hover:text-slate-400'}`}
               style={{ fontFamily: "'JetBrains Mono', monospace" }}>{i}
             </button>
           ))}
@@ -608,12 +608,12 @@ function KeyLevelsWidget({ currentInstrument }: { currentInstrument: Instrument 
       <div className="flex gap-1.5 items-center">
         {(['resistance', 'support', 'neutral'] as const).map(t => (
           <button key={t} onClick={() => setType(t)}
-            className={`flex-1 py-1 rounded-xl border text-[9px] font-bold transition-all ${type === t ? typeConfig[t].active : 'border-slate-800 text-slate-700 hover:border-slate-700'}`}>
+            className={`flex-1 py-1 rounded-xl border text-[10px] font-bold transition-all ${type === t ? typeConfig[t].active : 'border-slate-800 text-slate-700 hover:border-slate-700'}`}>
             {typeConfig[t].label}
           </button>
         ))}
         <button onClick={submit} disabled={!label.trim() || !price.trim()}
-          className="px-2.5 py-1 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 text-[9px] font-bold disabled:opacity-30 hover:bg-amber-500/20 transition-all">
+          className="px-2.5 py-1 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 text-[10px] font-bold disabled:opacity-30 hover:bg-amber-500/20 transition-all">
           <Plus size={9} />
         </button>
       </div>
@@ -634,7 +634,7 @@ function KeyLevelsWidget({ currentInstrument }: { currentInstrument: Instrument 
           ))
         }
         {current.length > 0 && (
-          <button onClick={() => clear(inst)} className="text-[9px] text-slate-700 hover:text-red-400 transition-colors w-full text-center pt-0.5">
+          <button onClick={() => clear(inst)} className="text-[10px] text-slate-700 hover:text-red-400 transition-colors w-full text-center pt-0.5">
             clear {inst}
           </button>
         )}

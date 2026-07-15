@@ -143,7 +143,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                           {/* Center labels */}
                           <div className="flex items-center gap-1 flex-shrink-0 w-12 justify-center">
                             <span className="text-[10px] font-bold text-blue-400">{a}</span>
-                            <span className="text-slate-700 text-[9px]">/</span>
+                            <span className="text-slate-700 text-[10px]">/</span>
                             <span className="text-[10px] font-bold text-purple-400">{b}</span>
                           </div>
                           {/* B bar (grows center→right) */}

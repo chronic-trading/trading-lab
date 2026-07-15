@@ -158,7 +158,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
               <div className="flex items-center gap-2 mb-2">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ background: tierFill[concept.tier] }} />
                 <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: tierFill[concept.tier] }}>{concept.tier}</span>
-                <span className="text-slate-700 text-[9px]">·</span>
+                <span className="text-slate-700 text-[10px]">·</span>
                 <span className="text-[10px] text-slate-500 capitalize">{concept.category}</span>
               </div>
               <h3 className="text-[17px] font-bold text-white leading-snug mb-2.5">{concept.name}</h3>

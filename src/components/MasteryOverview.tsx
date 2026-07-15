@@ -92,7 +92,7 @@ export function MasteryOverview() {
                 />
               ))}
             </div>
-            <span className={`text-[9px] font-bold w-[54px] text-right flex-shrink-0 ${MASTERY_TEXT[c.level]}`}>
+            <span className={`text-[10px] font-bold w-[54px] text-right flex-shrink-0 ${MASTERY_TEXT[c.level]}`}>
               {MASTERY_LABELS[c.level]}
             </span>
           </div>

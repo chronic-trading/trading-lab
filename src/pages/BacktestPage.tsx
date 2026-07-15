@@ -508,7 +508,7 @@ export function BacktestPage() {
                   <div className="flex items-center justify-between mb-2.5">
                     <div className="flex items-center gap-2">
                       <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
-                      <span className="text-[9px] font-black uppercase tracking-widest text-slate-500">Current Bar</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Current Bar</span>
                     </div>
                     {barInfo && <span className="text-[9.5px] text-slate-600" style={monoStyle}>{barInfo.date} · {barInfo.time}</span>}
                   </div>
@@ -540,7 +540,7 @@ export function BacktestPage() {
                         {activeTrade.dir === 'long' ? '↑ Long' : '↓ Short'}
                       </span>
                     </div>
-                    <span className="text-[9px] font-bold text-slate-500 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/50">Live</span>
+                    <span className="text-[10px] font-bold text-slate-500 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/50">Live</span>
                   </div>
 
                   {/* Entry / SL / TP */}
@@ -563,7 +563,7 @@ export function BacktestPage() {
                   <div className={`rounded-xl px-3 py-2.5 mb-3 text-center ${
                     unrealizedPts >= 0 ? 'bg-emerald-500/8 border border-emerald-500/20' : 'bg-red-500/8 border border-red-500/20'
                   }`}>
-                    <p className="text-[9px] text-slate-600 uppercase tracking-wider mb-1">Unrealized</p>
+                    <p className="text-[10px] text-slate-600 uppercase tracking-wider mb-1">Unrealized</p>
                     <p className={`text-[16px] font-black ${unrealizedPts >= 0 ? 'text-emerald-400' : 'text-red-400'}`} style={monoStyle}>
                       {unrealizedR >= 0 ? '+' : ''}{unrealizedR.toFixed(2)}R
                     </p>
@@ -598,7 +598,7 @@ export function BacktestPage() {
                 <div className="px-4 py-3 border-b border-slate-800/40 space-y-2.5">
                   <div className="flex items-center gap-2">
                     <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Mark Trade</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Mark Trade</p>
                   </div>
 
                   {/* Direction */}
@@ -664,7 +664,7 @@ export function BacktestPage() {
                 <div className="px-4 pt-3 pb-2 border-b border-slate-800/40 bg-slate-900/20">
                   <div className="flex items-center gap-2 mb-2.5">
                     <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
-                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">Session Stats</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Session Stats</p>
                   </div>
                   <div className="grid grid-cols-4 gap-2">
                   {[
@@ -690,7 +690,7 @@ export function BacktestPage() {
                   <>
                     <div className="flex items-center gap-2 pb-1">
                       <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
-                      <p className="text-[9px] font-black uppercase tracking-widest text-slate-500">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                         {trades.length} Trade{trades.length !== 1 ? 's' : ''}
                       </p>
                     </div>
