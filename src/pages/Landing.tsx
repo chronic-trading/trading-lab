@@ -566,7 +566,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div {...anim(200)} className={`${anim(200).className} mb-11`} style={anim(200).style}>
             <p className="text-slate-400 max-w-lg mx-auto leading-relaxed text-center"
               style={{ fontSize: 'clamp(15px, 2vw, 18px)' }}>
-              Thirteen precision-built tools for ICT and SMC traders.<br className="hidden sm:block" />
+              {/* The trailing space matters: on mobile the <br> is hidden, and JSX
+                  strips the newline, so without it the sentences collide
+                  ("traders.Build your system"). */}
+              Thirteen precision-built tools for ICT and SMC traders.{' '}
+              <br className="hidden sm:block" />
               Build your system. Grade every setup. Journal your edge.
             </p>
           </div>
@@ -595,7 +599,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               { val: '1',   sub: 'Platform'     },
             ].map((s, i) => (
               <div key={s.sub} className="flex items-stretch">
-                {i > 0 && <div className="w-px bg-slate-800/80 self-stretch mx-12 md:mx-20" />}
+                {i > 0 && <div className="w-px bg-slate-800/80 self-stretch mx-7 sm:mx-12 md:mx-20" />}
                 <div className="text-center">
                   <p className="font-black text-white leading-none"
                     style={{ fontSize: 'clamp(28px,5.5vw,44px)', fontFamily: "'JetBrains Mono',monospace",

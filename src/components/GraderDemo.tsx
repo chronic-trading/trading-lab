@@ -32,9 +32,14 @@ interface Props {
 // A live, no-login preview of the real Trade Grader engine, embedded on the
 // marketing page so visitors experience the flagship tool before buying.
 export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }: Props) {
-  // Start with a realistic partial setup so the gauge reads mid-grade, inviting
-  // the visitor to toggle factors and watch it move.
-  const [checked, setChecked] = useState<Set<string>>(new Set(['htf-bias', 'sweep', 'choch', 'pd-array']))
+  // Open on a complete A-grade setup (every essential present, 2R): the first
+  // thing a visitor sees should be the tool validating a good setup in green —
+  // not a red "F" telling them they're wrong before they've touched anything.
+  // It still leaves room to explore both ways: adding the optional confluences
+  // climbs to A+, and dropping an essential drops the grade fast.
+  const [checked, setChecked] = useState<Set<string>>(
+    new Set(['htf-bias', 'dol', 'sweep', 'choch', 'displacement', 'pd-array', 'killzone', 'invalidation', 'in-plan'])
+  )
   const [rr, setRr] = useState(2)
 
   // "demo-used" is the key engagement signal: it separates visitors who merely
@@ -61,8 +66,8 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
 
       <div className="grid grid-cols-1 md:grid-cols-5">
 
-        {/* Checklist */}
-        <div className="md:col-span-3 p-6 md:p-8 md:border-r border-slate-800/50">
+        {/* Checklist — second on mobile so the grade + CTA lead (see below) */}
+        <div className="order-2 md:order-1 md:col-span-3 p-6 md:p-8 md:border-r border-slate-800/50">
           <div className="flex items-center justify-between mb-5">
             <span className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">Tap what your setup has</span>
             <span className="text-[10px] font-bold text-amber-400/80" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{checked.size}/{ALL_FACTORS.length}</span>
@@ -117,8 +122,11 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
           </div>
         </div>
 
-        {/* Result */}
-        <div className="md:col-span-2 p-6 md:p-8 flex flex-col items-center justify-center text-center"
+        {/* Result — deliberately FIRST on mobile. Stacked, a 13-row checklist
+            would bury the gauge, grade and CTA below the fold, so a phone visitor
+            would tap chips with the payoff off-screen. Desktop is side-by-side,
+            where the natural checklist-then-result order reads better. */}
+        <div className="order-1 md:order-2 md:col-span-2 p-6 md:p-8 flex flex-col items-center justify-center text-center border-b md:border-b-0 border-slate-800/50"
           style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 0%, rgba(245,158,11,0.04), transparent 70%)' }}>
           <Gauge score={score} color={color} />
           <p className="font-black leading-none -mt-5" style={{ fontSize: '58px', color, textShadow: `0 0 34px ${color}66`, fontFamily: "'JetBrains Mono',monospace" }}>
