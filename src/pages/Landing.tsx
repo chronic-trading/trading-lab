@@ -3,7 +3,7 @@ import {
   FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target,
   Gauge, Beaker, LineChart, Network, BookOpen, CalendarDays, BarChart2,
   Building2, ShieldAlert, Smile, GraduationCap, Infinity as InfinityIcon,
-  Lock, Zap, Smartphone, ShieldCheck, Check, X,
+  Lock, Zap, Smartphone, ShieldCheck, Check, X, Plus,
 } from 'lucide-react'
 import { GraderDemo } from '../components/GraderDemo'
 import { track, trackOnce } from '../lib/track'
@@ -223,24 +223,36 @@ const FAQS = [
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
+  // Stable ids so the trigger can point at the panel it controls.
+  const slug = q.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40)
   // Which question a visitor opens tells you which objection is blocking them.
   // Keyed per question so each one reports separately (and only once per load).
   const onToggle = () => {
-    if (!open) trackOnce('faq-' + q.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40), q)
+    if (!open) trackOnce('faq-' + slug, q)
     setOpen(o => !o)
   }
+  const panelId = `faq-panel-${slug}`
+  // ARIA disclosure pattern: the trigger and its panel are SIBLINGS. Nesting the
+  // panel inside the button would fold the whole answer into the button's
+  // accessible name, and a collapsed panel left in the DOM gets read out of
+  // context — so it only renders when open.
   return (
-    <button onClick={onToggle}
-      className="w-full text-left rounded-2xl p-5 transition-all"
+    <div className="rounded-2xl overflow-hidden"
       style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-      <div className="flex items-center justify-between gap-4">
+      <button onClick={onToggle} aria-expanded={open} aria-controls={panelId}
+        className="w-full text-left p-5 flex items-center justify-between gap-4">
         <span className="text-[14px] font-bold text-white">{q}</span>
-        <span className={`flex-shrink-0 w-6 h-6 rounded-lg border border-amber-500/25 bg-amber-500/8 flex items-center justify-center text-amber-400 text-[15px] leading-none transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>+</span>
-      </div>
-      <div className="overflow-hidden transition-all duration-300" style={{ maxHeight: open ? '240px' : '0px', opacity: open ? 1 : 0 }}>
-        <p className="text-[13px] text-slate-500 leading-relaxed mt-3">{a}</p>
-      </div>
-    </button>
+        <span aria-hidden="true"
+          className={`flex-shrink-0 w-6 h-6 rounded-lg border border-amber-500/25 bg-amber-500/8 flex items-center justify-center text-amber-400 transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>
+          <Plus size={13} strokeWidth={2.5} />
+        </span>
+      </button>
+      {open && (
+        <div id={panelId} role="region" aria-label={q} className="px-5 pb-5 animate-fade-up">
+          <p className="text-[13px] text-slate-500 leading-relaxed">{a}</p>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -505,6 +517,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </div>
         </div>
       </nav>
+
+      {/* Every section below is the page's primary content. Without a <main>
+          landmark, screen-reader and browser "skip to content" affordances have
+          nothing to jump to. */}
+      <main>
 
       {/* ── Hero ──────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex flex-col items-center justify-center pt-14 pb-28 px-5 text-center overflow-hidden">
@@ -1136,6 +1153,8 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </p>
         </div>
       </section>
+
+      </main>
 
       {/* ── Footer ────────────────────────────────────────────────── */}
       <footer className="border-t border-slate-800/30 px-5 py-8">
