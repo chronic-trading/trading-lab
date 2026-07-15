@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef, lazy, Suspense, type ReactNode } from 'react'
-import { FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target } from 'lucide-react'
+import {
+  FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target,
+  Gauge, Beaker, LineChart, Network, BookOpen, CalendarDays, BarChart2,
+  Building2, ShieldAlert, Smile, GraduationCap, Infinity as InfinityIcon,
+  Lock, Zap, Smartphone, ShieldCheck, Check, X,
+} from 'lucide-react'
 import { GraderDemo } from '../components/GraderDemo'
 import { track, trackOnce } from '../lib/track'
 
@@ -122,16 +127,18 @@ function ConceptMapBg({ opacity = 0.09 }: { opacity?: number }) {
 
 // ── Static data ───────────────────────────────────────────────────────────────
 const TOOLS = [
-  { emoji: '🎯', name: 'Trade Grader',      desc: 'Score any setup against 13 weighted ICT confluences and your own saved system. Get a letter grade, the missing essentials, and a position-size suggestion — before you risk a dollar.', color: '#f59e0b', tag: 'New' },
-  { emoji: '🏗️', name: 'Strategy Builder',  desc: 'Stack ICT/SMC concepts into a living trading system. Real-time synergy detection shows you how your setups connect.', color: '#f59e0b', tag: 'Build' },
-  { emoji: '📈', name: 'Live Chart',         desc: 'Full TradingView integration. Concept-specific drawing guides keep you aligned with the methodology on every timeframe.', color: '#60a5fa', tag: 'Execute' },
-  { emoji: '🧠', name: 'Synergy Map',        desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map — hover any node to trace connections.', color: '#c084fc', tag: 'Study' },
-  { emoji: '📓', name: 'Trade Journal',      desc: 'Log trades with R-multiples, win rate, and streak tracking. Find the patterns in your performance over time.', color: '#34d399', tag: 'Track' },
-  { emoji: '📅', name: 'Session Planner',    desc: 'Plan kill zones, macros, and FOMC like a pro. Never get caught off-guard by a news candle or session transition.', color: '#fb923c', tag: 'Plan' },
-  { emoji: '📊', name: 'Trade Recap',        desc: 'Upload any broker CSV and get stunning visual trade cards, weekly montages, and one-click video export.', color: '#f472b6', tag: 'Review'   },
-  { emoji: '🏦', name: 'Prop Firm Compare',  desc: '9 futures prop firms scored and ranked. Filter by EOD drawdown, news trading, live accounts, and more.',   color: '#34d399', tag: 'Research' },
-  { emoji: '🛡️', name: 'Drawdown Guard',     desc: 'Set your daily loss limit and profit target. A live danger meter turns red as you approach your max — so you stop before you blow the account.', color: '#f97316', tag: 'Protect' },
-  { emoji: '🧘', name: 'Mindset Check',      desc: 'Rate your emotional state before the session and log a note. Track how your mindset correlates with your trading results over time.', color: '#a78bfa', tag: 'Focus' },
+  // Icons deliberately mirror the ones each tool uses inside the app, so the
+  // marketing page and the product read as one product, not two.
+  { Icon: Gauge,        name: 'Trade Grader',      desc: 'Score any setup against 13 weighted ICT confluences and your own saved system. Get a letter grade, the missing essentials, and a position-size suggestion — before you risk a dollar.', color: '#f59e0b', tag: 'New' },
+  { Icon: Beaker,       name: 'Strategy Builder',  desc: 'Stack ICT/SMC concepts into a living trading system. Real-time synergy detection shows you how your setups connect.', color: '#f59e0b', tag: 'Build' },
+  { Icon: LineChart,    name: 'Live Chart',         desc: 'Full TradingView integration. Concept-specific drawing guides keep you aligned with the methodology on every timeframe.', color: '#60a5fa', tag: 'Execute' },
+  { Icon: Network,      name: 'Synergy Map',        desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map — hover any node to trace connections.', color: '#c084fc', tag: 'Study' },
+  { Icon: BookOpen,     name: 'Trade Journal',      desc: 'Log trades with R-multiples, win rate, and streak tracking. Find the patterns in your performance over time.', color: '#34d399', tag: 'Track' },
+  { Icon: CalendarDays, name: 'Session Planner',    desc: 'Plan kill zones, macros, and FOMC like a pro. Never get caught off-guard by a news candle or session transition.', color: '#fb923c', tag: 'Plan' },
+  { Icon: BarChart2,    name: 'Trade Recap',        desc: 'Upload any broker CSV and get stunning visual trade cards, weekly montages, and one-click video export.', color: '#f472b6', tag: 'Review'   },
+  { Icon: Building2,    name: 'Prop Firm Compare',  desc: '9 futures prop firms scored and ranked. Filter by EOD drawdown, news trading, live accounts, and more.',   color: '#34d399', tag: 'Research' },
+  { Icon: ShieldAlert,  name: 'Drawdown Guard',     desc: 'Set your daily loss limit and profit target. A live danger meter turns red as you approach your max — so you stop before you blow the account.', color: '#f97316', tag: 'Protect' },
+  { Icon: Smile,        name: 'Mindset Check',      desc: 'Rate your emotional state before the session and log a note. Track how your mindset correlates with your trading results over time.', color: '#a78bfa', tag: 'Focus' },
 ]
 
 const STEPS = [
@@ -181,11 +188,11 @@ const PILLS = [
 
 // ── Who it's for ──────────────────────────────────────────────────────────────
 const PERSONAS = [
-  { emoji: '📚', title: 'The self-taught ICT trader', color: '#c084fc',
+  { Icon: GraduationCap, title: 'The self-taught ICT trader', color: '#c084fc',
     body: "You've watched every mentorship video but your notes live in twelve Discord bookmarks. This turns scattered knowledge into one connected, testable system." },
-  { emoji: '🏦', title: 'The prop-firm challenger', color: '#34d399',
+  { Icon: Building2, title: 'The prop-firm challenger', color: '#34d399',
     body: 'Passing an eval is a discipline game. Kill-zone timing, a drawdown guard, and a setup grader keep you from the one impulsive trade that blows the account.' },
-  { emoji: '📈', title: 'The trader who journals', color: '#60a5fa',
+  { Icon: LineChart, title: 'The trader who journals', color: '#60a5fa',
     body: 'You already know review is the edge. Equity curve, kill-zone win rates, R-multiples, and shareable recaps make the review actually happen every week.' },
 ]
 
@@ -758,7 +765,10 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                   style={{ background: `linear-gradient(90deg,transparent,${t.color},transparent)` }} />
                 <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{ background: `radial-gradient(ellipse 90% 55% at 50% 0%,${t.color}0c,transparent 70%)` }} />
-                <span className="text-[34px] leading-none mb-3 transition-transform duration-300 group-hover:scale-110">{t.emoji}</span>
+                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 flex-shrink-0"
+                  style={{ background: `${t.color}14`, border: `1px solid ${t.color}2e` }}>
+                  <t.Icon size={19} strokeWidth={1.75} style={{ color: t.color }} />
+                </span>
                 <span className="text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-0.5 rounded-full mb-4"
                   style={{ color: t.color, background: `${t.color}12`, border: `1px solid ${t.color}25` }}>
                   {t.tag}
@@ -818,7 +828,10 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               <div key={p.title} className="relative rounded-2xl p-7 overflow-hidden text-center flex flex-col items-center"
                 style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <div className="absolute top-0 inset-x-0 h-[1px]" style={{ background: `linear-gradient(90deg,transparent,${p.color}55,transparent)` }} />
-                <span className="text-[34px] leading-none mb-4">{p.emoji}</span>
+                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 flex-shrink-0"
+                  style={{ background: `${p.color}14`, border: `1px solid ${p.color}2e` }}>
+                  <p.Icon size={19} strokeWidth={1.75} style={{ color: p.color }} />
+                </span>
                 <h3 className="text-[15px] font-bold text-white mb-3">{p.title}</h3>
                 <p className="text-[12.5px] text-slate-500 leading-relaxed">{p.body}</p>
               </div>
@@ -844,11 +857,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             {COMPARISON.map((row, i) => (
               <div key={i} className="grid grid-cols-2">
                 <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
-                  <span className="text-slate-700 mt-0.5 flex-shrink-0">✕</span>
+                  <X size={13} strokeWidth={2.5} className="text-slate-700 mt-0.5 flex-shrink-0" />
                   <span className="text-[12.5px] text-slate-500 leading-snug">{row.old}</span>
                 </div>
                 <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 border-l border-slate-800/40 bg-amber-500/[0.02] ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
-                  <span className="text-emerald-400 mt-0.5 flex-shrink-0">✓</span>
+                  <Check size={13} strokeWidth={2.5} className="text-emerald-400 mt-0.5 flex-shrink-0" />
                   <span className="text-[12.5px] text-slate-300 leading-snug">{row.now}</span>
                 </div>
               </div>
@@ -943,13 +956,16 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
-              { icon: '🧩', title: 'Concepts → system', body: 'YouTube hands you 50 disconnected ideas. This connects them into one framework, grades your setups against it, and tracks whether it actually works.' },
-              { icon: '🎯', title: 'You keep your edge', body: 'No signals, no guru calls, no group to follow. It sharpens your own reads so you stay independent — the only kind of edge that lasts.' },
-              { icon: '♾️', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
+              { Icon: Network,      color: '#c084fc', title: 'Concepts → system', body: 'YouTube hands you 50 disconnected ideas. This connects them into one framework, grades your setups against it, and tracks whether it actually works.' },
+              { Icon: Target,       color: '#34d399', title: 'You keep your edge', body: 'No signals, no guru calls, no group to follow. It sharpens your own reads so you stay independent — the only kind of edge that lasts.' },
+              { Icon: InfinityIcon, color: '#f59e0b', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
             ].map(c => (
               <div key={c.title} className="rounded-2xl p-7 text-center flex flex-col items-center"
                 style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <span className="text-[30px] leading-none mb-4">{c.icon}</span>
+                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 flex-shrink-0"
+                  style={{ background: `${c.color}14`, border: `1px solid ${c.color}2e` }}>
+                  <c.Icon size={19} strokeWidth={1.75} style={{ color: c.color }} />
+                </span>
                 <h3 className="text-[14.5px] font-bold text-white mb-2.5">{c.title}</h3>
                 <p className="text-[12.5px] text-slate-500 leading-relaxed">{c.body}</p>
               </div>
@@ -999,7 +1015,9 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 'No signals. No subscription. Your system, your calls.',
               ].map(item => (
                 <div key={item} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-md bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 text-[11px] mt-0.5">✓</span>
+                  <span className="flex-shrink-0 w-5 h-5 rounded-md bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 mt-0.5">
+                    <Check size={11} strokeWidth={3} />
+                  </span>
                   <span className="text-[13px] text-slate-300 leading-relaxed">{item}</span>
                 </div>
               ))}
@@ -1020,13 +1038,13 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
             {/* Reassurance row */}
             <div className="mt-6 pt-5 border-t border-slate-800/50 flex items-center justify-center gap-x-5 gap-y-2 flex-wrap text-[11px] text-slate-600">
-              <span className="flex items-center gap-1.5">🔒 Secure checkout on Whop</span>
-              <span className="flex items-center gap-1.5">⚡ Instant access</span>
-              <span className="flex items-center gap-1.5">📱 Web &amp; mobile</span>
+              <span className="flex items-center gap-1.5"><Lock size={12} strokeWidth={2} /> Secure checkout on Whop</span>
+              <span className="flex items-center gap-1.5"><Zap size={12} strokeWidth={2} /> Instant access</span>
+              <span className="flex items-center gap-1.5"><Smartphone size={12} strokeWidth={2} /> Web &amp; mobile</span>
             </div>
             {GUARANTEE && (
               <p className="mt-3 text-center text-[12px] font-semibold text-emerald-400/90 flex items-center justify-center gap-1.5">
-                <span>🛡️</span> {GUARANTEE}
+                <ShieldCheck size={13} strokeWidth={2} /> {GUARANTEE}
               </p>
             )}
           </div>
