@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { useSettings } from '../hooks/useSettings'
 import { useBuilds } from '../hooks/useBuilds'
+import { useTheme } from '../hooks/useTheme'
 import { useTradeGrades } from '../hooks/useTradeGrades'
 import { getConceptById } from '../data/concepts'
 import { GROUPS, ALL_FACTORS, TOTAL_WEIGHT, letterFor, rrAdjust, verdictFor } from '../lib/grader'
@@ -41,6 +42,10 @@ export function TradeGrader() {
   const { settings } = useSettings()
   const { builds } = useBuilds()
   const { grades, add, remove, clear } = useTradeGrades()
+  // Grade hues are inline-styled, so they need the theme explicitly — the
+  // light-mode CSS remap only reaches class-based colours.
+  const { theme } = useTheme()
+  const lightTheme = theme === 'light'
 
   const [direction, setDirection] = useState<'long' | 'short'>('long')
   const [instrument, setInstrument] = useState<Instrument>(settings.defaultInstrument)
@@ -65,12 +70,12 @@ export function TradeGrader() {
     const checkedWeight = ALL_FACTORS.filter(f => checked.has(f.id)).reduce((s, f) => s + f.weight, 0)
     const base = (checkedWeight / TOTAL_WEIGHT) * 100
     const score = Math.max(0, Math.min(100, Math.round(base + rrAdjust(rrNum))))
-    const { letter, color } = letterFor(score)
+    const { letter, color } = letterFor(score, lightTheme)
     const verdict = verdictFor(letter)
     const essentialsMissing = ALL_FACTORS.filter(f => f.essential && !checked.has(f.id))
     const strengths = ALL_FACTORS.filter(f => checked.has(f.id)).sort((a, b) => b.weight - a.weight)
     return { score, letter, color, verdict, essentialsMissing, strengths }
-  }, [checked, rrNum])
+  }, [checked, rrNum, lightTheme])
 
   // Build coverage — of the selected build's concepts, how many are represented
   // by a checked confluence factor.
@@ -375,7 +380,7 @@ export function TradeGrader() {
             </div>
             <div className="space-y-1.5">
               {grades.map(g => {
-                const { color } = letterFor(g.score)
+                const { color } = letterFor(g.score, lightTheme)
                 return (
                   <div key={g.id} className="flex items-center gap-3 bg-slate-900/40 border border-slate-800/50 rounded-xl px-3.5 py-2.5">
                     <span className="w-8 h-8 rounded-lg flex items-center justify-center font-black text-[14px] flex-shrink-0"

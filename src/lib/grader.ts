@@ -91,13 +91,23 @@ export const GROUPS: Group[] = [
 export const ALL_FACTORS: Factor[] = GROUPS.flatMap(g => g.factors)
 export const TOTAL_WEIGHT = ALL_FACTORS.reduce((s, f) => s + f.weight, 0)
 
-export function letterFor(score: number): { letter: string; color: string } {
-  if (score >= 90) return { letter: 'A+', color: '#34d399' }
-  if (score >= 82) return { letter: 'A',  color: '#34d399' }
-  if (score >= 70) return { letter: 'B',  color: '#a3e635' }
-  if (score >= 56) return { letter: 'C',  color: '#f59e0b' }
-  if (score >= 40) return { letter: 'D',  color: '#fb923c' }
-  return { letter: 'F', color: '#f87171' }
+// Grade colours are applied via inline styles (SVG stroke, glow, big letter), so
+// index.css's class-based light-mode remapping can't reach them. The dark-tuned
+// hues sit at ~1.9:1 on the warm paper background — below WCAG AA even for large
+// text — so light mode gets its own darker, legible palette.
+const PALETTE = {
+  dark:  { green: '#34d399', lime: '#a3e635', amber: '#f59e0b', orange: '#fb923c', red: '#f87171' },
+  light: { green: '#15a34a', lime: '#4d7c0f', amber: '#b45309', orange: '#c2410c', red: '#b91c1c' },
+}
+
+export function letterFor(score: number, light = false): { letter: string; color: string } {
+  const c = light ? PALETTE.light : PALETTE.dark
+  if (score >= 90) return { letter: 'A+', color: c.green }
+  if (score >= 82) return { letter: 'A',  color: c.green }
+  if (score >= 70) return { letter: 'B',  color: c.lime }
+  if (score >= 56) return { letter: 'C',  color: c.amber }
+  if (score >= 40) return { letter: 'D',  color: c.orange }
+  return { letter: 'F', color: c.red }
 }
 
 export function rrAdjust(rr: number): number {

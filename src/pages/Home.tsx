@@ -75,12 +75,14 @@ function KeyLevelsPanel() {
 
   return (
     <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-5 space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <Target size={13} className="text-amber-400" />
-          <span className="text-[13px] font-bold text-white">Key Levels</span>
+          <span className="text-[13px] font-bold text-white whitespace-nowrap">Key Levels</span>
         </div>
-        <div className="flex gap-1">
+        {/* Wraps: six instrument pills on one row overflowed the card (and the
+            page) on narrower desktop widths. */}
+        <div className="flex gap-1 flex-wrap justify-end">
           {INSTRUMENTS.map(i => (
             <button key={i}
               onClick={() => setInst(i)}

@@ -276,10 +276,15 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             </div>
           </div>
 
-          {/* Desktop: clock — flex-1 so it fills the middle without overlapping */}
-          <div className="hidden md:flex flex-1 justify-center items-center min-w-0">
+          {/* Desktop clock — only from lg up. Between md and lg the logo, clock and
+              nine utility buttons don't fit on one row: the clock overflowed its
+              flex-1 slot and rendered on top of the "TRADING LAB" logo. Below lg
+              the compact clock gets its own row instead (see below). */}
+          <div className="hidden lg:flex flex-1 justify-center items-center min-w-0">
             <KillZoneClock />
           </div>
+          {/* Keeps the utility buttons right-aligned once the clock is hidden */}
+          <div className="flex-1 lg:hidden" />
 
           {/* Desktop: full utility buttons */}
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
@@ -337,8 +342,9 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             </div>
           </div>
         )}
-        {/* Mobile compact clock row */}
-        <div className="md:hidden flex items-center px-4 pb-2 pt-0.5 gap-2">
+        {/* Compact clock row — used below lg, where the full clock can't share the
+            header row with the logo + utility buttons. */}
+        <div className="lg:hidden flex items-center px-4 pb-2 pt-0.5 gap-2">
           <KillZoneClockCompact />
         </div>
 
