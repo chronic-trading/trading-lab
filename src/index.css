@@ -231,9 +231,14 @@ code, .mono {
   box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
 }
 
-/* ── Trade Recap feature ─────────────────────────────── */
+/* ── Typography ──────────────────────────────────────────
+   Tailwind v4 resolves font utilities from the --font-* namespace; v3 used
+   --font-family-*. Under the old name this token did nothing, so `font-mono`
+   fell back to the system stack and the JetBrains Mono we load in index.html
+   never rendered — on every price, R:R and score in the app. */
 @theme {
-  --font-family-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
 }
 
 @keyframes recapFadeUp {
