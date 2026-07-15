@@ -1,4 +1,5 @@
 import { useMemo, useState, useRef, useEffect } from 'react'
+import { X, Telescope } from 'lucide-react'
 import { concepts, getConceptById } from '../data/concepts'
 import { useBuilds } from '../hooks/useBuilds'
 import { useAllMastery, MASTERY_LABELS, type MasteryLevel } from '../hooks/useMastery'
@@ -342,8 +343,9 @@ export function ConceptMap() {
             </div>
             <button
               onClick={() => setHovered(null)}
-              className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all flex-shrink-0 ml-2 text-[15px]"
-            >✕</button>
+              aria-label="Close concept details"
+              className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all flex-shrink-0 ml-2"
+            ><X size={14} strokeWidth={2.5} /></button>
           </div>
 
           {/* Scrollable body — fills remaining height */}
@@ -513,7 +515,9 @@ export function ConceptMap() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
-              <div className="w-10 h-10 rounded-2xl bg-slate-800/50 border border-slate-700/30 flex items-center justify-center text-lg">🔭</div>
+              <div className="w-10 h-10 rounded-2xl bg-slate-800/50 border border-slate-700/30 flex items-center justify-center text-slate-500">
+                <Telescope size={18} strokeWidth={1.75} />
+              </div>
               <div>
                 <p className="text-[13px] font-semibold text-slate-300">Hover a concept</p>
                 <p className="text-[11px] text-slate-600 mt-1 leading-relaxed max-w-40">

@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import { Check, X, Flame } from 'lucide-react'
 import { FIRMS, TOP3, ACCOUNT_SIZES, formatPrice, formatSize, type PropFirm } from './propData'
 
 const scoreColor = (score: number) => score >= 80 ? 'var(--green)' : score >= 65 ? 'var(--accent)' : 'var(--red)'
@@ -15,7 +16,7 @@ function Tag({ yes, label }: { yes: boolean; label: string }) {
   return (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold"
       style={{ background: yes ? 'var(--green-soft)' : 'var(--red-soft)', color: c, border: `1px solid color-mix(in srgb, ${c} 25%, transparent)` }}>
-      {yes ? '✓' : '✗'} {label}
+      {yes ? <Check size={11} strokeWidth={3} /> : <X size={11} strokeWidth={3} />} {label}
     </span>
   )
 }
@@ -88,9 +89,9 @@ function Podium({ selectedSize }: { selectedSize: number }) {
               </div>
             </div>
             {firm.hasPricePromos && (
-              <div className="mt-3 w-full px-2 py-1.5 rounded-lg text-[10px] font-semibold text-amber-300 text-center"
+              <div className="mt-3 w-full px-2 py-1.5 rounded-lg text-[10px] font-semibold text-amber-300 flex items-center justify-center gap-1.5"
                 style={{ background: 'rgba(245,158,11,0.09)', border: '1px solid rgba(245,158,11,0.2)' }}>
-                🔥 {firm.promoNote}
+                <Flame size={11} strokeWidth={2} className="flex-shrink-0" /> {firm.promoNote}
               </div>
             )}
             <a href={firm.website} target="_blank" rel="noopener noreferrer"
@@ -186,9 +187,9 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
             </div>
           </div>
           {firm.hasPricePromos && firm.promoNote && (
-            <div className="col-span-full px-3 py-2 rounded-lg text-[11px] text-amber-300"
+            <div className="col-span-full px-3 py-2 rounded-lg text-[11px] text-amber-300 flex items-center gap-1.5"
               style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)' }}>
-              🔥 {firm.promoNote}
+              <Flame size={12} strokeWidth={2} className="flex-shrink-0" /> {firm.promoNote}
             </div>
           )}
           <div className="col-span-full flex items-center justify-between flex-wrap gap-2">
@@ -304,10 +305,10 @@ export function PropFirms() {
               { label: 'EOD',     val: filterEOD,  set: setFilterEOD  },
               { label: 'Live',    val: filterLive, set: setFilterLive },
             ].map(({ label, val, set }) => (
-              <button key={label} onClick={() => set(!val)}
-                className="px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all"
+              <button key={label} onClick={() => set(!val)} aria-pressed={val}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all"
                 style={{ background: val ? 'var(--green-soft)' : 'var(--surface-hover)', border: `1px solid ${val ? 'var(--green)' : 'var(--border)'}`, color: val ? 'var(--green)' : 'var(--text-dim)' }}>
-                {val ? '✓ ' : ''}{label}
+                {val && <Check size={10} strokeWidth={3} />}{label}
               </button>
             ))}
           </div>

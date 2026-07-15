@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import type { ThemeKey, ThemeConfig } from '../lib/themes'
 import { THEMES } from '../lib/themes'
 
@@ -166,8 +167,8 @@ export function Toolbar({
           }}
         />
         {symbolSearch && (
-          <button onClick={() => onSymbolSearch('')}
-            style={{ color: theme.textMuted, fontSize: 12, cursor: 'pointer', background: 'none', border: 'none', lineHeight: 1 }}>✕</button>
+          <button onClick={() => onSymbolSearch('')} aria-label="Clear symbol search"
+            style={{ color: theme.textMuted, cursor: 'pointer', background: 'none', border: 'none', lineHeight: 1, display: 'flex', alignItems: 'center' }}><X size={12} strokeWidth={2.5} /></button>
         )}
       </div>
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, X, Zap, Radio, Clock, TrendingUp, TrendingDown, Minus, Target, BarChart2, Package, Trash2 } from 'lucide-react'
+import { Plus, X, Zap, Radio, Clock, TrendingUp, TrendingDown, Minus, Target, BarChart2, Package, Trash2, Settings } from 'lucide-react'
 import { useKillZone } from '../hooks/useKillZone'
 import { useTheme } from '../hooks/useTheme'
 import { useJournal } from '../hooks/useJournal'
@@ -486,7 +486,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
               </p>
             </div>
           </div>
-          <p className="text-[10px] text-slate-700">Adjust in Settings ⚙</p>
+          <p className="text-[10px] text-slate-700 flex items-center gap-1">Adjust in Settings <Settings size={10} strokeWidth={2} /></p>
         </div>
 
       </div>

@@ -445,8 +445,8 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
               <span className="text-[13px] font-bold text-white">Prop Firm Compare</span>
             </div>
             <button onClick={() => setPropsOpen(false)}
-              className="text-[12px] font-semibold px-3 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:text-slate-300 hover:border-slate-600 transition-all">
-              ✕ Close
+              className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:text-slate-300 hover:border-slate-600 transition-all">
+              <X size={12} strokeWidth={2.5} /> Close
             </button>
           </div>
           <div className="flex-1 overflow-y-auto">

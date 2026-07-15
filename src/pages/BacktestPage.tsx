@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import {
   Play, Pause, SkipBack, ChevronRight, ChevronLeft,
   TrendingUp, TrendingDown, Crosshair, KeyRound,
-  ChevronDown, ChevronUp, Trash2, Search, X,
+  ChevronDown, ChevronUp, Trash2, Search, X, Check,
 } from 'lucide-react'
 import { ReplayChart } from '../components/ReplayChart'
 import { useReplayData, TD_KEY_STORAGE, type OHLCVBar } from '../hooks/useReplayData'
@@ -355,8 +355,8 @@ export function BacktestPage() {
                 className="w-56 bg-slate-900 border border-amber-500/40 rounded-lg px-3 py-1.5 text-[11px] text-slate-100 placeholder-slate-600 focus:outline-none" />
               <button onClick={saveKey} disabled={!keyDraft.trim()}
                 className="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 disabled:opacity-30 hover:bg-amber-500/25 transition-all">Save</button>
-              <button onClick={() => setShowKeyInput(false)}
-                className="text-[10px] text-slate-600 hover:text-slate-400 transition-colors">✕</button>
+              <button onClick={() => setShowKeyInput(false)} aria-label="Cancel"
+                className="text-slate-600 hover:text-slate-400 transition-colors"><X size={12} strokeWidth={2.5} /></button>
             </div>
           ) : (
             <button onClick={() => { setKeyDraft(apiKey); setShowKeyInput(true) }}
@@ -365,8 +365,8 @@ export function BacktestPage() {
                   ? 'border-emerald-500/25 text-emerald-400/70 bg-emerald-500/5 hover:bg-emerald-500/10'
                   : 'border-red-500/25 text-red-400/70 bg-red-500/5 hover:bg-red-500/10 animate-pulse'
               }`}>
-              <KeyRound size={10} />
-              {apiKey ? 'API key ✓' : 'Add API key'}
+              {apiKey ? <Check size={10} strokeWidth={3} /> : <KeyRound size={10} />}
+              {apiKey ? 'API key saved' : 'Add API key'}
             </button>
           )}
         </div>

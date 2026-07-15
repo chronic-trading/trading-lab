@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {
-  Plus, Trash2, Save, TrendingUp, TrendingDown, Minus,
+  Plus, Trash2, Save, TrendingUp, TrendingDown, Minus, Check,
   Calculator, CalendarDays, Target, BookOpen, Clock, X,
 } from 'lucide-react'
 import { useRules } from '../hooks/useRules'
@@ -433,8 +433,8 @@ export function Plan() {
                     ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300'
                     : 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
                   }`}>
-                <Save size={14} />
-                {saved ? 'Plan Saved ✓' : 'Save Today\'s Plan'}
+                {saved ? <Check size={14} strokeWidth={3} /> : <Save size={14} />}
+                {saved ? 'Plan Saved' : 'Save Today\'s Plan'}
               </button>
             </div>
           )}

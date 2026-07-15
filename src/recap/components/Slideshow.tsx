@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
+import { X } from 'lucide-react'
 import type { Trade } from '../lib/csvParser'
 import { calcStats } from '../lib/csvParser'
 import type { ThemeConfig } from '../lib/themes'
@@ -136,7 +137,8 @@ export function Slideshow({ trades, theme, label, onClose }: Props) {
             color: theme.textSecondary, fontSize: 14, cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
-        >✕</button>
+          aria-label="Close slideshow"
+        ><X size={16} strokeWidth={2.5} /></button>
       </div>
 
       {/* Slide counter */}
