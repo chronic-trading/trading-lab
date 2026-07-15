@@ -179,8 +179,17 @@ code, .mono {
   to   { opacity: 1; transform: translateY(0); }
 }
 .animate-tab-in { animation: tabIn 0.28s ease-out; }
+
+/* Accessibility + battery: honour the OS "reduce motion" setting everywhere.
+   The landing runs several infinite animations (orbs, drifting concept map,
+   CTA pulse); for users who ask for less motion we stop them repainting. */
 @media (prefers-reduced-motion: reduce) {
-  .animate-tab-in { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 #root {

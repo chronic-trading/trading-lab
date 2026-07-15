@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ArrowRight, Check } from 'lucide-react'
 import { GROUPS, ALL_FACTORS, scoreSetup, letterFor, verdictFor } from '../lib/grader'
+import { trackOnce } from '../lib/track'
 
 // Compact semicircular gauge (mirrors the in-app Trade Grader gauge).
 function Gauge({ score, color }: { score: number; color: string }) {
@@ -36,12 +37,16 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
   const [checked, setChecked] = useState<Set<string>>(new Set(['htf-bias', 'sweep', 'choch', 'pd-array']))
   const [rr, setRr] = useState(2)
 
-  const toggle = (id: string) =>
+  // "demo-used" is the key engagement signal: it separates visitors who merely
+  // scrolled past the demo from those who actually felt the product work.
+  const toggle = (id: string) => {
+    trackOnce('demo-used', 'Interacted with the live Grader demo')
     setChecked(prev => {
       const next = new Set(prev)
       next.has(id) ? next.delete(id) : next.add(id)
       return next
     })
+  }
 
   const { score, letter, color, verdict } = useMemo(() => {
     const s = scoreSetup(checked, rr)
@@ -98,7 +103,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
           <div className="flex items-center gap-2.5 mt-5 pt-4 border-t border-slate-800/50">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">R:R</span>
             {[1, 1.5, 2, 3, 4].map(v => (
-              <button key={v} onClick={() => setRr(v)}
+              <button key={v} onClick={() => { trackOnce('demo-used', 'Interacted with the live Grader demo'); setRr(v) }}
                 className="px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all"
                 style={{
                   background: rr === v ? 'rgba(245,158,11,0.15)' : 'transparent',

@@ -1,6 +1,33 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, lazy, Suspense, type ReactNode } from 'react'
 import { FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target } from 'lucide-react'
 import { GraderDemo } from '../components/GraderDemo'
+import { track, trackOnce } from '../lib/track'
+
+// The Concept Map demo pulls in the full concept dataset, so it's code-split and
+// only mounted once it scrolls into view — first paint never pays for it.
+const MapDemo = lazy(() => import('../components/MapDemo').then(m => ({ default: m.MapDemo })))
+
+// Defers rendering (and therefore the lazy chunk fetch) until near the viewport,
+// so first paint never pays for it. Deliberately fail-open: if IntersectionObserver
+// is missing or never fires, a safety net reveals the content anyway — a blank gap
+// on the sales page would be far worse than loading a small chunk late.
+function LazyOnVisible({ children, minHeight = 420 }: { children: ReactNode; minHeight?: number }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [show, setShow] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (typeof IntersectionObserver === 'undefined') { setShow(true); return }
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) { setShow(true); io.disconnect() }
+    }, { rootMargin: '300px' })
+    io.observe(el)
+    // Safety net — the critical first seconds stay light, then reveal regardless.
+    const t = setTimeout(() => setShow(true), 3000)
+    return () => { io.disconnect(); clearTimeout(t) }
+  }, [])
+  return <div ref={ref} style={{ minHeight: show ? undefined : minHeight }}>{show ? children : null}</div>
+}
 
 const WHOP_URL = import.meta.env.VITE_WHOP_BUY_URL as string | undefined
 
@@ -189,8 +216,14 @@ const FAQS = [
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false)
+  // Which question a visitor opens tells you which objection is blocking them.
+  // Keyed per question so each one reports separately (and only once per load).
+  const onToggle = () => {
+    if (!open) trackOnce('faq-' + q.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40), q)
+    setOpen(o => !o)
+  }
   return (
-    <button onClick={() => setOpen(o => !o)}
+    <button onClick={onToggle}
       className="w-full text-left rounded-2xl p-5 transition-all"
       style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
       <div className="flex items-center justify-between gap-4">
@@ -308,8 +341,28 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
     return () => html.setAttribute('data-theme', prev)
   }, [])
 
-  // Scroll parallax — each map container moves at 20% of scroll speed
+  // Scroll depth — how far down the page visitors actually get. Combined with
+  // the buy-click events this turns "nobody bought" into a readable funnel:
+  // pageview → scroll-50 → demo-used → buy-click-*.
   useEffect(() => {
+    const onDepth = () => {
+      const doc = document.documentElement
+      const max = doc.scrollHeight - window.innerHeight
+      if (max <= 0) return
+      const pct = (window.scrollY / max) * 100
+      for (const mark of [25, 50, 75, 90]) {
+        if (pct >= mark) trackOnce(`scroll-${mark}`, `Scrolled ${mark}%`)
+      }
+    }
+    window.addEventListener('scroll', onDepth, { passive: true })
+    return () => window.removeEventListener('scroll', onDepth)
+  }, [])
+
+  // Scroll parallax — each map container moves at 20% of scroll speed.
+  // Skipped entirely for reduced-motion users: the CSS media query can stop
+  // keyframes but not a JS scroll handler writing transforms every frame.
+  useEffect(() => {
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
     const onScroll = () => {
       const y = window.scrollY
       if (heroMapRef.current) heroMapRef.current.style.transform = `translateY(${y * 0.18}px)`
@@ -328,13 +381,19 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
     style: { transitionDelay: `${delay}ms` },
   })
 
-  const handleCTA = isAuthenticated ? onLaunch : onSignIn
-  const ctaLabel  = isAuthenticated ? 'Launch Trading Lab' : 'Sign In with License Key'
+  const baseCTA  = isAuthenticated ? onLaunch : onSignIn
+  const ctaLabel = isAuthenticated ? 'Launch Trading Lab' : 'Sign In with License Key'
+  const handleCTA = () => {
+    track(isAuthenticated ? 'cta-launch' : 'cta-signin')
+    baseCTA?.()
+  }
 
   // Purchase-intent CTA: signed-in users launch; cold visitors go to Whop to buy
   // (falling back to the license sign-in if no Whop URL is configured).
-  const goBuy = () => {
-    if (isAuthenticated) { onLaunch?.(); return }
+  // `where` labels the event so the dashboard shows which CTA actually converts.
+  const goBuy = (where: string) => () => {
+    if (isAuthenticated) { track('launch-' + where); onLaunch?.(); return }
+    track('buy-click-' + where)
     if (WHOP_URL) { window.open(WHOP_URL, '_blank', 'noopener,noreferrer'); return }
     onSignIn?.()
   }
@@ -589,7 +648,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               Tap what your setup has and watch the grade move.
             </p>
           </div>
-          <GraderDemo onCTA={goBuy} ctaLabel={buyLabel} />
+          <GraderDemo onCTA={goBuy('demo')} ctaLabel={buyLabel} />
         </div>
       </section>
 
@@ -709,6 +768,35 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── See inside — live Concept Map ─────────────────────────── */}
+      <section className="px-5 pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-24">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/25 bg-blue-500/8 mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" style={{ boxShadow: '0 0 6px #60a5fa' }} />
+              <span className="text-[10.5px] font-bold tracking-[0.2em] uppercase text-blue-400/90">See inside · live</span>
+            </div>
+            <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+              The whole framework, connected.
+            </h2>
+            <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
+              This is the <span className="text-slate-300 font-semibold">real Concept Map</span> from inside the Lab —
+              all 52 concepts and every synergy between them. Hover a node to trace its connections.
+            </p>
+          </div>
+          <LazyOnVisible minHeight={460}>
+            <Suspense fallback={
+              <div className="flex items-center justify-center gap-3 rounded-3xl" style={{ minHeight: 460, background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)' }}>
+                <div className="w-5 h-5 border-2 border-blue-500/30 border-t-blue-400 rounded-full animate-spin" />
+                <span className="text-[13px] text-slate-600 font-medium">Loading the map…</span>
+              </div>
+            }>
+              <MapDemo onCTA={goBuy('map-demo')} ctaLabel={buyLabel} />
+            </Suspense>
+          </LazyOnVisible>
         </div>
       </section>
 
@@ -1043,7 +1131,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       {/* ── Sticky mobile buy bar ─────────────────────────────────── */}
       <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 border-t border-slate-800/60 bg-[#05050a]/95 backdrop-blur-xl px-4 pt-3"
         style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
-        <button onClick={goBuy}
+        <button onClick={goBuy('mobile-bar')}
           className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-[15px] active:scale-[0.98] transition-transform"
           style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
           {isAuthenticated ? 'Launch Trading Lab' : PRICE ? `Get instant access — ${PRICE}` : 'Get instant access'}

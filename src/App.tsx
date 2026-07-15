@@ -4,12 +4,13 @@ import {
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
   ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical, MoreHorizontal, ChevronDown,
-  Gamepad2, Layers, Sun, Moon, Gauge,
+  Gamepad2, Layers, Sun, Moon, Gauge, LayoutDashboard,
 } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
 import { Landing }        from './pages/Landing'
 // Tab pages are code-split so the initial load (landing + shell) stays light —
 // each tool's JS only downloads when the user actually opens that tab.
+const Home         = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })))
 const Builder      = lazy(() => import('./pages/Builder').then(m => ({ default: m.Builder })))
 const MyBuilds     = lazy(() => import('./pages/MyBuilds').then(m => ({ default: m.MyBuilds })))
 const ConceptMap   = lazy(() => import('./pages/ConceptMap').then(m => ({ default: m.ConceptMap })))
@@ -28,7 +29,9 @@ const TradeGrader  = lazy(() => import('./pages/TradeGrader').then(m => ({ defau
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
 import { SessionNotes }   from './components/SessionNotes'
 import { TradingRules }   from './components/TradingRules'
-import { QuizModal }      from './components/QuizModal'
+// QuizModal pulls in the full concept dataset — keep it out of the entry chunk
+// (the landing would otherwise download all 52 concepts just to render a hero).
+const QuizModal = lazy(() => import('./components/QuizModal').then(m => ({ default: m.QuizModal })))
 import { SettingsModal }  from './components/SettingsModal'
 import { DrawdownGuard }  from './components/DrawdownGuard'
 import { MindsetCheck }   from './components/MindsetCheck'
@@ -42,11 +45,12 @@ const SUPABASE_CONFIGURED = !!(
   import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_ANON_KEY
 )
 
-type Tab  = 'builder' | 'grader' | 'map' | 'review' | 'journal' | 'backtest' | 'recap' | 'playbook' | 'plan' | 'chart' | 'calendar' | 'templates' | 'builds' | 'arcade'
+type Tab  = 'home' | 'builder' | 'grader' | 'map' | 'review' | 'journal' | 'backtest' | 'recap' | 'playbook' | 'plan' | 'chart' | 'calendar' | 'templates' | 'builds' | 'arcade'
 type View = 'landing' | 'login' | 'app'
 
 const tabs: { id: Tab; label: string; Icon: React.ElementType; badge?: string }[] = [
   // ── Showcase set (always visible on desktop; the build + signature tools) ──
+  { id: 'home',      label: 'Today',     Icon: LayoutDashboard },  // command centre: sessions, events, stats
   { id: 'builder',   label: 'Builder',   Icon: Beaker         },  // build setups from concepts
   { id: 'grader',    label: 'Grader',    Icon: Gauge, badge: 'NEW' },  // score a setup's confluence
   { id: 'map',       label: 'Map',       Icon: Network        },  // interactive concept graph
@@ -65,10 +69,11 @@ const tabs: { id: Tab; label: string; Icon: React.ElementType; badge?: string }[
 ]
 
 // Always-visible on the desktop tab bar; the rest live in a "More" dropdown.
-const DESKTOP_PRIMARY: Tab[] = ['builder', 'grader', 'map', 'review', 'journal', 'backtest', 'recap', 'playbook']
+const DESKTOP_PRIMARY: Tab[] = ['home', 'builder', 'grader', 'map', 'review', 'journal', 'backtest', 'recap', 'playbook']
 
-// Primary tabs always visible on mobile bottom bar
-const MOBILE_PRIMARY: Tab[] = ['builder', 'grader', 'map', 'journal']
+// Primary tabs always visible on mobile bottom bar (kept to 4 + More so the bar
+// stays thumb-friendly — the rest live in the More sheet).
+const MOBILE_PRIMARY: Tab[] = ['home', 'grader', 'builder', 'journal']
 
 // Mobile bottom nav
 function MobileBottomNav({
@@ -215,7 +220,7 @@ function RootApp() {
 }
 
 function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: string }) {
-  const [tab,          setTab]          = useState<Tab>('builder')
+  const [tab,          setTab]          = useState<Tab>('home')
   const mainRef = useRef<HTMLElement>(null)
   const [loadedBuild,  setLoadedBuild]  = useState<Build | null>(null)
   const [notesOpen,     setNotesOpen]     = useState(false)
@@ -391,6 +396,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
       <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden md:pb-0 pb-14">
         <div key={tab} className="flex-1 flex flex-col overflow-hidden animate-tab-in">
         <Suspense fallback={<PageFallback />}>
+        {tab === 'home'      && <Home      onNavigate={t => setTab(t as Tab)} />}
         {tab === 'builder'   && <Builder   initialBuild={loadedBuild} />}
         {tab === 'grader'    && <TradeGrader />}
         {tab === 'chart'     && <Chart />}
@@ -411,7 +417,11 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
       <SessionNotes  open={notesOpen}    onClose={() => setNotesOpen(false)} />
       <TradingRules  open={rulesOpen}    onClose={() => setRulesOpen(false)} />
-      <QuizModal     open={quizOpen}     onClose={() => setQuizOpen(false)} />
+      {quizOpen && (
+        <Suspense fallback={null}>
+          <QuizModal open onClose={() => setQuizOpen(false)} />
+        </Suspense>
+      )}
       <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
       <DrawdownGuard open={drawdownOpen} onClose={() => setDrawdownOpen(false)} />
       <MindsetCheck  open={mindsetOpen}  onClose={() => setMindsetOpen(false)} />
