@@ -7,7 +7,7 @@ const scoreSoft  = (score: number) => score >= 80 ? 'var(--green-soft)' : score 
 
 function ScoreBadge({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' | 'lg' }) {
   const color = scoreColor(score)
-  const sz = size === 'lg' ? 'text-[26px]' : size === 'md' ? 'text-[17px]' : 'text-[12px]'
+  const sz = size === 'lg' ? 'text-[24px]' : size === 'md' ? 'text-[18px]' : 'text-[12px]'
   return <span className={`font-black ${sz}`} style={{ color, textShadow: `0 0 16px color-mix(in srgb, ${color} 33%, transparent)` }}>{score}</span>
 }
 

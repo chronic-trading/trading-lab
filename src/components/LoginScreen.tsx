@@ -119,8 +119,8 @@ export function LoginScreen({ onBack }: { onBack?: () => void }) {
           {!done ? (
             <div className="space-y-5">
               <div className="space-y-1">
-                <p className="text-[17px] font-bold text-white">Activate your copy</p>
-                <p className="text-[12.5px] text-slate-500 leading-relaxed">
+                <p className="text-[18px] font-bold text-white">Activate your copy</p>
+                <p className="text-[13px] text-slate-500 leading-relaxed">
                   Find your key on Whop: <span className="text-slate-400">My Purchases → ICT/SMC Trading Lab → License Key</span>. It starts with <span className="text-amber-400 font-mono">C-</span>
                 </p>
               </div>
@@ -161,12 +161,12 @@ export function LoginScreen({ onBack }: { onBack?: () => void }) {
               {/* Buy link */}
               {WHOP_BUY_URL && (
                 <div className="text-center border-t border-slate-800/50 pt-4 mt-1">
-                  <p className="text-[11.5px] text-slate-600 mb-2">Don't have a license?</p>
+                  <p className="text-[12px] text-slate-600 mb-2">Don't have a license?</p>
                   <a
                     href={WHOP_BUY_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold text-amber-400 hover:text-amber-300 transition-colors"
+                    className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-amber-400 hover:text-amber-300 transition-colors"
                   >
                     Get access on Whop <ExternalLink size={12} />
                   </a>
@@ -180,7 +180,7 @@ export function LoginScreen({ onBack }: { onBack?: () => void }) {
               </div>
               <div className="space-y-1.5">
                 <p className="text-[16px] font-bold text-white">You're in</p>
-                <p className="text-[12.5px] text-slate-500">Loading your data…</p>
+                <p className="text-[13px] text-slate-500">Loading your data…</p>
               </div>
             </div>
           )}

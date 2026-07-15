@@ -285,7 +285,7 @@ export function Chart() {
                 >
                   <div className={`w-2 h-2 rounded-full flex-shrink-0 ${tierDot[c.tier]}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[12.5px] font-semibold text-slate-100 truncate">{c.name}</p>
+                    <p className="text-[13px] font-semibold text-slate-100 truncate">{c.name}</p>
                     <p className={`text-[10px] font-bold uppercase tracking-wider mt-0.5 ${tierColor[c.tier]}`}>{c.tier}</p>
                   </div>
                   {isOpen
@@ -317,7 +317,7 @@ export function Chart() {
                             {instr.steps.map((step, i) => (
                               <li key={i} className="flex gap-2.5">
                                 <span className="text-[10px] font-bold text-slate-600 w-4 flex-shrink-0 mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{i + 1}.</span>
-                                <p className="text-[11.5px] text-slate-300 leading-relaxed">{step}</p>
+                                <p className="text-[12px] text-slate-300 leading-relaxed">{step}</p>
                               </li>
                             ))}
                           </ol>
@@ -327,7 +327,7 @@ export function Chart() {
                             <Lightbulb size={11} className="text-amber-400" />
                             <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Pro tip</span>
                           </div>
-                          <p className="text-[11.5px] text-amber-200/70 leading-relaxed">{instr.tip}</p>
+                          <p className="text-[12px] text-amber-200/70 leading-relaxed">{instr.tip}</p>
                         </div>
                       </>
                     ) : (

@@ -119,7 +119,7 @@ export function ExportBuildModal({ build, open, onClose }: Props) {
             {/* Text preview */}
             <div className="flex-1 overflow-y-auto p-4">
               <pre
-                className="text-[11.5px] text-slate-300 leading-relaxed whitespace-pre-wrap bg-slate-900/60 border border-slate-800/60 rounded-2xl p-4 font-mono"
+                className="text-[12px] text-slate-300 leading-relaxed whitespace-pre-wrap bg-slate-900/60 border border-slate-800/60 rounded-2xl p-4 font-mono"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
                 {text}

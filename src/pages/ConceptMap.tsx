@@ -263,7 +263,7 @@ export function ConceptMap() {
                 {/* Constant weight — changing font-weight on hover reflows the
                     text (bold is wider) and makes labels visibly jump. Emphasis
                     comes from fill + opacity instead. */}
-                <text y={NODE_R + 14} textAnchor="middle" fontSize="9.5"
+                <text y={NODE_R + 14} textAnchor="middle" fontSize="10"
                   fontWeight="600"
                   fill={isHov ? fill : labelIdle}
                   opacity={isHov ? 1 : (isHighlit && !!hovered) ? 0.85 : hovered ? 0.05 : 0.5}
@@ -375,7 +375,7 @@ export function ConceptMap() {
             {/* Synergies as compact pills */}
             {activeConcept.synergies.length > 0 && (
               <div>
-                <p className="text-[9.5px] font-black uppercase tracking-wider text-slate-600 mb-2">
+                <p className="text-[10px] font-black uppercase tracking-wider text-slate-600 mb-2">
                   Synergies ({activeConcept.synergies.length})
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -500,7 +500,7 @@ export function ConceptMap() {
                       return (
                         <div key={syn.conceptId} className="flex items-center gap-2 bg-slate-900/50 rounded-xl px-3 py-2">
                           <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: getNodeFill(partner.id) }} />
-                          <span className="text-[11.5px] text-slate-200 flex-1">{partner.shortName}</span>
+                          <span className="text-[12px] text-slate-200 flex-1">{partner.shortName}</span>
                           <div className="flex gap-0.5">
                             {[1,2,3].map(i => (
                               <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= syn.strength ? 'bg-amber-400' : 'bg-slate-700'}`} />

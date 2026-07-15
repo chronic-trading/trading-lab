@@ -40,8 +40,8 @@ export function MasteryOverview() {
             { val: notStarted, label: 'Not yet',     color: 'text-slate-500' },
           ].map(s => (
             <div key={s.label} className="bg-[#0d0d16] border border-slate-800/60 rounded-xl px-2 py-2 text-center">
-              <p className={`text-[17px] font-bold leading-none ${s.color}`}>{s.val}</p>
-              <p className="text-[8.5px] text-slate-600 mt-1 leading-none uppercase tracking-wider">{s.label}</p>
+              <p className={`text-[18px] font-bold leading-none ${s.color}`}>{s.val}</p>
+              <p className="text-[10px] text-slate-600 mt-1 leading-none uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
         </div>
@@ -83,7 +83,7 @@ export function MasteryOverview() {
         {filtered.map(c => (
           <div key={c.id} className="flex items-center gap-2.5 bg-[#0d0d16] border border-slate-800/50 rounded-xl px-3 py-2 hover:border-slate-700/60 transition-all">
             <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierDot[c.tier]}`} />
-            <span className="text-[11.5px] font-semibold text-slate-200 flex-1 min-w-0 truncate">{c.name}</span>
+            <span className="text-[12px] font-semibold text-slate-200 flex-1 min-w-0 truncate">{c.name}</span>
             <div className="flex gap-0.5 flex-shrink-0">
               {[1, 2, 3, 4, 5].map(n => (
                 <div

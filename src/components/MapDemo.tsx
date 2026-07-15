@@ -123,7 +123,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
                     strokeWidth={isActive ? 2 : 1}
                     strokeOpacity={isActive ? 1 : dim ? 0.12 : 0.5}
                     style={{ transition: 'fill-opacity 0.15s, stroke-opacity 0.15s' }} />
-                  <text y={NODE_R + 13} textAnchor="middle" fontSize="9.5" fontWeight="600"
+                  <text y={NODE_R + 13} textAnchor="middle" fontSize="10" fontWeight="600"
                     fill={isActive ? fill : '#94a3b8'}
                     opacity={isActive ? 1 : isLinked ? 0.8 : 0.12}
                     fontFamily="Inter, sans-serif"
@@ -161,12 +161,12 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
                 <span className="text-slate-700 text-[10px]">·</span>
                 <span className="text-[10px] text-slate-500 capitalize">{concept.category}</span>
               </div>
-              <h3 className="text-[17px] font-bold text-white leading-snug mb-2.5">{concept.name}</h3>
-              <p className="text-[12.5px] text-slate-500 leading-relaxed line-clamp-5">{concept.description}</p>
+              <h3 className="text-[18px] font-bold text-white leading-snug mb-2.5">{concept.name}</h3>
+              <p className="text-[13px] text-slate-500 leading-relaxed line-clamp-5">{concept.description}</p>
 
               {concept.synergies.length > 0 && (
                 <div className="mt-4">
-                  <p className="text-[9.5px] font-black uppercase tracking-wider text-slate-600 mb-2">
+                  <p className="text-[10px] font-black uppercase tracking-wider text-slate-600 mb-2">
                     Connects to {concept.synergies.length}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -175,7 +175,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
                       if (!partner) return null
                       return (
                         <button key={syn.conceptId} onClick={() => select(syn.conceptId)}
-                          className="inline-flex items-center gap-1 text-[10.5px] font-semibold px-2 py-1 rounded-lg bg-slate-900/60 border border-slate-800/60 text-slate-300 hover:border-slate-600 transition-colors">
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-lg bg-slate-900/60 border border-slate-800/60 text-slate-300 hover:border-slate-600 transition-colors">
                           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                             style={{ background: syn.strength === 3 ? '#f59e0b' : syn.strength === 2 ? '#94a3b8' : '#475569' }} />
                           {partner.shortName}
@@ -189,7 +189,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
           )}
 
           <button onClick={onCTA}
-            className="group mt-auto pt-6 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-[13.5px] transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="group mt-auto pt-6 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-[14px] transition-all hover:scale-[1.02] active:scale-[0.98]"
             style={{ marginTop: 'auto' }}>
             <span className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl"
               style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>

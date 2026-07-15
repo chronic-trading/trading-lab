@@ -232,9 +232,9 @@ export function TradeGrader() {
                         }`} style={on ? { background: gc } : undefined}>
                           {on && <Check size={13} className="text-[#0b0b12]" strokeWidth={3} />}
                         </span>
-                        <span className={`text-[12.5px] leading-snug ${on ? 'text-slate-200 font-medium' : 'text-slate-400'}`}>{f.label}</span>
+                        <span className={`text-[13px] leading-snug ${on ? 'text-slate-200 font-medium' : 'text-slate-400'}`}>{f.label}</span>
                         {f.essential && (
-                          <span className="ml-auto text-[8.5px] font-black uppercase tracking-wider text-amber-500/70 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded flex-shrink-0">Key</span>
+                          <span className="ml-auto text-[10px] font-black uppercase tracking-wider text-amber-500/70 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded flex-shrink-0">Key</span>
                         )}
                       </button>
                     )
@@ -351,7 +351,7 @@ export function TradeGrader() {
                       <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold mb-1.5">In your build, not in this setup</p>
                       <div className="flex flex-wrap gap-1.5">
                         {buildCoverage.missing.map(cid => (
-                          <span key={cid} className="text-[10.5px] text-slate-400 bg-slate-900/60 border border-slate-800/60 rounded-lg px-2 py-0.5">
+                          <span key={cid} className="text-[11px] text-slate-400 bg-slate-900/60 border border-slate-800/60 rounded-lg px-2 py-0.5">
                             {getConceptById(cid)?.shortName ?? cid}
                           </span>
                         ))}

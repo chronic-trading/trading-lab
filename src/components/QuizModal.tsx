@@ -256,7 +256,7 @@ export function QuizModal({ open, onClose }: Props) {
                     <p className="text-[15px] sm:text-[16px] font-bold mt-2" style={{ color: pct >= 80 ? '#34d399' : pct >= 60 ? '#f59e0b' : '#f87171' }}>
                       {pct}% correct
                     </p>
-                    <p className="text-[12.5px] sm:text-[13px] text-slate-400 mt-2 leading-relaxed max-w-sm mx-auto">
+                    <p className="text-[13px] sm:text-[13px] text-slate-400 mt-2 leading-relaxed max-w-sm mx-auto">
                       {pct >= 80 ? 'Sharp. You know your ICT concepts cold.' : pct >= 60 ? 'Getting there — drill the ones you missed.' : 'Keep going. Repetition is how these concepts stick.'}
                     </p>
                   </div>
@@ -352,7 +352,7 @@ export function QuizModal({ open, onClose }: Props) {
                             : reveal && isSelected ? <XCircle size={13} className="text-red-400" />
                             : OPTION_LABELS[i]}
                           </span>
-                          <span className="text-[13px] sm:text-[13.5px] leading-snug sm:leading-relaxed flex-1">{opt}</span>
+                          <span className="text-[13px] sm:text-[14px] leading-snug sm:leading-relaxed flex-1">{opt}</span>
                         </button>
                       )
                     })}

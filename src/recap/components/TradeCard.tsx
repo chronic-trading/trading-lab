@@ -218,13 +218,13 @@ export function TradeCard({
           <div className="flex items-center justify-between" style={{ marginTop: isBest || isWorst ? 14 : 0 }}>
             <div className="flex items-center gap-1.5">
               {showSideTag && (
-                <span className="font-mono text-[9px] font-bold tracking-widest px-2 py-0.5 rounded border"
+                <span className="font-mono text-[10px] font-bold tracking-widest px-2 py-0.5 rounded border"
                   style={{ color: pnlColor, background: `${pnlColor}12`, borderColor: `${pnlColor}30` }}>
                   {sideLabel}
                 </span>
               )}
               {trade.dayOfWeek !== '—' && (
-                <span className="font-mono text-[9px] font-semibold tracking-widest px-1.5 py-0.5 rounded"
+                <span className="font-mono text-[10px] font-semibold tracking-widest px-1.5 py-0.5 rounded"
                   style={{ color: theme.textMuted, background: theme.surface }}>
                   {trade.dayOfWeek}
                 </span>
@@ -258,7 +258,7 @@ export function TradeCard({
           {/* Entry → Exit */}
           <div className="flex items-center gap-2">
             <div className="flex-1 flex flex-col gap-0.5">
-              <span className="font-mono text-[8px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>Entry</span>
+              <span className="font-mono text-[10px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>Entry</span>
               <span className="font-mono text-sm font-bold" style={{ color: theme.textSecondary }}>{fmtPrice(trade.entryPrice)}</span>
             </div>
             <div className="flex flex-col items-center">
@@ -267,11 +267,11 @@ export function TradeCard({
                 <svg width="5" height="7" viewBox="0 0 5 7"><path d="M0 0L5 3.5L0 7V0Z" fill={pnlColor} opacity="0.7" /></svg>
               </div>
               {trade.quantity > 1 && (
-                <span className="font-mono text-[8px] mt-0.5" style={{ color: theme.textMuted }}>{fmtQty(trade.quantity)}</span>
+                <span className="font-mono text-[10px] mt-0.5" style={{ color: theme.textMuted }}>{fmtQty(trade.quantity)}</span>
               )}
             </div>
             <div className="flex-1 flex flex-col gap-0.5 items-end">
-              <span className="font-mono text-[8px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>Exit</span>
+              <span className="font-mono text-[10px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>Exit</span>
               <span className="font-mono text-sm font-bold" style={{ color: theme.textSecondary }}>{fmtPrice(trade.exitPrice)}</span>
             </div>
           </div>
@@ -282,7 +282,7 @@ export function TradeCard({
               <div className="h-full rounded-full transition-all duration-700"
                 style={{ width: `${barWidth}%`, background: pnlColor, boxShadow: `0 0 6px ${pnlColor}60` }} />
             </div>
-            <span className="font-mono text-[9px] font-bold w-10 text-right shrink-0" style={{ color: `${pnlColor}99` }}>
+            <span className="font-mono text-[10px] font-bold w-10 text-right shrink-0" style={{ color: `${pnlColor}99` }}>
               {trade.pnlPercent >= 0 ? '+' : ''}{trade.pnlPercent.toFixed(1)}%
             </span>
           </div>
@@ -295,7 +295,7 @@ export function TradeCard({
               { label: 'Hold', value: trade.duration },
             ].map(({ label, value }) => (
               <div key={label} className="flex flex-col gap-0.5 rounded-lg p-2" style={{ background: theme.surface }}>
-                <span className="font-mono text-[8px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>{label}</span>
+                <span className="font-mono text-[10px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>{label}</span>
                 <span className="font-mono text-[11px] font-bold" style={{ color: theme.textSecondary }}>{value}</span>
               </div>
             ))}
@@ -305,7 +305,7 @@ export function TradeCard({
           <div className="rounded-lg px-2.5 py-2 flex items-center justify-between"
             style={{ background: theme.surface2, border: `1px solid ${theme.divider}` }}>
             <div className="flex flex-col gap-0.5">
-              <span className="font-mono text-[8px] tracking-widest uppercase" style={{ color: theme.textMuted }}>Opened</span>
+              <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: theme.textMuted }}>Opened</span>
               <span className="font-mono text-[10px] font-semibold" style={{ color: theme.textSecondary }}>
                 {trade.openDate}
                 {trade.openTimeOfDay !== '—' && <span style={{ color: theme.textMuted }}> · {trade.openTimeOfDay}</span>}
@@ -313,7 +313,7 @@ export function TradeCard({
             </div>
             <div className="w-px h-5" style={{ background: theme.divider }} />
             <div className="flex flex-col gap-0.5 items-end">
-              <span className="font-mono text-[8px] tracking-widest uppercase" style={{ color: theme.textMuted }}>Closed</span>
+              <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: theme.textMuted }}>Closed</span>
               <span className="font-mono text-[10px] font-semibold" style={{ color: theme.textSecondary }}>
                 {trade.closeDate}
                 {trade.closeTimeOfDay !== '—' && <span style={{ color: theme.textMuted }}> · {trade.closeTimeOfDay}</span>}
@@ -324,8 +324,8 @@ export function TradeCard({
           {/* Fees */}
           {trade.fees > 0 && (
             <div className="flex items-center justify-between px-0.5">
-              <span className="font-mono text-[9px]" style={{ color: theme.textMuted }}>Fees</span>
-              <span className="font-mono text-[9px] font-semibold" style={{ color: theme.loss }}>-${trade.fees.toFixed(2)}</span>
+              <span className="font-mono text-[10px]" style={{ color: theme.textMuted }}>Fees</span>
+              <span className="font-mono text-[10px] font-semibold" style={{ color: theme.loss }}>-${trade.fees.toFixed(2)}</span>
             </div>
           )}
 
@@ -354,11 +354,11 @@ export function TradeCard({
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full"
                 style={{ background: pnlColor, boxShadow: `0 0 5px ${pnlColor}`, animation: isWin && !exportMode ? 'glowPulse 2s ease-in-out infinite' : 'none' }} />
-              <span className="font-mono text-[8px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>
+              <span className="font-mono text-[10px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>
                 {isWin ? 'Winner' : 'Loser'}
               </span>
             </div>
-            <span className="font-mono text-[8px] tracking-widest uppercase" style={{ color: `${theme.textMuted}70` }}>Recap</span>
+            <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: `${theme.textMuted}70` }}>Recap</span>
           </div>
         </div>
       </div>

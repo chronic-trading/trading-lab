@@ -52,7 +52,7 @@ export function BuildCard({ build, onDelete, onShare, onLoad }: Props) {
           {conceptList.slice(0, 8).map(c => c && (
             <div key={c.id} className="flex items-center gap-1.5 bg-slate-900/60 border border-slate-800/50 rounded-xl px-2.5 py-1">
               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierBar[c.tier]}`} />
-              <span className="text-[11.5px] font-medium text-slate-300">{c.shortName}</span>
+              <span className="text-[12px] font-medium text-slate-300">{c.shortName}</span>
             </div>
           ))}
           {conceptList.length > 8 && (

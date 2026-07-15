@@ -184,7 +184,7 @@ export function Calendar() {
                   {todayEvents.events.map(ev => (
                     <div key={ev} className="flex items-start gap-2 bg-emerald-500/6 border border-emerald-500/15 rounded-xl px-3 py-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 flex-shrink-0" />
-                      <p className="text-[11.5px] text-emerald-200/80 leading-relaxed">{ev}</p>
+                      <p className="text-[12px] text-emerald-200/80 leading-relaxed">{ev}</p>
                     </div>
                   ))}
                 </div>
@@ -246,7 +246,7 @@ export function Calendar() {
                     <CalendarIcon size={10} className="text-slate-600 mt-0.5 flex-shrink-0" />
                     <p className="text-[11px] text-slate-500 leading-relaxed">{ev.schedule}</p>
                   </div>
-                  <p className="text-[11.5px] text-slate-400 leading-relaxed border-t border-slate-800/50 pt-2.5">{ev.why}</p>
+                  <p className="text-[12px] text-slate-400 leading-relaxed border-t border-slate-800/50 pt-2.5">{ev.why}</p>
                 </div>
               ))}
             </div>

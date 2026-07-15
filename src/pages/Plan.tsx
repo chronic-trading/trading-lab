@@ -329,7 +329,7 @@ export function Plan() {
                 <textarea value={reasoning} onChange={e => setReasoning(e.target.value)}
                   placeholder="Why are you bullish or bearish? What HTF context supports this? What happened this week?"
                   rows={3}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-[12.5px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors resize-none" />
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-[13px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors resize-none" />
               </div>
 
               {/* Key levels */}
@@ -364,7 +364,7 @@ export function Plan() {
                 </label>
                 <input value={dol} onChange={e => setDol(e.target.value)}
                   placeholder="e.g. BSL at 22,480 — prior week high sitting above"
-                  className="w-full bg-slate-900 border border-amber-500/25 rounded-xl px-3.5 py-2.5 text-[12.5px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500/50 transition-colors" />
+                  className="w-full bg-slate-900 border border-amber-500/25 rounded-xl px-3.5 py-2.5 text-[13px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-amber-500/50 transition-colors" />
               </div>
 
               {/* Kill zones */}
@@ -400,7 +400,7 @@ export function Plan() {
                 <textarea value={avoid} onChange={e => setAvoid(e.target.value)}
                   placeholder="e.g. No trades before NY AM · No chasing · No trading during news events"
                   rows={2}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-[12.5px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors resize-none" />
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-[13px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors resize-none" />
               </div>
 
               {/* Active rules reminder */}
@@ -424,7 +424,7 @@ export function Plan() {
                 <textarea value={notes} onChange={e => setNotes(e.target.value)}
                   placeholder="Anything else you want to remember going into this session..."
                   rows={2}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-[12.5px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors resize-none" />
+                  className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-[13px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors resize-none" />
               </div>
 
               <button onClick={handleSave}
@@ -474,10 +474,10 @@ export function Plan() {
                     {p.drawOnLiquidity && (
                       <div className="flex items-start gap-2 bg-amber-500/6 border border-amber-500/15 rounded-xl px-3 py-2">
                         <Target size={12} className="text-amber-400 mt-0.5 flex-shrink-0" />
-                        <p className="text-[11.5px] text-amber-200/70">{p.drawOnLiquidity}</p>
+                        <p className="text-[12px] text-amber-200/70">{p.drawOnLiquidity}</p>
                       </div>
                     )}
-                    {p.reasoning && <p className="text-[11.5px] text-slate-400 leading-relaxed">{p.reasoning}</p>}
+                    {p.reasoning && <p className="text-[12px] text-slate-400 leading-relaxed">{p.reasoning}</p>}
                     {p.keyLevels.length > 0 && (
                       <div className="flex flex-wrap gap-1.5">
                         {p.keyLevels.map((l, i) => <span key={i} className="text-[10px] text-slate-500 bg-slate-800 border border-slate-700/40 rounded-lg px-2 py-0.5">{l}</span>)}
@@ -519,13 +519,13 @@ export function Plan() {
           {dol && (
             <div className="pt-2 border-t border-slate-800/40">
               <p className="text-[10px] text-amber-600 font-bold uppercase tracking-wider mb-1">DOL</p>
-              <p className="text-[11.5px] text-amber-200/80 leading-relaxed">{dol}</p>
+              <p className="text-[12px] text-amber-200/80 leading-relaxed">{dol}</p>
             </div>
           )}
           {avoid && (
             <div className="pt-2 border-t border-slate-800/40">
               <p className="text-[10px] text-red-600 font-bold uppercase tracking-wider mb-1">Avoid</p>
-              <p className="text-[11.5px] text-red-300/70 leading-relaxed">{avoid}</p>
+              <p className="text-[12px] text-red-300/70 leading-relaxed">{avoid}</p>
             </div>
           )}
         </div>

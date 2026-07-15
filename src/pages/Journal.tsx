@@ -94,13 +94,13 @@ function LogModal({ open, onClose, onSave, existing }: {
               <div className="flex bg-slate-900/60 border border-slate-800 rounded-xl p-0.5 gap-0.5">
                 <button
                   onClick={() => setMode('live')}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11.5px] font-semibold transition-all ${mode === 'live' ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'text-slate-500 hover:text-slate-300'}`}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${mode === 'live' ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30' : 'text-slate-500 hover:text-slate-300'}`}
                 >
                   <Radio size={11} /> Live Trade
                 </button>
                 <button
                   onClick={() => setMode('backtest')}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11.5px] font-semibold transition-all ${mode === 'backtest' ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30' : 'text-slate-500 hover:text-slate-300'}`}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${mode === 'backtest' ? 'bg-purple-500/15 text-purple-300 border border-purple-500/30' : 'text-slate-500 hover:text-slate-300'}`}
                 >
                   <FlaskConical size={11} /> Backtest
                 </button>
@@ -205,7 +205,7 @@ function LogModal({ open, onClose, onSave, existing }: {
                     const on = conceptIds.includes(c.id)
                     return (
                       <button key={c.id} onClick={() => toggleConcept(c.id)}
-                        className={`flex items-center gap-1.5 px-2 py-1 rounded-xl border text-[10.5px] font-medium transition-all
+                        className={`flex items-center gap-1.5 px-2 py-1 rounded-xl border text-[11px] font-medium transition-all
                           ${on ? 'bg-slate-700 border-slate-600 text-slate-100' : 'border-slate-800 text-slate-600 hover:border-slate-700 hover:text-slate-400'}`}>
                         <div className={`w-1.5 h-1.5 rounded-full ${tierDot[c.tier]} ${on ? 'opacity-100' : 'opacity-30'}`} />
                         {c.shortName}
@@ -289,13 +289,13 @@ export function Journal() {
           <div className="flex bg-slate-900/70 border border-slate-800 rounded-xl p-0.5 gap-0.5">
             <button
               onClick={() => setView('trades')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold transition-all ${view === 'trades' ? 'bg-slate-700 text-slate-100' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${view === 'trades' ? 'bg-slate-700 text-slate-100' : 'text-slate-500 hover:text-slate-300'}`}
             >
               <List size={11} /> Trades
             </button>
             <button
               onClick={() => setView('analytics')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11.5px] font-semibold transition-all ${view === 'analytics' ? 'bg-slate-700 text-slate-100' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all ${view === 'analytics' ? 'bg-slate-700 text-slate-100' : 'text-slate-500 hover:text-slate-300'}`}
             >
               <BarChart2 size={11} /> Analytics
             </button>

@@ -59,7 +59,7 @@ export function Toolbar({
 
       {/* Theme — dot grid */}
       <div className="flex items-center gap-2">
-        <span className="font-mono text-[9px] font-semibold tracking-widest uppercase shrink-0"
+        <span className="font-mono text-[10px] font-semibold tracking-widest uppercase shrink-0"
           style={{ color: theme.textMuted }}>Theme</span>
         <div className="flex gap-1.5 shrink-0">
           {(Object.keys(THEMES) as ThemeKey[]).map(key => {
@@ -77,7 +77,7 @@ export function Toolbar({
                 <div className="w-2.5 h-2.5 rounded-full transition-all"
                   style={{ background: color, boxShadow: active ? `0 0 6px ${color}` : 'none' }} />
                 {/* Tooltip */}
-                <span className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[9px] font-mono whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50"
+                <span className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[10px] font-mono whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50"
                   style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' }}>
                   {THEMES[key].label}
                 </span>
@@ -91,7 +91,7 @@ export function Toolbar({
 
       {/* Filter */}
       <div className="flex items-center gap-1.5">
-        <span className="font-mono text-[9px] font-semibold tracking-widest uppercase shrink-0"
+        <span className="font-mono text-[10px] font-semibold tracking-widest uppercase shrink-0"
           style={{ color: theme.textMuted }}>Show</span>
         <div className="flex gap-0.5 p-0.5 rounded-lg"
           style={{ background: theme.surface2, border: `1px solid ${theme.divider}` }}>
@@ -110,7 +110,7 @@ export function Toolbar({
 
       {/* Sort */}
       <div className="flex items-center gap-1.5">
-        <span className="font-mono text-[9px] font-semibold tracking-widest uppercase shrink-0"
+        <span className="font-mono text-[10px] font-semibold tracking-widest uppercase shrink-0"
           style={{ color: theme.textMuted }}>Sort</span>
         <select value={sortBy} onChange={e => onSortChange(e.target.value as SortMode)}
           className="text-[11px] font-mono rounded-lg px-2.5 py-1 outline-none appearance-none cursor-pointer"
@@ -151,7 +151,7 @@ export function Toolbar({
 
       {/* Symbol search */}
       <div className="flex items-center gap-1.5">
-        <span className="font-mono text-[9px] font-semibold tracking-widest uppercase shrink-0"
+        <span className="font-mono text-[10px] font-semibold tracking-widest uppercase shrink-0"
           style={{ color: theme.textMuted }}>Search</span>
         <input
           type="text"
@@ -187,7 +187,7 @@ export function Toolbar({
         📊 Stats
       </button>
 
-      <span className="font-mono text-[9px] ml-auto px-2 py-1 rounded-md"
+      <span className="font-mono text-[10px] ml-auto px-2 py-1 rounded-md"
         style={{ background: theme.surface2, color: theme.textMuted, border: `1px solid ${theme.divider}` }}>
         {visibleCount}/{totalTrades}
       </span>

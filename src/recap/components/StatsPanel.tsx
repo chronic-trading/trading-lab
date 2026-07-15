@@ -107,7 +107,7 @@ export function StatsPanel({ trades, theme }: Props) {
                     />
                   </div>
                   <span className="font-mono text-[10px] font-bold w-16 text-right shrink-0" style={{ color }}>{fmt$(d.total)}</span>
-                  <span className="font-mono text-[9px] w-6 shrink-0" style={{ color: theme.textMuted }}>{d.trades}t</span>
+                  <span className="font-mono text-[10px] w-6 shrink-0" style={{ color: theme.textMuted }}>{d.trades}t</span>
                 </div>
               )
             })}
@@ -138,7 +138,7 @@ export function StatsPanel({ trades, theme }: Props) {
                     </div>
                   </div>
                   <span className="font-mono text-[10px] font-bold w-16 text-right shrink-0" style={{ color }}>{fmt$(data.pnl)}</span>
-                  <span className="font-mono text-[9px] w-8 text-right shrink-0" style={{ color: theme.textMuted }}>{wr}%W</span>
+                  <span className="font-mono text-[10px] w-8 text-right shrink-0" style={{ color: theme.textMuted }}>{wr}%W</span>
                 </div>
               )
             })}
@@ -155,7 +155,7 @@ export function StatsPanel({ trades, theme }: Props) {
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div className="rounded-xl p-3 text-center" style={{ background: theme.surface, border: `1px solid ${theme.divider}` }}>
-                <div className="font-mono text-[8px] tracking-widest uppercase mb-1" style={{ color: theme.textMuted }}>Current</div>
+                <div className="font-mono text-[10px] tracking-widest uppercase mb-1" style={{ color: theme.textMuted }}>Current</div>
                 <div className="font-mono font-black text-2xl" style={{
                   color: currentType === 'win' ? theme.profit : theme.loss,
                   textShadow: `0 0 12px ${currentType === 'win' ? theme.profit : theme.loss}60`,
@@ -164,7 +164,7 @@ export function StatsPanel({ trades, theme }: Props) {
                 </div>
               </div>
               <div className="rounded-xl p-3 text-center" style={{ background: theme.surface, border: `1px solid ${theme.divider}` }}>
-                <div className="font-mono text-[8px] tracking-widest uppercase mb-1" style={{ color: theme.textMuted }}>Best Win</div>
+                <div className="font-mono text-[10px] tracking-widest uppercase mb-1" style={{ color: theme.textMuted }}>Best Win</div>
                 <div className="font-mono font-black text-2xl" style={{ color: theme.profit, textShadow: `0 0 12px ${theme.profit}60` }}>
                   {best}W
                 </div>
@@ -189,7 +189,7 @@ export function StatsPanel({ trades, theme }: Props) {
                         style={{ background: theme.surface, border: `1px solid ${theme.divider}` }}>
                         <span className="font-mono text-[10px] font-bold" style={{ color: theme.textSecondary }}>{session} Session</span>
                         <span className="font-mono text-[10px] font-bold" style={{ color }}>{fmt$(data.pnl)}</span>
-                        <span className="font-mono text-[9px]" style={{ color: theme.textMuted }}>{data.count}t</span>
+                        <span className="font-mono text-[10px]" style={{ color: theme.textMuted }}>{data.count}t</span>
                       </div>
                     )
                   })}

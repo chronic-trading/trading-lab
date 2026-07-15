@@ -353,7 +353,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         <nav className="hidden md:flex items-stretch border-t border-[var(--border)] relative">
           {tabs.filter(t => DESKTOP_PRIMARY.includes(t.id)).map(({ id, label, Icon, badge }) => (
             <button key={id} onClick={() => { setTab(id); setMoreOpen(false) }}
-              className={`flex-1 min-w-[46px] flex items-center justify-center gap-1.5 py-3 text-[11.5px] font-semibold relative transition-all duration-150 border-b-2 px-2
+              className={`flex-1 min-w-[46px] flex items-center justify-center gap-1.5 py-3 text-[12px] font-semibold relative transition-all duration-150 border-b-2 px-2
                 ${tab === id ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
               <Icon size={12} />
               <span>{label}</span>
@@ -372,7 +372,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             return (
               <div className="relative flex flex-shrink-0">
                 <button onClick={() => setMoreOpen(o => !o)}
-                  className={`flex items-center justify-center gap-1.5 py-3 px-4 text-[11.5px] font-semibold border-b-2 transition-all duration-150
+                  className={`flex items-center justify-center gap-1.5 py-3 px-4 text-[12px] font-semibold border-b-2 transition-all duration-150
                     ${moreOpen || activeInMore ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
                   <MoreHorizontal size={13} />
                   <span>More</span>

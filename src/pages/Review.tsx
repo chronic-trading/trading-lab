@@ -23,7 +23,7 @@ function Stat({ value, label, icon, color }: { value: number | string; label: st
     <div className="flex items-center gap-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-3.5 py-3 flex-1 min-w-0 shadow-[var(--shadow-sm)]">
       <div className="flex-shrink-0" style={{ color }}>{icon}</div>
       <div className="min-w-0">
-        <p className="text-[17px] font-extrabold text-[var(--text)] leading-none">{value}</p>
+        <p className="text-[18px] font-extrabold text-[var(--text)] leading-none">{value}</p>
         <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-faint)] mt-1 truncate">{label}</p>
       </div>
     </div>
@@ -95,7 +95,7 @@ export function Review() {
             <Layers size={19} className="text-[var(--accent-ink)]" />
           </div>
           <div>
-            <h1 className="text-[19px] font-extrabold text-[var(--text)] leading-tight tracking-tight">Daily Review</h1>
+            <h1 className="text-[20px] font-extrabold text-[var(--text)] leading-tight tracking-tight">Daily Review</h1>
             <p className="text-[12px] text-[var(--text-dim)] mt-0.5">A few minutes a day keeps every concept sharp.</p>
           </div>
         </div>
@@ -162,9 +162,9 @@ export function Review() {
 
               {/* Front — the prompt */}
               <div className="px-6 py-8 md:py-10 text-center">
-                <p className="text-[27px] md:text-[32px] font-extrabold text-[var(--text)] leading-tight tracking-tight">{concept.name}</p>
+                <p className="text-[28px] md:text-[32px] font-extrabold text-[var(--text)] leading-tight tracking-tight">{concept.name}</p>
                 {!revealed && (
-                  <p className="text-[12.5px] text-[var(--text-faint)] mt-3">Recall the definition and how you'd trade it — then reveal.</p>
+                  <p className="text-[13px] text-[var(--text-faint)] mt-3">Recall the definition and how you'd trade it — then reveal.</p>
                 )}
               </div>
 
@@ -210,7 +210,7 @@ export function Review() {
               ) : (
                 <div className="border-t border-[var(--border)] p-4">
                   <button onClick={() => setRevealed(true)}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-white text-[14.5px] font-bold shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-white text-[14px] font-bold shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
                     style={{ background: 'linear-gradient(180deg, #fbbf24, var(--accent))' }}>
                     <Eye size={16} /> Show answer
                     <span className="hidden md:inline text-[10px] opacity-70 font-bold ml-1">space</span>
@@ -230,7 +230,7 @@ export function Review() {
                 <CheckCircle2 size={30} style={{ color: 'var(--green)' }} />
               </div>
               <div>
-                <p className="text-[21px] font-extrabold text-[var(--text)] tracking-tight">
+                <p className="text-[20px] font-extrabold text-[var(--text)] tracking-tight">
                   {doneCount > 0 ? 'Session complete' : 'All caught up'}
                 </p>
                 <p className="text-[13px] text-[var(--text-dim)] mt-2 leading-relaxed max-w-sm mx-auto">

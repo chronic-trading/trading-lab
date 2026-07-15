@@ -87,7 +87,7 @@ function KeyLevelsPanel() {
           {INSTRUMENTS.map(i => (
             <button key={i}
               onClick={() => setInst(i)}
-              className={`px-2.5 py-1 rounded-lg border text-[10.5px] font-bold transition-all ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-slate-800 text-slate-500 hover:border-slate-700 hover:text-slate-300'}`}
+              className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-slate-800 text-slate-500 hover:border-slate-700 hover:text-slate-300'}`}
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
               {i}
@@ -140,8 +140,8 @@ function KeyLevelsPanel() {
           {currentLevels.map(lv => (
             <div key={lv.id} className="flex items-center gap-2.5 bg-slate-900/40 border border-slate-800/50 rounded-xl px-3 py-2">
               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${typeConfig[lv.type].dot}`} />
-              <span className="text-[11.5px] font-semibold text-slate-300 flex-1">{lv.label}</span>
-              <span className="text-[11.5px] font-bold text-slate-200" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{lv.price}</span>
+              <span className="text-[12px] font-semibold text-slate-300 flex-1">{lv.label}</span>
+              <span className="text-[12px] font-bold text-slate-200" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{lv.price}</span>
               <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
                 lv.type === 'resistance' ? 'text-red-400 bg-red-500/10' : lv.type === 'support' ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-500 bg-slate-800'
               }`}>{typeConfig[lv.type].label}</span>
@@ -279,7 +279,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
                     {events.map(ev => (
                       <div key={ev} className="flex items-center gap-1.5">
                         <div className="w-1 h-1 rounded-full bg-red-500/60 flex-shrink-0" />
-                        <span className="text-[10.5px] text-slate-500">{ev}</span>
+                        <span className="text-[11px] text-slate-500">{ev}</span>
                       </div>
                     ))}
                     {events.length === 0 && <span className="text-[10px] text-slate-700">No major events scheduled</span>}
@@ -324,7 +324,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
                     return (
                       <div
                         key={e.id}
-                        className={`flex items-center gap-1 px-2 py-1 rounded-xl border text-[10.5px] font-bold
+                        className={`flex items-center gap-1 px-2 py-1 rounded-xl border text-[11px] font-bold
                           ${e.result === 'win' ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-300'
                           : e.result === 'loss' ? 'bg-red-500/10 border-red-500/25 text-red-300'
                           : 'bg-slate-800/40 border-slate-700/40 text-slate-400'}`}

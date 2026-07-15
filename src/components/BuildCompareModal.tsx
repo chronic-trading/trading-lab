@@ -107,7 +107,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                     { label: 'Shared', shared: shared.length },
                   ].map(stat => (
                     <div key={stat.label} className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-4 py-3 text-center">
-                      <p className="text-[9.5px] font-bold text-slate-600 uppercase tracking-wider mb-2">{stat.label}</p>
+                      <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">{stat.label}</p>
                       {'shared' in stat ? (
                         <p className="text-[20px] font-bold text-slate-300">{stat.shared}
                           <span className="text-[10px] text-slate-600 font-normal ml-1">in common</span>
@@ -186,7 +186,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                           return (
                             <div key={id} className={`flex items-center gap-1.5 ${bg} border ${border} rounded-xl px-2.5 py-1.5`}>
                               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierDot[c.tier]}`} />
-                              <span className={`text-[10.5px] font-medium ${text} leading-snug`}>{c.shortName}</span>
+                              <span className={`text-[11px] font-medium ${text} leading-snug`}>{c.shortName}</span>
                             </div>
                           )
                         })}

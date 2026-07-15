@@ -186,7 +186,7 @@ export function DrawdownGuard({ open, onClose }: Props) {
                           <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
                             e.result === 'win' ? 'bg-emerald-400' : e.result === 'loss' ? 'bg-red-400' : 'bg-slate-500'
                           }`} />
-                          <span className="text-[10.5px] font-bold text-amber-400/80"
+                          <span className="text-[11px] font-bold text-amber-400/80"
                                 style={{ fontFamily: "'JetBrains Mono', monospace" }}>{e.instrument}</span>
                           <span className="text-[11px] text-slate-400 flex-1 capitalize">{e.result}</span>
                           {pnl !== null && (

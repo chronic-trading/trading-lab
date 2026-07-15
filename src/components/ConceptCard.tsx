@@ -119,7 +119,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
         <h3 className="text-[15px] font-bold text-white leading-snug mb-2 pr-1 tracking-tight">{concept.name}</h3>
 
         {/* Description */}
-        <p className={`text-[12.5px] text-slate-300 leading-relaxed ${expanded ? '' : 'line-clamp-2'}`}><GlossaryText text={concept.description} /></p>
+        <p className={`text-[13px] text-slate-300 leading-relaxed ${expanded ? '' : 'line-clamp-2'}`}><GlossaryText text={concept.description} /></p>
 
         {/* Mastery rating */}
         <div className="flex items-center gap-2.5 mt-3">
@@ -157,7 +157,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-slate-800/40">
           <button
             onClick={e => { e.stopPropagation(); setExpanded(x => !x) }}
-            className="flex items-center gap-1.5 text-[11.5px] font-medium text-slate-500 hover:text-amber-400 transition-colors"
+            className="flex items-center gap-1.5 text-[12px] font-medium text-slate-500 hover:text-amber-400 transition-colors"
           >
             <ChevronDown size={12} className={`transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
             {expanded ? 'show less' : 'how to use'}
@@ -167,14 +167,14 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
             <button
               onClick={e => { e.stopPropagation(); toggleBookmark(concept.id) }}
               title={bookmarked ? 'Remove from Studying Now' : 'Pin to Studying Now'}
-              className={`flex items-center gap-1 text-[11.5px] font-medium transition-colors ${bookmarked ? 'text-amber-400 hover:text-amber-300' : 'text-slate-600 hover:text-slate-400'}`}
+              className={`flex items-center gap-1 text-[12px] font-medium transition-colors ${bookmarked ? 'text-amber-400 hover:text-amber-300' : 'text-slate-600 hover:text-slate-400'}`}
             >
               <Bookmark size={12} className={bookmarked ? 'fill-amber-400' : ''} />
               {bookmarked ? 'pinned' : 'pin'}
             </button>
             <button
               onClick={e => { e.stopPropagation(); setNotesOpen(x => !x) }}
-              className={`flex items-center gap-1 text-[11.5px] font-medium transition-colors ${hasNote ? 'text-amber-400 hover:text-amber-300' : 'text-slate-600 hover:text-slate-400'}`}
+              className={`flex items-center gap-1 text-[12px] font-medium transition-colors ${hasNote ? 'text-amber-400 hover:text-amber-300' : 'text-slate-600 hover:text-slate-400'}`}
             >
               <StickyNote size={12} />
               {hasNote ? 'note' : 'add note'}
@@ -194,7 +194,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
             <div className="relative px-5 pb-4 pt-3.5 border-t border-slate-800/60">
               <div className="absolute inset-0 bg-slate-900/40" />
               <div className="relative">
-                <p className="text-[12.5px] text-slate-200 leading-relaxed"><GlossaryText text={concept.howToUse} /></p>
+                <p className="text-[13px] text-slate-200 leading-relaxed"><GlossaryText text={concept.howToUse} /></p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {concept.tags.map(t => (
                     <span key={t} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-slate-800/70 text-slate-400 border border-slate-700/40">#{t}</span>

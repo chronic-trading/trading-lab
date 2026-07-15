@@ -504,13 +504,13 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             )}
             {isAuthenticated ? (
               <button onClick={onLaunch}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[12.5px] font-bold transition-all hover:scale-[1.02]"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-bold transition-all hover:scale-[1.02]"
                 style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
                 Launch Lab <ArrowRight size={13} />
               </button>
             ) : (
               <button onClick={onSignIn}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-amber-500/35 bg-amber-500/8 text-amber-300 text-[12.5px] font-bold hover:bg-amber-500/18 hover:border-amber-400/50 transition-all">
+                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-amber-500/35 bg-amber-500/8 text-amber-300 text-[13px] font-bold hover:bg-amber-500/18 hover:border-amber-400/50 transition-all">
                 Sign In
               </button>
             )}
@@ -651,7 +651,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="flex items-center gap-2.5 px-8 flex-wrap justify-center">
           {PILLS.map(p => (
             <span key={p.label}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10.5px] font-semibold tracking-[0.07em] uppercase whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-[0.07em] uppercase whitespace-nowrap"
               style={{ color: p.color, background: `${p.color}10`, border: `1px solid ${p.color}25` }}>
               <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: p.color, opacity: 0.7 }} />
               {p.label}
@@ -666,7 +666,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{ boxShadow: '0 0 6px #34d399' }} />
-              <span className="text-[10.5px] font-bold tracking-[0.2em] uppercase text-emerald-400/90">Try it now · no login</span>
+              <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-emerald-400/90">Try it now · no login</span>
             </div>
             <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
               Grade a setup in ten seconds.
@@ -710,7 +710,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               </p>
               <div className="h-px max-w-[120px] mx-auto mb-10"
                 style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.35), transparent)' }} />
-              <p className="text-[14.5px] text-slate-500 leading-relaxed max-w-lg mx-auto">
+              <p className="text-[14px] text-slate-500 leading-relaxed max-w-lg mx-auto">
                 The Trading Lab is where you build the mental models, the system, and the review process that separates consistently profitable traders from everyone else.
               </p>
             </div>
@@ -755,7 +755,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                     </div>
                   </div>
                   <h3 className="text-[15px] font-bold text-white mb-3">{s.title}</h3>
-                  <p className="text-[12.5px] text-slate-500 leading-relaxed">{s.body}</p>
+                  <p className="text-[13px] text-slate-500 leading-relaxed">{s.body}</p>
                 </div>
               )
             })}
@@ -791,7 +791,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                   {t.tag}
                 </span>
                 <h3 className="text-[14px] font-bold text-white mb-2">{t.name}</h3>
-                <p className="text-[12.5px] text-slate-500 leading-relaxed">{t.desc}</p>
+                <p className="text-[13px] text-slate-500 leading-relaxed">{t.desc}</p>
                 <div className="mt-5 flex items-center justify-center gap-2">
                   <div className="w-1.5 h-1.5 rounded-full" style={{ background: t.color, opacity: 0.7 }} />
                   <div className="h-px w-10" style={{ background: `linear-gradient(90deg,${t.color}50,transparent)` }} />
@@ -808,7 +808,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/25 bg-blue-500/8 mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400" style={{ boxShadow: '0 0 6px #60a5fa' }} />
-              <span className="text-[10.5px] font-bold tracking-[0.2em] uppercase text-blue-400/90">See inside · live</span>
+              <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-400/90">See inside · live</span>
             </div>
             <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
               The whole framework, connected.
@@ -850,7 +850,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                   <p.Icon size={19} strokeWidth={1.75} style={{ color: p.color }} />
                 </span>
                 <h3 className="text-[15px] font-bold text-white mb-3">{p.title}</h3>
-                <p className="text-[12.5px] text-slate-500 leading-relaxed">{p.body}</p>
+                <p className="text-[13px] text-slate-500 leading-relaxed">{p.body}</p>
               </div>
             ))}
           </div>
@@ -875,11 +875,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               <div key={i} className="grid grid-cols-2">
                 <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
                   <X size={13} strokeWidth={2.5} className="text-slate-700 mt-0.5 flex-shrink-0" />
-                  <span className="text-[12.5px] text-slate-500 leading-snug">{row.old}</span>
+                  <span className="text-[13px] text-slate-500 leading-snug">{row.old}</span>
                 </div>
                 <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 border-l border-slate-800/40 bg-amber-500/[0.02] ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
                   <Check size={13} strokeWidth={2.5} className="text-emerald-400 mt-0.5 flex-shrink-0" />
-                  <span className="text-[12.5px] text-slate-300 leading-snug">{row.now}</span>
+                  <span className="text-[13px] text-slate-300 leading-snug">{row.now}</span>
                 </div>
               </div>
             ))}
@@ -935,7 +935,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 <div className="flex flex-wrap gap-2 justify-center">
                   {col.items.map(item => (
                     <span key={item}
-                      className="px-3 py-1 rounded-lg text-[11.5px] font-medium text-slate-400"
+                      className="px-3 py-1 rounded-lg text-[12px] font-medium text-slate-400"
                       style={{ background: `${col.color}0d`, border: `1px solid ${col.color}22` }}>
                       {item}
                     </span>
@@ -983,8 +983,8 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                   style={{ background: `${c.color}14`, border: `1px solid ${c.color}2e` }}>
                   <c.Icon size={19} strokeWidth={1.75} style={{ color: c.color }} />
                 </span>
-                <h3 className="text-[14.5px] font-bold text-white mb-2.5">{c.title}</h3>
-                <p className="text-[12.5px] text-slate-500 leading-relaxed">{c.body}</p>
+                <h3 className="text-[14px] font-bold text-white mb-2.5">{c.title}</h3>
+                <p className="text-[13px] text-slate-500 leading-relaxed">{c.body}</p>
               </div>
             ))}
           </div>
@@ -1048,7 +1048,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             </button>
             {WHOP_URL && !isAuthenticated && (
               <a href={WHOP_URL} target="_blank" rel="noopener noreferrer"
-                className="mt-3 flex items-center justify-center gap-2 text-[12.5px] font-semibold text-slate-500 hover:text-amber-300 transition-colors">
+                className="mt-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-slate-500 hover:text-amber-300 transition-colors">
                 See full details on Whop <ExternalLink size={12} />
               </a>
             )}

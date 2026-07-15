@@ -70,7 +70,7 @@ function ConceptPicker({ selected, onChange }: { selected: string[]; onChange: (
       <div className="relative">
         <Search size={10} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-600" />
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search concepts…"
-          className="w-full bg-slate-900/70 border border-slate-800 rounded-lg pl-7 pr-3 py-1.5 text-[10.5px] text-slate-200 placeholder-slate-600 focus:outline-none focus:border-slate-600 transition-all" />
+          className="w-full bg-slate-900/70 border border-slate-800 rounded-lg pl-7 pr-3 py-1.5 text-[11px] text-slate-200 placeholder-slate-600 focus:outline-none focus:border-slate-600 transition-all" />
       </div>
       <div className="max-h-[100px] overflow-y-auto grid grid-cols-2 gap-1 pr-1">
         {filtered.map(c => (
@@ -110,17 +110,17 @@ function TradeCard({ trade, onDelete }: { trade: BacktestTrade; onDelete: (id: s
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5">
-            <span className="text-[10.5px] font-black text-amber-300/80" style={{ fontFamily:"'JetBrains Mono',monospace" }}>
+            <span className="text-[11px] font-black text-amber-300/80" style={{ fontFamily:"'JetBrains Mono',monospace" }}>
               {trade.instrument}
             </span>
-            <span className="text-[9.5px] text-slate-600">{trade.chartDate}</span>
+            <span className="text-[10px] text-slate-600">{trade.chartDate}</span>
             {trade.result && (
-              <span className={`ml-auto text-[9.5px] font-bold px-1.5 py-0.5 rounded-full border ${badge[trade.result]}`}>
+              <span className={`ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full border ${badge[trade.result]}`}>
                 {trade.result === 'win' ? `+${trade.rAchieved}R` : trade.result === 'loss' ? `${trade.rAchieved}R` : 'BE'}
               </span>
             )}
           </div>
-          <div className="flex items-center gap-1 mt-0.5 text-[9.5px]" style={{ fontFamily:"'JetBrains Mono',monospace" }}>
+          <div className="flex items-center gap-1 mt-0.5 text-[10px]" style={{ fontFamily:"'JetBrains Mono',monospace" }}>
             <span className="text-slate-400">{trade.entryPrice}</span>
             <span className="text-slate-700">·</span>
             <span className="text-red-400/70">SL {trade.stopPrice}</span>
@@ -141,7 +141,7 @@ function TradeCard({ trade, onDelete }: { trade: BacktestTrade; onDelete: (id: s
         <div className="px-3 pb-2.5 border-t border-slate-800/30 pt-2 flex flex-wrap gap-1">
           {trade.conceptIds.map(id => {
             const c = getConceptById(id)
-            return c ? <span key={id} className="text-[9.5px] text-slate-500 bg-slate-800/60 px-1.5 py-0.5 rounded">{c.shortName}</span> : null
+            return c ? <span key={id} className="text-[10px] text-slate-500 bg-slate-800/60 px-1.5 py-0.5 rounded">{c.shortName}</span> : null
           })}
           {trade.notes && <p className="w-full text-[10px] text-slate-600 mt-1">{trade.notes}</p>}
         </div>
@@ -360,7 +360,7 @@ export function BacktestPage() {
             </div>
           ) : (
             <button onClick={() => { setKeyDraft(apiKey); setShowKeyInput(true) }}
-              className={`flex items-center gap-1.5 text-[10.5px] px-2.5 py-1.5 rounded-lg border transition-all ${
+              className={`flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-lg border transition-all ${
                 apiKey
                   ? 'border-emerald-500/25 text-emerald-400/70 bg-emerald-500/5 hover:bg-emerald-500/10'
                   : 'border-red-500/25 text-red-400/70 bg-red-500/5 hover:bg-red-500/10 animate-pulse'
@@ -474,7 +474,7 @@ export function BacktestPage() {
 
               {/* Bar info */}
               {barInfo && (
-                <div className="ml-auto flex items-center gap-2 text-[10.5px]" style={monoStyle}>
+                <div className="ml-auto flex items-center gap-2 text-[11px]" style={monoStyle}>
                   <span className="text-slate-500">{barInfo.date}</span>
                   <span className="text-slate-600">{barInfo.time}</span>
                   <span className="text-slate-700">·</span>
@@ -510,12 +510,12 @@ export function BacktestPage() {
                       <div className="w-0.5 h-3 bg-amber-500/50 rounded-full" />
                       <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Current Bar</span>
                     </div>
-                    {barInfo && <span className="text-[9.5px] text-slate-600" style={monoStyle}>{barInfo.date} · {barInfo.time}</span>}
+                    {barInfo && <span className="text-[10px] text-slate-600" style={monoStyle}>{barInfo.date} · {barInfo.time}</span>}
                   </div>
                   <div className="grid grid-cols-4 gap-1.5">
                     {(['open','high','low','close'] as const).map(k => (
                       <div key={k} className="bg-slate-900/60 rounded-lg px-2 py-1.5 text-center">
-                        <p className="text-[8.5px] text-slate-600 uppercase">{k[0]}</p>
+                        <p className="text-[10px] text-slate-600 uppercase">{k[0]}</p>
                         <p className={`text-[11px] font-bold mt-0.5 ${
                           k === 'high'  ? 'text-emerald-400' :
                           k === 'low'   ? 'text-red-400' :
@@ -551,8 +551,8 @@ export function BacktestPage() {
                       { label:'TP',    val: activeTrade.target, cls:'text-emerald-400' },
                     ].map(row => (
                       <div key={row.label} className="bg-slate-900/60 rounded-lg px-2 py-1.5 text-center">
-                        <p className="text-[8.5px] text-slate-600">{row.label}</p>
-                        <p className={`text-[10.5px] font-bold mt-0.5 ${row.cls}`} style={monoStyle}>
+                        <p className="text-[10px] text-slate-600">{row.label}</p>
+                        <p className={`text-[11px] font-bold mt-0.5 ${row.cls}`} style={monoStyle}>
                           {priceFmt(row.val, instrument)}
                         </p>
                       </div>
@@ -583,11 +583,11 @@ export function BacktestPage() {
                     </button>
                     <div className="grid grid-cols-2 gap-1.5">
                       <button onClick={() => closeTrade('loss', activeTrade.stop)}
-                        className="py-2 rounded-xl border border-red-500/25 bg-red-500/8 text-red-300 text-[10.5px] font-bold hover:bg-red-500/15 transition-all">
+                        className="py-2 rounded-xl border border-red-500/25 bg-red-500/8 text-red-300 text-[11px] font-bold hover:bg-red-500/15 transition-all">
                         Close SL
                       </button>
                       <button onClick={() => closeTrade('win', activeTrade.target)}
-                        className="py-2 rounded-xl border border-emerald-500/25 bg-emerald-500/8 text-emerald-300 text-[10.5px] font-bold hover:bg-emerald-500/15 transition-all">
+                        className="py-2 rounded-xl border border-emerald-500/25 bg-emerald-500/8 text-emerald-300 text-[11px] font-bold hover:bg-emerald-500/15 transition-all">
                         Close TP
                       </button>
                     </div>
@@ -623,7 +623,7 @@ export function BacktestPage() {
                       { label:'TP',    val:tpInput,    set:setTpInput,    cls:'text-emerald-500/70' },
                     ].map(f => (
                       <div key={f.label}>
-                        <p className={`text-[8.5px] font-bold uppercase tracking-wider mb-1 ${f.cls}`}>{f.label}</p>
+                        <p className={`text-[10px] font-bold uppercase tracking-wider mb-1 ${f.cls}`}>{f.label}</p>
                         <input value={f.val} onChange={e => f.set(e.target.value)}
                           placeholder={instrument.includes('JPY') ? '150.000' : '1.08500'}
                           className="w-full bg-slate-900/70 border border-slate-800 rounded-lg px-2 py-1.5 text-[11px] text-slate-100 placeholder-slate-700 focus:outline-none focus:border-slate-600 transition-all"
@@ -634,7 +634,7 @@ export function BacktestPage() {
 
                   {/* R preview */}
                   {formValid && (
-                    <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-slate-900/50 border border-slate-800/50 text-[10.5px]" style={monoStyle}>
+                    <div className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-slate-900/50 border border-slate-800/50 text-[11px]" style={monoStyle}>
                       <span className="text-slate-600">Risk</span>
                       <span className="text-red-400">{priceFmt(riskPts!, instrument)}</span>
                       <span className="text-slate-700 mx-1">·</span>
@@ -653,7 +653,7 @@ export function BacktestPage() {
                     className="w-full bg-slate-900/70 border border-slate-800 rounded-lg px-3 py-2 text-[11px] text-slate-200 placeholder-slate-600 focus:outline-none focus:border-slate-600 transition-all resize-none" />
 
                   <button onClick={openTrade} disabled={!formValid}
-                    className="w-full py-2.5 rounded-xl border border-amber-500/35 bg-amber-500/12 text-amber-300 text-[11.5px] font-bold hover:bg-amber-500/22 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                    className="w-full py-2.5 rounded-xl border border-amber-500/35 bg-amber-500/12 text-amber-300 text-[12px] font-bold hover:bg-amber-500/22 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
                     Open Trade →
                   </button>
                 </div>
@@ -674,7 +674,7 @@ export function BacktestPage() {
                     { label:'W/L',   val:`${stats.wins}/${stats.losses}`, color:'text-slate-300' },
                   ].map(s => (
                     <div key={s.label} className="text-center">
-                      <p className="text-[8.5px] text-slate-600 uppercase tracking-wider">{s.label}</p>
+                      <p className="text-[10px] text-slate-600 uppercase tracking-wider">{s.label}</p>
                       <p className={`text-[12px] font-black mt-0.5 ${s.color}`} style={monoStyle}>{s.val}</p>
                     </div>
                   ))}

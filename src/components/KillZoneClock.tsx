@@ -27,7 +27,7 @@ export function KillZoneClock() {
       <div className="flex items-center gap-2.5 flex-shrink-0">
         <Clock size={13} className="text-slate-600 flex-shrink-0" />
         <div>
-          <p className="text-[17px] font-bold text-slate-100 tabular-nums leading-none font-mono">
+          <p className="text-[18px] font-bold text-slate-100 tabular-nums leading-none font-mono">
             {time.display}
           </p>
           <p className="text-[10px] font-bold text-slate-600 tracking-widest mt-0.5">NEW YORK</p>

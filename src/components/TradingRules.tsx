@@ -114,7 +114,7 @@ export function TradingRules({ open, onClose }: Props) {
                             onChange={e => setEditText(e.target.value)}
                             onBlur={saveEdit}
                             onKeyDown={e => { if (e.key === 'Enter') saveEdit(); if (e.key === 'Escape') setEditingId(null) }}
-                            className="w-full bg-slate-900 border border-slate-600 rounded-lg px-2 py-1 text-[12.5px] text-slate-100 focus:outline-none"
+                            className="w-full bg-slate-900 border border-slate-600 rounded-lg px-2 py-1 text-[13px] text-slate-100 focus:outline-none"
                           />
                         ) : (
                           <p
@@ -164,7 +164,7 @@ export function TradingRules({ open, onClose }: Props) {
                   onChange={e => setNewText(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleAdd()}
                   placeholder="Write a rule..."
-                  className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-[12.5px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors"
+                  className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-[13px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors"
                 />
                 <button
                   onClick={handleAdd}

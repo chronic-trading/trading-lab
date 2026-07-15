@@ -129,7 +129,7 @@ export function BuildRadar({ selectedIds }: Props) {
               x={x} y={y}
               textAnchor={anchor}
               dominantBaseline="middle"
-              fontSize="8.5"
+              fontSize="10"
               fontWeight={hasData ? '700' : '400'}
               fill={hasData ? CAT_COLORS[cat] : '#334155'}
               fontFamily="Inter, sans-serif"

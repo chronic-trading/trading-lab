@@ -78,7 +78,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
               <div key={group.key}>
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-[3px] h-3 rounded-full" style={{ background: group.color }} />
-                  <span className="text-[9.5px] font-black uppercase tracking-[0.16em]" style={{ color: group.color }}>{group.title}</span>
+                  <span className="text-[10px] font-black uppercase tracking-[0.16em]" style={{ color: group.color }}>{group.title}</span>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {group.factors.map(f => {
@@ -135,11 +135,11 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
           <p className="text-[10px] text-slate-500 mt-1 uppercase tracking-[0.2em] font-semibold">
             Score <span className="text-slate-300" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{score}</span>/100
           </p>
-          <p className="text-[13.5px] font-bold text-white mt-4">{verdict.headline}</p>
+          <p className="text-[14px] font-bold text-white mt-4">{verdict.headline}</p>
           <p className="text-[12px] text-slate-500 leading-relaxed mt-1.5 max-w-[240px]">{verdict.body}</p>
 
           <button onClick={onCTA}
-            className="group mt-6 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-[13.5px] transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="group mt-6 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-[14px] transition-all hover:scale-[1.02] active:scale-[0.98]"
             style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
             {ctaLabel}
             <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />

@@ -100,7 +100,7 @@ export function SynergyPanel({ selectedIds }: Props) {
               </div>
 
               {/* Note */}
-              <p className="text-[11.5px] text-slate-400 leading-relaxed">{syn.notes[0]}</p>
+              <p className="text-[12px] text-slate-400 leading-relaxed">{syn.notes[0]}</p>
 
               {/* Strength label */}
               <span className={`inline-block text-[10px] font-bold tracking-wider uppercase ${cfg.color}`}>

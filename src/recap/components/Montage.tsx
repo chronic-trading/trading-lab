@@ -56,7 +56,7 @@ export function Montage({ trades, theme, label }: Props) {
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full"
                 style={{ background: theme.accent, boxShadow: `0 0 6px ${theme.accent}` }} />
-              <span className="font-mono text-[9px] font-semibold tracking-[0.2em] uppercase" style={{ color: theme.textMuted }}>
+              <span className="font-mono text-[10px] font-semibold tracking-[0.2em] uppercase" style={{ color: theme.textMuted }}>
                 Trade Recap
               </span>
             </div>
@@ -69,7 +69,7 @@ export function Montage({ trades, theme, label }: Props) {
           </div>
 
           <div className="flex flex-col items-end shrink-0">
-            <span className="font-mono text-[9px] font-semibold tracking-widest uppercase mb-1" style={{ color: theme.textMuted }}>Net P&L</span>
+            <span className="font-mono text-[10px] font-semibold tracking-widest uppercase mb-1" style={{ color: theme.textMuted }}>Net P&L</span>
             <span className="font-mono font-black leading-none"
               style={{ fontSize: 44, color: pnlColor, textShadow: `0 0 28px ${pnlColor}55`, letterSpacing: '-2px' }}>
               {fmt$(stats.totalPnl)}
@@ -98,20 +98,20 @@ export function Montage({ trades, theme, label }: Props) {
           ].map(({ label, value, sub, color }) => (
             <div key={label} className="flex flex-col gap-1 px-3 py-2.5 rounded-xl"
               style={{ background: theme.surface, border: `1px solid ${theme.divider}` }}>
-              <span className="font-mono text-[8px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>{label}</span>
+              <span className="font-mono text-[10px] font-semibold tracking-widest uppercase" style={{ color: theme.textMuted }}>{label}</span>
               <span className="font-mono font-black text-lg leading-none"
                 style={{ color, textShadow: `0 0 12px ${color}50` }}>
                 {value}
               </span>
-              {sub && <span className="font-mono text-[9px]" style={{ color: theme.textMuted }}>{sub}</span>}
+              {sub && <span className="font-mono text-[10px]" style={{ color: theme.textMuted }}>{sub}</span>}
             </div>
           ))}
         </div>
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-0.5" style={{ borderTop: `1px solid ${theme.divider}` }}>
-          <span className="font-mono text-[9px] tracking-widest uppercase" style={{ color: theme.textMuted }}>Trade Recap</span>
-          <span className="font-mono text-[9px]" style={{ color: `${theme.textMuted}70` }}>
+          <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: theme.textMuted }}>Trade Recap</span>
+          <span className="font-mono text-[10px]" style={{ color: `${theme.textMuted}70` }}>
             {new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
           </span>
         </div>

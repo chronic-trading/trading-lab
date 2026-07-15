@@ -60,7 +60,7 @@ export function BuildSuggestions({ selectedIds, onAdd }: Props) {
           >
             <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierDot[c.tier]}`} />
             <div className="flex-1 min-w-0">
-              <p className="text-[11.5px] font-semibold text-slate-200 truncate">{c.shortName}</p>
+              <p className="text-[12px] font-semibold text-slate-200 truncate">{c.shortName}</p>
               <p className={`text-[10px] font-bold uppercase tracking-wider ${tierText[c.tier]}`}>{c.tier}</p>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">

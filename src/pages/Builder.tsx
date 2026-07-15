@@ -154,7 +154,7 @@ export function Builder({ initialBuild }: Props) {
                   <button
                     key={tier}
                     onClick={() => setTierFilter(prev => prev === tier ? null : tier)}
-                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl border text-[11.5px] font-semibold capitalize transition-all ${active ? s.active : s.idle}`}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-xl border text-[12px] font-semibold capitalize transition-all ${active ? s.active : s.idle}`}
                   >
                     <div className={`w-1.5 h-1.5 rounded-full ${s.dot} ${active ? 'opacity-100' : 'opacity-40'}`} />
                     {tier}
@@ -282,7 +282,7 @@ export function Builder({ initialBuild }: Props) {
           {selectedIds.length > 0 && (
             <button
               onClick={() => { setSelectedIds([]); setCurrentBuild(null) }}
-              className="flex items-center gap-1.5 text-[11.5px] text-slate-500 hover:text-slate-300 px-2.5 py-1.5 rounded-xl hover:bg-slate-800/60 transition-all"
+              className="flex items-center gap-1.5 text-[12px] text-slate-500 hover:text-slate-300 px-2.5 py-1.5 rounded-xl hover:bg-slate-800/60 transition-all"
             >
               <RotateCcw size={11} /> Clear
             </button>
@@ -290,7 +290,7 @@ export function Builder({ initialBuild }: Props) {
           {currentBuild && (
             <button
               onClick={handleShare}
-              className={`flex items-center gap-1.5 text-[11.5px] font-medium px-2.5 py-1.5 rounded-xl border transition-all
+              className={`flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1.5 rounded-xl border transition-all
                 ${copied ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300' : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200'}`}
             >
               {copied ? <Check size={12} /> : <Share2 size={12} />}
@@ -300,14 +300,14 @@ export function Builder({ initialBuild }: Props) {
           <button
             onClick={() => setChecklistOpen(true)}
             disabled={selectedIds.length === 0}
-            className="flex items-center gap-1.5 text-[11.5px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white transition-all disabled:opacity-25 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white transition-all disabled:opacity-25 disabled:cursor-not-allowed"
           >
             <ClipboardList size={12} /> Checklist
           </button>
           <button
             onClick={() => setSaveOpen(true)}
             disabled={selectedIds.length === 0}
-            className="flex items-center gap-1.5 text-[11.5px] font-semibold px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/35 text-amber-300 hover:bg-amber-500/22 hover:border-amber-400/50 transition-all disabled:opacity-25 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/35 text-amber-300 hover:bg-amber-500/22 hover:border-amber-400/50 transition-all disabled:opacity-25 disabled:cursor-not-allowed"
           >
             <Save size={12} /> Save
           </button>
@@ -407,7 +407,7 @@ export function Builder({ initialBuild }: Props) {
           <button
             key={id}
             onClick={() => setMobileTab(id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[11.5px] font-semibold transition-all border-b-2
+            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold transition-all border-b-2
               ${mobileTab === id ? 'text-amber-300 border-amber-400 bg-slate-800/20' : 'text-slate-600 border-transparent hover:text-slate-300'}`}
           >
             <Icon size={13} /> {label}

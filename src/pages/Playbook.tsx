@@ -69,13 +69,13 @@ function SetupCard({ setup }: { setup: SetupExample }) {
             <span className="text-slate-700 text-[10px]">·</span>
             <span className={`text-[10px] font-semibold ${sessionColor[setup.session]}`}>{setup.session}</span>
             <span className="ml-auto flex-shrink-0">
-              <span className={`inline-flex items-center gap-1 text-[9.5px] font-bold px-2 py-0.5 rounded-full border ${res.bg} ${res.color}`}>
+              <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${res.bg} ${res.color}`}>
                 <ResIcon size={9} />
                 {setup.rrAchieved ? `${setup.rrAchieved}R` : res.label}
               </span>
             </span>
           </div>
-          <p className="text-[12.5px] font-bold text-white leading-snug">{setup.title}</p>
+          <p className="text-[13px] font-bold text-white leading-snug">{setup.title}</p>
           {!expanded && (
             <p className="text-[11px] text-slate-500 mt-1 leading-relaxed line-clamp-2">{setup.what}</p>
           )}
