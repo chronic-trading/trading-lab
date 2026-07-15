@@ -1,27 +1,35 @@
 import { useState, useMemo } from 'react'
 import { FIRMS, TOP3, ACCOUNT_SIZES, formatPrice, formatSize, type PropFirm } from './propData'
 
+const scoreColor = (score: number) => score >= 80 ? 'var(--green)' : score >= 65 ? 'var(--accent)' : 'var(--red)'
+const scoreSoft  = (score: number) => score >= 80 ? 'var(--green-soft)' : score >= 65 ? 'var(--accent-soft)' : 'var(--red-soft)'
+
 function ScoreBadge({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' | 'lg' }) {
-  const color = score >= 80 ? '#34d399' : score >= 65 ? '#f59e0b' : '#f87171'
+  const color = scoreColor(score)
   const sz = size === 'lg' ? 'text-[26px]' : size === 'md' ? 'text-[17px]' : 'text-[12px]'
-  return <span className={`font-black ${sz}`} style={{ color, textShadow: `0 0 16px ${color}55` }}>{score}</span>
+  return <span className={`font-black ${sz}`} style={{ color, textShadow: `0 0 16px color-mix(in srgb, ${color} 33%, transparent)` }}>{score}</span>
 }
 
 function Tag({ yes, label }: { yes: boolean; label: string }) {
+  const c = yes ? 'var(--green)' : 'var(--red)'
   return (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold"
-      style={{ background: yes ? 'rgba(52,211,153,0.12)' : 'rgba(248,113,113,0.1)', color: yes ? '#34d399' : '#f87171', border: `1px solid ${yes ? 'rgba(52,211,153,0.25)' : 'rgba(248,113,113,0.2)'}` }}>
+      style={{ background: yes ? 'var(--green-soft)' : 'var(--red-soft)', color: c, border: `1px solid color-mix(in srgb, ${c} 25%, transparent)` }}>
       {yes ? '✓' : '✗'} {label}
     </span>
   )
 }
 
 function DrawdownBadge({ type }: { type: PropFirm['drawdownType'] }) {
-  const map = { eod: { label: 'EOD', color: '#34d399' }, static: { label: 'Static', color: '#f59e0b' }, trailing: { label: 'Trailing', color: '#f87171' } }
-  const { label, color } = map[type]
+  const map = {
+    eod:      { label: 'EOD',      color: 'var(--green)',  soft: 'var(--green-soft)'  },
+    static:   { label: 'Static',   color: 'var(--accent)', soft: 'var(--accent-soft)' },
+    trailing: { label: 'Trailing', color: 'var(--red)',    soft: 'var(--red-soft)'    },
+  }
+  const { label, color, soft } = map[type]
   return (
     <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide"
-      style={{ background: `${color}15`, color, border: `1px solid ${color}30` }}>{label}</span>
+      style={{ background: soft, color, border: `1px solid color-mix(in srgb, ${color} 30%, transparent)` }}>{label}</span>
   )
 }
 
@@ -103,21 +111,21 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
   const plan = firm.accounts.find(a => a.size === selectedSize)
   return (
     <div onClick={onSelect} className="relative rounded-xl p-4 cursor-pointer transition-all duration-150 hover:-translate-y-0.5"
-      style={{ background: isSelected ? `${firm.color}0c` : 'rgba(7,7,14,0.98)', border: `1px solid ${isSelected ? firm.color + '35' : 'rgba(255,255,255,0.06)'}` }}>
+      style={{ background: isSelected ? `color-mix(in srgb, ${firm.color} 7%, var(--surface))` : 'var(--surface)', border: `1px solid ${isSelected ? firm.color + '35' : 'var(--border)'}` }}>
       <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-xl"
         style={{ background: `linear-gradient(90deg,transparent,${firm.color}50,transparent)`, opacity: isSelected ? 1 : 0.3 }} />
       <div className="flex items-center gap-3">
         <div className="flex-shrink-0 w-12 h-12 rounded-xl flex flex-col items-center justify-center"
-          style={{ background: `${firm.score! >= 80 ? '#34d399' : firm.score! >= 65 ? '#f59e0b' : '#f87171'}10`, border: `1px solid ${firm.score! >= 80 ? '#34d399' : firm.score! >= 65 ? '#f59e0b' : '#f87171'}25` }}>
+          style={{ background: scoreSoft(firm.score!), border: `1px solid color-mix(in srgb, ${scoreColor(firm.score!)} 25%, transparent)` }}>
           <ScoreBadge score={firm.score!} />
-          <span className="text-[7px] text-slate-600 uppercase tracking-wider">score</span>
+          <span className="text-[10px] text-slate-600 uppercase tracking-wider">score</span>
         </div>
         <div className="flex-shrink-0 min-w-[110px]">
           <p className="text-[13px] font-bold text-white">{firm.name}</p>
           <div className="flex items-center gap-1 mt-0.5 flex-wrap">
             <DrawdownBadge type={firm.drawdownType} />
-            {firm.liveAccount    && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: 'rgba(52,211,153,0.1)', color: '#34d399', border: '1px solid rgba(52,211,153,0.2)' }}>LIVE</span>}
-            {firm.hasPricePromos && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: 'rgba(245,158,11,0.1)', color: '#f59e0b', border: '1px solid rgba(245,158,11,0.2)' }}>PROMO</span>}
+            {firm.liveAccount    && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: 'var(--green-soft)', color: 'var(--green)', border: '1px solid color-mix(in srgb, var(--green) 20%, transparent)' }}>LIVE</span>}
+            {firm.hasPricePromos && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: 'var(--accent-soft)', color: 'var(--accent-ink)', border: '1px solid color-mix(in srgb, var(--accent) 20%, transparent)' }}>PROMO</span>}
           </div>
         </div>
         <div className="hidden md:block flex-shrink-0 text-center min-w-[80px]">
@@ -146,7 +154,7 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
             <div className="space-y-1.5">
               {firm.accounts.map(a => (
                 <div key={a.size} className="flex items-center justify-between px-3 py-1.5 rounded-lg"
-                  style={{ background: a.size === selectedSize ? `${firm.color}10` : 'rgba(255,255,255,0.03)', border: `1px solid ${a.size === selectedSize ? firm.color + '22' : 'rgba(255,255,255,0.05)'}` }}>
+                  style={{ background: a.size === selectedSize ? `color-mix(in srgb, ${firm.color} 10%, var(--surface))` : 'var(--surface-hover)', border: `1px solid ${a.size === selectedSize ? firm.color + '22' : 'var(--border)'}` }}>
                   <span className="text-[12px] font-bold text-white">{formatSize(a.size)}</span>
                   <div className="flex items-center gap-3">
                     <span className="text-[11px] text-slate-400">{formatPrice(a.price)}/mo</span>
@@ -238,14 +246,14 @@ export function PropFirms() {
       {/* Mini stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { val: `${FIRMS.length}`,                                      label: 'Firms',         color: '#f59e0b' },
-          { val: `${FIRMS.filter(f => f.newsTrading).length}`,            label: 'Allow News',    color: '#34d399' },
-          { val: `${FIRMS.filter(f => f.drawdownType === 'eod').length}`, label: 'EOD Drawdown',  color: '#60a5fa' },
-          { val: `${FIRMS.filter(f => f.liveAccount).length}`,            label: 'Live Accounts', color: '#c084fc' },
+          { val: `${FIRMS.length}`,                                      label: 'Firms',         color: 'var(--accent-ink)' },
+          { val: `${FIRMS.filter(f => f.newsTrading).length}`,            label: 'Allow News',    color: 'var(--green)'      },
+          { val: `${FIRMS.filter(f => f.drawdownType === 'eod').length}`, label: 'EOD Drawdown',  color: 'var(--blue)'       },
+          { val: `${FIRMS.filter(f => f.liveAccount).length}`,            label: 'Live Accounts', color: 'var(--violet)'     },
         ].map(s => (
           <div key={s.label} className="rounded-xl p-3 text-center"
-            style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <p className="font-black text-[22px]" style={{ color: s.color, fontFamily: "'JetBrains Mono',monospace", textShadow: `0 0 16px ${s.color}40` }}>{s.val}</p>
+            style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
+            <p className="font-black text-[22px] font-mono" style={{ color: s.color, textShadow: `0 0 16px color-mix(in srgb, ${s.color} 25%, transparent)` }}>{s.val}</p>
             <p className="text-[10px] text-slate-600 uppercase tracking-[0.15em]">{s.label}</p>
           </div>
         ))}
@@ -259,7 +267,7 @@ export function PropFirms() {
             {[50000, 100000, 150000].map(s => (
               <button key={s} onClick={() => setSelectedSize(s)}
                 className="px-3 py-1 rounded-lg text-[10px] font-bold transition-all"
-                style={{ background: selectedSize === s ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.04)', border: `1px solid ${selectedSize === s ? 'rgba(245,158,11,0.35)' : 'rgba(255,255,255,0.07)'}`, color: selectedSize === s ? '#f59e0b' : '#64748b' }}>
+                style={{ background: selectedSize === s ? 'var(--accent-soft)' : 'var(--surface-hover)', border: `1px solid ${selectedSize === s ? 'var(--accent-ring)' : 'var(--border)'}`, color: selectedSize === s ? 'var(--accent-ink)' : 'var(--text-dim)' }}>
                 ${(s / 1000).toFixed(0)}K
               </button>
             ))}
@@ -269,14 +277,14 @@ export function PropFirms() {
       </div>
 
       {/* Filters */}
-      <div className="rounded-xl p-3" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+      <div className="rounded-xl p-3" style={{ background: 'var(--bg-elev)', border: '1px solid var(--border)' }}>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider w-8">Size</span>
             {ACCOUNT_SIZES.map(s => (
               <button key={s} onClick={() => setSelectedSize(s)}
                 className="px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all"
-                style={{ background: selectedSize === s ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${selectedSize === s ? 'rgba(245,158,11,0.35)' : 'rgba(255,255,255,0.06)'}`, color: selectedSize === s ? '#f59e0b' : '#64748b' }}>
+                style={{ background: selectedSize === s ? 'var(--accent-soft)' : 'var(--surface-hover)', border: `1px solid ${selectedSize === s ? 'var(--accent-ring)' : 'var(--border)'}`, color: selectedSize === s ? 'var(--accent-ink)' : 'var(--text-dim)' }}>
                 {formatSize(s)}
               </button>
             ))}
@@ -286,7 +294,7 @@ export function PropFirms() {
             {(['score', 'price', 'split', 'days'] as const).map(s => (
               <button key={s} onClick={() => setSortBy(s)}
                 className="px-2.5 py-1 rounded-lg text-[10px] font-bold capitalize transition-all"
-                style={{ background: sortBy === s ? 'rgba(96,165,250,0.15)' : 'rgba(255,255,255,0.03)', border: `1px solid ${sortBy === s ? 'rgba(96,165,250,0.3)' : 'rgba(255,255,255,0.06)'}`, color: sortBy === s ? '#60a5fa' : '#64748b' }}>
+                style={{ background: sortBy === s ? 'var(--blue-soft)' : 'var(--surface-hover)', border: `1px solid ${sortBy === s ? 'var(--blue)' : 'var(--border)'}`, color: sortBy === s ? 'var(--blue)' : 'var(--text-dim)' }}>
                 {s === 'days' ? 'Min Days' : s}
               </button>
             ))}
@@ -298,7 +306,7 @@ export function PropFirms() {
             ].map(({ label, val, set }) => (
               <button key={label} onClick={() => set(!val)}
                 className="px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all"
-                style={{ background: val ? 'rgba(52,211,153,0.12)' : 'rgba(255,255,255,0.03)', border: `1px solid ${val ? 'rgba(52,211,153,0.28)' : 'rgba(255,255,255,0.06)'}`, color: val ? '#34d399' : '#64748b' }}>
+                style={{ background: val ? 'var(--green-soft)' : 'var(--surface-hover)', border: `1px solid ${val ? 'var(--green)' : 'var(--border)'}`, color: val ? 'var(--green)' : 'var(--text-dim)' }}>
                 {val ? '✓ ' : ''}{label}
               </button>
             ))}

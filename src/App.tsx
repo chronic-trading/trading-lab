@@ -357,7 +357,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
               <Icon size={12} />
               <span>{label}</span>
               {badge && (
-                <span className="absolute top-1.5 right-1.5 text-[7px] font-black tracking-wide px-1 py-px rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 leading-none">
+                <span className="absolute top-1.5 right-1.5 text-[10px] font-black tracking-wide px-1 py-px rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 leading-none">
                   {badge}
                 </span>
               )}

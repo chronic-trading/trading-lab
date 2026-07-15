@@ -209,9 +209,9 @@ function TapeReader({ onBack }: { onBack: () => void }) {
     <GameFrame onBack={onBack} title="TAPE READER" ticker="$FAKE" subtitle="60 seconds · long & short · all-in scalps">
       <div className="grid grid-cols-4 gap-2 mb-3">
         <Stat label="Cash" value={fmt(hud.cash)} />
-        <Stat label="Position" value={hud.shares === 0 ? '—' : `${hud.shares > 0 ? 'L' : 'S'} ${Math.abs(hud.shares)}`} color={hud.shares > 0 ? '#34d399' : hud.shares < 0 ? '#f87171' : undefined} />
-        <Stat label="P&L" value={signed(pnl)} color={pnl >= 0 ? '#34d399' : '#f87171'} />
-        <Stat label="Time" value={String(hud.timeLeft)} color={hud.timeLeft <= 10 ? '#f87171' : undefined} />
+        <Stat label="Position" value={hud.shares === 0 ? '—' : `${hud.shares > 0 ? 'L' : 'S'} ${Math.abs(hud.shares)}`} color={hud.shares > 0 ? 'var(--green)' : hud.shares < 0 ? 'var(--red)' : undefined} />
+        <Stat label="P&L" value={signed(pnl)} color={pnl >= 0 ? 'var(--green)' : 'var(--red)'} />
+        <Stat label="Time" value={String(hud.timeLeft)} color={hud.timeLeft <= 10 ? 'var(--red)' : undefined} />
       </div>
 
       <div className="relative rounded-2xl border border-slate-800/60 overflow-hidden">
@@ -227,7 +227,7 @@ function TapeReader({ onBack }: { onBack: () => void }) {
             ) : (
               <>
                 <p className="text-[15px] font-black tracking-widest text-white mb-1">{result.pnl >= 0 ? 'CLOSING BELL 🔔' : 'REKT 📉'}</p>
-                <p className="text-[28px] font-black mb-2" style={{ color: result.pnl >= 0 ? '#34d399' : '#f87171' }}>{signed(result.pnl)}</p>
+                <p className="text-[28px] font-black mb-2" style={{ color: result.pnl >= 0 ? 'var(--green)' : 'var(--red)' }}>{signed(result.pnl)}</p>
               </>
             )}
             {Number.isFinite(result.best) && (
@@ -399,9 +399,9 @@ function Liquidation({ onBack }: { onBack: () => void }) {
     <GameFrame onBack={onBack} title="LIQUIDATION" ticker="$DEGEN-PERP" subtitle="leveraged perps · trade the news · don't get wicked">
       <div className="grid grid-cols-4 gap-2 mb-3">
         <Stat label="Equity" value={fmt(hud.equity)} />
-        <Stat label="Position" value={hud.pos ? `${hud.pos.dir > 0 ? 'LONG' : 'SHORT'} ${lev}x` : '—'} color={hud.pos ? (hud.pos.dir > 0 ? '#34d399' : '#f87171') : undefined} />
-        <Stat label="Unrealized" value={hud.pos ? `${signed(hud.unreal)} (${roi >= 0 ? '+' : ''}${roi.toFixed(0)}%)` : '—'} color={hud.unreal >= 0 ? '#34d399' : '#f87171'} />
-        <Stat label="Peak" value={fmt(hud.peak)} color="#fbbf24" />
+        <Stat label="Position" value={hud.pos ? `${hud.pos.dir > 0 ? 'LONG' : 'SHORT'} ${lev}x` : '—'} color={hud.pos ? (hud.pos.dir > 0 ? 'var(--green)' : 'var(--red)') : undefined} />
+        <Stat label="Unrealized" value={hud.pos ? `${signed(hud.unreal)} (${roi >= 0 ? '+' : ''}${roi.toFixed(0)}%)` : '—'} color={hud.unreal >= 0 ? 'var(--green)' : 'var(--red)'} />
+        <Stat label="Peak" value={fmt(hud.peak)} color="var(--accent-ink)" />
       </div>
 
       <div className={`relative rounded-2xl border border-slate-800/60 overflow-hidden ${shake ? 'animate-[shake_0.5s_ease-in-out]' : ''}`}>

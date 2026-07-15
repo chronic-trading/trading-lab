@@ -30,10 +30,14 @@
   --accent-soft:   #fcf1dd;   /* amber tint fill */
   --accent-ring:   rgba(245, 158, 11, 0.35);
 
-  --green:      #15a34a;  --green-soft: #e7f6ec;
+  /* Status colors carry text (P&L, scores, badges), so they are tuned by measured
+     contrast rather than by shade number: green and orange read perceptually
+     brighter than red/blue/violet at the same step, so they need one step darker
+     to clear 4.5:1 on --surface like the rest of the family already does. */
+  --green:      #15803d;  --green-soft: #e7f6ec;
   --red:        #dc2626;  --red-soft:   #fdeaea;
   --blue:       #2563eb;  --blue-soft:  #e8f0fe;
-  --orange:     #ea580c;  --orange-soft:#fdeee2;
+  --orange:     #c2410c;  --orange-soft:#fdeee2;
   --violet:     #7c3aed;
   --amber-txt:  #b45309;
 
