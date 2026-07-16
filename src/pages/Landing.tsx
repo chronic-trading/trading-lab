@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, lazy, Suspense, type ReactNode } from 'rea
 import {
   FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target,
   Gauge, Beaker, LineChart, Network, BookOpen, CalendarDays, BarChart2,
-  Building2, ShieldAlert, Smile, GraduationCap, Infinity as InfinityIcon,
+  Building2, ShieldAlert, Smile, Infinity as InfinityIcon,
   Lock, Zap, Smartphone, ShieldCheck, Check, X, Plus,
 } from 'lucide-react'
 import { GraderDemo } from '../components/GraderDemo'
@@ -144,7 +144,7 @@ const TOOLS = [
 const STEPS = [
   { n: '01', title: 'Get Your License',  body: 'Buy on Whop. Your key unlocks everything — all thirteen tools, cross-device sync, lifetime access. No subscriptions.',        icon: Target },
   { n: '02', title: 'Build Your System', body: 'Open the Builder. Stack your concepts, watch synergies fire, and lock in a playbook you actually understand.',             icon: Brain },
-  { n: '03', title: 'Execute & Review',  body: 'Trade with a plan. Log every entry. Recap each week with visual trade cards. Watch your edge compound over time.',        icon: TrendingUp },
+  { n: '03', title: 'Execute & Review',  body: 'Trade with a plan. Log every entry. Recap each week with visual trade cards, and see which concepts you actually know.', icon: TrendingUp },
 ]
 
 const FEATURE_COLS = [
@@ -186,15 +186,6 @@ const PILLS = [
   { label: 'Swing H&L',        color: '#34d399' },
 ]
 
-// ── Who it's for ──────────────────────────────────────────────────────────────
-const PERSONAS = [
-  { Icon: GraduationCap, title: 'The self-taught ICT trader', color: '#c084fc',
-    body: "You've watched every mentorship video but your notes live in twelve Discord bookmarks. This turns scattered knowledge into one connected, testable system." },
-  { Icon: Building2, title: 'The prop-firm challenger', color: '#34d399',
-    body: 'Passing an eval is a discipline game. Kill-zone timing, a drawdown guard, and a setup grader keep you from the one impulsive trade that blows the account.' },
-  { Icon: LineChart, title: 'The trader who journals', color: '#60a5fa',
-    body: 'You already know review is the edge. Equity curve, kill-zone win rates, R-multiples, and shareable recaps make the review actually happen every week.' },
-]
 
 // ── The old way vs Trading Lab ────────────────────────────────────────────────
 const COMPARISON = [
@@ -271,7 +262,7 @@ const BOOT_LINES = [
   { text: '▸  drawdown guard ...................  LOADED', type: 'item'    },
   { text: '▸  mindset check-in tracker .........  LOADED', type: 'item'    },
   { text: '─────────────────────────────────────────────', type: 'divider' },
-  { text: '✓  ALL SYSTEMS ONLINE — YOUR EDGE IS LIVE',    type: 'success'  },
+  { text: '✓  ALL SYSTEMS ONLINE',                        type: 'success'  },
 ]
 
 function Terminal() {
@@ -571,18 +562,18 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div {...anim(80)} className={`${anim(80).className} mb-5 w-full`} style={anim(80).style}>
             <h1 className="font-black leading-[0.88] tracking-tight select-none text-center"
               style={{ fontSize: 'clamp(50px, 10vw, 94px)', letterSpacing: '-3px' }}>
-              <span className="text-white">The Professional</span><br />
+              <span className="text-white">Learn ICT</span><br />
               <span className="animate-gradient-pan" style={{
                 background: 'linear-gradient(125deg, #fbbf24 0%, #f59e0b 20%, #fde68a 50%, #f59e0b 80%, #fbbf24 100%)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>Trading System.</span>
+              }}>by building it.</span>
             </h1>
           </div>
 
           {/* Tagline */}
           <div {...anim(140)} className={`${anim(140).className} mb-4`} style={anim(140).style}>
             <p className="text-[13px] font-semibold tracking-[0.18em] uppercase text-slate-500 text-center">
-              ICT · SMC · Futures · All in One Platform
+              ICT · SMC · Futures · Learn it in one place
             </p>
           </div>
 
@@ -592,10 +583,10 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               style={{ fontSize: 'clamp(15px, 2vw, 18px)' }}>
               {/* The trailing space matters: on mobile the <br> is hidden, and JSX
                   strips the newline, so without it the sentences collide
-                  ("traders.Build your system"). */}
-              Thirteen precision-built tools for ICT and SMC traders.{' '}
+                  ("ICT.Stack the concepts"). */}
+              A model builder for traders learning ICT.{' '}
               <br className="hidden sm:block" />
-              Build your system. Grade every setup. Journal your edge.
+              Stack the concepts, watch the synergies connect, and master the framework in one place.
             </p>
           </div>
 
@@ -619,8 +610,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div {...anim(350)} className={`${anim(350).className} flex items-center justify-center`} style={anim(350).style}>
             {[
               { val: '50+', sub: 'ICT Concepts' },
-              { val: '13',  sub: 'Pro Tools'    },
-              { val: '1',   sub: 'Platform'     },
+              { val: '13',  sub: 'Tools'        },
             ].map((s, i) => (
               <div key={s.sub} className="flex items-stretch">
                 {i > 0 && <div className="w-px bg-slate-800/80 self-stretch mx-7 sm:mx-12 md:mx-20" />}
@@ -686,7 +676,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The Foundation</p>
             <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              What separates consistent traders.
+              Where people get stuck.
             </h2>
           </div>
           {/* Single large card — same dark style as The Process */}
@@ -697,21 +687,15 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             <div className="absolute inset-0 pointer-events-none"
               style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.04), transparent 65%)' }} />
             <div className="relative max-w-2xl mx-auto">
-              <p className="font-black leading-[0.9] mb-6 text-center"
-                style={{ fontSize: 'clamp(28px,5.5vw,52px)', letterSpacing: '-2px' }}>
-                <span className="text-slate-400">Most traders fail because</span><br />
-                <span className="text-white">they </span>
-                <span style={{ background: 'linear-gradient(125deg,#fbbf24,#f59e0b 45%,#fde68a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>react.</span>
-              </p>
               <p className="font-black leading-[0.9] mb-10 text-center"
                 style={{ fontSize: 'clamp(28px,5.5vw,52px)', letterSpacing: '-2px' }}>
-                <span className="text-white">ICT traders </span>
-                <span style={{ color: '#34d399', textShadow: '0 0 30px rgba(52,211,153,0.4)' }}>anticipate.</span>
+                <span className="text-slate-400">ICT has a lot of</span><br />
+                <span style={{ background: 'linear-gradient(125deg,#fbbf24,#f59e0b 45%,#fde68a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>moving parts.</span>
               </p>
               <div className="h-px max-w-[120px] mx-auto mb-10"
                 style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.35), transparent)' }} />
               <p className="text-[14px] text-slate-500 leading-relaxed max-w-lg mx-auto">
-                The Trading Lab is where you build the mental models, the system, and the review process that separates consistently profitable traders from everyone else.
+                Order blocks, liquidity, kill zones, displacement. Each one makes sense on its own. Putting them together into a model you can actually trade is the hard part. That is what the builder is for.
               </p>
             </div>
           </div>
@@ -724,7 +708,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The process</p>
             <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              From setup to edge in three steps.
+              Three steps to your first model.
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -769,9 +753,9 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">What's inside</p>
             <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              Every tool you need. Nothing you don't.
+              Thirteen tools for learning ICT.
             </h2>
-            <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Thirteen precision-built tools in one dark, focused platform.</p>
+            <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Build models, drill the concepts, journal your trades, and track what you actually know.</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {TOOLS.map(t => (
@@ -835,25 +819,18 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       {/* ── Who it's for ──────────────────────────────────────────── */}
       <section className="px-5 pb-28 border-t border-slate-800/30">
         <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Who it's for</p>
             <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              Built for the trader who's serious.
+              People learning ICT.
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {PERSONAS.map(p => (
-              <div key={p.title} className="relative rounded-2xl p-7 overflow-hidden text-center flex flex-col items-center"
-                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div className="absolute top-0 inset-x-0 h-[1px]" style={{ background: `linear-gradient(90deg,transparent,${p.color}55,transparent)` }} />
-                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 flex-shrink-0"
-                  style={{ background: `${p.color}14`, border: `1px solid ${p.color}2e` }}>
-                  <p.Icon size={19} strokeWidth={1.75} style={{ color: p.color }} />
-                </span>
-                <h3 className="text-[15px] font-bold text-white mb-3">{p.title}</h3>
-                <p className="text-[13px] text-slate-500 leading-relaxed">{p.body}</p>
-              </div>
-            ))}
+          <div className="max-w-xl mx-auto text-center">
+            <p className="text-[15px] text-slate-400 leading-relaxed">
+              If you are new to ICT and trying to actually learn and master the concepts, this is built for you.
+              The library, the model builder, the drills, and the review are all in one place, so you are not
+              stitching the framework together from twelve different tabs.
+            </p>
           </div>
         </div>
       </section>
@@ -864,7 +841,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The difference</p>
             <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              Stop duct-taping your process together.
+              What changes.
             </h2>
           </div>
           <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
@@ -888,32 +865,6 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         </div>
       </section>
 
-      {/* ── Pull quote numbers ────────────────────────────────────── */}
-      <section className="relative px-5 py-24 border-t border-slate-800/30 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 80% 100% at 50% 50%, rgba(245,158,11,0.04) 0%, transparent 70%)' }} />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-12">By the numbers</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
-            {[
-              { val: '50+', label: 'Mapped Concepts', color: '#34d399' },
-              { val: '13',  label: 'Pro Tools',        color: '#f59e0b' },
-              { val: '∞',   label: 'Synergy Links',    color: '#c084fc' },
-              { val: '1',   label: 'Platform',         color: '#60a5fa' },
-            ].map(s => (
-              <div key={s.label} className="flex flex-col items-center text-center">
-                <p className="font-black leading-none mb-2"
-                  style={{ fontSize: 'clamp(36px,6vw,52px)', fontFamily: "'JetBrains Mono',monospace",
-                    color: s.color, textShadow: `0 0 30px ${s.color}55` }}>
-                  {s.val}
-                </p>
-                <p className="text-[11px] text-slate-600 uppercase tracking-[0.2em]">{s.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Everything included — horizontal stacked cards ────────── */}
       <section className="relative px-5 py-28 border-t border-slate-800/30 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none"
@@ -922,7 +873,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Everything included</p>
             <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              Built for the serious trader.
+              What comes with the license.
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -975,7 +926,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {[
               { Icon: Network,      color: '#c084fc', title: 'Concepts → system', body: 'YouTube hands you 50 disconnected ideas. This connects them into one framework, grades your setups against it, and tracks whether it actually works.' },
-              { Icon: Target,       color: '#34d399', title: 'You keep your edge', body: 'No signals, no guru calls, no group to follow. It sharpens your own reads so you stay independent — the only kind of edge that lasts.' },
+              { Icon: Target,       color: '#34d399', title: 'No signals to follow', body: 'No signals, no guru calls, no group to copy. You learn the concepts and build your own reads instead of waiting on someone else.' },
               { Icon: InfinityIcon, color: '#f59e0b', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
             ].map(c => (
               <div key={c.title} className="rounded-2xl p-7 text-center flex flex-col items-center"
@@ -1075,7 +1026,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-14">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Questions</p>
             <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              Everything you're wondering.
+              Common questions.
             </h2>
           </div>
           <div className="space-y-3">
@@ -1119,11 +1070,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               }}>is waiting.</span></>
             ) : (
-              <>Trade smarter.<br />
+              <>Start learning<br />
               <span className="animate-gradient-pan" style={{
                 background: 'linear-gradient(125deg,#fbbf24,#f59e0b 40%,#fde68a,#f59e0b 80%,#fbbf24)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>Starting now.</span></>
+              }}>the framework.</span></>
             )}
           </h2>
 
