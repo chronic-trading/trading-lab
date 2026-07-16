@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, lazy, Suspense, type ReactNode } from 'rea
 import {
   FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target,
   Gauge, Beaker, LineChart, Network, BookOpen, CalendarDays, BarChart2,
-  Building2, ShieldAlert, Smile, Infinity as InfinityIcon,
+  LayoutDashboard, Layers, Crosshair, GraduationCap, ClipboardCheck,
+  LayoutTemplate, Package, Gamepad2, Infinity as InfinityIcon,
   Lock, Zap, Smartphone, ShieldCheck, Check, X, Plus,
 } from 'lucide-react'
 import { GraderDemo } from '../components/GraderDemo'
@@ -127,22 +128,30 @@ function ConceptMapBg({ opacity = 0.09 }: { opacity?: number }) {
 
 // ── Static data ───────────────────────────────────────────────────────────────
 const TOOLS = [
-  // Icons deliberately mirror the ones each tool uses inside the app, so the
-  // marketing page and the product read as one product, not two.
-  { Icon: Gauge,        name: 'Trade Grader',      desc: 'Score any setup against 13 weighted ICT confluences and your own saved system. Get a letter grade, the missing essentials, and a position-size suggestion — before you risk a dollar.', color: '#f59e0b', tag: 'New' },
-  { Icon: Beaker,       name: 'Strategy Builder',  desc: 'Stack ICT/SMC concepts into a living trading system. Real-time synergy detection shows you how your setups connect.', color: '#f59e0b', tag: 'Build' },
-  { Icon: LineChart,    name: 'Live Chart',         desc: 'Full TradingView integration. Concept-specific drawing guides keep you aligned with the methodology on every timeframe.', color: '#60a5fa', tag: 'Execute' },
-  { Icon: Network,      name: 'Synergy Map',        desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map — hover any node to trace connections.', color: '#c084fc', tag: 'Study' },
-  { Icon: BookOpen,     name: 'Trade Journal',      desc: 'Log trades with R-multiples, win rate, and streak tracking. Find the patterns in your performance over time.', color: '#34d399', tag: 'Track' },
-  { Icon: CalendarDays, name: 'Session Planner',    desc: 'Plan kill zones, macros, and FOMC ahead of time, so a news candle or session transition never catches you off-guard.', color: '#fb923c', tag: 'Plan' },
-  { Icon: BarChart2,    name: 'Trade Recap',        desc: 'Upload any broker CSV and get stunning visual trade cards, weekly montages, and one-click video export.', color: '#f472b6', tag: 'Review'   },
-  { Icon: Building2,    name: 'Prop Firm Compare',  desc: '9 futures prop firms scored and ranked. Filter by EOD drawdown, news trading, live accounts, and more.',   color: '#34d399', tag: 'Research' },
-  { Icon: ShieldAlert,  name: 'Drawdown Guard',     desc: 'Set your daily loss limit and profit target. A live danger meter turns red as you approach your max — so you stop before you blow the account.', color: '#f97316', tag: 'Protect' },
-  { Icon: Smile,        name: 'Mindset Check',      desc: 'Rate your emotional state before the session and log a note. Track how your mindset correlates with your trading results over time.', color: '#a78bfa', tag: 'Focus' },
+  // One card per app tab — 15 tabs, 15 cards, so the "15 tools" claim is
+  // countable right on the page. Icons deliberately mirror the ones each tool
+  // uses inside the app, so the marketing page and the product read as one
+  // product, not two. Header utilities (Props, Guard, Mindset, Quiz, Rules,
+  // Notes) are listed separately under the grid.
+  { Icon: LayoutDashboard, name: 'Today',            desc: 'The screen you open at the start of a session: kill zones, red-folder events, key levels, and your recent performance in one place.', color: '#f59e0b', tag: 'Daily' },
+  { Icon: Beaker,          name: 'Strategy Builder', desc: 'Stack ICT/SMC concepts into a living trading system. Real-time synergy detection shows you how your setups connect.', color: '#f59e0b', tag: 'Build' },
+  { Icon: Gauge,           name: 'Trade Grader',     desc: 'Score any setup against 13 weighted ICT confluences and your own saved system. Get a letter grade, the missing essentials, and a position-size suggestion before you risk a dollar.', color: '#fbbf24', tag: 'New' },
+  { Icon: Network,         name: 'Synergy Map',      desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map and hover any node to trace its connections.', color: '#c084fc', tag: 'Study' },
+  { Icon: Layers,          name: 'Review',           desc: 'Spaced-repetition flashcards for every concept. Grade your own recall and the scheduler resurfaces whatever is fading.', color: '#a78bfa', tag: 'Study' },
+  { Icon: BookOpen,        name: 'Trade Journal',    desc: 'Log trades with R-multiples, win rate, and streak tracking. Find the patterns in your performance over time.', color: '#34d399', tag: 'Track' },
+  { Icon: Crosshair,       name: 'Replay',           desc: 'Bar-by-bar replay of historical sessions. Practice your entries and get scored on them without risking anything.', color: '#22d3ee', tag: 'Practice' },
+  { Icon: BarChart2,       name: 'Trade Recap',      desc: 'Upload any broker CSV and get visual trade cards, weekly montages, and one-click video export.', color: '#f472b6', tag: 'Share' },
+  { Icon: GraduationCap,   name: 'Playbook',         desc: 'The lessons. Every concept explained with annotated diagrams, starting from the ten basics and building up.', color: '#34d399', tag: 'Learn' },
+  { Icon: ClipboardCheck,  name: 'Session Planner',  desc: 'Plan kill zones, macros, and FOMC ahead of time, so a news candle or session transition never catches you off-guard.', color: '#fb923c', tag: 'Plan' },
+  { Icon: LineChart,       name: 'Key Levels',       desc: 'A live TradingView chart with your marked levels beside it, so the lines you planned are the lines you trade.', color: '#60a5fa', tag: 'Execute' },
+  { Icon: CalendarDays,    name: 'News Calendar',    desc: 'Every red-folder event on one calendar, so a scheduled release never catches you in a position.', color: '#f87171', tag: 'Plan' },
+  { Icon: LayoutTemplate,  name: 'Templates',        desc: 'Starter models to learn from. Load one into the Builder and adapt it until it is yours.', color: '#60a5fa', tag: 'Start' },
+  { Icon: Package,         name: 'My Builds',        desc: 'Every model you have built, saved with its score and comparable side by side.', color: '#fbbf24', tag: 'Save' },
+  { Icon: Gamepad2,        name: 'Arcade',           desc: 'Trading mini-games with fake money and real lessons. Train discipline and execution speed with nothing on the line.', color: '#c084fc', tag: 'Train' },
 ]
 
 const STEPS = [
-  { n: '01', title: 'Get Your License',  body: 'Buy on Whop. Your key unlocks everything — all thirteen tools, cross-device sync, lifetime access. No subscriptions.',        icon: Target },
+  { n: '01', title: 'Get Your License',  body: 'Buy on Whop. Your key unlocks everything: all fifteen tools, cross-device sync, lifetime access. No subscriptions.',        icon: Target },
   { n: '02', title: 'Build Your System', body: 'Open the Builder. Stack your concepts, watch synergies fire, and lock in a playbook you actually understand.',             icon: Brain },
   { n: '03', title: 'Execute & Review',  body: 'Trade with a plan. Log every entry. Recap each week with visual trade cards, and see which concepts you actually know.', icon: TrendingUp },
 ]
@@ -600,7 +609,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div {...anim(350)} className={`${anim(350).className} flex items-center justify-center`} style={anim(350).style}>
             {[
               { val: '50+', sub: 'ICT Concepts' },
-              { val: '13',  sub: 'Tools'        },
+              { val: '15',  sub: 'Tools'        },
             ].map((s, i) => (
               <div key={s.sub} className="flex items-stretch">
                 {i > 0 && <div className="w-px bg-slate-800/80 self-stretch mx-7 sm:mx-12 md:mx-20" />}
@@ -743,7 +752,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">What's inside</p>
             <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              Thirteen tools for learning ICT.
+              Fifteen tools for learning ICT.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Build models, drill the concepts, journal your trades, and track what you actually know.</p>
           </div>
@@ -773,6 +782,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               </div>
             ))}
           </div>
+          {/* The header utilities aren't counted in the 15 — they ride along free. */}
+          <p className="text-center text-[13px] text-slate-500 mt-10 max-w-xl mx-auto leading-relaxed">
+            Plus the utility belt in the header: a prop-firm comparison of 12 futures firms,
+            a drawdown guard, mindset check-ins, a concept quiz, your trading rules, and session notes.
+          </p>
         </div>
       </section>
 
@@ -966,7 +980,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
             <div className="space-y-2.5 mb-8">
               {[
-                'All 13 tools unlocked',
+                'All 15 tools unlocked',
                 '50+ ICT / SMC concepts, mapped & testable',
                 'The new Trade Grader + full journal analytics',
                 'Cross-device sync across web and mobile',
