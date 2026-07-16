@@ -194,14 +194,9 @@ export function ConceptMap() {
             <circle key={r} cx="0" cy="0" r={r} fill="none" stroke={ringStroke} strokeWidth="1" strokeDasharray="4 6" />
           ))}
 
-          {/* Ring tier labels — only in tier mode */}
-          {colorMode === 'tier' && (['basic', 'intermediate', 'advanced'] as const).map(tier => (
-            <text key={tier} x={RINGS[tier] + 12} y={6}
-              fill={tierFill[tier]} fontSize="9" fontFamily="'JetBrains Mono', monospace" opacity="0.35" textAnchor="start">
-              {tier.toUpperCase()}
-            </text>
-          ))}
-
+          {/* No ring labels: they sat on the 3-o'clock axis at ring radius, which
+              is where nodes live (one every ~17°), so they always collided with a
+              node label — and the legend already maps the tier colors. */}
           {/* Edges */}
           {edges.filter(isEdgeVisible).map(e => {
             const a = positions.get(e.from); const b = positions.get(e.to)
