@@ -329,7 +329,9 @@ export function Journal() {
                 { label: 'W/L/BE',   value: `${filteredWins}/${filteredLoss}/${filteredBE}`, color: 'text-slate-300', mono: true },
                 { label: 'Pts',      value: filteredPts >= 0 ? `+${filteredPts}` : `${filteredPts}`, color: filteredPts >= 0 ? 'text-emerald-400' : 'text-red-400', mono: true },
               ].map(s => (
-                <div key={s.label} className="px-4 md:px-5 py-3 border-r border-slate-800/40 last:border-r-0">
+                // h-[60px] matches the Quick Stats header exactly, so the bottom
+                // rules of the stats bar and the sidebar meet as one line.
+                <div key={s.label} className="px-4 md:px-5 h-[60px] flex flex-col justify-center border-r border-slate-800/40 last:border-r-0">
                   <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">{s.label}</p>
                   <p className={`text-[14px] font-bold mt-0.5 ${s.color}`} style={{ fontFamily: s.mono ? "'JetBrains Mono', monospace" : undefined }}>
                     {s.value}
@@ -431,7 +433,10 @@ export function Journal() {
 
           {/* Quick stats sidebar — desktop only */}
           <div className="hidden md:flex w-[240px] flex-shrink-0 border-l border-slate-800/50 bg-[#06060d] flex-col overflow-hidden">
-            <div className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-800/50">
+            {/* 61px, not 60: the stats bar is 60px cells + a 1px border on its
+                wrapper, while this header's border-box keeps the border inside.
+                Equal heights here means bottom rules meeting as one line. */}
+            <div className="flex items-center gap-2.5 px-5 h-[61px] flex-shrink-0 border-b border-slate-800/50">
               <BarChart2 size={12} className="text-blue-400" />
               <span className="text-[12px] font-semibold text-slate-200">Quick Stats</span>
             </div>
