@@ -276,10 +276,11 @@ export function ConceptMap() {
           })}
         </svg>
 
-        {/* Legend */}
-        <div className="absolute bottom-4 left-4 bg-slate-900/85 border border-slate-800/60 rounded-xl px-4 py-2.5 backdrop-blur-sm">
+        {/* Legend — right-4 caps its width on phones, where the tier row is wider
+            than the screen and used to run past the edge; the row wraps instead. */}
+        <div className="absolute bottom-4 left-4 right-4 sm:right-auto bg-slate-900/85 border border-slate-800/60 rounded-xl px-4 py-2.5 backdrop-blur-sm">
           {colorMode === 'tier' ? (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap gap-y-1.5">
               {(['basic', 'intermediate', 'advanced'] as const).map(tier => (
                 <div key={tier} className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: tierFill[tier] }} />

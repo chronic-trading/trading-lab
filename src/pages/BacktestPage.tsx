@@ -302,8 +302,10 @@ export function BacktestPage() {
 
       {/* ── Top toolbar ──────────────────────────────────────────────────────── */}
       <div className="flex items-center gap-2 px-4 py-2.5 border-b border-slate-800/50 bg-[#06060d] flex-shrink-0 flex-wrap">
-        {/* Instrument */}
-        <div className="flex gap-1">
+        {/* Instrument — wraps internally: six mono chips are ~400px side by side,
+            wider than a phone, and the toolbar's own flex-wrap can't split a
+            single child group. */}
+        <div className="flex gap-1 flex-wrap">
           {INSTRUMENTS.map(i => (
             <button key={i} onClick={() => setInstrument(i)}
               className={`text-[11px] font-bold px-2.5 py-1.5 rounded-lg border transition-all ${
@@ -486,7 +488,9 @@ export function BacktestPage() {
         </div>
 
         {/* ── Right panel ──────────────────────────────────────────────────── */}
-        <div className="w-[320px] flex-shrink-0 border-l border-slate-800/50 flex flex-col overflow-hidden bg-[#06060d]">
+        {/* hidden below md: at 320px fixed this panel left a 55px chart on phones.
+            Same pattern as Plan's summary sidebar. */}
+        <div className="hidden md:flex w-[320px] flex-shrink-0 border-l border-slate-800/50 flex-col overflow-hidden bg-[#06060d]">
 
           {!hasData ? (
             /* Empty state */

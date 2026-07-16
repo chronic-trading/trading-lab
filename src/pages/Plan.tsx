@@ -583,16 +583,18 @@ function KeyLevelsWidget({ currentInstrument }: { currentInstrument: Instrument 
 
   return (
     <div className="border-t border-slate-800/50 pt-4 space-y-3">
-      <div className="flex items-center justify-between">
+      {/* Label and chips stack: six mono chips are ~330px at min-content, and this
+          sidebar is 280px — side by side they widened the column and pushed the
+          whole panel off the viewport edge. */}
+      <div className="space-y-2">
         <div className="flex items-center gap-1.5">
           <Target size={11} className="text-amber-400" />
           <span className="text-[11px] font-bold text-white">Key Levels</span>
         </div>
-        <div className="flex gap-1">
+        <div className="flex flex-wrap gap-1">
           {(['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]).map(i => (
             <button key={i} onClick={() => setInst(i)}
-              className={`px-1.5 py-0.5 rounded-lg border text-[10px] font-bold transition-all ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-slate-800 text-slate-600 hover:text-slate-400'}`}
-              style={{ fontFamily: "'JetBrains Mono', monospace" }}>{i}
+              className={`px-1.5 py-0.5 rounded-lg border text-[10px] font-bold transition-all font-mono ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-slate-800 text-slate-600 hover:text-slate-400'}`}>{i}
             </button>
           ))}
         </div>
@@ -600,10 +602,12 @@ function KeyLevelsWidget({ currentInstrument }: { currentInstrument: Instrument 
 
       {/* Add form */}
       <div className="flex gap-1.5">
+        {/* min-w-0: inputs default to min-width:auto, so flex-1 alone cannot shrink
+            the label below its ~170px intrinsic width inside this 240px sidebar. */}
         <input value={label} onChange={e => setLabel(e.target.value)} onKeyDown={e => e.key === 'Enter' && submit()}
-          placeholder="Label" className="flex-1 bg-slate-900/70 border border-slate-800 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-600 transition-all" />
+          placeholder="Label" className="flex-1 min-w-0 bg-slate-900/70 border border-slate-800 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-600 transition-all" />
         <input value={price} onChange={e => setPrice(e.target.value)} onKeyDown={e => e.key === 'Enter' && submit()}
-          placeholder="Price" className="w-20 bg-slate-900/70 border border-slate-800 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-600 transition-all" style={{ fontFamily: "'JetBrains Mono', monospace" }} />
+          placeholder="Price" className="w-20 flex-shrink-0 bg-slate-900/70 border border-slate-800 rounded-xl px-2.5 py-1.5 text-[11px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-600 transition-all font-mono" />
       </div>
       <div className="flex gap-1.5 items-center">
         {(['resistance', 'support', 'neutral'] as const).map(t => (
