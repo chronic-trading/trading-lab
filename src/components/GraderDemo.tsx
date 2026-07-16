@@ -83,13 +83,14 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
                 <div className="flex flex-wrap gap-1.5">
                   {group.factors.map(f => {
                     const on = checked.has(f.id)
+                    // text via classes, not hex: the page's grey tiers are the
+                    // slate scale, and one-off hexes read as extra colors.
                     return (
                       <button key={f.id} onClick={() => toggle(f.id)}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all"
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all ${on ? 'text-white' : 'text-slate-500'}`}
                         style={{
                           background: on ? `${group.color}1c` : 'rgba(255,255,255,0.02)',
                           border: `1px solid ${on ? group.color + '55' : 'rgba(255,255,255,0.07)'}`,
-                          color: on ? '#e8e6e1' : '#7a8494',
                         }}>
                         <span className="w-3.5 h-3.5 rounded-lg flex items-center justify-center flex-shrink-0"
                           style={{ background: on ? group.color : 'transparent', border: on ? 'none' : '1px solid rgba(255,255,255,0.18)' }}>
@@ -109,12 +110,10 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">R:R</span>
             {[1, 1.5, 2, 3, 4].map(v => (
               <button key={v} onClick={() => { trackOnce('demo-used', 'Interacted with the live Grader demo'); setRr(v) }}
-                className="px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all"
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all font-mono ${rr === v ? 'text-amber-400' : 'text-slate-500'}`}
                 style={{
                   background: rr === v ? 'rgba(245,158,11,0.15)' : 'transparent',
                   border: `1px solid ${rr === v ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.08)'}`,
-                  color: rr === v ? '#fbbf24' : '#6d7683',
-                  fontFamily: "'JetBrains Mono',monospace",
                 }}>
                 {v}R
               </button>
@@ -129,11 +128,13 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
         <div className="order-1 md:order-2 md:col-span-2 p-6 md:p-8 flex flex-col items-center justify-center text-center border-b md:border-b-0 border-slate-800/50"
           style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 0%, rgba(245,158,11,0.04), transparent 70%)' }}>
           <Gauge score={score} color={color} />
-          <p className="font-black leading-none -mt-5" style={{ fontSize: '58px', color, textShadow: `0 0 34px ${color}66`, fontFamily: "'JetBrains Mono',monospace" }}>
+          {/* 52px joins the page's statement step — 58 was the only display size
+              outside the 94/52/40 scale. */}
+          <p className="font-black leading-none -mt-5 font-mono" style={{ fontSize: '52px', color, textShadow: `0 0 34px ${color}66` }}>
             {letter}
           </p>
           <p className="text-[10px] text-slate-500 mt-1 uppercase tracking-[0.2em] font-semibold">
-            Score <span className="text-slate-300" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{score}</span>/100
+            Score <span className="text-slate-400 font-mono">{score}</span>/100
           </p>
           <p className="text-[14px] font-bold text-white mt-4">{verdict.headline}</p>
           <p className="text-[12px] text-slate-500 leading-relaxed mt-1.5 max-w-[240px]">{verdict.body}</p>

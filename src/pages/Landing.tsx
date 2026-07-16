@@ -135,18 +135,18 @@ const TOOLS = [
   // Notes) are listed separately under the grid.
   { Icon: LayoutDashboard, name: 'Today',            desc: 'The screen you open at the start of a session: kill zones, red-folder events, key levels, and your recent performance in one place.', color: '#f59e0b', tag: 'Daily' },
   { Icon: Beaker,          name: 'Strategy Builder', desc: 'Stack ICT/SMC concepts into a living trading system. Real-time synergy detection shows you how your setups connect.', color: '#f59e0b', tag: 'Build' },
-  { Icon: Gauge,           name: 'Trade Grader',     desc: 'Score any setup against 13 weighted ICT confluences and your own saved system. Get a letter grade, the missing essentials, and a position-size suggestion before you risk a dollar.', color: '#fbbf24', tag: 'New' },
+  { Icon: Gauge,           name: 'Trade Grader',     desc: 'Score any setup against 13 weighted ICT confluences and your own saved system. Get a letter grade, the missing essentials, and a position-size suggestion before you risk a dollar.', color: '#f59e0b', tag: 'New' },
   { Icon: Network,         name: 'Synergy Map',      desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map and hover any node to trace its connections.', color: '#c084fc', tag: 'Study' },
-  { Icon: Layers,          name: 'Review',           desc: 'Spaced-repetition flashcards for every concept. Grade your own recall and the scheduler resurfaces whatever is fading.', color: '#a78bfa', tag: 'Study' },
+  { Icon: Layers,          name: 'Review',           desc: 'Spaced-repetition flashcards for every concept. Grade your own recall and the scheduler resurfaces whatever is fading.', color: '#c084fc', tag: 'Study' },
   { Icon: BookOpen,        name: 'Trade Journal',    desc: 'Log trades with R-multiples, win rate, and streak tracking. Find the patterns in your performance over time.', color: '#34d399', tag: 'Track' },
-  { Icon: Crosshair,       name: 'Replay',           desc: 'Bar-by-bar replay of historical sessions. Practice your entries and get scored on them without risking anything.', color: '#22d3ee', tag: 'Practice' },
-  { Icon: BarChart2,       name: 'Trade Recap',      desc: 'Upload any broker CSV and get visual trade cards, weekly montages, and one-click video export.', color: '#f472b6', tag: 'Share' },
+  { Icon: Crosshair,       name: 'Replay',           desc: 'Bar-by-bar replay of historical sessions. Practice your entries and get scored on them without risking anything.', color: '#60a5fa', tag: 'Practice' },
+  { Icon: BarChart2,       name: 'Trade Recap',      desc: 'Upload any broker CSV and get visual trade cards, weekly montages, and one-click video export.', color: '#c084fc', tag: 'Share' },
   { Icon: GraduationCap,   name: 'Playbook',         desc: 'The lessons. Every concept explained with annotated diagrams, starting from the ten basics and building up.', color: '#34d399', tag: 'Learn' },
-  { Icon: ClipboardCheck,  name: 'Session Planner',  desc: 'Plan kill zones, macros, and FOMC ahead of time, so a news candle or session transition never catches you off-guard.', color: '#fb923c', tag: 'Plan' },
+  { Icon: ClipboardCheck,  name: 'Session Planner',  desc: 'Plan kill zones, macros, and FOMC ahead of time, so a news candle or session transition never catches you off-guard.', color: '#f59e0b', tag: 'Plan' },
   { Icon: LineChart,       name: 'Key Levels',       desc: 'A live TradingView chart with your marked levels beside it, so the lines you planned are the lines you trade.', color: '#60a5fa', tag: 'Execute' },
   { Icon: CalendarDays,    name: 'News Calendar',    desc: 'Every red-folder event on one calendar, so a scheduled release never catches you in a position.', color: '#f87171', tag: 'Plan' },
   { Icon: LayoutTemplate,  name: 'Templates',        desc: 'Starter models to learn from. Load one into the Builder and adapt it until it is yours.', color: '#60a5fa', tag: 'Start' },
-  { Icon: Package,         name: 'My Builds',        desc: 'Every model you have built, saved with its score and comparable side by side.', color: '#fbbf24', tag: 'Save' },
+  { Icon: Package,         name: 'My Builds',        desc: 'Every model you have built, saved with its score and comparable side by side.', color: '#f59e0b', tag: 'Save' },
   { Icon: Gamepad2,        name: 'Arcade',           desc: 'Trading mini-games with fake money and real lessons. Train discipline and execution speed with nothing on the line.', color: '#c084fc', tag: 'Train' },
 ]
 
@@ -488,7 +488,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="flex items-center gap-3">
             {WHOP_URL && !isAuthenticated && (
               <a href={WHOP_URL} target="_blank" rel="noopener noreferrer"
-                className="hidden sm:block text-[12px] font-semibold text-slate-500 hover:text-slate-300 transition-colors">
+                className="hidden sm:block text-[12px] font-semibold text-slate-500 hover:text-slate-400 transition-colors">
                 Get Access
               </a>
             )}
@@ -615,7 +615,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 {i > 0 && <div className="w-px bg-slate-800/80 self-stretch mx-7 sm:mx-12 md:mx-20" />}
                 <div className="text-center">
                   <p className="font-black text-white leading-none"
-                    style={{ fontSize: 'clamp(28px,5.5vw,44px)', fontFamily: "'JetBrains Mono',monospace",
+                    style={{ fontSize: 'clamp(28px,5.5vw,40px)', fontFamily: "'JetBrains Mono',monospace",
                       textShadow: '0 0 35px rgba(245,158,11,0.45)' }}>{s.val}</p>
                   <p className="text-[10px] text-slate-600 uppercase tracking-[0.22em] mt-2">{s.sub}</p>
                 </div>
@@ -661,7 +661,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               Grade a setup in ten seconds.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
-              This is the <span className="text-slate-300 font-semibold">real Trade Grader</span> — the exact tool inside the Lab.
+              This is the <span className="text-slate-400 font-semibold">real Trade Grader</span> — the exact tool inside the Lab.
               Tap what your setup has and watch the grade move.
             </p>
           </div>
@@ -725,7 +725,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                   )}
                   {/* Step number */}
                   <p className="font-black leading-none mb-5 text-center"
-                    style={{ fontSize: '44px', fontFamily: "'JetBrains Mono',monospace",
+                    style={{ fontSize: '40px', fontFamily: "'JetBrains Mono',monospace",
                       background: 'linear-gradient(135deg,rgba(245,158,11,0.25),rgba(245,158,11,0.06))',
                       WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                     {s.n}
@@ -802,7 +802,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               Start with the ten foundations.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
-              This is the <span className="text-slate-300 font-semibold">real Concept Map</span> from inside the Lab,
+              This is the <span className="text-slate-400 font-semibold">real Concept Map</span> from inside the Lab,
               showing the ten basics every ICT trader learns first. Hover one to see what it connects to.
               The other 42 concepts build on top of these.
             </p>
@@ -861,7 +861,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 </div>
                 <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 border-l border-slate-800/40 bg-amber-500/[0.02] ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
                   <Check size={13} strokeWidth={2.5} className="text-emerald-400 mt-0.5 flex-shrink-0" />
-                  <span className="text-[13px] text-slate-300 leading-snug">{row.now}</span>
+                  <span className="text-[13px] text-slate-400 leading-snug">{row.now}</span>
                 </div>
               </div>
             ))}
@@ -991,7 +991,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                   <span className="flex-shrink-0 w-5 h-5 rounded-lg bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 mt-0.5">
                     <Check size={11} strokeWidth={3} />
                   </span>
-                  <span className="text-[13px] text-slate-300 leading-relaxed">{item}</span>
+                  <span className="text-[13px] text-slate-400 leading-relaxed">{item}</span>
                 </div>
               ))}
             </div>
@@ -1065,8 +1065,10 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             </span>
           </div>
 
+          {/* Same clamp as the hero h1: the opening and closing statements share one
+              display size, so the page has three display steps (94/52/40). */}
           <h2 className="font-black text-white mb-8 w-full"
-            style={{ fontSize: 'clamp(44px, 8.5vw, 82px)', lineHeight: 0.88, letterSpacing: '-3px' }}>
+            style={{ fontSize: 'clamp(50px, 10vw, 94px)', lineHeight: 0.88, letterSpacing: '-3px' }}>
             {/* Static gradient here on purpose: the panning animation is the hero's
                 one signature moment. Running it again at the bottom made the page
                 read as two competing heroes. */}
@@ -1121,10 +1123,10 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="flex items-center gap-2.5">
             <FlaskConical size={12} className="text-amber-500/40" />
             <span className="text-[11px] font-black tracking-widest text-slate-700 uppercase">Trading Lab</span>
-            <span className="text-[10px] text-slate-800 mx-1">·</span>
-            <span className="text-[10px] text-slate-800 tracking-[0.12em] uppercase">a Chronic Trading tool</span>
+            <span className="text-[10px] text-slate-700 mx-1">·</span>
+            <span className="text-[10px] text-slate-700 tracking-[0.12em] uppercase">a Chronic Trading tool</span>
           </div>
-          <p className="text-[11px] text-slate-800 tracking-[0.15em] uppercase">ICT · SMC · Futures</p>
+          <p className="text-[11px] text-slate-700 tracking-[0.15em] uppercase">ICT · SMC · Futures</p>
         </div>
       </footer>
 

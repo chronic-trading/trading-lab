@@ -183,7 +183,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
                       if (!partner) return null
                       return (
                         <button key={syn.conceptId} onClick={() => select(syn.conceptId)}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-lg bg-slate-900/60 border border-slate-800/60 text-slate-300 hover:border-slate-600 transition-colors">
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-lg bg-slate-900/60 border border-slate-800/60 text-slate-400 hover:border-slate-600 transition-colors">
                           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                             style={{ background: syn.strength === 3 ? '#f59e0b' : syn.strength === 2 ? '#94a3b8' : '#475569' }} />
                           {partner.shortName}
