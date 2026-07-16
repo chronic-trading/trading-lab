@@ -910,7 +910,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="text-center mb-14">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Why pay for it</p>
             <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
-              Free knowledge isn't a system.
+              Why it's worth paying for.
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
