@@ -240,7 +240,7 @@ export function RecapPage() {
               ← New Import
             </button>
             {filesLoaded > 1 && (
-              <span className="text-[10px] font-mono px-2 py-1 rounded-md"
+              <span className="text-[10px] font-mono px-2 py-1 rounded-lg"
                 style={{ background: `${theme.accent}15`, border: `1px solid ${theme.accent}30`, color: theme.accentText }}>
                 {filesLoaded} files merged
               </span>

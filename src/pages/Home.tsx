@@ -142,7 +142,7 @@ function KeyLevelsPanel() {
               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${typeConfig[lv.type].dot}`} />
               <span className="text-[12px] font-semibold text-slate-300 flex-1">{lv.label}</span>
               <span className="text-[12px] font-bold text-slate-200" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{lv.price}</span>
-              <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded ${
+              <span className={`text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-lg ${
                 lv.type === 'resistance' ? 'text-red-400 bg-red-500/10' : lv.type === 'support' ? 'text-emerald-400 bg-emerald-500/10' : 'text-slate-500 bg-slate-800'
               }`}>{typeConfig[lv.type].label}</span>
               <button onClick={() => remove(inst, lv.id)} className="w-5 h-5 flex items-center justify-center text-slate-700 hover:text-red-400 transition-colors flex-shrink-0">

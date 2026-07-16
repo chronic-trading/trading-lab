@@ -80,7 +80,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
   const linked = useMemo(() => new Set(basicSynergies.map(s => s.conceptId)), [basicSynergies])
 
   return (
-    <div className="relative rounded-3xl overflow-hidden"
+    <div className="relative rounded-2xl overflow-hidden"
       style={{ background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)', boxShadow: '0 0 60px rgba(96,165,250,0.05)' }}>
       <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: 'linear-gradient(90deg,transparent,rgba(96,165,250,0.6),transparent)' }} />
 

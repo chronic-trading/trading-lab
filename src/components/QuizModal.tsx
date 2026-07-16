@@ -189,7 +189,7 @@ export function QuizModal({ open, onClose }: Props) {
             exit={{ y: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
             onClick={e => e.stopPropagation()}
-            className="w-full sm:max-w-2xl bg-[#0d0d16] border-t sm:border border-slate-700/60 rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+            className="w-full sm:max-w-2xl bg-[#0d0d16] border-t sm:border border-slate-700/60 rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden"
             style={{ maxHeight: 'calc(100dvh - 20px)', height: 'auto' }}
           >
             {/* Drag handle (mobile visual affordance) */}
@@ -246,7 +246,7 @@ export function QuizModal({ open, onClose }: Props) {
             <div className="flex-1 overflow-y-auto overscroll-contain">
               {done ? (
                 <div className="flex flex-col items-center justify-center py-8 px-5 sm:py-10 sm:px-8 gap-5 text-center">
-                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center">
                     <Trophy size={30} className="text-amber-400" />
                   </div>
                   <div>

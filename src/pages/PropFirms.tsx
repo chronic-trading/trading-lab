@@ -14,7 +14,7 @@ function ScoreBadge({ score, size = 'md' }: { score: number; size?: 'sm' | 'md' 
 function Tag({ yes, label }: { yes: boolean; label: string }) {
   const c = yes ? 'var(--green)' : 'var(--red)'
   return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-semibold"
+    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-semibold"
       style={{ background: yes ? 'var(--green-soft)' : 'var(--red-soft)', color: c, border: `1px solid color-mix(in srgb, ${c} 25%, transparent)` }}>
       {yes ? <Check size={11} strokeWidth={3} /> : <X size={11} strokeWidth={3} />} {label}
     </span>
@@ -29,7 +29,7 @@ function DrawdownBadge({ type }: { type: PropFirm['drawdownType'] }) {
   }
   const { label, color, soft } = map[type]
   return (
-    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide"
+    <span className="px-2 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wide"
       style={{ background: soft, color, border: `1px solid color-mix(in srgb, ${color} 30%, transparent)` }}>{label}</span>
   )
 }
@@ -125,8 +125,8 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
           <p className="text-[13px] font-bold text-white">{firm.name}</p>
           <div className="flex items-center gap-1 mt-0.5 flex-wrap">
             <DrawdownBadge type={firm.drawdownType} />
-            {firm.liveAccount    && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: 'var(--green-soft)', color: 'var(--green)', border: '1px solid color-mix(in srgb, var(--green) 20%, transparent)' }}>LIVE</span>}
-            {firm.hasPricePromos && <span className="px-1.5 py-0.5 rounded text-[10px] font-bold" style={{ background: 'var(--accent-soft)', color: 'var(--accent-ink)', border: '1px solid color-mix(in srgb, var(--accent) 20%, transparent)' }}>PROMO</span>}
+            {firm.liveAccount    && <span className="px-1.5 py-0.5 rounded-lg text-[10px] font-bold" style={{ background: 'var(--green-soft)', color: 'var(--green)', border: '1px solid color-mix(in srgb, var(--green) 20%, transparent)' }}>LIVE</span>}
+            {firm.hasPricePromos && <span className="px-1.5 py-0.5 rounded-lg text-[10px] font-bold" style={{ background: 'var(--accent-soft)', color: 'var(--accent-ink)', border: '1px solid color-mix(in srgb, var(--accent) 20%, transparent)' }}>PROMO</span>}
           </div>
         </div>
         <div className="hidden md:block flex-shrink-0 text-center min-w-[80px]">

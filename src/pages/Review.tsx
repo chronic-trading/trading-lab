@@ -226,7 +226,7 @@ export function Review() {
               animate={{ opacity: 1, y: 0 }}
               className="bg-[var(--surface)] border border-[var(--border)] rounded-[26px] px-6 py-12 text-center space-y-4 shadow-[var(--shadow-md)]"
             >
-              <div className="w-16 h-16 mx-auto rounded-3xl bg-[var(--green-soft)] flex items-center justify-center">
+              <div className="w-16 h-16 mx-auto rounded-2xl bg-[var(--green-soft)] flex items-center justify-center">
                 <CheckCircle2 size={30} style={{ color: 'var(--green)' }} />
               </div>
               <div>

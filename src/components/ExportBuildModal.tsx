@@ -94,7 +94,7 @@ export function ExportBuildModal({ build, open, onClose }: Props) {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 8 }}
             transition={{ duration: 0.18 }}
-            className="w-full max-w-2xl bg-[#0c0c15] border border-slate-700/60 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+            className="w-full max-w-2xl bg-[#0c0c15] border border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}

@@ -227,14 +227,14 @@ export function TradeGrader() {
                         className={`w-full flex items-center gap-3 text-left px-3.5 py-2.5 rounded-xl border transition-all ${
                           on ? 'bg-slate-900/60 border-slate-700/70' : 'bg-slate-900/20 border-slate-800/50 hover:border-slate-700/60'
                         }`}>
-                        <span className={`w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 border transition-all ${
+                        <span className={`w-5 h-5 rounded-lg flex items-center justify-center flex-shrink-0 border transition-all ${
                           on ? 'border-transparent' : 'border-slate-700'
                         }`} style={on ? { background: gc } : undefined}>
                           {on && <Check size={13} className="text-[#0b0b12]" strokeWidth={3} />}
                         </span>
                         <span className={`text-[13px] leading-snug ${on ? 'text-slate-200 font-medium' : 'text-slate-400'}`}>{f.label}</span>
                         {f.essential && (
-                          <span className="ml-auto text-[10px] font-black uppercase tracking-wider text-amber-500/70 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded flex-shrink-0">Key</span>
+                          <span className="ml-auto text-[10px] font-black uppercase tracking-wider text-amber-500/70 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded-lg flex-shrink-0">Key</span>
                         )}
                       </button>
                     )

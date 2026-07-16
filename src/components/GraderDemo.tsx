@@ -60,7 +60,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
   }, [checked, rr])
 
   return (
-    <div className="relative rounded-3xl overflow-hidden"
+    <div className="relative rounded-2xl overflow-hidden"
       style={{ background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(245,158,11,0.18)', boxShadow: '0 0 60px rgba(245,158,11,0.06)' }}>
       <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.7),transparent)' }} />
 
@@ -91,7 +91,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
                           border: `1px solid ${on ? group.color + '55' : 'rgba(255,255,255,0.07)'}`,
                           color: on ? '#e8e6e1' : '#7a8494',
                         }}>
-                        <span className="w-3.5 h-3.5 rounded flex items-center justify-center flex-shrink-0"
+                        <span className="w-3.5 h-3.5 rounded-lg flex items-center justify-center flex-shrink-0"
                           style={{ background: on ? group.color : 'transparent', border: on ? 'none' : '1px solid rgba(255,255,255,0.18)' }}>
                           {on && <Check size={10} className="text-[#0b0b12]" strokeWidth={3.5} />}
                         </span>

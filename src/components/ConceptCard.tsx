@@ -95,7 +95,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
       <div className="absolute inset-0 bg-[#0b0b13] -z-10" />
 
       {/* Left accent bar */}
-      <div className={`absolute left-0 inset-y-0 w-[3.5px] rounded-r ${cfg.bar}
+      <div className={`absolute left-0 inset-y-0 w-[3.5px] rounded-r-lg ${cfg.bar}
         ${selected ? 'opacity-100 shadow-lg ' + cfg.dotGlow : 'opacity-35 group-hover:opacity-65'} transition-opacity duration-200`}
       />
 

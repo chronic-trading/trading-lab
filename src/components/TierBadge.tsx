@@ -9,7 +9,7 @@ const config: Record<Tier, { label: string; className: string }> = {
 export function TierBadge({ tier }: { tier: Tier }) {
   const { label, className } = config[tier]
   return (
-    <span className={`text-[10px] font-bold tracking-widest px-2 py-0.5 rounded border ${className}`}>
+    <span className={`text-[10px] font-bold tracking-widest px-2 py-0.5 rounded-lg border ${className}`}>
       {label}
     </span>
   )

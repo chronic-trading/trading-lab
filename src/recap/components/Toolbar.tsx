@@ -77,7 +77,7 @@ export function Toolbar({
                 <div className="w-2.5 h-2.5 rounded-full transition-all"
                   style={{ background: color, boxShadow: active ? `0 0 6px ${color}` : 'none' }} />
                 {/* Tooltip */}
-                <span className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded text-[10px] font-mono whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50"
+                <span className="absolute bottom-full mb-1.5 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-lg text-[10px] font-mono whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50"
                   style={{ background: 'rgba(0,0,0,0.85)', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' }}>
                   {THEMES[key].label}
                 </span>
@@ -97,7 +97,7 @@ export function Toolbar({
           style={{ background: theme.surface2, border: `1px solid ${theme.divider}` }}>
           {([['all', 'All'], ['wins', 'Wins ▲'], ['losses', 'Losses ▼']] as [FilterMode, string][]).map(([f, lbl]) => (
             <button key={f} onClick={() => onFilterChange(f)}
-              className="px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all duration-150"
+              className="px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all duration-150"
               style={{
                 background: filterMode === f ? (f === 'wins' ? `${theme.profit}20` : f === 'losses' ? `${theme.loss}20` : theme.surface) : 'transparent',
                 color: filterMode === f ? (f === 'wins' ? theme.profit : f === 'losses' ? theme.loss : theme.textSecondary) : theme.textMuted,
@@ -187,7 +187,7 @@ export function Toolbar({
         📊 Stats
       </button>
 
-      <span className="font-mono text-[10px] ml-auto px-2 py-1 rounded-md"
+      <span className="font-mono text-[10px] ml-auto px-2 py-1 rounded-lg"
         style={{ background: theme.surface2, color: theme.textMuted, border: `1px solid ${theme.divider}` }}>
         {visibleCount}/{totalTrades}
       </span>

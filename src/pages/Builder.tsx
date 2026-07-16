@@ -342,7 +342,7 @@ export function Builder({ initialBuild }: Props) {
                     transition={{ duration: 0.15 }}
                     className="flex items-center gap-3 bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-4 py-3 group hover:border-slate-700/60 transition-all relative overflow-hidden"
                   >
-                    <div className={`absolute left-0 inset-y-0 w-[3px] rounded-r ${tierBar[c.tier]}`} />
+                    <div className={`absolute left-0 inset-y-0 w-[3px] rounded-r-lg ${tierBar[c.tier]}`} />
                     <span className="text-[12px] text-slate-600 w-5 text-center flex-shrink-0 ml-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{idx + 1}</span>
                     <div className={`w-2 h-2 rounded-full flex-shrink-0 ${tierBar[c.tier]}`} />
                     <div className="flex-1 min-w-0">

@@ -439,14 +439,6 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           0%,100% { transform:translateY(0px) scale(1); }
           50%      { transform:translateY(14px) scale(0.97); }
         }
-        @keyframes badge-glow {
-          0%,100% { box-shadow:0 0 10px rgba(245,158,11,0.2); }
-          50%      { box-shadow:0 0 22px rgba(245,158,11,0.5); }
-        }
-        @keyframes cta-pulse {
-          0%,100% { box-shadow:0 0 50px rgba(245,158,11,0.22),0 4px 20px rgba(245,158,11,0.14); }
-          50%      { box-shadow:0 0 80px rgba(245,158,11,0.38),0 8px 32px rgba(245,158,11,0.22); }
-        }
         @keyframes map-drift {
           0%   { transform:translate(0px,0px); }
           18%  { transform:translate(-55px,-38px); }
@@ -464,8 +456,6 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           background-size:200% 200%;
           animation:gradient-pan 5s ease infinite;
         }
-        .animate-cta-pulse { animation:cta-pulse 3s ease-in-out infinite; }
-        .animate-badge-glow { animation:badge-glow 2.5s ease-in-out infinite; }
         /* Force classic margin centering on all max-w containers.
            Tailwind v4 compiles mx-auto to margin-inline:auto which can
            mis-render in certain flex/grid parent contexts. */
@@ -552,7 +542,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
           {/* Badge */}
           <div {...anim(0)} className={`${anim(0).className} mb-8`} style={anim(0).style}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8 animate-badge-glow">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: '0 0 8px #f59e0b' }} />
               <span className="text-[11px] font-bold tracking-[0.22em] uppercase text-amber-400/85">a Chronic Trading tool</span>
             </div>
@@ -593,7 +583,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           {/* CTAs */}
           <div {...anim(270)} className={`${anim(270).className} flex flex-col sm:flex-row items-center justify-center gap-3 mb-16`} style={anim(270).style}>
             <button onClick={handleCTA}
-              className="group flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-[15px] transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] animate-cta-pulse"
+              className="group flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-[15px] transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
               style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
               {ctaLabel}
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -805,7 +795,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </div>
           <LazyOnVisible minHeight={460}>
             <Suspense fallback={
-              <div className="flex items-center justify-center gap-3 rounded-3xl" style={{ minHeight: 460, background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)' }}>
+              <div className="flex items-center justify-center gap-3 rounded-2xl" style={{ minHeight: 460, background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)' }}>
                 <div className="w-5 h-5 border-2 border-blue-500/30 border-t-blue-400 rounded-full animate-spin" />
                 <span className="text-[13px] text-slate-600 font-medium">Loading the map…</span>
               </div>
@@ -955,7 +945,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             </h2>
           </div>
 
-          <div className="relative rounded-3xl p-8 md:p-10 overflow-hidden"
+          <div className="relative rounded-2xl p-8 md:p-10 overflow-hidden"
             style={{ background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(245,158,11,0.22)', boxShadow: '0 0 60px rgba(245,158,11,0.08)' }}>
             <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.7),transparent)' }} />
 
@@ -984,7 +974,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 'No signals. No subscription. Your system, your calls.',
               ].map(item => (
                 <div key={item} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-md bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 mt-0.5">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-lg bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 mt-0.5">
                     <Check size={11} strokeWidth={3} />
                   </span>
                   <span className="text-[13px] text-slate-300 leading-relaxed">{item}</span>
@@ -993,7 +983,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             </div>
 
             <button onClick={handleCTA}
-              className="group w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-[15px] transition-all hover:scale-[1.02] active:scale-[0.98] animate-cta-pulse"
+              className="group w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-[15px] transition-all hover:scale-[1.02] active:scale-[0.98]"
               style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
               {ctaLabel}
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -1054,7 +1044,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
         <div className="relative z-10 max-w-3xl mx-auto px-5 py-32 flex flex-col items-center text-center">
 
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/20 bg-amber-500/6 mb-10 animate-badge-glow">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/20 bg-amber-500/6 mb-10">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: '0 0 6px #f59e0b' }} />
             <span className="text-[11px] font-bold tracking-[0.22em] uppercase text-amber-400/80">
               {isAuthenticated ? "You're In" : 'Get Started Today'}
@@ -1063,15 +1053,18 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
           <h2 className="font-black text-white mb-8 w-full"
             style={{ fontSize: 'clamp(44px, 8.5vw, 82px)', lineHeight: 0.88, letterSpacing: '-3px' }}>
+            {/* Static gradient here on purpose: the panning animation is the hero's
+                one signature moment. Running it again at the bottom made the page
+                read as two competing heroes. */}
             {isAuthenticated ? (
               <>Your lab<br />
-              <span className="animate-gradient-pan" style={{
+              <span style={{
                 background: 'linear-gradient(125deg,#fbbf24,#f59e0b 40%,#fde68a,#f59e0b 80%,#fbbf24)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               }}>is waiting.</span></>
             ) : (
               <>Start learning<br />
-              <span className="animate-gradient-pan" style={{
+              <span style={{
                 background: 'linear-gradient(125deg,#fbbf24,#f59e0b 40%,#fde68a,#f59e0b 80%,#fbbf24)',
                 WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
               }}>the framework.</span></>
@@ -1086,7 +1079,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
             <button onClick={handleCTA}
-              className="group flex items-center gap-3 rounded-2xl font-bold text-[16px] transition-all hover:scale-[1.03] active:scale-[0.97] animate-cta-pulse"
+              className="group flex items-center gap-3 rounded-2xl font-bold text-[16px] transition-all hover:scale-[1.03] active:scale-[0.97]"
               style={{ padding: '1.1rem 3rem', background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
               {ctaLabel}
               <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />

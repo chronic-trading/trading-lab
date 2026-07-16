@@ -141,7 +141,7 @@ function TradeCard({ trade, onDelete }: { trade: BacktestTrade; onDelete: (id: s
         <div className="px-3 pb-2.5 border-t border-slate-800/30 pt-2 flex flex-wrap gap-1">
           {trade.conceptIds.map(id => {
             const c = getConceptById(id)
-            return c ? <span key={id} className="text-[10px] text-slate-500 bg-slate-800/60 px-1.5 py-0.5 rounded">{c.shortName}</span> : null
+            return c ? <span key={id} className="text-[10px] text-slate-500 bg-slate-800/60 px-1.5 py-0.5 rounded-lg">{c.shortName}</span> : null
           })}
           {trade.notes && <p className="w-full text-[10px] text-slate-600 mt-1">{trade.notes}</p>}
         </div>

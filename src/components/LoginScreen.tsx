@@ -115,7 +115,7 @@ export function LoginScreen({ onBack }: { onBack?: () => void }) {
         </div>
 
         {/* Card */}
-        <div className="bg-[#0c0c15] border border-slate-800/60 rounded-3xl p-6 shadow-2xl text-left">
+        <div className="bg-[#0c0c15] border border-slate-800/60 rounded-2xl p-6 shadow-2xl text-left">
           {!done ? (
             <div className="space-y-5">
               <div className="space-y-1">

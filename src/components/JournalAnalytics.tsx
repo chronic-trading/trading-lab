@@ -204,7 +204,7 @@ export function JournalAnalytics({ entries }: Props) {
         <div className="flex items-center gap-4 mt-2">
           {[['#34d399','Win'], ['#f87171','Loss'], ['#64748b','BE']].map(([c,l]) => (
             <div key={l} className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-sm" style={{ background: c }} />
+              <div className="w-2 h-2 rounded-lg" style={{ background: c }} />
               <span className="text-[10px] text-slate-600">{l}</span>
             </div>
           ))}

@@ -178,14 +178,14 @@ export function TradeCard({
         {/* Disabled banner */}
         {disabled && !exportMode && (
           <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-            <span className="font-mono text-[10px] font-bold tracking-widest px-3 py-1 rounded border"
+            <span className="font-mono text-[10px] font-bold tracking-widest px-3 py-1 rounded-lg border"
               style={{ color: theme.textMuted, borderColor: theme.divider, background: 'rgba(0,0,0,0.6)' }}>HIDDEN</span>
           </div>
         )}
 
         {/* Select checkbox */}
         {!exportMode && selectMode && (
-          <div className="absolute top-2.5 left-2.5 z-20 w-5 h-5 rounded flex items-center justify-center"
+          <div className="absolute top-2.5 left-2.5 z-20 w-5 h-5 rounded-lg flex items-center justify-center"
             style={{ background: selected ? theme.accent : 'rgba(0,0,0,0.6)', border: `1.5px solid ${selected ? theme.accent : theme.divider}` }}>
             {selected && <span style={{ color: '#fff', fontSize: 11, lineHeight: 1 }}>✓</span>}
           </div>
@@ -196,14 +196,14 @@ export function TradeCard({
           <div className="absolute top-2.5 right-2.5 z-20 flex gap-1.5">
             {onToggleDisabled && (
               <button onClick={e => { e.stopPropagation(); onToggleDisabled() }}
-                className="w-6 h-6 rounded-md flex items-center justify-center text-[11px]"
+                className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px]"
                 style={{ background: 'rgba(0,0,0,0.75)', border: `1px solid ${theme.divider}`, color: theme.textMuted, cursor: 'pointer' }}>
                 {disabled ? '👁' : '🚫'}
               </button>
             )}
             {onDelete && (
               <button onClick={e => { e.stopPropagation(); onDelete() }}
-                className="w-6 h-6 rounded-md flex items-center justify-center text-[11px]"
+                className="w-6 h-6 rounded-lg flex items-center justify-center text-[11px]"
                 style={{ background: 'rgba(0,0,0,0.75)', border: '1px solid rgba(255,51,102,0.35)', color: '#ff3366', cursor: 'pointer' }}>
                 ✕
               </button>
@@ -218,13 +218,13 @@ export function TradeCard({
           <div className="flex items-center justify-between" style={{ marginTop: isBest || isWorst ? 14 : 0 }}>
             <div className="flex items-center gap-1.5">
               {showSideTag && (
-                <span className="font-mono text-[10px] font-bold tracking-widest px-2 py-0.5 rounded border"
+                <span className="font-mono text-[10px] font-bold tracking-widest px-2 py-0.5 rounded-lg border"
                   style={{ color: pnlColor, background: `${pnlColor}12`, borderColor: `${pnlColor}30` }}>
                   {sideLabel}
                 </span>
               )}
               {trade.dayOfWeek !== '—' && (
-                <span className="font-mono text-[10px] font-semibold tracking-widest px-1.5 py-0.5 rounded"
+                <span className="font-mono text-[10px] font-semibold tracking-widest px-1.5 py-0.5 rounded-lg"
                   style={{ color: theme.textMuted, background: theme.surface }}>
                   {trade.dayOfWeek}
                 </span>
