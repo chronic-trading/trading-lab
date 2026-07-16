@@ -134,7 +134,7 @@ const TOOLS = [
   { Icon: LineChart,    name: 'Live Chart',         desc: 'Full TradingView integration. Concept-specific drawing guides keep you aligned with the methodology on every timeframe.', color: '#60a5fa', tag: 'Execute' },
   { Icon: Network,      name: 'Synergy Map',        desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map — hover any node to trace connections.', color: '#c084fc', tag: 'Study' },
   { Icon: BookOpen,     name: 'Trade Journal',      desc: 'Log trades with R-multiples, win rate, and streak tracking. Find the patterns in your performance over time.', color: '#34d399', tag: 'Track' },
-  { Icon: CalendarDays, name: 'Session Planner',    desc: 'Plan kill zones, macros, and FOMC like a pro. Never get caught off-guard by a news candle or session transition.', color: '#fb923c', tag: 'Plan' },
+  { Icon: CalendarDays, name: 'Session Planner',    desc: 'Plan kill zones, macros, and FOMC ahead of time, so a news candle or session transition never catches you off-guard.', color: '#fb923c', tag: 'Plan' },
   { Icon: BarChart2,    name: 'Trade Recap',        desc: 'Upload any broker CSV and get stunning visual trade cards, weekly montages, and one-click video export.', color: '#f472b6', tag: 'Review'   },
   { Icon: Building2,    name: 'Prop Firm Compare',  desc: '9 futures prop firms scored and ranked. Filter by EOD drawdown, news trading, live accounts, and more.',   color: '#34d399', tag: 'Research' },
   { Icon: ShieldAlert,  name: 'Drawdown Guard',     desc: 'Set your daily loss limit and profit target. A live danger meter turns red as you approach your max — so you stop before you blow the account.', color: '#f97316', tag: 'Protect' },
@@ -149,7 +149,7 @@ const STEPS = [
 
 const FEATURE_COLS = [
   {
-    heading: 'Edge-Building',
+    heading: 'Learning',
     color: '#f59e0b',
     items: ['50+ ICT / SMC concepts mapped', 'Real-time synergy detection', 'Full concept dependency graph', 'Mastery quiz & self-testing', 'Strategy template library'],
   },
@@ -199,15 +199,15 @@ const COMPARISON = [
 // ── FAQ ───────────────────────────────────────────────────────────────────────
 const FAQS = [
   { q: 'Is this a signals or alerts service?',
-    a: 'No — and that\'s the point. Trading Lab gives you no signals, no calls, and no "trust me" entries. It\'s a system-building, grading, and review platform that makes YOUR reads sharper. You stay the trader.' },
+    a: 'No, and that is the point. Trading Lab gives you no signals, no calls, and no "trust me" entries. It is a system-building, grading, and review platform that makes your own reads sharper. You stay the trader.' },
   { q: 'Do I need to be advanced at ICT already?',
-    a: 'No. The concept map, playbook lessons, and mastery quiz start from the six basics and build up. If you already know the framework, the Builder, Grader, and journal analytics go as deep as you want.' },
+    a: 'No. The concept map, playbook lessons, and mastery quiz start from the ten basics and build up from there. If you already know the framework, the Builder, Grader, and journal analytics go as deep as you want.' },
   { q: 'One-time payment or a subscription?',
-    a: 'One license unlocks every tool with lifetime access and free updates — no recurring subscription. Your progress syncs across all your devices.' },
+    a: 'One license unlocks every tool with lifetime access and free updates. No recurring subscription, and your progress syncs across all your devices.' },
   { q: 'Which markets and instruments does it cover?',
     a: 'It\'s built for ICT / SMC on futures (NQ, ES, GC, SI) and the major forex pairs, with kill-zone timing tuned to the New York session. The concepts apply to any market the methodology is traded on.' },
   { q: 'Does it work on my phone?',
-    a: 'Yes. Every tool is built mobile-first and feels native on a phone, so you can build, grade, and journal from anywhere — the same login works across web and mobile.' },
+    a: 'Yes. Every tool is built mobile-first and feels native on a phone, so you can build, grade, and journal from anywhere. The same login works across web and mobile.' },
   { q: 'Is my data private?',
     a: 'Your builds and journal are yours. Analytics are privacy-first with no ad tracking, and your trading data syncs only to your own account.' },
 ]
@@ -966,10 +966,10 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
             <div className="space-y-2.5 mb-8">
               {[
-                'All 13 professional tools unlocked',
+                'All 13 tools unlocked',
                 '50+ ICT / SMC concepts, mapped & testable',
                 'The new Trade Grader + full journal analytics',
-                'Cross-device sync — web and mobile',
+                'Cross-device sync across web and mobile',
                 'Lifetime access with free updates',
                 'No signals. No subscription. Your system, your calls.',
               ].map(item => (
@@ -1074,7 +1074,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <p className="text-[15px] text-slate-400 max-w-xs mx-auto mb-14 leading-relaxed">
             {isAuthenticated
               ? 'Jump back in. Your builds, journal, and plans are waiting.'
-              : 'One license. Every tool. Syncs across all your devices forever.'}
+              : 'One license gets you every tool, with lifetime access and sync across all your devices.'}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
@@ -1094,7 +1094,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </div>
 
           <p className="mt-16 text-[11px] text-slate-700 tracking-[0.22em] uppercase font-semibold">
-            ICT · SMC · Futures · One Platform
+            ICT · SMC · Futures · Learn it in one place
           </p>
         </div>
       </section>
