@@ -62,19 +62,22 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
   }
 
   const concept = getConceptById(active)
-  const basicSynergies = useMemo(
-    () => concept?.synergies.filter(s => basicIds.has(s.conceptId)) ?? [],
-    [concept],
-  )
 
-  const linked = useMemo(() => {
-    const s = new Set<string>()
+  // Derived from `edges`, not from concept.synergies directly: a synergy is only
+  // declared on one of the two concepts, but the edge is drawn for both. Reading
+  // the pills off the concept undercounted them — Liquidity drew six lines while
+  // the panel said "Connects to 2". Both now come from the same edge set, so the
+  // count always matches the lines you can count on the map.
+  const basicSynergies = useMemo(() => {
+    const out: { conceptId: string; strength: number }[] = []
     for (const e of edges) {
-      if (e.from === active) s.add(e.to)
-      if (e.to === active)   s.add(e.from)
+      if (e.from === active)      out.push({ conceptId: e.to,   strength: e.strength })
+      else if (e.to === active)   out.push({ conceptId: e.from, strength: e.strength })
     }
-    return s
+    return out
   }, [active, edges])
+
+  const linked = useMemo(() => new Set(basicSynergies.map(s => s.conceptId)), [basicSynergies])
 
   return (
     <div className="relative rounded-3xl overflow-hidden"
@@ -175,7 +178,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
                     Connects to {basicSynergies.length}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
-                    {basicSynergies.slice(0, 5).map(syn => {
+                    {basicSynergies.map(syn => {
                       const partner = getConceptById(syn.conceptId)
                       if (!partner) return null
                       return (
