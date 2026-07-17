@@ -1,73 +1,73 @@
-# React + TypeScript + Vite
+# Trading Lab
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A model builder for traders learning ICT — stack concepts, watch the synergies
+connect, and master the framework in one workspace. Built by Chronic Trading;
+licenses are sold on Whop.
 
-Currently, two official plugins are available:
+**Live:** https://chronic-trading.github.io/trading-lab/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What's inside
 
-## React Compiler
+Fifteen tools behind one license: a concept library (50+ mapped ICT/SMC
+concepts), the strategy Builder with live synergy detection, a weighted-
+confluence Trade Grader, spaced-repetition Review, a trade Journal with
+R-multiples and kill-zone stats, bar-by-bar Replay, CSV-to-trade-card Recap,
+the Playbook lessons, session planning, key levels, a red-folder News Calendar,
+templates, saved builds, and the Arcade. Plus header utilities: prop-firm
+comparison, drawdown guard, mindset check-ins, quiz, rules, and notes.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Stack
 
-## Expanding the ESLint configuration
+- React 19 + TypeScript, Vite, Tailwind CSS v4 (CSS-based config — no
+  `tailwind.config`)
+- Supabase for license auth and cross-device sync (`user_data` upserts)
+- `lightweight-charts` for the Replay chart, `framer-motion` for modals,
+  `papaparse` + `mp4-muxer` for the Recap pipeline
+- Capacitor scaffolding for iOS/Android shells (`npm run cap:ios` / `cap:android`)
+- Deployed to GitHub Pages by Actions on every push to `main`
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Development
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev        # Vite dev server
+npm run build      # tsc -b && vite build
+npm run lint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+With no `.env`, the app boots in **local-only mode**: no network calls, all
+state in localStorage, login disabled. To exercise auth and sync locally:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# .env
+VITE_SUPABASE_URL=...
+VITE_SUPABASE_ANON_KEY=...
+VITE_WHOP_BUY_URL=...   # optional: shows the purchase CTA
+VITE_PRICE=$9.99        # optional: pricing shown on the landing page
 ```
+
+Production values are supplied as repository secrets to the deploy workflow
+(`.github/workflows/deploy.yml`).
+
+## Theming
+
+Light is the default theme; dark is opt-in via `<html data-theme="dark">`.
+All colors flow through the semantic tokens in `src/index.css` (`--bg`,
+`--surface`, `--text`, `--accent`, status colors with `-soft` tints). Three
+surfaces pin dark for their lifetime on purpose: the Landing page, the login
+screen, and Recap (its share cards are designed dark). Canvas-drawn charts
+keep literal hex — canvas can't resolve CSS variables.
+
+## Structure
+
+```
+src/
+  pages/        one file per tab (Today, Builder, Grader, Map, …)
+  components/   shared widgets + the header modals (Guard, Quiz, Rules, …)
+  hooks/        localStorage-backed state (journal, builds, mastery, theme, …)
+  data/         the concept graph, setups, prop-firm data
+  recap/        the CSV → trade-card → video pipeline
+  lib/          supabase client, sync, grader scoring
+```
+
+Proprietary — all rights reserved.
