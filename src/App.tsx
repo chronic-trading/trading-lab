@@ -87,7 +87,7 @@ function MobileBottomNav({
   return (
     <>
       {/* Bottom bar */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#06060d]/95 backdrop-blur-md border-t border-slate-800/60"
+      <nav className="tl-darkchrome md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#06060d]/95 backdrop-blur-md border-t border-slate-800/60"
            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-stretch">
           {primary.map(({ id, label, Icon, badge }) => (
@@ -127,7 +127,7 @@ function MobileBottomNav({
           className="md:hidden fixed inset-0 z-30"
           onClick={() => setMoreOpen(false)}>
           <div
-            className="absolute inset-x-0 bg-[#08080f] border-t border-slate-800/60 p-4 pb-2 shadow-2xl"
+            className="tl-darkchrome absolute inset-x-0 bg-[#08080f] border-t border-slate-800/60 p-4 pb-2 shadow-2xl"
             style={{ bottom: `calc(56px + env(safe-area-inset-bottom))` }}
             onClick={e => e.stopPropagation()}>
             <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-3 px-1">All tabs</p>

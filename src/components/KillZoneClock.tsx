@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useKillZone } from '../hooks/useKillZone'
 import { useTheme } from '../hooks/useTheme'
 import { Clock, Zap } from 'lucide-react'
@@ -8,9 +9,21 @@ import { Clock, Zap } from 'lucide-react'
  * This clock is in the header on every page, so pick the right twin per theme.
  */
 function useZoneText() {
+  // Choose the zone hue from the RENDERED data-theme, not the persisted setting:
+  // the Recap tab pins the DOM to dark while leaving the setting on light, so
+  // keying off the setting would paint the light zone hue on Recap's dark header.
+  // A MutationObserver re-renders the moment the attribute flips (no 1s flash).
   const { theme } = useTheme()
-  return (z: { textColor: string; textColorLight: string }) =>
-    theme === 'light' ? z.textColorLight : z.textColor
+  const [, force] = useState(0)
+  useEffect(() => {
+    const obs = new MutationObserver(() => force(n => n + 1))
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    return () => obs.disconnect()
+  }, [])
+  return (z: { textColor: string; textColorLight: string }) => {
+    const active = (typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme')) || theme
+    return active === 'light' ? z.textColorLight : z.textColor
+  }
 }
 
 /** Full-width clock for desktop header centre */
@@ -103,7 +116,7 @@ export function KillZoneClockCompact() {
           <span className="text-slate-700">in {timeToNext}</span>
         </span>
       )}
-      <span className="text-slate-800">·</span>
+      <span className="text-slate-600">·</span>
       {/* Macro */}
       <span className="flex items-center gap-1 text-slate-600">
         <Zap size={9} className="text-amber-500/60 flex-shrink-0" />

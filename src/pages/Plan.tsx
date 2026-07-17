@@ -76,7 +76,9 @@ const QBtn = ({ phase, current, onChange }: { phase: QPhase; current: QPhase; on
         ${current === phase ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-slate-800 text-slate-600 hover:border-slate-700'}`}
     >
       <span className="text-[12px]">{phase}</span>
-      <span className="opacity-60">{desc[phase]}</span>
+      {/* Hierarchy by size only: opacity-60 on top of the muted chip color pushed
+          this sub-label to ~1.7:1 in dark and ~2.3:1 in light. */}
+      <span>{desc[phase]}</span>
     </button>
   )
 }

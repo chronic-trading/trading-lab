@@ -158,7 +158,9 @@ export function Builder({ initialBuild }: Props) {
                   >
                     <div className={`w-1.5 h-1.5 rounded-full ${s.dot} ${active ? 'opacity-100' : 'opacity-40'}`} />
                     {tier}
-                    <span className="opacity-40 text-[10px]">{count}</span>
+                    {/* A color tier, not opacity: opacity-40 pushed these counts
+                        to ~1.6:1 in dark and ~1.8:1 in light. */}
+                    <span className="text-[10px] text-slate-500">{count}</span>
                   </button>
                 )
               })}

@@ -26,20 +26,20 @@
 
   /* Brand accent (amber) + friendly status colors tuned for light bg */
   --accent:        #f59e0b;
-  --accent-ink:    #b45309;   /* amber text/icons that stay legible on light */
+  --accent-ink:    #9e4a06;   /* amber text/icons: ≥4.5 even on the amber tint fills */
   --accent-soft:   #fcf1dd;   /* amber tint fill */
   --accent-ring:   rgba(245, 158, 11, 0.35);
 
   /* Status colors carry text (P&L, scores, badges), so they are tuned by measured
-     contrast rather than by shade number: green and orange read perceptually
-     brighter than red/blue/violet at the same step, so they need one step darker
-     to clear 4.5:1 on --surface like the rest of the family already does. */
-  --green:      #15803d;  --green-soft: #e7f6ec;
-  --red:        #dc2626;  --red-soft:   #fdeaea;
-  --blue:       #2563eb;  --blue-soft:  #e8f0fe;
-  --orange:     #c2410c;  --orange-soft:#fdeee2;
-  --violet:     #7c3aed;
-  --amber-txt:  #b45309;
+     contrast, not shade number. Values clear 4.5:1 on their own -soft tint fills,
+     not just on --surface — status text usually sits inside a tinted chip (the
+     active-tab label measured 4.49 on the amber tint: one hundredth under AA). */
+  --green:      #166534;  --green-soft: #e7f6ec;
+  --red:        #b91c1c;  --red-soft:   #fdeaea;
+  --blue:       #1d4ed8;  --blue-soft:  #e8f0fe;
+  --orange:     #9a3412;  --orange-soft:#fdeee2;
+  --violet:     #6d28d9;
+  --amber-txt:  #9e4a06;
 
   /* Warm, soft shadows */
   --shadow-sm: 0 1px 2px rgba(74, 58, 28, 0.06), 0 1px 3px rgba(74, 58, 28, 0.05);
@@ -64,7 +64,10 @@ html[data-theme="dark"] {
 
   --text:          #eae6dd;
   --text-dim:      #9aa0ac;
-  --text-faint:    #5e6570;
+  /* 4.5:1 even on --surface-2, the lightest panel this tier sits on. The old
+     #5e6570 measured 3.19 on the header — sub-AA for real text like the
+     "ICT · SMC · FUTURES" tagline. */
+  --text-faint:    #8891a0;
 
   --accent:        #f59e0b;
   --accent-ink:    #fbbf24;
@@ -124,15 +127,61 @@ html[data-theme="light"] {
   & .bg-\[\#0b0b12\], & .bg-\[\#0d0d16\], & .bg-\[\#0b0b14\] { box-shadow: var(--shadow-sm); }
 
   /* Semantic accent text — darken the dark-tuned -300/-400 stops for legibility on light */
-  & [class*="text-amber-300"], & [class*="text-amber-400"], & [class*="text-amber-500"] { color: var(--accent-ink); }
-  & [class*="text-emerald-300"], & [class*="text-emerald-400"], & [class*="text-green-400"] { color: var(--green); }
+  & [class*="text-amber-300"], & [class*="text-amber-400"], & [class*="text-amber-500"], & [class*="text-amber-600"] { color: var(--accent-ink); }
+  & [class*="text-emerald-200"], & [class*="text-emerald-300"], & [class*="text-emerald-400"], & [class*="text-green-400"] { color: var(--green); }
+  & [class*="text-yellow-300"], & [class*="text-yellow-400"] { color: var(--accent-ink); }
   & [class*="text-red-300"], & [class*="text-red-400"] { color: var(--red); }
   & [class*="text-orange-300"], & [class*="text-orange-400"] { color: var(--orange); }
   & [class*="text-blue-300"], & [class*="text-blue-400"] { color: var(--blue); }
-  & [class*="text-cyan-300"], & [class*="text-cyan-400"] { color: #0891b2; }
-  & [class*="text-teal-300"], & [class*="text-teal-400"] { color: #0d9488; }
+  /* One step darker than the obvious picks: [class*=] is a substring match, so
+     these also catch elements whose only cyan/teal class is a hover: variant —
+     the header's Trainer/Glossary links render these AT REST (measured 3.62). */
+  & [class*="text-cyan-300"], & [class*="text-cyan-400"] { color: #0e7490; }
+  & [class*="text-teal-300"], & [class*="text-teal-400"] { color: #0f766e; }
   & [class*="text-purple-300"], & [class*="text-purple-400"], & [class*="text-violet-400"] { color: var(--violet); }
   & [class*="text-pink-300"], & [class*="text-pink-400"] { color: #db2777; }
+
+  /* Always-dark chrome (mobile bottom nav + its "More" sheet) keeps a dark
+     background even in light mode, so the light remaps above would paint dark
+     text on it. Restore dark-appropriate light text inside .tl-darkchrome —
+     higher specificity than the block above, so it wins. */
+  & .tl-darkchrome [class*="text-amber-300"], & .tl-darkchrome [class*="text-amber-400"], & .tl-darkchrome [class*="text-amber-500"] { color: #fbbf24; }
+  & .tl-darkchrome [class*="text-slate-500"], & .tl-darkchrome [class*="text-slate-600"] { color: #94a3b8; }
+  & .tl-darkchrome [class*="text-slate-200"], & .tl-darkchrome [class*="text-slate-300"] { color: #cbd5e1; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Dark-mode AA layer — the mirror of the light compat block above, and the
+   piece that was missing: dark mode served raw Tailwind slate text, and the
+   dim stops fail AA on near-black (slate-700 ≈ 1.8, slate-600 ≈ 2.5,
+   slate-500 ≈ 4.1). Only TEXT tiers are remapped; slate surfaces, borders and
+   slate-800+ decorative glyphs are untouched so the dark look stays intact.
+   ═══════════════════════════════════════════════════════════════════════════ */
+html[data-theme="dark"] {
+  & [class*="text-slate-500"] { color: var(--text-dim); }
+  & [class*="text-slate-600"], & [class*="text-slate-700"] { color: var(--text-faint); }
+
+  /* Status text at full strength. These values are Tailwind's own defaults, so
+     plain text-red-400 renders pixel-identically — the point is that [class*=]
+     also matches the /60-/80 opacity-suffixed variants (text-red-400/70 etc.),
+     whose baked-in alpha dropped small colored text to ~2.1-4.2:1 on the dark
+     surfaces. This strips the alpha without touching sixty call sites. */
+  & [class*="text-red-300"] { color: #fca5a5; }
+  & [class*="text-red-400"], & [class*="text-red-500"] { color: #f87171; }
+  & [class*="text-emerald-300"] { color: #6ee7b7; }
+  & [class*="text-emerald-400"], & [class*="text-emerald-500"], & [class*="text-green-400"] { color: #34d399; }
+  & [class*="text-amber-200"] { color: #fde68a; }
+  & [class*="text-amber-300"] { color: #fcd34d; }
+  & [class*="text-amber-400"] { color: #fbbf24; }
+  & [class*="text-amber-500"], & [class*="text-amber-600"] { color: #f59e0b; }
+  & [class*="text-blue-300"] { color: #93c5fd; }
+  & [class*="text-blue-400"] { color: #60a5fa; }
+  & [class*="text-purple-300"] { color: #d8b4fe; }
+  & [class*="text-purple-400"] { color: #c084fc; }
+  & [class*="text-yellow-400"] { color: #facc15; }
+  & [class*="text-pink-400"] { color: #f472b6; }
+  & [class*="text-cyan-400"] { color: #22d3ee; }
+  & [class*="text-teal-400"] { color: #2dd4bf; }
 }
 
 /* ── Landing WCAG-AA lift ────────────────────────────────────────────────────
