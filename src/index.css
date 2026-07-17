@@ -22,7 +22,7 @@
   /* Ink — warm near-black, never pure #000 */
   --text:          #2c2720;
   --text-dim:      #6d6456;
-  --text-faint:    #a99e8c;
+  --text-faint:    #766c5a;   /* darkened to clear WCAG AA (4.5:1) on warm paper */
 
   /* Brand accent (amber) + friendly status colors tuned for light bg */
   --accent:        #f59e0b;
@@ -134,6 +134,16 @@ html[data-theme="light"] {
   & [class*="text-purple-300"], & [class*="text-purple-400"], & [class*="text-violet-400"] { color: var(--violet); }
   & [class*="text-pink-300"], & [class*="text-pink-400"] { color: #db2777; }
 }
+
+/* ── Landing WCAG-AA lift ────────────────────────────────────────────────────
+   The marketing landing is dark-locked and uses Tailwind slate/amber utilities
+   at dim stops (slate-500/600/700, amber-500/60) that don't clear AA on the near
+   -black bg. Lift the failing text stops to legible tokens. Scoped to .tl-landing
+   so the rest of the app is untouched — a blanket remap regresses colored
+   surfaces elsewhere. slate-400 already passes and is left as the body tier. */
+.tl-landing [class*="text-slate-500"], .tl-landing [class*="text-slate-600"] { color: var(--text-dim); }
+.tl-landing [class*="text-slate-700"], .tl-landing [class*="text-slate-800"] { color: #868c99; }
+.tl-landing [class*="text-amber-300"], .tl-landing [class*="text-amber-400"], .tl-landing [class*="text-amber-500"] { color: var(--accent-ink); }
 
 /* Reset lives in @layer base so Tailwind's utilities (mx-auto, m-*, p-*) still
    win — an unlayered `* { margin:0 }` silently overrides margin-inline:auto and

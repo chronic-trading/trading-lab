@@ -419,7 +419,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
   const buyLabel = isAuthenticated ? 'Launch the full Grader' : 'Get instant access'
 
   return (
-    <div className="min-h-screen bg-[#05050a] text-white overflow-x-hidden pb-[76px] sm:pb-0">
+    <div className="tl-landing min-h-screen bg-[#05050a] text-white overflow-x-hidden pb-[76px] sm:pb-0">
 
       {/* ── CSS Animations ────────────────────────────────────────── */}
       <style>{`
