@@ -168,13 +168,22 @@ code, .mono {
 /* Warm text selection */
 ::selection { background: color-mix(in srgb, var(--accent) 24%, transparent); color: var(--text); }
 
-/* Crisp accessible focus — only for keyboard nav, never on mouse click */
+/* Crisp accessible focus — only for keyboard nav, never on mouse click.
+   !important: Tailwind's focus:outline-none out-specifies this rule, so inputs
+   using it suppressed the keyboard ring entirely. Keyboard focus must always
+   be visible; the :not(:focus-visible) rule below keeps mouse clicks clean.
+   Longhands with a literal color: Chrome drops a var() inside an !important
+   outline shorthand (the ring computed to 3px currentColor — the longhands'
+   initial values). #f59e0b is --accent's value in BOTH themes, so the literal
+   is exactly equivalent. No border-radius here: forcing 8px on focus visibly
+   reshaped rounded-full elements while they were focused. */
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline-style: solid !important;
+  outline-width: 2px !important;
+  outline-color: #f59e0b !important;
   outline-offset: 2px;
-  border-radius: 8px;
 }
-:focus:not(:focus-visible) { outline: none; }
+:focus:not(:focus-visible) { outline: none !important; }
 
 /* Gentle, consistent elevation on hover — opt-in via className */
 .tl-lift { transition: transform 0.18s ease, box-shadow 0.18s ease; }
