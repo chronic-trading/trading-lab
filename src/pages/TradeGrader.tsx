@@ -121,7 +121,7 @@ export function TradeGrader() {
                 <Gauge size={18} className="text-white" />
               </div>
               <div>
-                <h1 className="text-[20px] md:text-[24px] font-black text-white tracking-tight leading-none">Trade Grader</h1>
+                <h1 className="text-[22px] md:text-[22px] font-black text-white tracking-tight leading-none">Trade Grader</h1>
                 <p className="text-[12px] text-slate-500 mt-1">Score a setup's confluence before you risk a dollar.</p>
               </div>
             </div>
@@ -281,7 +281,7 @@ export function TradeGrader() {
                     <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Suggested risk</p>
                     <p className="text-[10px] text-slate-500 mt-0.5">{Math.round(result.verdict.riskMult * 100)}% of your ${Math.round(baseRisk).toLocaleString()} plan</p>
                   </div>
-                  <p className="text-[20px] font-black" style={{ color: result.color, fontFamily: "'JetBrains Mono', monospace" }}>
+                  <p className="text-[22px] font-black" style={{ color: result.color, fontFamily: "'JetBrains Mono', monospace" }}>
                     ${suggestedRisk.toLocaleString()}
                   </p>
                 </div>

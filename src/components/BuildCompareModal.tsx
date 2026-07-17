@@ -109,7 +109,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                     <div key={stat.label} className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-4 py-3 text-center">
                       <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">{stat.label}</p>
                       {'shared' in stat ? (
-                        <p className="text-[20px] font-bold text-slate-300">{stat.shared}
+                        <p className="text-[22px] font-bold text-slate-300">{stat.shared}
                           <span className="text-[10px] text-slate-600 font-normal ml-1">in common</span>
                         </p>
                       ) : (

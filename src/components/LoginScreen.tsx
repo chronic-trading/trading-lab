@@ -109,7 +109,7 @@ export function LoginScreen({ onBack }: { onBack?: () => void }) {
             <FlaskConical size={30} className="text-amber-400" />
           </div>
           <div className="space-y-1">
-            <p className="text-[24px] font-black tracking-widest text-slate-100 leading-none">TRADING LAB</p>
+            <p className="text-[22px] font-black tracking-widest text-slate-100 leading-none">TRADING LAB</p>
             <p className="text-[11px] font-semibold text-slate-600 tracking-[0.22em]">ICT · SMC · FUTURES</p>
           </div>
         </div>

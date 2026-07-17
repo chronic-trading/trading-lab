@@ -250,8 +250,8 @@ export function QuizModal({ open, onClose }: Props) {
                     <Trophy size={30} className="text-amber-400" />
                   </div>
                   <div>
-                    <p className="text-[38px] sm:text-[42px] font-black text-white leading-none">
-                      {score}<span className="text-[22px] sm:text-[24px] text-slate-500 font-semibold">/{questions.length}</span>
+                    <p className="text-[40px] sm:text-[40px] font-black text-white leading-none">
+                      {score}<span className="text-[22px] sm:text-[22px] text-slate-500 font-semibold">/{questions.length}</span>
                     </p>
                     <p className="text-[15px] sm:text-[16px] font-bold mt-2" style={{ color: pct >= 80 ? '#34d399' : pct >= 60 ? '#f59e0b' : '#f87171' }}>
                       {pct}% correct

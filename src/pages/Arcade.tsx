@@ -528,7 +528,7 @@ export function Arcade() {
             <button onClick={() => setGame('tape')}
               className="text-left rounded-2xl border border-slate-800/60 bg-slate-900/40 p-5 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all group">
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-xl">📈</span>
+                <span className="text-[22px]">📈</span>
                 <p className="text-[13px] font-black tracking-widest text-white group-hover:text-amber-400 transition-colors">TAPE READER</p>
               </div>
               <p className="text-[11px] text-slate-500 leading-relaxed mb-3">60-second scalping sprint. Read the trend, go long or short with your whole stack, and bank as much as you can before the bell.</p>

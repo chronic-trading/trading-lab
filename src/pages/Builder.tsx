@@ -318,7 +318,7 @@ export function Builder({ initialBuild }: Props) {
       <div className="flex-1 overflow-y-auto p-5 md:p-6">
         {selectedIds.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-5 text-center">
-            <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-slate-800 flex items-center justify-center text-2xl">⚗️</div>
+            <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-slate-800 flex items-center justify-center text-[22px]">⚗️</div>
             <div>
               <p className="text-[14px] font-semibold text-slate-300">Build is empty</p>
               <p className="text-[12px] text-slate-600 mt-1.5 max-w-52 leading-relaxed">

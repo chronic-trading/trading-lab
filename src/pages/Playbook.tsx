@@ -257,7 +257,7 @@ export function Playbook() {
                   </p>
                 </div>
                 <div className="flex-shrink-0 text-right">
-                  <p className="text-[24px] md:text-[28px] font-black text-slate-200 leading-none"
+                  <p className="text-[22px] md:text-[28px] font-black text-slate-200 leading-none"
                      style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                     {setups.length}
                   </p>

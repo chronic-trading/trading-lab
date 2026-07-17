@@ -86,7 +86,7 @@ export function DrawdownGuard({ open, onClose }: Props) {
               {/* Today's P&L */}
               <div className={`rounded-2xl border px-4 py-4 ${todayPnL >= 0 ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-red-500/5 border-red-500/20'}`}>
                 <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold mb-1">Today's P&L</p>
-                <p className={`text-[32px] font-black leading-none ${todayPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`}
+                <p className={`text-[28px] font-black leading-none ${todayPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`}
                    style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                   {todayPnL >= 0 ? '+' : '-'}${Math.abs(todayPnL).toLocaleString('en-US', { maximumFractionDigits: 0 })}
                 </p>

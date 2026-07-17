@@ -56,7 +56,7 @@ export function SynergyPanel({ selectedIds }: Props) {
       <div className="rounded-2xl border border-slate-700/50 bg-slate-900/50 p-4 mb-3">
         <div className="flex items-end justify-between mb-2.5">
           <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Build Score</span>
-          <span className={`text-2xl font-bold tabular-nums leading-none
+          <span className={`text-[22px] font-bold tabular-nums leading-none
             ${score >= 80 ? 'text-amber-200' : score >= 60 ? 'text-amber-400' : score >= 40 ? 'text-yellow-500' : 'text-slate-400'}`}>
             {score}
           </span>

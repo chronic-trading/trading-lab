@@ -202,7 +202,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         {/* ── Greeting ── */}
         <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
-            <h1 className="text-[20px] md:text-[24px] font-black text-white tracking-tight">{greeting}, trader.</h1>
+            <h1 className="text-[22px] md:text-[22px] font-black text-white tracking-tight">{greeting}, trader.</h1>
             <p className="text-[12px] text-slate-500 mt-0.5">{todayFull} · New York</p>
           </div>
           <div className="flex items-center gap-2 bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-4 py-2.5">

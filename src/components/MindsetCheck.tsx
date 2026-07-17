@@ -272,9 +272,9 @@ export function MindsetCheck({ open, onClose }: Props) {
                   <div className={`rounded-2xl border px-4 py-4 ${SCORES[todayEntry.score - 1].bg}`}>
                     <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold mb-2">Today's Mindset</p>
                     <div className="flex items-center gap-3">
-                      <span className="text-[32px] leading-none">{SCORES[todayEntry.score - 1].emoji}</span>
+                      <span className="text-[28px] leading-none">{SCORES[todayEntry.score - 1].emoji}</span>
                       <div>
-                        <p className={`text-[20px] font-black leading-none ${SCORES[todayEntry.score - 1].color}`}>
+                        <p className={`text-[22px] font-black leading-none ${SCORES[todayEntry.score - 1].color}`}>
                           {SCORES[todayEntry.score - 1].label}
                         </p>
                         <p className="text-[10px] text-slate-600 mt-0.5">{todayEntry.score} / 5</p>

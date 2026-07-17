@@ -95,7 +95,7 @@ export function Review() {
             <Layers size={19} className="text-[var(--accent-ink)]" />
           </div>
           <div>
-            <h1 className="text-[20px] font-extrabold text-[var(--text)] leading-tight tracking-tight">Daily Review</h1>
+            <h1 className="text-[22px] font-extrabold text-[var(--text)] leading-tight tracking-tight">Daily Review</h1>
             <p className="text-[12px] text-[var(--text-dim)] mt-0.5">A few minutes a day keeps every concept sharp.</p>
           </div>
         </div>
@@ -162,7 +162,7 @@ export function Review() {
 
               {/* Front — the prompt */}
               <div className="px-6 py-8 md:py-10 text-center">
-                <p className="text-[28px] md:text-[32px] font-extrabold text-[var(--text)] leading-tight tracking-tight">{concept.name}</p>
+                <p className="text-[28px] md:text-[28px] font-extrabold text-[var(--text)] leading-tight tracking-tight">{concept.name}</p>
                 {!revealed && (
                   <p className="text-[13px] text-[var(--text-faint)] mt-3">Recall the definition and how you'd trade it — then reveal.</p>
                 )}
@@ -230,7 +230,7 @@ export function Review() {
                 <CheckCircle2 size={30} style={{ color: 'var(--green)' }} />
               </div>
               <div>
-                <p className="text-[20px] font-extrabold text-[var(--text)] tracking-tight">
+                <p className="text-[22px] font-extrabold text-[var(--text)] tracking-tight">
                   {doneCount > 0 ? 'Session complete' : 'All caught up'}
                 </p>
                 <p className="text-[13px] text-[var(--text-dim)] mt-2 leading-relaxed max-w-sm mx-auto">

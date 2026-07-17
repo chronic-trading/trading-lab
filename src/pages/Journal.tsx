@@ -346,7 +346,7 @@ export function Journal() {
             <div className="max-w-5xl mx-auto px-6 md:px-8 py-5 space-y-3">
               {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full gap-4">
-                  <div className="w-14 h-14 rounded-2xl border-2 border-dashed border-slate-800 flex items-center justify-center text-2xl">📓</div>
+                  <div className="w-14 h-14 rounded-2xl border-2 border-dashed border-slate-800 flex items-center justify-center text-[22px]">📓</div>
                   <div className="text-center">
                     <p className="text-[14px] font-semibold text-slate-300">{entries.length === 0 ? 'No trades logged yet' : 'No trades match this filter'}</p>
                     <p className="text-[12px] text-slate-600 mt-1.5">{entries.length === 0 ? 'Hit "Log Trade" to start tracking' : 'Switch the filter above to see other trades'}</p>
