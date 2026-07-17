@@ -187,6 +187,12 @@ function RootApp() {
     prevUserRef.current = user
   }, [user])
 
+  // Landing and login keep the long SEO title from index.html; AppShell owns
+  // the per-tool title while the app is open.
+  useEffect(() => {
+    if (view !== 'app') document.title = 'Trading Lab — ICT · SMC · Futures Workspace | Chronic Trading'
+  }, [view])
+
   if (authLoading || !synced) {
     return (
       <div className="flex items-center justify-center h-screen bg-[var(--bg)] gap-3">
@@ -234,6 +240,13 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
   const [moreOpen,      setMoreOpen]      = useState(false)
   const { loadSharedBuild }             = useBuilds()
   const { theme, toggle }               = useTheme()
+
+  // Browser tab reads the current tool ("Journal — Trading Lab"), so multiple
+  // open tabs and the history menu are tellable apart.
+  useEffect(() => {
+    const label = tabs.find(t => t.id === tab)?.label
+    document.title = label ? `${label} — Trading Lab` : 'Trading Lab'
+  }, [tab])
 
   useEffect(() => {
     const shared = loadSharedBuild()
