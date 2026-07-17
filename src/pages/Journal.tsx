@@ -388,7 +388,9 @@ export function Journal() {
                                 {entry.points !== null && (
                                   <span className={`text-[11px] font-bold ml-auto ${(entry.points ?? 0) >= 0 ? 'text-emerald-400' : 'text-red-400'}`} style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                                     {(entry.points ?? 0) >= 0 ? '+' : ''}{entry.points}pt
-                                    {dollarVal && <span className="text-[10px] text-slate-600 ml-1">(${dollarVal.toLocaleString()})</span>}
+                                    {/* !!: dollarVal is 0 for breakeven trades, and `0 && …`
+                                        renders the literal 0 — the row read "+0pt0". */}
+                                    {!!dollarVal && <span className="text-[10px] text-slate-600 ml-1">(${dollarVal.toLocaleString()})</span>}
                                   </span>
                                 )}
                               </div>
