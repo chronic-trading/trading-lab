@@ -114,17 +114,18 @@ export function TradeGrader() {
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-5">
 
         {/* ── Header ── */}
-        <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-end justify-between gap-4 flex-wrap tl-page-head">
           <div>
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-md shadow-amber-500/25">
-                <Gauge size={18} className="text-[var(--text)]" />
-              </div>
-              <div>
-                <h1 className="text-[22px] md:text-[22px] font-black text-[var(--text)] tracking-tight leading-none">Trade Grader</h1>
-                <p className="text-[12px] text-[var(--text-dim)] mt-1">Score a setup's confluence before you risk a dollar.</p>
-              </div>
+            <div className="flex items-center gap-2 mb-1.5">
+              {/* White, not var(--text): this icon sits on the solid amber chip,
+                  where the theme ink would be dark-on-amber in light mode. */}
+              <Gauge size={13} className="text-amber-500" />
+              <span className="tl-eyebrow">Trade Grader</span>
             </div>
+            <h1 className="tl-title">Score it before you risk it.</h1>
+            <p className="text-[13px] text-[var(--text-dim)] mt-2 max-w-md leading-relaxed">
+              Check off the confluence you actually have. The grade is what your setup earns — not what you hope it is.
+            </p>
           </div>
           {gradedCount > 0 && (
             <div className="flex items-center gap-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-4 py-2.5">
@@ -255,24 +256,26 @@ export function TradeGrader() {
             <div className="lg:sticky lg:top-4 space-y-5">
 
               {/* Grade card */}
-              <div className="relative bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 overflow-hidden">
+              <div className="relative tl-card p-6 overflow-hidden">
                 <div className="absolute top-0 inset-x-0 h-[2px] opacity-70"
                   style={{ background: `linear-gradient(90deg,transparent,${result.color},transparent)` }} />
 
                 <Gauge180 score={result.score} color={result.color} />
 
+                {/* The grade is the page's hero moment, so it carries the display
+                    serif rather than the mono used for ordinary figures. */}
                 <div className="text-center -mt-6">
-                  <p className="font-black leading-none" style={{ fontSize: '52px', color: result.color, textShadow: `0 0 34px ${result.color}66`, fontFamily: "'JetBrains Mono', monospace" }}>
+                  <p className="tl-display leading-none" style={{ fontSize: '68px', color: result.color }}>
                     {result.letter}
                   </p>
-                  <p className="text-[11px] text-[var(--text-dim)] mt-1 uppercase tracking-[0.2em] font-semibold">
-                    Score <span className="text-[var(--text-dim)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{result.score}</span> / 100
+                  <p className="text-[11px] text-[var(--text-dim)] mt-1.5 uppercase tracking-[0.2em] font-semibold">
+                    Score <span className="tl-figure text-[var(--text)]">{result.score}</span> / 100
                   </p>
                 </div>
 
-                <div className="mt-4 text-center">
-                  <p className="text-[14px] font-bold text-[var(--text)]">{result.verdict.headline}</p>
-                  <p className="text-[12px] text-[var(--text-dim)] leading-relaxed mt-1.5">{result.verdict.body}</p>
+                <div className="mt-5 text-center">
+                  <p className="tl-display text-[21px] text-[var(--text)]">{result.verdict.headline}</p>
+                  <p className="text-[12px] text-[var(--text-dim)] leading-relaxed mt-2">{result.verdict.body}</p>
                 </div>
 
                 {/* Risk suggestion */}

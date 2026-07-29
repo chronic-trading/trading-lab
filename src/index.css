@@ -48,16 +48,28 @@
 
   --ct-font: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --ct-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  /* Editorial display voice — page titles and hero numerals only. Never body
+     copy or UI labels: at 11-13px a display serif loses to Inter on legibility. */
+  --ct-display: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
+
+  /* Editorial rhythm. Cards get a larger, softer corner than the old rounded-2xl
+     everywhere, and a deliberate elevation ladder replaces ad-hoc shadows. */
+  --radius-card: 18px;
+  --radius-control: 11px;
 
   color-scheme: light;
 }
 
 html[data-theme="dark"] {
-  --bg:            #0b0b10;
-  --bg-elev:       #111119;
-  --surface:       #15151f;
-  --surface-2:     #1c1c28;
-  --surface-hover: #20202d;
+  /* Warm charcoal, not blue-black. The light theme is warm paper and the ink is
+     warm (#eae6dd); a cold #0b0b10 base made dark mode read as a different
+     product rather than the same one at night. These are the same hue family as
+     the paper tones, just far down the lightness scale. */
+  --bg:            #100e0b;
+  --bg-elev:       #16130f;
+  --surface:       #1b1713;
+  --surface-2:     #221d18;
+  --surface-hover: #2a241d;
 
   --border:        rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.15);
@@ -197,6 +209,76 @@ body {
 code, .mono {
   font-family: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Editorial layer.
+   The app's visual character: a display serif for titles, a consistent card
+   with real elevation, and a standard page header. These are opt-in classes
+   rather than blanket element rules, so a page adopts the look by using them —
+   nothing restyles behind your back. Both themes are first-class: the serif and
+   the rhythm carry the character, so dark mode reads editorial too rather than
+   being a light design with the lights turned off.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Display type. Instrument Serif runs optically small and tight, so it gets a
+   nudge up in size and a looser leading than the sans it replaces. */
+.tl-display {
+  font-family: var(--ct-display);
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  line-height: 1.12;
+}
+
+/* Page header — the editorial anchor at the top of every tool. An eyebrow
+   (small, spaced, uppercase) over a serif title, with a hairline rule under. */
+.tl-page-head {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.tl-eyebrow {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.tl-title {
+  font-family: var(--ct-display);
+  font-weight: 400;
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+@media (min-width: 768px) {
+  .tl-title { font-size: 36px; }
+}
+
+/* The card. One shape for the whole app instead of per-page rounded-2xl +
+   ad-hoc borders. Elevation is a hairline plus a soft shadow in light; in dark,
+   where shadows barely read, a slightly lifted surface does the work instead. */
+.tl-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+html[data-theme="dark"] .tl-card {
+  background: var(--surface);
+  box-shadow: none;
+}
+
+/* Numerals. Trading data is scanned in columns, so figures are tabular and
+   never reflow as they tick. */
+.tl-figure {
+  font-family: var(--ct-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
 /* ── Finishing touches ─────────────────────────────────────────────────────── */
