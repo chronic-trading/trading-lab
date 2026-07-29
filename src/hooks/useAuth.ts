@@ -14,6 +14,9 @@ import { setCurrentUserId } from '../lib/currentUser'
  * let it decide. A false negative would strand a logged-in user on the landing
  * page; a false positive only costs the download we were making anyway.
  */
+/** How long to wait for the auth server before falling through to signed-out. */
+const AUTH_TIMEOUT_MS = 8000
+
 function hasStoredSession(): boolean {
   const url = import.meta.env.VITE_SUPABASE_URL as string | undefined
   if (!url) return false                       // local-only mode: no auth at all
@@ -55,13 +58,30 @@ export function useAuth() {
       // while this import is still in flight — don't set state or subscribe then.
       if (cancelled) return
 
-      supabase.auth.getSession().then(({ data }) => {
-        if (cancelled) return
-        const u = data.session?.user ?? null
-        setUser(u)
-        setCurrentUserId(u?.id ?? null)
-        setLoading(false)
-      })
+      // getSession() can reject or hang: restoring a stored session makes gotrue
+      // refresh the token against the auth server, and if that server is
+      // unreachable — a paused free-tier project, an offline user — it retries
+      // and fails. Without the catch/finally below, setLoading(false) never ran
+      // and the app sat on its spinner forever, which meant a licensed user
+      // could not even reach the login screen to re-enter their key. The race
+      // covers the hang case, where the promise simply never settles.
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('auth timeout')), AUTH_TIMEOUT_MS))
+
+      Promise.race([supabase.auth.getSession(), timeout])
+        .then(({ data }) => {
+          if (cancelled) return
+          const u = data.session?.user ?? null
+          setUser(u)
+          setCurrentUserId(u?.id ?? null)
+        })
+        .catch(() => {
+          // Treat an unreachable auth server as signed out rather than fatal.
+          // The stored session is left alone: it may well be valid, and a later
+          // onAuthStateChange can still restore it once the server responds.
+          if (!cancelled) setCurrentUserId(null)
+        })
+        .finally(() => { if (!cancelled) setLoading(false) })
 
       const { data: listener } = supabase.auth.onAuthStateChange((_, session) => {
         const u = session?.user ?? null
