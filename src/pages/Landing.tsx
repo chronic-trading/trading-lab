@@ -804,7 +804,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
               This is the <span className="text-slate-400 font-semibold">real Concept Map</span> from inside the Lab,
               showing the ten basics every ICT trader learns first. Hover one to see what it connects to.
-              The other 42 concepts build on top of these.
+              {/* Deliberately not an exact count. Landing is the entry chunk and
+                  cannot import the concept dataset to derive one, so a literal
+                  here goes stale every time the library grows — it already read
+                  "42" against a library of 52. This matches the 50+ used above. */}
+              {' '}The rest of the 50+ concept library builds on top of these.
             </p>
           </div>
           <LazyOnVisible minHeight={460}>
