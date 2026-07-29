@@ -195,6 +195,83 @@ function GradePerformance({ entries }: { entries: JournalEntry[] }) {
   )
 }
 
+/**
+ * Expectancy, profit factor, and the live/backtest split.
+ *
+ * Win rate is the number traders quote and the one that misleads most — a 30%
+ * win rate is excellent at 5R and ruinous at 0.5R. Expectancy (average points
+ * per trade, wins and losses together) and profit factor (gross win ÷ gross
+ * loss) are what actually say whether there's an edge, so they get stated
+ * plainly rather than left for the reader to derive from the other panels.
+ */
+function EdgeSummary({ entries }: { entries: JournalEntry[] }) {
+  const scored = entries.filter(e => e.points !== null)
+  if (scored.length < 4) return null
+
+  const gross = (sign: 1 | -1) =>
+    scored.filter(e => sign * (e.points ?? 0) > 0)
+          .reduce((s, e) => s + Math.abs(e.points ?? 0), 0)
+  const grossWin  = gross(1)
+  const grossLoss = gross(-1)
+
+  const expectancy  = scored.reduce((s, e) => s + (e.points ?? 0), 0) / scored.length
+  // Infinite profit factor is real (no losers yet) but reads as a bug, so it's
+  // shown as an em dash with the reason in the caption instead.
+  const profitFactor = grossLoss > 0 ? grossWin / grossLoss : null
+
+  const byMode = (['live', 'backtest'] as const).map(m => {
+    const es = entries.filter(e => e.mode === m)
+    const decided = es.filter(e => e.result !== 'breakeven').length
+    const w = es.filter(e => e.result === 'win').length
+    return { mode: m, count: es.length, rate: decided ? Math.round((w / decided) * 100) : null }
+  }).filter(r => r.count > 0)
+
+  const tiles = [
+    {
+      label: 'Expectancy',
+      value: `${expectancy >= 0 ? '+' : ''}${expectancy.toFixed(2)}`,
+      sub: 'points per trade, all trades',
+      color: expectancy > 0 ? 'var(--green)' : expectancy < 0 ? 'var(--red)' : 'var(--text-dim)',
+    },
+    {
+      label: 'Profit factor',
+      value: profitFactor === null ? '—' : profitFactor.toFixed(2),
+      sub: profitFactor === null ? 'no losing trades yet' : profitFactor >= 1 ? 'above 1.0 is profitable' : 'below 1.0 loses money',
+      color: profitFactor === null ? 'var(--text-dim)' : profitFactor >= 1 ? 'var(--green)' : 'var(--red)',
+    },
+  ]
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {tiles.map(t => (
+        <div key={t.label} className="tl-card px-5 py-4">
+          <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider">{t.label}</p>
+          <p className="tl-figure text-[22px] font-bold mt-1 leading-none" style={{ color: t.color }}>{t.value}</p>
+          <p className="text-[10px] text-[var(--text-faint)] mt-1">{t.sub}</p>
+        </div>
+      ))}
+      <div className="tl-card px-5 py-4">
+        <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider">Live vs backtest</p>
+        {byMode.length === 0 ? (
+          <p className="text-[11px] text-[var(--text-faint)] mt-2">No trades yet</p>
+        ) : (
+          <div className="mt-1.5 space-y-1">
+            {byMode.map(m => (
+              <div key={m.mode} className="flex items-baseline gap-2">
+                <span className="text-[11px] font-semibold text-[var(--text-dim)] capitalize w-14">{m.mode}</span>
+                <span className="tl-figure text-[14px] font-bold text-[var(--text)]">
+                  {m.rate === null ? '—' : `${m.rate}%`}
+                </span>
+                <span className="text-[10px] text-[var(--text-faint)]">{m.count} {m.count === 1 ? 'trade' : 'trades'}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export function JournalAnalytics({ entries }: Props) {
   const total    = entries.length
   const wins     = entries.filter(e => e.result === 'win').length
@@ -286,6 +363,8 @@ export function JournalAnalytics({ entries }: Props) {
           </div>
         ))}
       </div>
+
+      <EdgeSummary entries={entries} />
 
       {/* Equity curve */}
       <EquityCurve entries={entries} />
