@@ -2,7 +2,7 @@ import type { Instrument } from '../types'
 import { KILLZONES, type JournalEntry } from '../hooks/useJournal'
 import { getConceptById } from '../data/concepts'
 import { POINT_VALUES } from '../hooks/useSettings'
-import { BarChart2, TrendingUp, TrendingDown, Zap, Clock } from 'lucide-react'
+import { BarChart2, TrendingUp, TrendingDown, Zap, Clock, Gauge } from 'lucide-react'
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const TRADING_DAYS = [1, 2, 3, 4, 5] // Mon-Fri
@@ -99,6 +99,102 @@ function PointsTimeline({ entries }: { entries: JournalEntry[] }) {
 
 interface Props { entries: JournalEntry[] }
 
+/**
+ * Win rate and points per Trade Grader grade.
+ *
+ * The point of grading a setup is the claim that better confluence produces
+ * better outcomes. This is the only place that claim gets tested against the
+ * user's own trades rather than asserted — so it deliberately reports what the
+ * data says, including when the data disagrees with the grade.
+ */
+function GradePerformance({ entries }: { entries: JournalEntry[] }) {
+  const ORDER = ['A+', 'A', 'B', 'C', 'D', 'F']
+  const graded = entries.filter(e => e.gradeLetter)
+  if (graded.length < 3) return null
+
+  const rows = ORDER.map(letter => {
+    const es = graded.filter(e => e.gradeLetter === letter)
+    const wins = es.filter(e => e.result === 'win').length
+    const decided = es.filter(e => e.result !== 'breakeven').length
+    return {
+      letter,
+      count: es.length,
+      winRate: decided > 0 ? Math.round((wins / decided) * 100) : null,
+      points: es.reduce((s, e) => s + (e.points ?? 0), 0),
+    }
+  }).filter(r => r.count > 0)
+
+  if (rows.length < 2) return null
+
+  // Does the data actually support the grades? Compare the win rate of the top
+  // half of grades against the bottom half, by trade count.
+  const strong = rows.filter(r => ['A+', 'A', 'B'].includes(r.letter))
+  const weak   = rows.filter(r => ['C', 'D', 'F'].includes(r.letter))
+  const rateOf = (rs: typeof rows) => {
+    const n = rs.reduce((s, r) => s + r.count, 0)
+    if (!n) return null
+    return Math.round(rs.reduce((s, r) => s + (r.winRate ?? 0) * r.count, 0) / n)
+  }
+  const strongRate = rateOf(strong), weakRate = rateOf(weak)
+  // "points" means price points everywhere else in this app, so win rates are
+  // always stated as percentages to avoid reading as a P&L figure.
+  const verdict = strongRate !== null && weakRate !== null
+    ? strongRate > weakRate
+      ? `Your A–B setups win ${strongRate}% of the time against ${weakRate}% for C–F. The grading is earning its keep.`
+      : strongRate === weakRate
+        ? `High and low grades are both winning ${strongRate}% of the time so far. This needs more trades before it means anything.`
+        : `Your C–F setups are winning more often (${weakRate}%) than your A–B ones (${strongRate}%). Either the grading needs tuning, or the good setups are being managed worse.`
+    : null
+
+  const max = Math.max(...rows.map(r => r.count))
+
+  return (
+    <div className="tl-card p-5 space-y-4">
+      <div className="flex items-center gap-2">
+        <Gauge size={13} className="text-amber-400" />
+        <span className="text-[13px] font-bold text-[var(--text)]">Performance by grade</span>
+        <span className="ml-auto text-[10px] text-[var(--text-faint)] font-semibold">
+          {graded.length} graded {graded.length === 1 ? 'trade' : 'trades'}
+        </span>
+      </div>
+
+      <div className="space-y-2">
+        {rows.map(r => (
+          <div key={r.letter} className="flex items-center gap-3">
+            <span className="tl-figure w-8 text-[13px] font-bold text-[var(--text)]">{r.letter}</span>
+            <div className="flex-1 h-6 rounded-lg bg-[var(--surface-2)] overflow-hidden relative">
+              <div className="h-full rounded-lg transition-all"
+                style={{
+                  width: `${Math.max(6, (r.count / max) * 100)}%`,
+                  background: r.winRate === null ? 'var(--border-strong)'
+                    : r.winRate >= 50 ? 'var(--green)' : 'var(--red)',
+                  opacity: 0.75,
+                }} />
+              <span className="absolute inset-y-0 left-2.5 flex items-center text-[10px] font-bold text-[var(--text)]">
+                {r.count} {r.count === 1 ? 'trade' : 'trades'}
+              </span>
+            </div>
+            <span className="tl-figure w-11 text-right text-[12px] font-bold"
+              style={{ color: r.winRate === null ? 'var(--text-faint)' : r.winRate >= 50 ? 'var(--green)' : 'var(--red)' }}>
+              {r.winRate === null ? '—' : `${r.winRate}%`}
+            </span>
+            <span className="tl-figure w-14 text-right text-[11px] font-semibold"
+              style={{ color: r.points > 0 ? 'var(--green)' : r.points < 0 ? 'var(--red)' : 'var(--text-faint)' }}>
+              {r.points > 0 ? '+' : ''}{r.points.toFixed(1)}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      {verdict && (
+        <p className="text-[11px] text-[var(--text-dim)] leading-relaxed border-t border-[var(--border)] pt-3">
+          {verdict}
+        </p>
+      )}
+    </div>
+  )
+}
+
 export function JournalAnalytics({ entries }: Props) {
   const total    = entries.length
   const wins     = entries.filter(e => e.result === 'win').length
@@ -193,6 +289,8 @@ export function JournalAnalytics({ entries }: Props) {
 
       {/* Equity curve */}
       <EquityCurve entries={entries} />
+
+      <GradePerformance entries={entries} />
 
       {/* Points timeline */}
       <div className="tl-card p-4">

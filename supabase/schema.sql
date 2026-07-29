@@ -25,8 +25,15 @@ create table if not exists journal_entries (
   concept_ids text[]  default '{}',
   points      float,
   notes       text    default '',
-  created_at  timestamptz default now()
+  created_at  timestamptz default now(),
+  -- Trade Grader result this trade was taken on (null = ungraded).
+  grade_letter text,
+  grade_score  int
 );
+
+-- Safe to re-run on a database created before the grade columns existed.
+alter table journal_entries add column if not exists grade_letter text;
+alter table journal_entries add column if not exists grade_score  int;
 
 -- Session plans
 create table if not exists plans (

@@ -5,6 +5,7 @@ import { useJournal, KILLZONES, type JournalEntry, type JournalMode, type Killzo
 import { JournalAnalytics } from '../components/JournalAnalytics'
 import { concepts, getConceptById } from '../data/concepts'
 import { useBuilds } from '../hooks/useBuilds'
+import { useTradeGrades } from '../hooks/useTradeGrades'
 import { POINT_VALUES } from '../hooks/useSettings'
 import type { Instrument } from '../types'
 
@@ -43,6 +44,22 @@ function LogModal({ open, onClose, onSave, existing }: {
   const [points,     setPoints]     = useState<string>(existing?.points?.toString() ?? '')
   const [notes,      setNotes]      = useState(existing?.notes ?? '')
   const [buildId,    setBuildId]    = useState('')
+  const [gradeLetter, setGradeLetter] = useState<string | null>(existing?.gradeLetter ?? null)
+  const [gradeScore,  setGradeScore]  = useState<number | null>(existing?.gradeScore  ?? null)
+  const { grades } = useTradeGrades()
+
+  // Grades from the last few days that match what's being logged. The Grader
+  // stores instrument and direction, so the right grade is usually one tap —
+  // without making the user remember a score they recorded hours earlier.
+  const suggestedGrades = grades
+    .filter(g => g.instrument === instrument && g.direction === direction)
+    .slice(0, 4)
+
+  const pickGrade = (letter: string, score: number | null) => {
+    const same = gradeLetter === letter && gradeScore === score
+    setGradeLetter(same ? null : letter)   // tapping the active chip clears it
+    setGradeScore(same ? null : score)
+  }
 
   const loadBuild = (id: string) => {
     const b = builds.find(x => x.id === id)
@@ -60,6 +77,7 @@ function LogModal({ open, onClose, onSave, existing }: {
       points:    points ? parseFloat(points) : null,
       notes,
       createdAt: existing?.createdAt ?? new Date().toISOString(),
+      gradeLetter, gradeScore,
     })
     onClose()
   }
@@ -213,6 +231,48 @@ function LogModal({ open, onClose, onSave, existing }: {
                     )
                   })}
                 </div>
+              </div>
+
+              {/* Grade — links this trade back to the Trade Grader, which is what
+                  makes "do my A+ setups actually win?" answerable. */}
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-semibold text-[var(--text-dim)]">
+                  Setup grade <span className="text-[var(--text-faint)] font-normal">· optional</span>
+                </label>
+                {suggestedGrades.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {suggestedGrades.map(g => (
+                      <button key={g.id} onClick={() => pickGrade(g.letter, g.score)}
+                        className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all ${
+                          gradeLetter === g.letter && gradeScore === g.score
+                            ? 'border-amber-500/50 bg-amber-500/15 text-amber-300'
+                            : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)]'
+                        }`}>
+                        <span className="tl-figure">{g.letter}</span>
+                        <span className="text-[10px] font-semibold text-[var(--text-faint)]">
+                          {g.score} · {g.session}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                <div className="flex flex-wrap gap-1.5">
+                  {['A+','A','B','C','D','F'].map(l => (
+                    <button key={l} onClick={() => pickGrade(l, gradeLetter === l ? gradeScore : null)}
+                      className={`w-10 py-1.5 rounded-lg border text-[11px] font-bold tl-figure transition-all ${
+                        gradeLetter === l
+                          ? 'border-amber-500/50 bg-amber-500/15 text-amber-300'
+                          : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)]'
+                      }`}>
+                      {l}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[10px] text-[var(--text-faint)]">
+                  {suggestedGrades.length > 0
+                    ? 'Recent grades for this pair and direction are shown above.'
+                    : 'Grade a setup in the Grader and it will appear here as a one-tap match.'}
+                </p>
               </div>
 
               <div className="space-y-1.5">
