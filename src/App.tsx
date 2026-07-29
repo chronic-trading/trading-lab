@@ -4,7 +4,7 @@ import {
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
   ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical,
-  Gamepad2, Layers, Sun, Moon, Gauge, LayoutDashboard,
+  Gamepad2, Layers, Sun, Moon, Gauge, LayoutDashboard, Search,
 } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
 import { Landing }        from './pages/Landing'
@@ -43,6 +43,10 @@ import { MindsetCheck }   from './components/MindsetCheck'
 // the client used to land in the entry chunk. It renders only once the visitor
 // chooses to sign in, which is exactly when loading the client is warranted.
 const LoginScreen = lazy(() => import('./components/LoginScreen').then(m => ({ default: m.LoginScreen })))
+// Loaded on first ⌘K rather than with the shell — it pulls the concept dataset
+// in to make concepts searchable, which is a big chunk to pay for up front.
+const CommandPalette = lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })))
+import type { Command } from './components/CommandPalette'
 import { useBuilds }      from './hooks/useBuilds'
 import { useAuth }        from './hooks/useAuth'
 // dataSync reaches Supabase, so it is imported dynamically at the call site
@@ -99,6 +103,25 @@ const NAV_GROUPS: NavGroup[] = [
 ]
 
 const tabMeta = (id: Tab) => tabs.find(t => t.id === id)!
+
+/** Search aliases for the command palette — see the keywords note where used. */
+const TAB_ALIASES: Partial<Record<Tab, string>> = {
+  home:      'today dashboard overview sessions',
+  builder:   'build model setup concepts',
+  grader:    'grade score confluence trade',
+  map:       'concept map graph network',
+  review:    'spaced repetition mastery drill flashcards',
+  journal:   'trades log analytics equity',
+  backtest:  'replay backtest practice bar by bar',
+  recap:     'montage share export csv',
+  playbook:  'lessons setups course learn',
+  plan:      'session plan risk checklist',
+  chart:     'key levels price',
+  calendar:  'economic news events red folder',
+  templates: 'starter presets models',
+  builds:    'saved builds my builds',
+  arcade:    'game practice tape reading',
+}
 
 /** The nav entry a tab is shown under — itself, or its parent if it's a child. */
 function parentOf(tab: Tab): NavItem {
@@ -319,6 +342,8 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
   const [drawdownOpen,  setDrawdownOpen]  = useState(false)
   const [mindsetOpen,   setMindsetOpen]   = useState(false)
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
+  const [paletteOpen,   setPaletteOpen]   = useState(false)
+  const [focusConcept,  setFocusConcept]  = useState<string | null>(null)
   const { loadSharedBuild }             = useBuilds()
   const { theme, toggle }               = useTheme()
 
@@ -328,6 +353,22 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
     const label = tabs.find(t => t.id === tab)?.label
     document.title = label ? `${label} — Trading Lab` : 'Trading Lab'
   }, [tab])
+
+  // ⌘K / Ctrl-K opens the palette from anywhere. Ignored while typing so the
+  // shortcut can't hijack a keystroke inside the journal's notes field.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'k' || !(e.metaKey || e.ctrlKey)) return
+      const el = document.activeElement
+      const typing = el instanceof HTMLElement &&
+        (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)
+      if (typing && !paletteOpen) return
+      e.preventDefault()
+      setPaletteOpen(o => !o)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [paletteOpen])
 
   useEffect(() => {
     const shared = loadSharedBuild()
@@ -346,6 +387,36 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
     }, 0)
     return () => clearTimeout(timer)
   }, [tab])
+
+  // Every destination and utility as one searchable list. Concepts are added
+  // lazily by the palette itself — see conceptCommands below.
+  const commands: Command[] = [
+    ...tabs.map(t => ({
+      id: `go:${t.id}`,
+      label: t.label,
+      section: 'Go to',
+      // The sidebar labels are deliberately terse ("Map", "Levels"), which makes
+      // them poor search targets on their own — nobody types "map" looking for
+      // the concept graph. These are the words people actually reach for.
+      keywords: `${TAB_ALIASES[t.id] ?? ''} ${parentOf(t.id).id !== t.id ? tabMeta(parentOf(t.id).id).label : ''}`,
+      Icon: t.Icon,
+      run: () => setTab(t.id),
+    })),
+    { id: 'tool:notes',    label: 'Session notes',   section: 'Tools', Icon: StickyNote,  run: () => setNotesOpen(true) },
+    { id: 'tool:rules',    label: 'Trading rules',   section: 'Tools', Icon: Shield,      run: () => setRulesOpen(true) },
+    { id: 'tool:quiz',     label: 'Concept quiz',    section: 'Tools', Icon: Brain,       run: () => setQuizOpen(true) },
+    { id: 'tool:guard',    label: 'Drawdown guard',  section: 'Tools', Icon: ShieldAlert, run: () => setDrawdownOpen(true) },
+    { id: 'tool:mindset',  label: 'Mindset check',   section: 'Tools', Icon: Smile,       run: () => setMindsetOpen(true) },
+    { id: 'tool:props',    label: 'Prop firm compare', section: 'Tools', Icon: Building2, run: () => setPropsOpen(true) },
+    { id: 'tool:settings', label: 'Settings',        section: 'Tools', Icon: Settings,    run: () => setSettingsOpen(true) },
+    {
+      id: 'tool:theme',
+      label: theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode',
+      section: 'Tools', keywords: 'theme appearance dark light',
+      Icon: theme === 'light' ? Moon : Sun,
+      run: toggle,
+    },
+  ]
 
   const handleLoadBuild = (build: Build) => {
     setLoadedBuild(build)
@@ -383,6 +454,14 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
           {/* Desktop: full utility buttons */}
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+            {/* The search affordance carries the shortcut, so ⌘K is discoverable
+                rather than something you have to already know about. */}
+            <button onClick={() => setPaletteOpen(true)} title="Search (⌘K)"
+              className="flex items-center gap-2 text-[11px] font-semibold pl-2.5 pr-2 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text)] transition-all">
+              <Search size={12} />
+              <span className="hidden lg:inline">Search</span>
+              <kbd className="hidden lg:inline text-[10px] font-semibold border border-[var(--border)] rounded-md px-1 py-px leading-none">⌘K</kbd>
+            </button>
             <a href="https://chronic-trading.github.io/ict-replay/" target="_blank" rel="noopener noreferrer" title="ICT Replay Trainer" className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:border-cyan-500/40 hover:text-cyan-400 hover:bg-cyan-500/8 transition-all"><Crosshair size={12} /><span className="hidden xl:inline">Trainer</span></a>
             <a href="https://chronic-trading.github.io/ict-glossary/" target="_blank" rel="noopener noreferrer" title="ICT Glossary" className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:border-teal-500/40 hover:text-teal-400 hover:bg-teal-500/8 transition-all"><BookOpen size={12} /><span className="hidden xl:inline">Glossary</span></a>
             <div className="w-px h-4 bg-[var(--border)] mx-0.5" />
@@ -511,7 +590,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         {tab === 'builder'   && <Builder   initialBuild={loadedBuild} />}
         {tab === 'grader'    && <TradeGrader />}
         {tab === 'chart'     && <Chart />}
-        {tab === 'map'       && <ConceptMap />}
+        {tab === 'map'       && <ConceptMap focusConceptId={focusConcept} />}
         {tab === 'review'    && <Review />}
         {tab === 'plan'      && <Plan />}
         {tab === 'journal'   && <Journal />}
@@ -546,6 +625,13 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
       </Suspense>
       <DrawdownGuard open={drawdownOpen} onClose={() => setDrawdownOpen(false)} />
       <MindsetCheck  open={mindsetOpen}  onClose={() => setMindsetOpen(false)} />
+
+      {paletteOpen && (
+        <Suspense fallback={null}>
+          <CommandPalette open onClose={() => setPaletteOpen(false)} commands={commands}
+            onSelectConcept={id => { setFocusConcept(id); setTab('map') }} />
+        </Suspense>
+      )}
 
       {/* Mobile bottom nav */}
       <MobileBottomNav tab={tab} setTab={setTab} />

@@ -58,13 +58,15 @@ const masteryLegend: { level: MasteryLevel; label: string; color: string }[] = [
 ]
 
 // ── Component ─────────────────────────────────────────────────────────────
-export function ConceptMap() {
+export function ConceptMap({ focusConceptId }: { focusConceptId?: string | null } = {}) {
   const positions   = useMemo(getPositions, [])
   const edges       = useMemo(getEdges,     [])
   const { builds }  = useBuilds()
   const masteryData = useAllMastery()
 
-  const [hovered,       setHovered]       = useState<string | null>(null)
+  // `hovered` is what the detail panel reads, so seeding it is how the command
+  // palette lands you on a specific concept rather than the bare map.
+  const [hovered,       setHovered]       = useState<string | null>(focusConceptId ?? null)
   const [selectedBuild, setSelectedBuild] = useState<Build | null>(null)
   const [mode,          setMode]          = useState<'all' | 'build'>('all')
   const [colorMode,     setColorMode]     = useState<'tier' | 'mastery'>('tier')
@@ -90,6 +92,9 @@ export function ConceptMap() {
     if (mode === 'build' && activeIds) return activeIds.includes(e.from) && activeIds.includes(e.to)
     return true
   }
+
+  // Re-focus when the palette picks another concept while the map is already open.
+  useEffect(() => { if (focusConceptId) setHovered(focusConceptId) }, [focusConceptId])
 
   const activeConcept = hovered ? getConceptById(hovered) : null
   const activeLevel   = activeConcept ? (masteryData[activeConcept.id] ?? 0) as MasteryLevel : 0
