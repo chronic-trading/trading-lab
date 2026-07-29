@@ -79,7 +79,7 @@ function LogModal({ open, onClose, onSave, existing }: {
             initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.96, opacity: 0 }}
             transition={{ duration: 0.15 }}
             onClick={e => e.stopPropagation()}
-            className="w-full max-w-lg bg-[var(--surface)] border border-[var(--border)] rounded-2xl shadow-2xl overflow-hidden"
+            className="w-full max-w-lg tl-card shadow-2xl overflow-hidden"
           >
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <h2 className="text-[15px] font-bold text-[var(--text)]">{existing ? 'Edit Trade' : 'Log a Trade'}</h2>
@@ -366,7 +366,7 @@ export function Journal() {
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.97 }}
-                        className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 hover:border-[var(--border)] transition-all group"
+                        className="tl-card p-5 hover:border-[var(--border)] transition-all group"
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex items-start gap-3 flex-1 min-w-0">
@@ -445,7 +445,7 @@ export function Journal() {
             <div className="flex-1 p-5 space-y-5">
               {total > 0 && (
                 <>
-                  <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 text-center">
+                  <div className="tl-card p-5 text-center">
                     <div className="relative w-16 h-16 mx-auto mb-2.5">
                       <svg viewBox="0 0 80 80" className="w-full h-full -rotate-90">
                         <circle cx="40" cy="40" r="32" fill="none" stroke="#1e2030" strokeWidth="8" />

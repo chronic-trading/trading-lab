@@ -325,7 +325,7 @@ export function QuizModal({ open, onClose }: Props) {
                   )}
 
                   {/* Question — larger text, less padding on mobile */}
-                  <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4">
+                  <div className="tl-card px-4 py-3.5 sm:px-5 sm:py-4">
                     <p className="text-[15px] sm:text-[15px] text-[var(--text)] leading-relaxed font-medium">{q.question}</p>
                   </div>
 

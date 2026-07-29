@@ -46,7 +46,7 @@ export function SaveBuildModal({ open, onClose, onSave, selectedIds, existingBui
             exit={{ scale: 0.96, opacity: 0 }}
             transition={{ duration: 0.16 }}
             onClick={e => e.stopPropagation()}
-            className="w-full max-w-md bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-6 space-y-5 shadow-2xl"
+            className="w-full max-w-md tl-card p-6 space-y-5 shadow-2xl"
           >
             <div className="flex items-center justify-between">
               <h2 className="text-[16px] font-bold text-[var(--text)]">Save Build</h2>

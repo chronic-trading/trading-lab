@@ -167,7 +167,7 @@ function RiskCalc({ defaultInstrument }: { defaultInstrument: Instrument }) {
       </div>
 
       {/* Results */}
-      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+      <div className="tl-card p-4 space-y-3">
         <div className="flex justify-between items-center border-b border-[var(--border)] pb-3">
           <span className="text-[12px] text-[var(--text-dim)]">Dollar Risk</span>
           <span className="text-[14px] font-bold text-[var(--text)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{fmt(dollarRisk)}</span>
@@ -407,7 +407,7 @@ export function Plan() {
 
               {/* Active rules reminder */}
               {activeRules.length > 0 && (
-                <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+                <div className="tl-card p-4">
                   <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-2.5">Your Active Rules</p>
                   <div className="space-y-1.5">
                     {activeRules.map(r => (
@@ -457,7 +457,7 @@ export function Plan() {
                 <p className="text-[12px] text-[var(--text-faint)] py-8 text-center">No saved plans yet. Fill out today\'s session plan and save it.</p>
               ) : (
                 plans.map(p => (
-                  <div key={p.id} className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+                  <div key={p.id} className="tl-card p-4 space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <span className="text-[11px] font-bold text-amber-400 font-mono">{p.instrument}</span>
@@ -497,7 +497,7 @@ export function Plan() {
       {/* ── Right: Summary card ──────────────────────────────────── */}
       <div className="hidden md:block w-[280px] flex-shrink-0 bg-[var(--bg-elev)] p-5 space-y-4 overflow-y-auto border-l border-[var(--border)]">
         <h3 className="text-[13px] font-bold text-[var(--text)]">Today's Summary</h3>
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4 space-y-3">
+        <div className="tl-card p-4 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-[11px] text-[var(--text-dim)]">Instrument</span>
             <span className="text-[12px] font-bold text-amber-400" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{instrument}</span>

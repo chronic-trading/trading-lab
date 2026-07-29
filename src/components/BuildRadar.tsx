@@ -76,7 +76,7 @@ export function BuildRadar({ selectedIds }: Props) {
   const coveragePct = Math.round((filledCount / N) * 100)
 
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-3 mb-3">
+    <div className="tl-card p-3 mb-3">
       {/* Header */}
       <div className="flex items-center justify-between mb-2">
         <span className="text-[10px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Build DNA</span>

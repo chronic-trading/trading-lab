@@ -128,7 +128,7 @@ export function TradeGrader() {
             </p>
           </div>
           {gradedCount > 0 && (
-            <div className="flex items-center gap-4 bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-4 py-2.5">
+            <div className="flex items-center gap-4 tl-card px-4 py-2.5">
               <div className="text-center">
                 <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider font-semibold">Graded</p>
                 <p className="text-[15px] font-bold text-[var(--text)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{gradedCount}</p>
@@ -148,7 +148,7 @@ export function TradeGrader() {
           <div className="lg:col-span-3 space-y-5">
 
             {/* Setup context */}
-            <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+            <div className="tl-card p-5 space-y-4">
               <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">The Setup</span>
 
               {/* Direction + instrument */}
@@ -207,7 +207,7 @@ export function TradeGrader() {
             </div>
 
             {/* Confluence checklist */}
-            <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-5">
+            <div className="tl-card p-5 space-y-5">
               <div className="flex items-center justify-between">
                 <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Confluence Checklist</span>
                 <span className="text-[10px] text-[var(--text-faint)] font-semibold">{checked.size}/{ALL_FACTORS.length} checked</span>
@@ -335,7 +335,7 @@ export function TradeGrader() {
 
               {/* Build coverage */}
               {buildCoverage && (
-                <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-3">
+                <div className="tl-card p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Package size={13} className="text-amber-400" />
@@ -374,7 +374,7 @@ export function TradeGrader() {
 
         {/* ── History ── */}
         {grades.length > 0 && (
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-3">
+          <div className="tl-card p-5 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Award size={13} className="text-amber-400" />

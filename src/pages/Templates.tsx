@@ -32,7 +32,7 @@ function TemplateCard({ t, i, onLoad }: CardProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: i * 0.06 }}
-      className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden hover:border-[var(--border)] transition-all group flex flex-col"
+      className="tl-card overflow-hidden hover:border-[var(--border)] transition-all group flex flex-col"
     >
       <div className={`h-[3px] w-full ${tierBar[t.difficulty]}`} />
 
@@ -119,9 +119,10 @@ export function Templates({ onLoad }: Props) {
     <div className="flex-1 overflow-y-auto">
       <div className="max-w-6xl mx-auto px-6 md:px-8 py-8 space-y-10">
         {/* Page header */}
-        <div>
-          <h1 className="text-[22px] font-bold text-[var(--text)] tracking-tight">Build Templates</h1>
-          <p className="text-[13px] text-[var(--text-dim)] mt-1.5">
+        <div className="tl-page-head">
+          <div className="tl-eyebrow mb-1.5">Build Templates</div>
+          <h1 className="tl-title">Start from a model.</h1>
+          <p className="text-[13px] text-[var(--text-dim)] mt-2 max-w-md leading-relaxed">
             Pre-built models to load into the builder and make your own. Each one is a starting point, not a rulebook.
           </p>
         </div>

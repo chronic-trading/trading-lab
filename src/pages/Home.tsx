@@ -75,7 +75,7 @@ function KeyLevelsPanel() {
   const currentLevels = levels[inst] ?? []
 
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+    <div className="tl-card p-5 space-y-4">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <Target size={13} className="text-amber-400" />
@@ -200,12 +200,12 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-5">
 
         {/* ── Greeting ── */}
-        <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-end justify-between gap-4 flex-wrap tl-page-head">
           <div>
-            <h1 className="text-[22px] md:text-[22px] font-black text-[var(--text)] tracking-tight">{greeting}, trader.</h1>
-            <p className="text-[12px] text-[var(--text-dim)] mt-0.5">{todayFull} · New York</p>
+            <div className="tl-eyebrow mb-1.5">{todayFull} · New York</div>
+            <h1 className="tl-title">{greeting}, trader.</h1>
           </div>
-          <div className="flex items-center gap-2 bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-4 py-2.5">
+          <div className="flex items-center gap-2 tl-card px-4 py-2.5">
             <Clock size={13} className="text-[var(--text-dim)]" />
             <span className="text-[16px] font-bold text-[var(--text)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{time.display}</span>
             <span className="text-[10px] text-[var(--text-faint)] font-semibold">NY</span>
@@ -216,7 +216,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
 
           {/* Kill Zone card */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div className="tl-card p-5 space-y-4">
             <div className="flex items-center gap-2">
               <Radio size={13} className="text-[var(--text-dim)]" />
               <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Kill Zones</span>
@@ -258,7 +258,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
           </div>
 
           {/* This week's events */}
-          <div className="md:col-span-2 bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5">
+          <div className="md:col-span-2 tl-card p-5">
             <div className="flex items-center gap-2 mb-3">
               <Zap size={13} className="text-red-400" />
               <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Upcoming Red Events</span>
@@ -294,7 +294,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
           {/* Recent P&L */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div className="tl-card p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <BarChart2 size={13} className="text-blue-400" />
@@ -364,7 +364,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
           {/* Mastery progress */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div className="tl-card p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <TrendingUp size={13} className="text-purple-400" />
@@ -407,7 +407,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
           </div>
 
           {/* Latest build */}
-          <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div className="tl-card p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Package size={13} className="text-amber-400" />
@@ -465,7 +465,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         </div>
 
         {/* Account snapshot */}
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-5 py-4 flex items-center justify-between flex-wrap gap-4">
+        <div className="tl-card px-5 py-4 flex items-center justify-between flex-wrap gap-4">
           <div className="flex items-center gap-5 flex-wrap">
             <div>
               <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider font-semibold">Account Size</p>

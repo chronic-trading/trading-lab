@@ -45,7 +45,7 @@ function EquityCurve({ entries }: { entries: JournalEntry[] }) {
   const color = final >= 0 ? '#34d399' : '#f87171'
 
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+    <div className="tl-card p-4">
       <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
         <p className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Equity Curve</p>
         <div className="flex items-center gap-3">
@@ -183,7 +183,7 @@ export function JournalAnalytics({ entries }: Props) {
           { label: 'Avg R:R', value: rr, sub: `${avgWinPts.toFixed(0)}pt win / ${avgLossPts.toFixed(0)}pt loss`, color: 'text-blue-400', mono: true },
           { label: 'Streak', value: streak.type ? `${streak.count}${streak.type}` : '—', sub: streak.type === 'W' ? 'current win streak' : streak.type === 'L' ? 'current loss streak' : 'no streak', color: streak.type === 'W' ? 'text-emerald-400' : streak.type === 'L' ? 'text-red-400' : 'text-[var(--text-dim)]' },
         ].map(s => (
-          <div key={s.label} className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-5 py-4">
+          <div key={s.label} className="tl-card px-5 py-4">
             <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider">{s.label}</p>
             <p className={`text-[22px] font-bold mt-1 leading-none ${s.color}`} style={{ fontFamily: s.mono ? "'JetBrains Mono', monospace" : undefined }}>{s.value}</p>
             <p className="text-[10px] text-[var(--text-faint)] mt-1">{s.sub}</p>
@@ -195,7 +195,7 @@ export function JournalAnalytics({ entries }: Props) {
       <EquityCurve entries={entries} />
 
       {/* Points timeline */}
-      <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+      <div className="tl-card p-4">
         <div className="flex items-center justify-between mb-3">
           <p className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Points Timeline</p>
           <p className="text-[10px] text-[var(--text-faint)]">last {Math.min(total, 24)} trades</p>
@@ -214,7 +214,7 @@ export function JournalAnalytics({ entries }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
         {/* Day of week */}
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+        <div className="tl-card p-4">
           <p className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider mb-4">Day of Week</p>
           <div className="space-y-2.5">
             {dayStats.map(({ day, total: dt, rate }) => (
@@ -238,7 +238,7 @@ export function JournalAnalytics({ entries }: Props) {
         </div>
 
         {/* Kill zone */}
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+        <div className="tl-card p-4">
           <div className="flex items-center gap-2 mb-4">
             <Clock size={12} className="text-[var(--text-dim)]" />
             <p className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Kill Zone</p>
@@ -275,7 +275,7 @@ export function JournalAnalytics({ entries }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Direction */}
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+        <div className="tl-card p-4">
             <p className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider mb-4">Direction</p>
             <div className="space-y-2.5">
               {[
@@ -299,7 +299,7 @@ export function JournalAnalytics({ entries }: Props) {
 
         {/* Instrument */}
         {instStats.length > 0 && (
-            <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+            <div className="tl-card p-4">
               <p className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider mb-4">Instrument</p>
               <div className="space-y-2.5">
                 {instStats.map(({ inst, rate, total: t }) => (
@@ -319,7 +319,7 @@ export function JournalAnalytics({ entries }: Props) {
 
       {/* Concept performance */}
       {conceptStats.length > 0 && (
-        <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+        <div className="tl-card p-4">
           <div className="flex items-center gap-2 mb-4">
             <Zap size={13} className="text-amber-400" />
             <p className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Concept Performance</p>

@@ -131,7 +131,7 @@ export function Builder({ initialBuild }: Props) {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search concepts or tags..."
-                className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-2xl pl-4 pr-9 py-2.5 text-[13px] text-[var(--text)] placeholder-[var(--text-faint)] focus:outline-none focus:border-[var(--border-strong)] focus:bg-[var(--surface)] transition-all"
+                className="w-full tl-card pl-4 pr-9 py-2.5 text-[13px] text-[var(--text)] placeholder-[var(--text-faint)] focus:outline-none focus:border-[var(--border-strong)] focus:bg-[var(--surface)] transition-all"
               />
               {search ? (
                 <button
@@ -342,7 +342,7 @@ export function Builder({ initialBuild }: Props) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 12, scale: 0.97 }}
                     transition={{ duration: 0.15 }}
-                    className="flex items-center gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-4 py-3 group hover:border-[var(--border)] transition-all relative overflow-hidden"
+                    className="flex items-center gap-3 tl-card px-4 py-3 group hover:border-[var(--border)] transition-all relative overflow-hidden"
                   >
                     <div className={`absolute left-0 inset-y-0 w-[3px] rounded-r-lg ${tierBar[c.tier]}`} />
                     <span className="text-[12px] text-[var(--text-faint)] w-5 text-center flex-shrink-0 ml-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{idx + 1}</span>

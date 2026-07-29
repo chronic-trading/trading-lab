@@ -106,7 +106,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                     { label: 'Synergies', a: synA, b: synB },
                     { label: 'Shared', shared: shared.length },
                   ].map(stat => (
-                    <div key={stat.label} className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-4 py-3 text-center">
+                    <div key={stat.label} className="tl-card px-4 py-3 text-center">
                       <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-2">{stat.label}</p>
                       {'shared' in stat ? (
                         <p className="text-[22px] font-bold text-[var(--text-dim)]">{stat.shared}
@@ -124,7 +124,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                 </div>
 
                 {/* Category coverage */}
-                <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-4">
+                <div className="tl-card p-4">
                   <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-4">Category Coverage</p>
                   <div className="space-y-3">
                     {CATS.map(cat => {

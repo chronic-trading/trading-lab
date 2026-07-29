@@ -113,10 +113,11 @@ export function Calendar() {
       <div className="max-w-5xl mx-auto px-6 md:px-8 py-8 space-y-8">
 
         {/* Header */}
-        <div className="flex items-start justify-between gap-6">
+        <div className="flex items-end justify-between gap-6 tl-page-head">
           <div>
-            <h1 className="text-[22px] font-bold text-[var(--text)] tracking-tight">Economic Calendar</h1>
-            <p className="text-[13px] text-[var(--text-dim)] mt-1.5 leading-relaxed max-w-xl">
+            <div className="tl-eyebrow mb-1.5">Economic Calendar</div>
+            <h1 className="tl-title">Know what's coming.</h1>
+            <p className="text-[13px] text-[var(--text-dim)] mt-2 leading-relaxed max-w-xl">
               Red folder (high-impact) events only. These are the releases that move markets hard — mark the data high/low immediately after each print.
             </p>
           </div>

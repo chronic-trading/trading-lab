@@ -41,7 +41,7 @@ function SetupCard({ setup }: { setup: SetupExample }) {
   const tvUrl = `https://www.tradingview.com/chart/?symbol=${setup.tvSymbol}&interval=${setup.tvInterval}`
 
   return (
-    <div className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl overflow-hidden transition-all duration-200 hover:border-[var(--border)]">
+    <div className="tl-card overflow-hidden transition-all duration-200 hover:border-[var(--border)]">
       <button
         onClick={() => setExpanded(e => !e)}
         className="w-full text-left px-4 py-4 flex items-start gap-3"
