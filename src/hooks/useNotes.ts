@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { syncUserDataField } from '../lib/supabase'
+import { syncUserDataField } from '../lib/sync'
 import { getCurrentUserId } from '../lib/currentUser'
 
 const KEY = 'trading-lab-concept-notes'

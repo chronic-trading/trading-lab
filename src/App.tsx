@@ -27,18 +27,27 @@ const PropFirms    = lazy(() => import('./pages/PropFirms').then(m => ({ default
 const Arcade       = lazy(() => import('./pages/Arcade').then(m => ({ default: m.Arcade })))
 const TradeGrader  = lazy(() => import('./pages/TradeGrader').then(m => ({ default: m.TradeGrader })))
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
-import { SessionNotes }   from './components/SessionNotes'
+// SessionNotes and the modals below reach Supabase (directly or via a sync hook),
+// so importing them here would pull the auth client into the entry chunk and put
+// it back on the landing page's critical path. They only ever render inside the
+// signed-in shell, so they load with it.
+const SessionNotes = lazy(() => import('./components/SessionNotes').then(m => ({ default: m.SessionNotes })))
 import { TradingRules }   from './components/TradingRules'
 // QuizModal pulls in the full concept dataset — keep it out of the entry chunk
 // (the landing would otherwise download all 52 concepts just to render a hero).
 const QuizModal = lazy(() => import('./components/QuizModal').then(m => ({ default: m.QuizModal })))
-import { SettingsModal }  from './components/SettingsModal'
+const SettingsModal = lazy(() => import('./components/SettingsModal').then(m => ({ default: m.SettingsModal })))
 import { DrawdownGuard }  from './components/DrawdownGuard'
 import { MindsetCheck }   from './components/MindsetCheck'
-import { LoginScreen }    from './components/LoginScreen'
+// LoginScreen imports the Supabase client directly — the single biggest reason
+// the client used to land in the entry chunk. It renders only once the visitor
+// chooses to sign in, which is exactly when loading the client is warranted.
+const LoginScreen = lazy(() => import('./components/LoginScreen').then(m => ({ default: m.LoginScreen })))
 import { useBuilds }      from './hooks/useBuilds'
 import { useAuth }        from './hooks/useAuth'
-import { syncOnLogin }    from './lib/dataSync'
+// dataSync reaches Supabase, so it is imported dynamically at the call site
+// below — a static import here would pull the client back into the entry chunk
+// that useAuth was just changed to keep it out of.
 import type { Build }     from './types'
 
 const SUPABASE_CONFIGURED = !!(
@@ -167,7 +176,7 @@ export default function App() {
 }
 
 function RootApp() {
-  const { user, loading: authLoading, signOut } = useAuth()
+  const { user, loading: authLoading, signOut, attach: attachAuth } = useAuth()
   const [synced, setSynced] = useState(false)
   const [view,   setView]   = useState<View>('landing')
   const prevUserRef = useRef(user)
@@ -176,7 +185,11 @@ function RootApp() {
     if (!SUPABASE_CONFIGURED) { setSynced(true); return }
     if (authLoading) return
     if (!user) { setSynced(true); return }
-    syncOnLogin(user.id).finally(() => setSynced(true))
+    import('./lib/dataSync')
+      .then(({ syncOnLogin }) => syncOnLogin(user.id))
+      // Never strand the app on the loading spinner if the chunk or sync fails.
+      .catch(() => {})
+      .finally(() => setSynced(true))
   }, [user, authLoading])
 
   // After successful login → go straight to app
@@ -203,7 +216,16 @@ function RootApp() {
   }
 
   if (view === 'login') {
-    return <LoginScreen onBack={() => setView('landing')} />
+    return (
+      <Suspense fallback={
+        <div className="flex items-center justify-center h-screen bg-[var(--bg)] gap-3">
+          <div className="w-5 h-5 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
+          <span className="text-[13px] text-[var(--text-dim)] font-medium">Loading…</span>
+        </div>
+      }>
+        <LoginScreen onBack={() => setView('landing')} />
+      </Suspense>
+    )
   }
 
   if (view === 'app' && user) {
@@ -219,7 +241,10 @@ function RootApp() {
   return (
     <Landing
       isAuthenticated={!!user}
-      onSignIn={() => setView('login')}
+      // attachAuth before showing the login screen: a signed-out visitor never
+      // loaded the Supabase client, so the session listener has to be started
+      // here for a successful sign-in to actually navigate into the app.
+      onSignIn={() => { attachAuth(); setView('login') }}
       onLaunch={user ? () => setView('app') : undefined}
     />
   )
@@ -435,14 +460,23 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         </div>
       </main>
 
-      <SessionNotes  open={notesOpen}    onClose={() => setNotesOpen(false)} />
+      {/* Mounted whether or not it's open: SessionNotes owns an AnimatePresence
+          exit animation and persists the note from an effect, both of which are
+          lost if the component is unmounted on close. The lazy import alone is
+          what keeps it out of the entry chunk. */}
+      <Suspense fallback={null}>
+        <SessionNotes open={notesOpen} onClose={() => setNotesOpen(false)} />
+      </Suspense>
       <TradingRules  open={rulesOpen}    onClose={() => setRulesOpen(false)} />
       {quizOpen && (
         <Suspense fallback={null}>
           <QuizModal open onClose={() => setQuizOpen(false)} />
         </Suspense>
       )}
-      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      {/* Also always-mounted — SettingsModal animates on exit too. */}
+      <Suspense fallback={null}>
+        <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      </Suspense>
       <DrawdownGuard open={drawdownOpen} onClose={() => setDrawdownOpen(false)} />
       <MindsetCheck  open={mindsetOpen}  onClose={() => setMindsetOpen(false)} />
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, StickyNote, RotateCcw } from 'lucide-react'
-import { syncUserDataField } from '../lib/supabase'
+import { syncUserDataField } from '../lib/sync'
 import { getCurrentUserId } from '../lib/currentUser'
 import { useModalBackButton } from '../hooks/useModalBackButton'
 

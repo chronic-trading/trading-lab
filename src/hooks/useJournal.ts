@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import type { Instrument } from '../types'
-import { supabase } from '../lib/supabase'
+// Imported at the point of each write rather than statically: this hook is
+// reachable from App's first render, and a static import would put the Supabase
+// client in the entry chunk (see lib/sync.ts). Every call below is already
+// gated on a signed-in user.
 import { getCurrentUserId } from '../lib/currentUser'
 
 export type JournalMode = 'live' | 'backtest'
@@ -75,20 +78,31 @@ export function useJournal() {
   const addEntry = (e: JournalEntry) => {
     setEntries(p => [e, ...p])
     const uid = getCurrentUserId()
-    if (uid) supabase.from('journal_entries').insert(toRow(e, uid)).then()
+    if (uid) {
+      import('../lib/supabase').then(({ supabase }) =>
+        supabase.from('journal_entries').insert(toRow(e, uid)).then()
+      )
+    }
   }
 
   const delEntry = (id: string) => {
     setEntries(p => p.filter(e => e.id !== id))
     const uid = getCurrentUserId()
-    if (uid) supabase.from('journal_entries').delete().eq('id', id).eq('user_id', uid).then()
+    if (uid) {
+      import('../lib/supabase').then(({ supabase }) =>
+        supabase.from('journal_entries').delete().eq('id', id).eq('user_id', uid).then()
+      )
+    }
   }
 
   const editEntry = (e: JournalEntry) => {
     setEntries(p => p.map(x => x.id === e.id ? e : x))
     const uid = getCurrentUserId()
-    if (uid) supabase.from('journal_entries')
-      .upsert(toRow(e, uid), { onConflict: 'id' }).then()
+    if (uid) {
+      import('../lib/supabase').then(({ supabase }) =>
+        supabase.from('journal_entries').upsert(toRow(e, uid), { onConflict: 'id' }).then()
+      )
+    }
   }
 
   const stats = calcStats(entries)
