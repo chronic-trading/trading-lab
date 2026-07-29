@@ -551,7 +551,7 @@ export function PlaybookDiagram({ conceptId, dir }: { conceptId: string; dir: 'l
   const uid   = `z${conceptId.replace(/[^a-z]/g,'')}`
 
   return (
-    <div className="rounded-xl overflow-hidden border border-slate-800/40" style={{ background:'#05050c' }}>
+    <div className="rounded-xl overflow-hidden border border-[var(--border)]" style={{ background:'#05050c' }}>
       <style>{`
         @keyframes ${uid}p{0%,100%{opacity:.7}50%{opacity:1}}
         .${uid}z{animation:${uid}p 2.5s ease-in-out infinite}

@@ -109,14 +109,14 @@ export function Calendar() {
   const todayEvents = WEEKLY_SCHEDULE.find(s => s.day === todayDay)
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#05050a]">
+    <div className="flex-1 overflow-y-auto bg-[var(--bg)]">
       <div className="max-w-5xl mx-auto px-6 md:px-8 py-8 space-y-8">
 
         {/* Header */}
         <div className="flex items-start justify-between gap-6">
           <div>
-            <h1 className="text-[22px] font-bold text-white tracking-tight">Economic Calendar</h1>
-            <p className="text-[13px] text-slate-400 mt-1.5 leading-relaxed max-w-xl">
+            <h1 className="text-[22px] font-bold text-[var(--text)] tracking-tight">Economic Calendar</h1>
+            <p className="text-[13px] text-[var(--text-dim)] mt-1.5 leading-relaxed max-w-xl">
               Red folder (high-impact) events only. These are the releases that move markets hard — mark the data high/low immediately after each print.
             </p>
           </div>
@@ -148,7 +148,7 @@ export function Calendar() {
           <div className="col-span-1 space-y-3">
             <div className="flex items-center gap-2">
               <Zap size={14} className="text-amber-400" />
-              <h2 className="text-[14px] font-bold text-white">Upcoming FOMC</h2>
+              <h2 className="text-[14px] font-bold text-[var(--text)]">Upcoming FOMC</h2>
             </div>
             <div className="space-y-2">
               {upcomingFOMC.map((f, i) => {
@@ -157,13 +157,13 @@ export function Calendar() {
                 return (
                   <div key={f.date}
                     className={`flex items-center justify-between px-4 py-3 rounded-2xl border transition-all
-                      ${isNext ? 'bg-amber-500/10 border-amber-500/35' : 'bg-[#0b0b12] border-slate-800/60'}`}
+                      ${isNext ? 'bg-amber-500/10 border-amber-500/35' : 'bg-[var(--surface)] border-[var(--border)]'}`}
                   >
                     <div>
-                      <p className={`text-[13px] font-bold ${isNext ? 'text-amber-300' : 'text-slate-200'}`}>
+                      <p className={`text-[13px] font-bold ${isNext ? 'text-amber-300' : 'text-[var(--text)]'}`}>
                         {f.label}
                       </p>
-                      <p className="text-[10px] text-slate-600 mt-0.5">2:00 PM EST</p>
+                      <p className="text-[10px] text-[var(--text-faint)] mt-0.5">2:00 PM EST</p>
                     </div>
                     {isNext && (
                       <span className="text-[10px] font-bold text-amber-400 bg-amber-500/15 border border-amber-500/30 px-2 py-0.5 rounded-full">NEXT</span>
@@ -178,7 +178,7 @@ export function Calendar() {
               <div className="mt-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock size={13} className="text-emerald-400" />
-                  <h3 className="text-[13px] font-bold text-white">Today ({todayDay})</h3>
+                  <h3 className="text-[13px] font-bold text-[var(--text)]">Today ({todayDay})</h3>
                 </div>
                 <div className="space-y-1.5">
                   {todayEvents.events.map(ev => (
@@ -195,18 +195,18 @@ export function Calendar() {
             <div className="mt-4">
               <div className="flex items-center gap-2 mb-2">
                 <CalendarIcon size={13} className="text-blue-400" />
-                <h3 className="text-[13px] font-bold text-white">Weekly Pattern</h3>
+                <h3 className="text-[13px] font-bold text-[var(--text)]">Weekly Pattern</h3>
               </div>
               <div className="space-y-1.5">
                 {WEEKLY_SCHEDULE.map(day => (
                   <div key={day.day}
-                    className={`rounded-xl border px-3 py-2 ${day.day === todayDay ? 'border-blue-500/30 bg-blue-500/6' : 'border-slate-800/60 bg-[#0b0b12]'}`}
+                    className={`rounded-xl border px-3 py-2 ${day.day === todayDay ? 'border-blue-500/30 bg-blue-500/6' : 'border-[var(--border)] bg-[var(--surface)]'}`}
                   >
-                    <p className={`text-[11px] font-bold mb-1 ${day.day === todayDay ? 'text-blue-300' : 'text-slate-400'}`}>{day.day}</p>
+                    <p className={`text-[11px] font-bold mb-1 ${day.day === todayDay ? 'text-blue-300' : 'text-[var(--text-dim)]'}`}>{day.day}</p>
                     {day.events.map(ev => (
                       <div key={ev} className="flex items-start gap-1.5">
                         <div className="w-1 h-1 rounded-full bg-red-500/70 mt-1.5 flex-shrink-0" />
-                        <p className="text-[10px] text-slate-500 leading-relaxed">{ev}</p>
+                        <p className="text-[10px] text-[var(--text-dim)] leading-relaxed">{ev}</p>
                       </div>
                     ))}
                   </div>
@@ -219,13 +219,13 @@ export function Calendar() {
           <div className="col-span-2 space-y-3">
             <div className="flex items-center gap-2">
               <TrendingUp size={14} className="text-red-400" />
-              <h2 className="text-[14px] font-bold text-white">Red Folder Reference</h2>
+              <h2 className="text-[14px] font-bold text-[var(--text)]">Red Folder Reference</h2>
             </div>
             <div className="grid grid-cols-2 gap-3">
               {RECURRING.map(ev => (
                 <div key={ev.name}
-                  className={`bg-[#0b0b12] border rounded-2xl p-4 space-y-2.5
-                    ${ev.impact === 'extreme' ? 'border-red-500/30' : 'border-slate-800/60'}`}
+                  className={`bg-[var(--surface)] border rounded-2xl p-4 space-y-2.5
+                    ${ev.impact === 'extreme' ? 'border-red-500/30' : 'border-[var(--border)]'}`}
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div>
@@ -235,18 +235,18 @@ export function Calendar() {
                           {ev.impact === 'extreme' ? 'Extreme Impact' : 'High Impact'}
                         </span>
                       </div>
-                      <p className="text-[13px] font-bold text-white leading-snug">{ev.name}</p>
+                      <p className="text-[13px] font-bold text-[var(--text)] leading-snug">{ev.name}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock size={10} className="text-slate-600 flex-shrink-0" />
-                    <p className="text-[11px] text-slate-400">{ev.time}</p>
+                    <Clock size={10} className="text-[var(--text-faint)] flex-shrink-0" />
+                    <p className="text-[11px] text-[var(--text-dim)]">{ev.time}</p>
                   </div>
                   <div className="flex items-start gap-1.5">
-                    <CalendarIcon size={10} className="text-slate-600 mt-0.5 flex-shrink-0" />
-                    <p className="text-[11px] text-slate-500 leading-relaxed">{ev.schedule}</p>
+                    <CalendarIcon size={10} className="text-[var(--text-faint)] mt-0.5 flex-shrink-0" />
+                    <p className="text-[11px] text-[var(--text-dim)] leading-relaxed">{ev.schedule}</p>
                   </div>
-                  <p className="text-[12px] text-slate-400 leading-relaxed border-t border-slate-800/50 pt-2.5">{ev.why}</p>
+                  <p className="text-[12px] text-[var(--text-dim)] leading-relaxed border-t border-[var(--border)] pt-2.5">{ev.why}</p>
                 </div>
               ))}
             </div>

@@ -210,7 +210,7 @@ export function Review() {
               ) : (
                 <div className="border-t border-[var(--border)] p-4">
                   <button onClick={() => setRevealed(true)}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-white text-[14px] font-bold shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-[var(--text)] text-[14px] font-bold shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
                     style={{ background: 'linear-gradient(180deg, #fbbf24, var(--accent))' }}>
                     <Eye size={16} /> Show answer
                     <span className="hidden md:inline text-[10px] opacity-70 font-bold ml-1">space</span>

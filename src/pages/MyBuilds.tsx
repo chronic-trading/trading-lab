@@ -18,12 +18,12 @@ export function MyBuilds({ onLoadBuild }: Props) {
   if (builds.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center flex-1 gap-5 text-center py-24">
-        <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-slate-800 flex items-center justify-center">
-          <Package size={24} className="text-slate-600" />
+        <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-[var(--border)] flex items-center justify-center">
+          <Package size={24} className="text-[var(--text-faint)]" />
         </div>
         <div>
-          <p className="text-[15px] font-semibold text-slate-300">No saved builds yet</p>
-          <p className="text-[12px] text-slate-600 mt-2 leading-relaxed">Craft a model in the Builder and hit Save Build</p>
+          <p className="text-[15px] font-semibold text-[var(--text-dim)]">No saved builds yet</p>
+          <p className="text-[12px] text-[var(--text-faint)] mt-2 leading-relaxed">Craft a model in the Builder and hit Save Build</p>
         </div>
       </div>
     )
@@ -35,8 +35,8 @@ export function MyBuilds({ onLoadBuild }: Props) {
         <div className="max-w-3xl mx-auto w-full px-6 md:px-8 py-6 md:py-8 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-[16px] font-bold text-slate-100">My Builds</h2>
-              <p className="text-[12px] text-slate-500 mt-0.5">{builds.length} saved</p>
+              <h2 className="text-[16px] font-bold text-[var(--text)]">My Builds</h2>
+              <p className="text-[12px] text-[var(--text-dim)] mt-0.5">{builds.length} saved</p>
             </div>
             {builds.length >= 2 && (
               <button

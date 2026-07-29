@@ -214,19 +214,19 @@ function TapeReader({ onBack }: { onBack: () => void }) {
         <Stat label="Time" value={String(hud.timeLeft)} color={hud.timeLeft <= 10 ? 'var(--red)' : undefined} />
       </div>
 
-      <div className="relative rounded-2xl border border-slate-800/60 overflow-hidden">
+      <div className="relative rounded-2xl border border-[var(--border)] overflow-hidden">
         <canvas ref={cvsRef} width={760} height={340} className="w-full block" />
         {phase !== 'playing' && (
-          <div className="absolute inset-0 bg-[#05050a]/90 flex flex-col items-center justify-center text-center p-6">
+          <div className="absolute inset-0 bg-[var(--bg)]/90 flex flex-col items-center justify-center text-center p-6">
             {phase === 'idle' ? (
               <>
-                <p className="text-[15px] font-black tracking-widest text-white mb-2">TAPE READER</p>
-                <p className="text-[11px] text-slate-500 mb-1">B goes all-in long · S goes all-in short · opposite key closes</p>
-                <p className="text-[11px] text-slate-500 mb-4">Open positions are marked to market at the bell.</p>
+                <p className="text-[15px] font-black tracking-widest text-[var(--text)] mb-2">TAPE READER</p>
+                <p className="text-[11px] text-[var(--text-dim)] mb-1">B goes all-in long · S goes all-in short · opposite key closes</p>
+                <p className="text-[11px] text-[var(--text-dim)] mb-4">Open positions are marked to market at the bell.</p>
               </>
             ) : (
               <>
-                <p className="text-[15px] font-black tracking-widest text-white mb-1">{result.pnl >= 0 ? 'CLOSING BELL 🔔' : 'REKT 📉'}</p>
+                <p className="text-[15px] font-black tracking-widest text-[var(--text)] mb-1">{result.pnl >= 0 ? 'CLOSING BELL 🔔' : 'REKT 📉'}</p>
                 <p className="text-[28px] font-black mb-2" style={{ color: result.pnl >= 0 ? 'var(--green)' : 'var(--red)' }}>{signed(result.pnl)}</p>
               </>
             )}
@@ -404,33 +404,33 @@ function Liquidation({ onBack }: { onBack: () => void }) {
         <Stat label="Peak" value={fmt(hud.peak)} color="var(--accent-ink)" />
       </div>
 
-      <div className={`relative rounded-2xl border border-slate-800/60 overflow-hidden ${shake ? 'animate-[shake_0.5s_ease-in-out]' : ''}`}>
+      <div className={`relative rounded-2xl border border-[var(--border)] overflow-hidden ${shake ? 'animate-[shake_0.5s_ease-in-out]' : ''}`}>
         <style>{`@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }`}</style>
         <canvas ref={cvsRef} width={760} height={340} className="w-full block" />
 
         {headline && phase === 'playing' && (
-          <div className="absolute top-3 inset-x-3 flex items-center gap-2 px-3 py-2 rounded-xl bg-[#05050a]/95 border border-amber-500/40 shadow-lg shadow-amber-500/10">
+          <div className="absolute top-3 inset-x-3 flex items-center gap-2 px-3 py-2 rounded-xl bg-[var(--bg)]/95 border border-amber-500/40 shadow-lg shadow-amber-500/10">
             <Newspaper size={13} className="text-amber-400 flex-shrink-0" />
             <span className="text-[11px] font-black tracking-wide text-amber-300 truncate">{headline}</span>
           </div>
         )}
 
         {phase !== 'playing' && (
-          <div className="absolute inset-0 bg-[#05050a]/90 flex flex-col items-center justify-center text-center p-6">
+          <div className="absolute inset-0 bg-[var(--bg)]/90 flex flex-col items-center justify-center text-center p-6">
             {phase === 'idle' ? (
               <>
-                <p className="text-[15px] font-black tracking-widest text-white mb-2">LIQUIDATION</p>
-                <p className="text-[11px] text-slate-500 mb-1">Pick your leverage. Go long or short with your whole stack.</p>
-                <p className="text-[11px] text-slate-500 mb-4">News moves the tape. The red line is your liquidation — wicks count. No timer: compound until you're rekt.</p>
+                <p className="text-[15px] font-black tracking-widest text-[var(--text)] mb-2">LIQUIDATION</p>
+                <p className="text-[11px] text-[var(--text-dim)] mb-1">Pick your leverage. Go long or short with your whole stack.</p>
+                <p className="text-[11px] text-[var(--text-dim)] mb-4">News moves the tape. The red line is your liquidation — wicks count. No timer: compound until you're rekt.</p>
               </>
             ) : (
               <>
                 <Skull size={28} className="text-red-400 mb-2" />
                 <p className="text-[15px] font-black tracking-widest text-red-400 mb-2">LIQUIDATED</p>
                 <div className="grid grid-cols-3 gap-4 mb-3">
-                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Peak equity</p><p className="text-[15px] font-black text-amber-400">{fmt(stats.peak)}</p></div>
-                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Trades closed</p><p className="text-[15px] font-black text-slate-200">{stats.trades}</p></div>
-                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Best trade</p><p className="text-[15px] font-black text-emerald-400">{signed(stats.bestTrade)}</p></div>
+                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-faint)]">Peak equity</p><p className="text-[15px] font-black text-amber-400">{fmt(stats.peak)}</p></div>
+                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-faint)]">Trades closed</p><p className="text-[15px] font-black text-[var(--text)]">{stats.trades}</p></div>
+                  <div><p className="text-[10px] font-bold uppercase tracking-widest text-[var(--text-faint)]">Best trade</p><p className="text-[15px] font-black text-emerald-400">{signed(stats.bestTrade)}</p></div>
                 </div>
               </>
             )}
@@ -445,16 +445,16 @@ function Liquidation({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="flex items-center gap-2 mt-3 mb-2">
-        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600">Leverage</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--text-faint)]">Leverage</span>
         {LEVERAGES.map(l => (
           <button key={l} onClick={() => setLev(l)} disabled={!!hud.pos}
             className={`px-3 py-1 rounded-lg text-[11px] font-black transition-all disabled:opacity-40 ${
-              lev === l ? 'bg-amber-500/15 border border-amber-500/40 text-amber-400' : 'border border-slate-800 text-slate-500 hover:text-slate-300'
+              lev === l ? 'bg-amber-500/15 border border-amber-500/40 text-amber-400' : 'border border-[var(--border)] text-[var(--text-dim)] hover:text-[var(--text-dim)]'
             }`}>
             {l}x
           </button>
         ))}
-        <span className="ml-auto text-[10px] text-slate-600 font-semibold hidden md:block">
+        <span className="ml-auto text-[10px] text-[var(--text-faint)] font-semibold hidden md:block">
           {lev}x → ±{(95 / lev).toFixed(1)}% move = liquidation
         </span>
       </div>
@@ -485,9 +485,9 @@ function Liquidation({ onBack }: { onBack: () => void }) {
 // ─────────────────────────────────────────────────────────────
 function Stat({ label, value, color }: { label: string; value: string; color?: string }) {
   return (
-    <div className="rounded-xl border border-slate-800/60 bg-slate-900/40 px-3 py-2 text-center">
-      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600">{label}</p>
-      <p className="text-[14px] md:text-[16px] font-black tabular-nums text-slate-100" style={color ? { color } : undefined}>{value}</p>
+    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-center">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--text-faint)]">{label}</p>
+      <p className="text-[14px] md:text-[16px] font-black tabular-nums text-[var(--text)]" style={color ? { color } : undefined}>{value}</p>
     </div>
   )
 }
@@ -498,12 +498,12 @@ function GameFrame({ onBack, title, ticker, subtitle, children }: {
   return (
     <div className="max-w-3xl mx-auto w-full">
       <div className="flex items-center gap-3 mb-4">
-        <button onClick={onBack} className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:text-slate-300 hover:border-slate-600 transition-all">
+        <button onClick={onBack} className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:text-[var(--text-dim)] hover:border-[var(--border-strong)] transition-all">
           <ArrowLeft size={12} /> Arcade
         </button>
         <div>
-          <p className="text-[14px] font-black tracking-widest text-white leading-none">{title} <span className="text-amber-400">{ticker}</span></p>
-          <p className="text-[10px] text-slate-600 font-semibold mt-0.5">{subtitle}</p>
+          <p className="text-[14px] font-black tracking-widest text-[var(--text)] leading-none">{title} <span className="text-amber-400">{ticker}</span></p>
+          <p className="text-[10px] text-[var(--text-faint)] font-semibold mt-0.5">{subtitle}</p>
         </div>
       </div>
       {children}
@@ -520,28 +520,28 @@ export function Arcade() {
         <div className="max-w-3xl mx-auto w-full">
           <div className="flex items-center gap-2 mb-1">
             <Gamepad2 size={16} className="text-amber-400" />
-            <h1 className="text-[16px] font-black tracking-widest text-white">ARCADE</h1>
+            <h1 className="text-[16px] font-black tracking-widest text-[var(--text)]">ARCADE</h1>
           </div>
-          <p className="text-[11px] text-slate-500 mb-5">Train your tape instincts. Fake money, real lessons.</p>
+          <p className="text-[11px] text-[var(--text-dim)] mb-5">Train your tape instincts. Fake money, real lessons.</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <button onClick={() => setGame('tape')}
-              className="text-left rounded-2xl border border-slate-800/60 bg-slate-900/40 p-5 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all group">
+              className="text-left rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-amber-500/40 hover:bg-amber-500/5 transition-all group">
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-[22px]">📈</span>
-                <p className="text-[13px] font-black tracking-widest text-white group-hover:text-amber-400 transition-colors">TAPE READER</p>
+                <p className="text-[13px] font-black tracking-widest text-[var(--text)] group-hover:text-amber-400 transition-colors">TAPE READER</p>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed mb-3">60-second scalping sprint. Read the trend, go long or short with your whole stack, and bank as much as you can before the bell.</p>
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600">No leverage · Timed · Pure tape reading</p>
+              <p className="text-[11px] text-[var(--text-dim)] leading-relaxed mb-3">60-second scalping sprint. Read the trend, go long or short with your whole stack, and bank as much as you can before the bell.</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--text-faint)]">No leverage · Timed · Pure tape reading</p>
             </button>
 
             <button onClick={() => setGame('liq')}
-              className="text-left rounded-2xl border border-slate-800/60 bg-slate-900/40 p-5 hover:border-red-500/40 hover:bg-red-500/5 transition-all group">
+              className="text-left rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 hover:border-red-500/40 hover:bg-red-500/5 transition-all group">
               <div className="flex items-center gap-2 mb-2">
                 <Zap size={18} className="text-red-400" />
-                <p className="text-[13px] font-black tracking-widest text-white group-hover:text-red-400 transition-colors">LIQUIDATION</p>
+                <p className="text-[13px] font-black tracking-widest text-[var(--text)] group-hover:text-red-400 transition-colors">LIQUIDATION</p>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed mb-3">Leveraged perps with a live news feed. Up to 50x, a liquidation line that hunts your wicks, and no timer — compound until you blow up.</p>
+              <p className="text-[11px] text-[var(--text-dim)] leading-relaxed mb-3">Leveraged perps with a live news feed. Up to 50x, a liquidation line that hunts your wicks, and no timer — compound until you blow up.</p>
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-red-400/70">5–50x leverage · News events · Survival</p>
             </button>
           </div>

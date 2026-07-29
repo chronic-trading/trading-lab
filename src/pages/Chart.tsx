@@ -98,9 +98,9 @@ function TVChart({ symbol, interval }: { symbol: string; interval: string }) {
 
   if (error) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-[#05050a]">
-        <p className="text-slate-400 text-[14px] font-semibold">Chart couldn't load</p>
-        <p className="text-slate-600 text-[12px]">Try the Reload button, or open TradingView directly.</p>
+      <div className="w-full h-full flex flex-col items-center justify-center gap-4 bg-[var(--bg)]">
+        <p className="text-[var(--text-dim)] text-[14px] font-semibold">Chart couldn't load</p>
+        <p className="text-[var(--text-faint)] text-[12px]">Try the Reload button, or open TradingView directly.</p>
         <a
           href={`https://www.tradingview.com/chart/?symbol=${symbol}`}
           target="_blank"
@@ -157,7 +157,7 @@ export function Chart() {
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
 
         {/* Toolbar */}
-        <div className="flex items-center gap-2 px-5 py-3 border-b border-slate-800/50 bg-[#06060d] flex-shrink-0 flex-wrap">
+        <div className="flex items-center gap-2 px-5 py-3 border-b border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0 flex-wrap">
 
           {/* Preset symbols */}
           <div className="flex gap-1.5 flex-wrap">
@@ -169,7 +169,7 @@ export function Chart() {
                 className={`text-[12px] font-bold px-3 py-1.5 rounded-xl border transition-all
                   ${symbol === p.symbol
                     ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
-                    : 'border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-200'}`}
+                    : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text)]'}`}
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
                 {p.label}
@@ -177,7 +177,7 @@ export function Chart() {
             ))}
           </div>
 
-          <div className="w-px h-5 bg-slate-800 flex-shrink-0" />
+          <div className="w-px h-5 bg-[var(--surface-2)] flex-shrink-0" />
 
           {/* Custom symbol input */}
           <div className="flex items-center gap-1.5">
@@ -186,19 +186,19 @@ export function Chart() {
               onChange={e => setCustom(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && applyCustom()}
               placeholder="AAPL, TSLA…"
-              className="bg-slate-900/70 border border-slate-800 rounded-xl px-3 py-1.5 text-[12px] text-slate-200 placeholder-slate-600 focus:outline-none focus:border-slate-600 transition-all w-28"
+              className="bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-1.5 text-[12px] text-[var(--text)] placeholder-[var(--text-faint)] focus:outline-none focus:border-[var(--border-strong)] transition-all w-28"
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             />
             <button
               onClick={applyCustom}
               disabled={!custom.trim()}
-              className="text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200 transition-all disabled:opacity-30"
+              className="text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text)] transition-all disabled:opacity-30"
             >
               Go
             </button>
           </div>
 
-          <div className="w-px h-5 bg-slate-800 flex-shrink-0" />
+          <div className="w-px h-5 bg-[var(--surface-2)] flex-shrink-0" />
 
           {/* Timeframes */}
           <div className="flex gap-1">
@@ -208,8 +208,8 @@ export function Chart() {
                 onClick={() => { setTf(t.value); setChartKey(k => k + 1) }}
                 className={`text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border transition-all
                   ${tf === t.value
-                    ? 'bg-slate-700 border-slate-600 text-slate-100'
-                    : 'border-slate-800 text-slate-500 hover:border-slate-600 hover:text-slate-300'}`}
+                    ? 'bg-[var(--surface-hover)] border-[var(--border-strong)] text-[var(--text)]'
+                    : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text-dim)]'}`}
               >
                 {t.label}
               </button>
@@ -229,7 +229,7 @@ export function Chart() {
             </button>
             <button
               onClick={() => setChartKey(k => k + 1)}
-              className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-slate-300 px-2 py-1.5 rounded-lg hover:bg-slate-800/50 transition-all"
+              className="flex items-center gap-1.5 text-[11px] text-[var(--text-faint)] hover:text-[var(--text-dim)] px-2 py-1.5 rounded-lg hover:bg-[var(--surface-2)] transition-all"
             >
               <RefreshCw size={11} /> Reload
             </button>
@@ -243,22 +243,22 @@ export function Chart() {
       </div>
 
       {/* ── Instructions panel ──────────────────────────────── */}
-      <div className={`${guideOpen ? 'flex' : 'hidden'} md:flex w-full md:w-[310px] flex-shrink-0 border-l border-slate-800/50 flex-col bg-[#06060d] overflow-hidden absolute md:relative inset-0 z-10 md:z-auto`}>
-        <div className="px-5 py-4 border-b border-slate-800/50 space-y-3">
+      <div className={`${guideOpen ? 'flex' : 'hidden'} md:flex w-full md:w-[310px] flex-shrink-0 border-l border-[var(--border)] flex-col bg-[var(--bg-elev)] overflow-hidden absolute md:relative inset-0 z-10 md:z-auto`}>
+        <div className="px-5 py-4 border-b border-[var(--border)] space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[14px] font-bold text-white">Drawing Guide</p>
-              <p className="text-[11px] text-slate-500 mt-0.5">TradingView steps for each concept in your build</p>
+              <p className="text-[14px] font-bold text-[var(--text)]">Drawing Guide</p>
+              <p className="text-[11px] text-[var(--text-dim)] mt-0.5">TradingView steps for each concept in your build</p>
             </div>
             <button
               onClick={() => setGuideOpen(false)}
-              className="md:hidden w-8 h-8 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all"
+              className="md:hidden w-8 h-8 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text-dim)] hover:bg-[var(--surface-2)] transition-all"
             >
               <ChevronDown size={16} />
             </button>
           </div>
           <select
-            className="w-full bg-slate-900 border border-slate-700/60 rounded-xl px-3 py-2 text-[12px] text-slate-200 focus:outline-none focus:border-slate-500 transition-colors"
+            className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2 text-[12px] text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-colors"
             value={buildId}
             onChange={e => { setBuildId(e.target.value); setExpanded(null) }}
           >
@@ -266,13 +266,13 @@ export function Chart() {
             {builds.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
           </select>
           {!buildId && (
-            <p className="text-[11px] text-slate-600 leading-relaxed">
+            <p className="text-[11px] text-[var(--text-faint)] leading-relaxed">
               Select a build to get step-by-step TradingView drawing guides for each concept.
             </p>
           )}
         </div>
 
-        <div className="flex-1 overflow-y-auto divide-y divide-slate-800/40">
+        <div className="flex-1 overflow-y-auto divide-y divide-[var(--border)]">
           {conceptList.map(c => {
             if (!c) return null
             const instr  = tvInstructions[c.id]
@@ -281,20 +281,20 @@ export function Chart() {
               <div key={c.id}>
                 <button
                   onClick={() => setExpanded(isOpen ? null : c.id)}
-                  className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-slate-800/20 transition-colors text-left"
+                  className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-[var(--surface-2)] transition-colors text-left"
                 >
                   <div className={`w-2 h-2 rounded-full flex-shrink-0 ${tierDot[c.tier]}`} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-semibold text-slate-100 truncate">{c.name}</p>
+                    <p className="text-[13px] font-semibold text-[var(--text)] truncate">{c.name}</p>
                     <p className={`text-[10px] font-bold uppercase tracking-wider mt-0.5 ${tierColor[c.tier]}`}>{c.tier}</p>
                   </div>
                   {isOpen
-                    ? <ChevronUp size={13} className="text-slate-600 flex-shrink-0" />
-                    : <ChevronDown size={13} className="text-slate-600 flex-shrink-0" />}
+                    ? <ChevronUp size={13} className="text-[var(--text-faint)] flex-shrink-0" />
+                    : <ChevronDown size={13} className="text-[var(--text-faint)] flex-shrink-0" />}
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-5 bg-slate-900/20 border-t border-slate-800/30 space-y-4 pt-4">
+                  <div className="px-5 pb-5 bg-[var(--surface)] border-t border-[var(--border)] space-y-4 pt-4">
                     {instr ? (
                       <>
                         <div>
@@ -304,7 +304,7 @@ export function Chart() {
                           </div>
                           <div className="flex flex-wrap gap-1">
                             {instr.tools.map(t => (
-                              <span key={t} className="text-[10px] text-slate-400 bg-slate-800 border border-slate-700/50 px-2 py-0.5 rounded-lg">{t}</span>
+                              <span key={t} className="text-[10px] text-[var(--text-dim)] bg-[var(--surface-2)] border border-[var(--border)] px-2 py-0.5 rounded-lg">{t}</span>
                             ))}
                           </div>
                         </div>
@@ -316,8 +316,8 @@ export function Chart() {
                           <ol className="space-y-2.5">
                             {instr.steps.map((step, i) => (
                               <li key={i} className="flex gap-2.5">
-                                <span className="text-[10px] font-bold text-slate-600 w-4 flex-shrink-0 mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{i + 1}.</span>
-                                <p className="text-[12px] text-slate-300 leading-relaxed">{step}</p>
+                                <span className="text-[10px] font-bold text-[var(--text-faint)] w-4 flex-shrink-0 mt-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{i + 1}.</span>
+                                <p className="text-[12px] text-[var(--text-dim)] leading-relaxed">{step}</p>
                               </li>
                             ))}
                           </ol>
@@ -331,7 +331,7 @@ export function Chart() {
                         </div>
                       </>
                     ) : (
-                      <p className="text-[11px] text-slate-600">No drawing guide yet for this concept.</p>
+                      <p className="text-[11px] text-[var(--text-faint)]">No drawing guide yet for this concept.</p>
                     )}
                   </div>
                 )}

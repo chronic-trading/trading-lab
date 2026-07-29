@@ -9,7 +9,7 @@ const tierPillActive: Record<string, string> = {
   intermediate: 'bg-blue-500/15 border-blue-500/45 text-blue-300',
   advanced: 'bg-purple-500/15 border-purple-500/45 text-purple-300',
 }
-const levelColors = ['bg-slate-700', 'bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-emerald-500', 'bg-amber-400']
+const levelColors = ['bg-[var(--surface-hover)]', 'bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-emerald-500', 'bg-amber-400']
 
 export function MasteryOverview() {
   const [tierFilter, setTierFilter] = useState<Tier | null>(null)
@@ -31,17 +31,17 @@ export function MasteryOverview() {
     <div className="flex flex-col flex-1 overflow-hidden">
 
       {/* Summary stats */}
-      <div className="px-3 pt-3 pb-2 space-y-2.5 border-b border-slate-800/40">
+      <div className="px-3 pt-3 pb-2 space-y-2.5 border-b border-[var(--border)]">
         <div className="grid grid-cols-4 gap-1.5">
           {[
             { val: mastered,   label: 'Mastered',   color: 'text-amber-300' },
             { val: proficient, label: 'Proficient+', color: 'text-emerald-400' },
             { val: started,    label: 'Started',     color: 'text-blue-400' },
-            { val: notStarted, label: 'Not yet',     color: 'text-slate-500' },
+            { val: notStarted, label: 'Not yet',     color: 'text-[var(--text-dim)]' },
           ].map(s => (
-            <div key={s.label} className="bg-[#0d0d16] border border-slate-800/60 rounded-xl px-2 py-2 text-center">
+            <div key={s.label} className="bg-[var(--surface)] border border-[var(--border)] rounded-xl px-2 py-2 text-center">
               <p className={`text-[18px] font-bold leading-none ${s.color}`}>{s.val}</p>
-              <p className="text-[10px] text-slate-600 mt-1 leading-none uppercase tracking-wider">{s.label}</p>
+              <p className="text-[10px] text-[var(--text-faint)] mt-1 leading-none uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
         </div>
@@ -51,18 +51,18 @@ export function MasteryOverview() {
           {dist.map((count, i) => count > 0 ? (
             <div key={i} className={`${levelColors[i + 1]} transition-all duration-500`} style={{ flex: count }} />
           ) : null)}
-          {notStarted > 0 && <div className="bg-slate-800/60 transition-all duration-500" style={{ flex: notStarted }} />}
+          {notStarted > 0 && <div className="bg-[var(--surface-2)] transition-all duration-500" style={{ flex: notStarted }} />}
         </div>
 
-        <p className="text-[10px] text-slate-600 text-center">
-          Avg mastery <span className="text-slate-400 font-semibold">{avgLevel.toFixed(1)}</span> / 5.0
+        <p className="text-[10px] text-[var(--text-faint)] text-center">
+          Avg mastery <span className="text-[var(--text-dim)] font-semibold">{avgLevel.toFixed(1)}</span> / 5.0
         </p>
 
         {/* Tier filter */}
         <div className="flex gap-1.5">
           <button
             onClick={() => setTierFilter(null)}
-            className={`flex-1 py-1 rounded-xl border text-[10px] font-semibold transition-all ${tierFilter === null ? 'bg-slate-800 border-slate-600 text-slate-200' : 'border-slate-800 text-slate-600 hover:text-slate-400 hover:border-slate-700'}`}
+            className={`flex-1 py-1 rounded-xl border text-[10px] font-semibold transition-all ${tierFilter === null ? 'bg-[var(--surface-2)] border-[var(--border-strong)] text-[var(--text)]' : 'border-[var(--border)] text-[var(--text-faint)] hover:text-[var(--text-dim)] hover:border-[var(--border)]'}`}
           >
             all
           </button>
@@ -70,7 +70,7 @@ export function MasteryOverview() {
             <button
               key={t}
               onClick={() => setTierFilter(prev => prev === t ? null : t)}
-              className={`flex-1 py-1 rounded-xl border text-[10px] font-semibold capitalize transition-all ${tierFilter === t ? tierPillActive[t] : 'border-slate-800 text-slate-600 hover:text-slate-400 hover:border-slate-700'}`}
+              className={`flex-1 py-1 rounded-xl border text-[10px] font-semibold capitalize transition-all ${tierFilter === t ? tierPillActive[t] : 'border-[var(--border)] text-[var(--text-faint)] hover:text-[var(--text-dim)] hover:border-[var(--border)]'}`}
             >
               {t === 'intermediate' ? 'int.' : t}
             </button>
@@ -81,14 +81,14 @@ export function MasteryOverview() {
       {/* Concept list */}
       <div className="flex-1 overflow-y-auto p-2.5 space-y-1">
         {filtered.map(c => (
-          <div key={c.id} className="flex items-center gap-2.5 bg-[#0d0d16] border border-slate-800/50 rounded-xl px-3 py-2 hover:border-slate-700/60 transition-all">
+          <div key={c.id} className="flex items-center gap-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2 hover:border-[var(--border)] transition-all">
             <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierDot[c.tier]}`} />
-            <span className="text-[12px] font-semibold text-slate-200 flex-1 min-w-0 truncate">{c.name}</span>
+            <span className="text-[12px] font-semibold text-[var(--text)] flex-1 min-w-0 truncate">{c.name}</span>
             <div className="flex gap-0.5 flex-shrink-0">
               {[1, 2, 3, 4, 5].map(n => (
                 <div
                   key={n}
-                  className={`w-3 h-3 rounded-full border transition-all ${n <= c.level ? `${levelColors[c.level]} border-transparent` : 'border-slate-700/60 bg-transparent'}`}
+                  className={`w-3 h-3 rounded-full border transition-all ${n <= c.level ? `${levelColors[c.level]} border-transparent` : 'border-[var(--border)] bg-transparent'}`}
                 />
               ))}
             </div>

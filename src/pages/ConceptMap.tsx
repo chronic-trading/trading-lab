@@ -169,7 +169,7 @@ export function ConceptMap() {
   }
 
   return (
-    <div className="flex h-full overflow-hidden bg-[#05050a] flex-col md:flex-row relative">
+    <div className="flex h-full overflow-hidden bg-[var(--bg)] flex-col md:flex-row relative">
 
       {/* ── SVG Map ── */}
       <div className="flex-1 relative overflow-hidden">
@@ -273,19 +273,19 @@ export function ConceptMap() {
 
         {/* Legend — right-4 caps its width on phones, where the tier row is wider
             than the screen and used to run past the edge; the row wraps instead. */}
-        <div className="absolute bottom-4 left-4 right-4 sm:right-auto bg-slate-900/85 border border-slate-800/60 rounded-xl px-4 py-2.5 backdrop-blur-sm">
+        <div className="absolute bottom-4 left-4 right-4 sm:right-auto bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-2.5 backdrop-blur-sm">
           {colorMode === 'tier' ? (
             <div className="flex items-center gap-4 flex-wrap gap-y-1.5">
               {(['basic', 'intermediate', 'advanced'] as const).map(tier => (
                 <div key={tier} className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ background: tierFill[tier] }} />
-                  <span className="text-[11px] font-medium text-slate-400 capitalize">{tier}</span>
+                  <span className="text-[11px] font-medium text-[var(--text-dim)] capitalize">{tier}</span>
                 </div>
               ))}
-              <div className="w-px h-4 bg-slate-700" />
+              <div className="w-px h-4 bg-[var(--surface-hover)]" />
               <div className="flex items-center gap-2">
                 <div className="w-6 h-px bg-slate-300 opacity-40" />
-                <span className="text-[10px] text-slate-500">Essential synergy</span>
+                <span className="text-[10px] text-[var(--text-dim)]">Essential synergy</span>
               </div>
             </div>
           ) : (
@@ -295,8 +295,8 @@ export function ConceptMap() {
                 return (
                   <div key={level} className="flex items-center gap-1.5">
                     <div className="w-2.5 h-2.5 rounded-full" style={{ background: color }} />
-                    <span className="text-[10px] text-slate-400">{label}</span>
-                    <span className="text-[10px] text-slate-600">({count})</span>
+                    <span className="text-[10px] text-[var(--text-dim)]">{label}</span>
+                    <span className="text-[10px] text-[var(--text-faint)]">({count})</span>
                   </div>
                 )
               })}
@@ -304,8 +304,8 @@ export function ConceptMap() {
                 const count = concepts.filter(c => (masteryData[c.id] ?? 0) === 0).length
                 return count > 0 ? (
                   <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full bg-slate-700" />
-                    <span className="text-[10px] text-slate-600">Not started ({count})</span>
+                    <div className="w-2.5 h-2.5 rounded-full bg-[var(--surface-hover)]" />
+                    <span className="text-[10px] text-[var(--text-faint)]">Not started ({count})</span>
                   </div>
                 ) : null
               })()}
@@ -317,13 +317,13 @@ export function ConceptMap() {
       {/* ── Mobile bottom sheet — max 40vh so the map stays visible ── */}
       {activeConcept && (
         <div
-          className="md:hidden fixed inset-x-0 bottom-0 z-50 bg-[#06060d] border-t border-slate-800/60 rounded-t-2xl shadow-2xl"
+          className="md:hidden fixed inset-x-0 bottom-0 z-50 bg-[var(--bg-elev)] border-t border-[var(--border)] rounded-t-2xl shadow-2xl"
           style={{ maxHeight: '40vh' }}
           onClick={e => e.stopPropagation()}
         >
           {/* Drag handle */}
           <div className="flex justify-center pt-2 pb-1 flex-shrink-0">
-            <div className="w-8 h-1 bg-slate-700 rounded-full" />
+            <div className="w-8 h-1 bg-[var(--surface-hover)] rounded-full" />
           </div>
 
           {/* Fixed header — always visible */}
@@ -334,13 +334,13 @@ export function ConceptMap() {
                 style={{ color: colorMode === 'tier' ? tierFill[activeConcept.tier] : masteryFill[activeLevel] }}>
                 {colorMode === 'tier' ? activeConcept.tier : MASTERY_LABELS[activeLevel]}
               </span>
-              <span className="text-slate-700 text-[10px]">·</span>
-              <span className="text-[10px] text-slate-500 capitalize truncate">{activeConcept.category}</span>
+              <span className="text-[var(--text-faint)] text-[10px]">·</span>
+              <span className="text-[10px] text-[var(--text-dim)] capitalize truncate">{activeConcept.category}</span>
             </div>
             <button
               onClick={() => setHovered(null)}
               aria-label="Close concept details"
-              className="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all flex-shrink-0 ml-2"
+              className="w-7 h-7 flex items-center justify-center rounded-lg text-[var(--text-dim)] hover:text-[var(--text-dim)] hover:bg-[var(--surface-2)] transition-all flex-shrink-0 ml-2"
             ><X size={14} strokeWidth={2.5} /></button>
           </div>
 
@@ -348,7 +348,7 @@ export function ConceptMap() {
           <div className="overflow-y-auto overscroll-contain px-4 pb-5"
             style={{ maxHeight: 'calc(40vh - 68px)' }}>
 
-            <h3 className="text-[15px] font-bold text-white leading-tight mb-2">{activeConcept.name}</h3>
+            <h3 className="text-[15px] font-bold text-[var(--text)] leading-tight mb-2">{activeConcept.name}</h3>
 
             {/* Mastery row */}
             <div className="flex items-center gap-1.5 mb-3">
@@ -356,22 +356,22 @@ export function ConceptMap() {
                 {[1,2,3,4,5].map(n => (
                   <div key={n} className={`w-2.5 h-2.5 rounded-full border ${n <= activeLevel
                     ? (activeLevel === 5 ? 'bg-amber-400 border-amber-300' : activeLevel >= 4 ? 'bg-emerald-500 border-emerald-400' : activeLevel === 3 ? 'bg-yellow-500 border-yellow-400' : activeLevel === 2 ? 'bg-orange-500 border-orange-400' : 'bg-red-500 border-red-400')
-                    : 'border-slate-700'}`}
+                    : 'border-[var(--border)]'}`}
                   />
                 ))}
               </div>
-              <span className="text-[10px] text-slate-400 font-medium">{MASTERY_LABELS[activeLevel]}</span>
+              <span className="text-[10px] text-[var(--text-dim)] font-medium">{MASTERY_LABELS[activeLevel]}</span>
             </div>
 
             {/* Description — 3-line clamp, readable without dominating */}
-            <p className="text-[12px] text-slate-300 leading-relaxed line-clamp-3 mb-3">
+            <p className="text-[12px] text-[var(--text-dim)] leading-relaxed line-clamp-3 mb-3">
               <GlossaryText text={activeConcept.description} />
             </p>
 
             {/* Synergies as compact pills */}
             {activeConcept.synergies.length > 0 && (
               <div>
-                <p className="text-[10px] font-black uppercase tracking-wider text-slate-600 mb-2">
+                <p className="text-[10px] font-black uppercase tracking-wider text-[var(--text-faint)] mb-2">
                   Synergies ({activeConcept.synergies.length})
                 </p>
                 <div className="flex flex-wrap gap-1.5">
@@ -380,7 +380,7 @@ export function ConceptMap() {
                     if (!partner) return null
                     return (
                       <span key={syn.conceptId}
-                        className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-1 rounded-lg bg-slate-800/70 border border-slate-700/50 text-slate-300">
+                        className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-1 rounded-lg bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text-dim)]">
                         <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                           style={{ background: syn.strength === 3 ? '#f59e0b' : syn.strength === 2 ? '#94a3b8' : '#475569' }} />
                         {partner.shortName}
@@ -395,25 +395,25 @@ export function ConceptMap() {
       )}
 
       {/* ── Right panel (desktop only) ── */}
-      <div className="hidden md:flex w-[300px] flex-shrink-0 border-l border-slate-800/50 flex-col bg-[#06060d]">
+      <div className="hidden md:flex w-[300px] flex-shrink-0 border-l border-[var(--border)] flex-col bg-[var(--bg-elev)]">
 
-        <div className="px-5 py-4 border-b border-slate-800/50 space-y-3">
+        <div className="px-5 py-4 border-b border-[var(--border)] space-y-3">
           <div>
-            <p className="text-[13px] font-bold text-white">Concept Map</p>
-            <p className="text-[11px] text-slate-500 mt-0.5">{concepts.length} concepts · hover to explore</p>
+            <p className="text-[13px] font-bold text-[var(--text)]">Concept Map</p>
+            <p className="text-[11px] text-[var(--text-dim)] mt-0.5">{concepts.length} concepts · hover to explore</p>
           </div>
 
           {/* Color mode toggle */}
-          <div className="flex bg-slate-900/60 border border-slate-800 rounded-xl p-0.5 gap-0.5">
+          <div className="flex bg-[var(--surface)] border border-[var(--border)] rounded-xl p-0.5 gap-0.5">
             <button
               onClick={() => setColorMode('tier')}
-              className={`flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${colorMode === 'tier' ? 'bg-slate-700 text-slate-100' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${colorMode === 'tier' ? 'bg-[var(--surface-hover)] text-[var(--text)]' : 'text-[var(--text-dim)] hover:text-[var(--text-dim)]'}`}
             >
               Tier View
             </button>
             <button
               onClick={() => setColorMode('mastery')}
-              className={`flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${colorMode === 'mastery' ? 'bg-slate-700 text-slate-100' : 'text-slate-500 hover:text-slate-300'}`}
+              className={`flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${colorMode === 'mastery' ? 'bg-[var(--surface-hover)] text-[var(--text)]' : 'text-[var(--text-dim)] hover:text-[var(--text-dim)]'}`}
             >
               Mastery View
             </button>
@@ -421,9 +421,9 @@ export function ConceptMap() {
 
           {builds.length > 0 && (
             <div className="space-y-2">
-              <label className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Highlight a build</label>
+              <label className="text-[11px] font-semibold text-[var(--text-dim)] uppercase tracking-wider">Highlight a build</label>
               <select
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-[12px] text-slate-200 focus:outline-none focus:border-slate-500 transition-colors"
+                className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2 text-[12px] text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-colors"
                 value={selectedBuild?.id ?? ''}
                 onChange={e => {
                   const b = builds.find(x => x.id === e.target.value) ?? null
@@ -438,7 +438,7 @@ export function ConceptMap() {
                   {(['all', 'build'] as const).map(m => (
                     <button key={m} onClick={() => setMode(m)}
                       className={`flex-1 py-1.5 rounded-xl border text-[11px] font-semibold transition-all
-                        ${mode === m ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-slate-800 text-slate-500 hover:border-slate-700 hover:text-slate-300'}`}>
+                        ${mode === m ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)]'}`}>
                       {m === 'all' ? 'All connections' : 'Build only'}
                     </button>
                   ))}
@@ -458,10 +458,10 @@ export function ConceptMap() {
                   <span className="text-[11px] font-bold uppercase tracking-wider" style={{ color: colorMode === 'tier' ? tierFill[activeConcept.tier] : masteryFill[activeLevel] }}>
                     {colorMode === 'tier' ? activeConcept.tier : MASTERY_LABELS[activeLevel]}
                   </span>
-                  <span className="text-slate-600 text-[10px]">·</span>
-                  <span className="text-[11px] text-slate-500 capitalize">{activeConcept.category}</span>
+                  <span className="text-[var(--text-faint)] text-[10px]">·</span>
+                  <span className="text-[11px] text-[var(--text-dim)] capitalize">{activeConcept.category}</span>
                 </div>
-                <h3 className="text-[15px] font-bold text-white leading-snug">{activeConcept.name}</h3>
+                <h3 className="text-[15px] font-bold text-[var(--text)] leading-snug">{activeConcept.name}</h3>
               </div>
 
               {/* Mastery dots in detail panel */}
@@ -470,23 +470,23 @@ export function ConceptMap() {
                   {[1,2,3,4,5].map(n => (
                     <div key={n} className={`w-3 h-3 rounded-full border transition-all ${n <= activeLevel
                       ? (activeLevel === 5 ? 'bg-amber-400 border-amber-300' : activeLevel >= 4 ? 'bg-emerald-500 border-emerald-400' : activeLevel === 3 ? 'bg-yellow-500 border-yellow-400' : activeLevel === 2 ? 'bg-orange-500 border-orange-400' : 'bg-red-500 border-red-400')
-                      : 'border-slate-700'}`}
+                      : 'border-[var(--border)]'}`}
                     />
                   ))}
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium">{MASTERY_LABELS[activeLevel]}</span>
+                <span className="text-[11px] text-[var(--text-dim)] font-medium">{MASTERY_LABELS[activeLevel]}</span>
               </div>
 
-              <p className="text-[12px] text-slate-300 leading-relaxed"><GlossaryText text={activeConcept.description} /></p>
+              <p className="text-[12px] text-[var(--text-dim)] leading-relaxed"><GlossaryText text={activeConcept.description} /></p>
 
               <div>
-                <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">How to use</p>
-                <p className="text-[12px] text-slate-400 leading-relaxed"><GlossaryText text={activeConcept.howToUse} /></p>
+                <p className="text-[11px] font-semibold text-[var(--text-dim)] uppercase tracking-wider mb-2">How to use</p>
+                <p className="text-[12px] text-[var(--text-dim)] leading-relaxed"><GlossaryText text={activeConcept.howToUse} /></p>
               </div>
 
               {activeConcept.synergies.length > 0 && (
                 <div>
-                  <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                  <p className="text-[11px] font-semibold text-[var(--text-dim)] uppercase tracking-wider mb-2">
                     Synergies ({activeConcept.synergies.length})
                   </p>
                   <div className="space-y-1.5">
@@ -494,12 +494,12 @@ export function ConceptMap() {
                       const partner = getConceptById(syn.conceptId)
                       if (!partner) return null
                       return (
-                        <div key={syn.conceptId} className="flex items-center gap-2 bg-slate-900/50 rounded-xl px-3 py-2">
+                        <div key={syn.conceptId} className="flex items-center gap-2 bg-[var(--surface)] rounded-xl px-3 py-2">
                           <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: getNodeFill(partner.id) }} />
-                          <span className="text-[12px] text-slate-200 flex-1">{partner.shortName}</span>
+                          <span className="text-[12px] text-[var(--text)] flex-1">{partner.shortName}</span>
                           <div className="flex gap-0.5">
                             {[1,2,3].map(i => (
-                              <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= syn.strength ? 'bg-amber-400' : 'bg-slate-700'}`} />
+                              <div key={i} className={`w-1.5 h-1.5 rounded-full ${i <= syn.strength ? 'bg-amber-400' : 'bg-[var(--surface-hover)]'}`} />
                             ))}
                           </div>
                         </div>
@@ -511,12 +511,12 @@ export function ConceptMap() {
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center h-full gap-3 text-center">
-              <div className="w-10 h-10 rounded-2xl bg-slate-800/50 border border-slate-700/30 flex items-center justify-center text-slate-500">
+              <div className="w-10 h-10 rounded-2xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center text-[var(--text-dim)]">
                 <Telescope size={18} strokeWidth={1.75} />
               </div>
               <div>
-                <p className="text-[13px] font-semibold text-slate-300">Hover a concept</p>
-                <p className="text-[11px] text-slate-600 mt-1 leading-relaxed max-w-40">
+                <p className="text-[13px] font-semibold text-[var(--text-dim)]">Hover a concept</p>
+                <p className="text-[11px] text-[var(--text-faint)] mt-1 leading-relaxed max-w-40">
                   {colorMode === 'mastery' ? 'Nodes colored by your mastery level' : 'Move your cursor over any node to explore it'}
                 </p>
               </div>
@@ -528,8 +528,8 @@ export function ConceptMap() {
                     return (
                       <div key={level} className="flex items-center gap-2 w-full">
                         <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: color }} />
-                        <span className="text-[11px] text-slate-400 flex-1 text-left">{label}</span>
-                        <span className="text-[11px] font-bold text-slate-300">{count}</span>
+                        <span className="text-[11px] text-[var(--text-dim)] flex-1 text-left">{label}</span>
+                        <span className="text-[11px] font-bold text-[var(--text-dim)]">{count}</span>
                       </div>
                     )
                   })}

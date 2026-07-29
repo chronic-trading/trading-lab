@@ -47,7 +47,7 @@ export function BuildSuggestions({ selectedIds, onAdd }: Props) {
   if (selectedIds.length === 0 || suggestions.length === 0) return null
 
   return (
-    <div className="border-t border-slate-800/50 pt-3 mt-1">
+    <div className="border-t border-[var(--border)] pt-3 mt-1">
       <div className="flex items-center gap-1.5 mb-2.5 px-1">
         <Sparkles size={11} className="text-amber-400" />
         <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">Suggested next</span>
@@ -56,11 +56,11 @@ export function BuildSuggestions({ selectedIds, onAdd }: Props) {
         {suggestions.map(({ concept: c, score }) => (
           <div
             key={c.id}
-            className="flex items-center gap-2.5 bg-[#0d0d16] border border-slate-800/60 rounded-xl px-3 py-2 hover:border-slate-700/60 transition-all group"
+            className="flex items-center gap-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2 hover:border-[var(--border)] transition-all group"
           >
             <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierDot[c.tier]}`} />
             <div className="flex-1 min-w-0">
-              <p className="text-[12px] font-semibold text-slate-200 truncate">{c.shortName}</p>
+              <p className="text-[12px] font-semibold text-[var(--text)] truncate">{c.shortName}</p>
               <p className={`text-[10px] font-bold uppercase tracking-wider ${tierText[c.tier]}`}>{c.tier}</p>
             </div>
             <div className="flex items-center gap-1 flex-shrink-0">
@@ -70,7 +70,7 @@ export function BuildSuggestions({ selectedIds, onAdd }: Props) {
             </div>
             <button
               onClick={() => onAdd(c.id)}
-              className="w-6 h-6 rounded-full border border-slate-700 flex items-center justify-center text-slate-600 hover:border-amber-500/50 hover:text-amber-400 hover:bg-amber-500/10 transition-all opacity-0 group-hover:opacity-100"
+              className="w-6 h-6 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--text-faint)] hover:border-amber-500/50 hover:text-amber-400 hover:bg-amber-500/10 transition-all opacity-0 group-hover:opacity-100"
             >
               <Plus size={10} />
             </button>

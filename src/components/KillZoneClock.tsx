@@ -38,16 +38,16 @@ export function KillZoneClock() {
 
       {/* NY Clock */}
       <div className="flex items-center gap-2.5 flex-shrink-0">
-        <Clock size={13} className="text-slate-600 flex-shrink-0" />
+        <Clock size={13} className="text-[var(--text-faint)] flex-shrink-0" />
         <div>
-          <p className="text-[18px] font-bold text-slate-100 tabular-nums leading-none font-mono">
+          <p className="text-[18px] font-bold text-[var(--text)] tabular-nums leading-none font-mono">
             {time.display}
           </p>
-          <p className="text-[10px] font-bold text-slate-600 tracking-widest mt-0.5">NEW YORK</p>
+          <p className="text-[10px] font-bold text-[var(--text-faint)] tracking-widest mt-0.5">NEW YORK</p>
         </div>
       </div>
 
-      <div className="w-px h-8 bg-slate-800/80" />
+      <div className="w-px h-8 bg-[var(--surface-2)]" />
 
       {/* Kill zone status */}
       <div className="flex items-center gap-2.5 flex-shrink-0">
@@ -61,15 +61,15 @@ export function KillZoneClock() {
               <p className="text-[13px] font-bold leading-none" style={{ color: zoneText(active) }}>
                 {active.name}
               </p>
-              <p className="text-[10px] text-slate-500 mt-0.5">{timeLeft} left</p>
+              <p className="text-[10px] text-[var(--text-dim)] mt-0.5">{timeLeft} left</p>
             </div>
           </>
         ) : (
           <>
-            <div className="w-2.5 h-2.5 rounded-full bg-slate-800 border border-slate-700 flex-shrink-0" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[var(--surface-2)] border border-[var(--border)] flex-shrink-0" />
             <div>
-              <p className="text-[12px] font-semibold text-slate-500 leading-none">Off Session</p>
-              <p className="text-[10px] text-slate-600 mt-0.5">
+              <p className="text-[12px] font-semibold text-[var(--text-dim)] leading-none">Off Session</p>
+              <p className="text-[10px] text-[var(--text-faint)] mt-0.5">
                 <span style={{ color: zoneText(next.zone) }}>{next.zone.shortName}</span>
                 {' '}in {timeToNext}
               </p>
@@ -78,16 +78,16 @@ export function KillZoneClock() {
         )}
       </div>
 
-      <div className="w-px h-8 bg-slate-800/80" />
+      <div className="w-px h-8 bg-[var(--surface-2)]" />
 
       {/* Next ICT Macro */}
       <div className="flex items-center gap-2 flex-shrink-0">
         <Zap size={12} className="text-amber-500/60 flex-shrink-0" />
         <div>
-          <p className="text-[11px] font-semibold text-slate-400 leading-none">
+          <p className="text-[11px] font-semibold text-[var(--text-dim)] leading-none">
             Next Macro <span className="text-amber-400">{nextMacro.name}</span>
           </p>
-          <p className="text-[10px] text-slate-600 mt-0.5">in {timeToMacro}</p>
+          <p className="text-[10px] text-[var(--text-faint)] mt-0.5">in {timeToMacro}</p>
         </div>
       </div>
 
@@ -107,21 +107,21 @@ export function KillZoneClockCompact() {
         <span className="flex items-center gap-1" style={{ color: zoneText(active) }}>
           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 animate-pulse" style={{ backgroundColor: active.color }} />
           {active.shortName ?? active.name}
-          <span className="text-slate-600 font-normal">{timeLeft}</span>
+          <span className="text-[var(--text-faint)] font-normal">{timeLeft}</span>
         </span>
       ) : (
-        <span className="flex items-center gap-1 text-slate-600">
-          <span className="w-1.5 h-1.5 rounded-full bg-slate-700 flex-shrink-0" />
+        <span className="flex items-center gap-1 text-[var(--text-faint)]">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--surface-hover)] flex-shrink-0" />
           <span style={{ color: zoneText(next.zone) }}>{next.zone.shortName}</span>
-          <span className="text-slate-700">in {timeToNext}</span>
+          <span className="text-[var(--text-faint)]">in {timeToNext}</span>
         </span>
       )}
-      <span className="text-slate-600">·</span>
+      <span className="text-[var(--text-faint)]">·</span>
       {/* Macro */}
-      <span className="flex items-center gap-1 text-slate-600">
+      <span className="flex items-center gap-1 text-[var(--text-faint)]">
         <Zap size={9} className="text-amber-500/60 flex-shrink-0" />
         <span className="text-amber-400/80">{nextMacro.name}</span>
-        <span className="text-slate-700">in {timeToMacro}</span>
+        <span className="text-[var(--text-faint)]">in {timeToMacro}</span>
       </span>
     </div>
   )

@@ -89,43 +89,18 @@ html[data-theme="dark"] {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Light-mode compatibility layer.
-   The app's components hardcode a dark-tuned Tailwind palette (slate scale +
-   arbitrary dark hexes). Rather than edit every file, this remaps those
-   utilities to the warm-light tokens ONLY in light mode. Dark mode carries no
-   overrides here, so its look is exactly as originally built. Hero surfaces
-   (App shell, Review) are converted directly to var(--…) for full polish;
-   everything else is skinned coherently by the rules below.
+   Colored-text contrast normalization (light).
+   As of the Phase-1 token migration, every app surface uses the semantic
+   var(--…) neutral tokens directly — the old blanket slate→token remap is gone,
+   and with it the fragility where a new component silently rendered dark-on-dark
+   in light mode. What remains here is deliberate: the app still uses Tailwind's
+   colored text utilities (amber/emerald/red/…) for P&L, scores and badges, whose
+   dark-tuned -300/-400 stops don't clear AA on warm paper. These rules pull the
+   colored TEXT stops onto legible tokens in light mode. Neutrals are no longer
+   touched. Dark-locked surfaces (Landing, Login, Recap) force data-theme="dark"
+   while mounted, so none of this applies to them.
    ═══════════════════════════════════════════════════════════════════════════ */
 html[data-theme="light"] {
-  /* Neutral text */
-  & [class*="text-slate-100"], & [class*="text-slate-200"], & .text-white { color: var(--text); }
-  /* slate-500 maps to dim, not faint: pages use it for real body copy (Playbook
-     setup descriptions, card summaries), and in dark mode it reads ~4.1:1. Faint
-     (2.6:1) is reserved for true hints — slate-600 and below. */
-  & [class*="text-slate-300"], & [class*="text-slate-400"], & [class*="text-slate-500"] { color: var(--text-dim); }
-  & [class*="text-slate-600"],
-  & [class*="text-slate-700"], & [class*="text-slate-800"] { color: var(--text-faint); }
-
-  /* Neutral surfaces (slate scale) */
-  & [class*="bg-slate-900"] { background-color: var(--surface); }
-  & [class*="bg-slate-800"] { background-color: var(--surface-2); }
-  & [class*="bg-slate-700"] { background-color: var(--surface-hover); }
-  & [class*="bg-slate-600"], & [class*="bg-slate-500"] { background-color: var(--border-strong); }
-
-  /* Neutral surfaces (arbitrary dark hexes) */
-  & .bg-\[\#05050a\], & .bg-\[\#04040a\] { background-color: var(--bg); }
-  & .bg-\[\#06060d\], & .bg-\[\#08080f\], & .bg-\[\#0c0c15\], & .bg-\[\#0b0b13\] { background-color: var(--bg-elev); }
-  & .bg-\[\#0b0b12\], & .bg-\[\#0b0b14\], & .bg-\[\#0d0d16\], & .bg-\[\#0f0a0a\], & .bg-\[\#0a0f0d\] { background-color: var(--surface); }
-
-  /* Borders */
-  & [class*="border-slate-800"], & [class*="border-slate-700"] { border-color: var(--border); }
-  & [class*="border-slate-600"], & [class*="border-slate-500"] { border-color: var(--border-strong); }
-
-  /* Card elevation — the #0b0b12 / #0d0d16 hexes are card surfaces (not chips/insets),
-     so a soft warm shadow lifts them off the paper background without over-shadowing. */
-  & .bg-\[\#0b0b12\], & .bg-\[\#0d0d16\], & .bg-\[\#0b0b14\] { box-shadow: var(--shadow-sm); }
-
   /* Semantic accent text — darken the dark-tuned -300/-400 stops for legibility on light */
   & [class*="text-amber-300"], & [class*="text-amber-400"], & [class*="text-amber-500"], & [class*="text-amber-600"] { color: var(--accent-ink); }
   & [class*="text-emerald-200"], & [class*="text-emerald-300"], & [class*="text-emerald-400"], & [class*="text-green-400"] { color: var(--green); }
@@ -142,9 +117,11 @@ html[data-theme="light"] {
   & [class*="text-pink-300"], & [class*="text-pink-400"] { color: #db2777; }
 
   /* Always-dark chrome (mobile bottom nav + its "More" sheet) keeps a dark
-     background even in light mode, so the light remaps above would paint dark
-     text on it. Restore dark-appropriate light text inside .tl-darkchrome —
-     higher specificity than the block above, so it wins. */
+     background even in light mode. It deliberately still uses raw slate/amber
+     utilities — being dark-locked, it wants the dark-tuned palette, not the warm
+     light tokens. These rules lift its dim stops to AA on near-black (slate-600
+     renders ~2.5:1 unaided) and keep its amber from being darkened by the block
+     above, which would otherwise paint amber-on-black at --accent-ink. */
   & .tl-darkchrome [class*="text-amber-300"], & .tl-darkchrome [class*="text-amber-400"], & .tl-darkchrome [class*="text-amber-500"] { color: #fbbf24; }
   & .tl-darkchrome [class*="text-slate-500"], & .tl-darkchrome [class*="text-slate-600"] { color: #94a3b8; }
   & .tl-darkchrome [class*="text-slate-200"], & .tl-darkchrome [class*="text-slate-300"] { color: #cbd5e1; }

@@ -197,7 +197,7 @@ function RootApp() {
     return (
       <div className="flex items-center justify-center h-screen bg-[var(--bg)] gap-3">
         <div className="w-5 h-5 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
-        <span className="text-[13px] text-slate-500 font-medium">Loading…</span>
+        <span className="text-[13px] text-[var(--text-dim)] font-medium">Loading…</span>
       </div>
     )
   }
@@ -341,7 +341,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
                 { label: 'Quiz',     Icon: Brain,       color: 'text-purple-400', onClick: () => { setQuizOpen(true);      setMobileToolsOpen(false) } },
                 { label: 'Rules',    Icon: Shield,      color: 'text-red-400',    onClick: () => { setRulesOpen(true);     setMobileToolsOpen(false) } },
                 { label: 'Notes',    Icon: StickyNote,  color: 'text-amber-400',  onClick: () => { setNotesOpen(true);     setMobileToolsOpen(false) } },
-                { label: 'Settings', Icon: Settings,    color: 'text-slate-400',  onClick: () => { setSettingsOpen(true);  setMobileToolsOpen(false) } },
+                { label: 'Settings', Icon: Settings,    color: 'text-[var(--text-dim)]',  onClick: () => { setSettingsOpen(true);  setMobileToolsOpen(false) } },
                 { label: 'Trainer',  Icon: Crosshair,   color: 'text-cyan-400',   onClick: () => { window.open('https://chronic-trading.github.io/ict-replay/', '_blank');   setMobileToolsOpen(false) } },
                 { label: 'Glossary', Icon: BookOpen,    color: 'text-teal-400',   onClick: () => { window.open('https://chronic-trading.github.io/ict-glossary/', '_blank'); setMobileToolsOpen(false) } },
                 { label: theme === 'light' ? 'Dark' : 'Light', Icon: theme === 'light' ? Moon : Sun, color: 'text-[var(--accent-ink)]', onClick: () => { toggle(); setMobileToolsOpen(false) } },
@@ -451,14 +451,14 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
       {/* Prop Firms modal */}
       {propsOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-[#05050a]">
-          <div className="flex items-center justify-between px-5 py-3 border-b border-slate-800/50 flex-shrink-0">
+        <div className="fixed inset-0 z-50 flex flex-col bg-[var(--bg)]">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)] flex-shrink-0">
             <div className="flex items-center gap-2">
               <Building2 size={14} className="text-emerald-400" />
-              <span className="text-[13px] font-bold text-white">Prop Firm Compare</span>
+              <span className="text-[13px] font-bold text-[var(--text)]">Prop Firm Compare</span>
             </div>
             <button onClick={() => setPropsOpen(false)}
-              className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:text-slate-300 hover:border-slate-600 transition-all">
+              className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-all">
               <X size={12} strokeWidth={2.5} /> Close
             </button>
           </div>
