@@ -3,7 +3,7 @@ import {
   FlaskConical, Package, Beaker, Network,
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
-  ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical, MoreHorizontal, ChevronDown,
+  ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical,
   Gamepad2, Layers, Sun, Moon, Gauge, LayoutDashboard,
 } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
@@ -77,8 +77,36 @@ const tabs: { id: Tab; label: string; Icon: React.ElementType; badge?: string }[
   { id: 'arcade',    label: 'Arcade',    Icon: Gamepad2       },
 ]
 
-// Always-visible on the desktop tab bar; the rest live in a "More" dropdown.
-const DESKTOP_PRIMARY: Tab[] = ['home', 'builder', 'grader', 'map', 'review', 'journal', 'backtest', 'recap', 'playbook']
+/* ── Navigation model ────────────────────────────────────────────────────────
+   Fifteen flat tabs meant nine competed for the bar and six were effectively
+   undiscoverable behind "More". They are now grouped by what you are trying to
+   do, and the six tools that are really facets of a bigger one became children
+   of it: Builds and Templates belong to the Builder, Recap reads the Journal's
+   trades, and Levels and Calendar are both things you set up while planning.
+   A child is reached from its parent's sub-tab strip, so the sidebar lists ten
+   destinations instead of fifteen while everything stays one or two clicks away.
+   Tab ids are unchanged, so the pages themselves needed no edits.            */
+type NavItem = { id: Tab; children?: Tab[] }
+type NavGroup = { title: string; items: NavItem[] }
+
+const NAV_GROUPS: NavGroup[] = [
+  { title: '',         items: [{ id: 'home' }] },
+  { title: 'Practice', items: [{ id: 'grader' }, { id: 'backtest' }, { id: 'review' }, { id: 'arcade' }] },
+  { title: 'Build',    items: [{ id: 'builder', children: ['builds', 'templates'] }] },
+  { title: 'Journal',  items: [{ id: 'journal', children: ['recap'] }] },
+  { title: 'Learn',    items: [{ id: 'playbook' }, { id: 'map' }] },
+  { title: 'Plan',     items: [{ id: 'plan', children: ['chart', 'calendar'] }] },
+]
+
+const tabMeta = (id: Tab) => tabs.find(t => t.id === id)!
+
+/** The nav entry a tab is shown under — itself, or its parent if it's a child. */
+function parentOf(tab: Tab): NavItem {
+  for (const g of NAV_GROUPS)
+    for (const item of g.items)
+      if (item.id === tab || item.children?.includes(tab)) return item
+  return { id: 'home' }
+}
 
 // Primary tabs always visible on mobile bottom bar (kept to 4 + More so the bar
 // stays thumb-friendly — the rest live in the More sheet).
@@ -139,20 +167,40 @@ function MobileBottomNav({
             className="tl-darkchrome absolute inset-x-0 bg-[#08080f] border-t border-slate-800/60 p-4 pb-2 shadow-2xl"
             style={{ bottom: `calc(56px + env(safe-area-inset-bottom))` }}
             onClick={e => e.stopPropagation()}>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-3 px-1">All tabs</p>
-            <div className="grid grid-cols-4 gap-2 pb-2">
-              {secondary.map(({ id, label, Icon }) => (
-                <button key={id}
-                  onClick={() => { setTab(id); setMoreOpen(false) }}
-                  className={`flex flex-col items-center gap-1.5 py-3 rounded-2xl border transition-all ${
-                    tab === id
-                      ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
-                      : 'border-slate-800/60 bg-slate-900/50 text-slate-500 active:text-slate-200 active:border-slate-600'
-                  }`}>
-                  <Icon size={17} />
-                  <span className="text-[10px] font-bold">{label}</span>
-                </button>
-              ))}
+            {/* Grouped the same way as the desktop sidebar, so the two navs
+                teach the same map of the app rather than two different ones. */}
+            <div className="max-h-[58vh] overflow-y-auto pb-2 space-y-3">
+              {NAV_GROUPS.map(group => {
+                // Flatten parents with their children — on mobile there is no
+                // sub-tab strip, so every destination must be reachable here.
+                const ids = group.items.flatMap(i => [i.id, ...(i.children ?? [])])
+                          .filter(id => !MOBILE_PRIMARY.includes(id))
+                if (!ids.length) return null
+                return (
+                  <div key={group.title || 'root'}>
+                    {group.title && (
+                      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-2 px-1">{group.title}</p>
+                    )}
+                    <div className="grid grid-cols-4 gap-2">
+                      {ids.map(id => {
+                        const { label, Icon } = tabMeta(id)
+                        return (
+                          <button key={id}
+                            onClick={() => { setTab(id); setMoreOpen(false) }}
+                            className={`flex flex-col items-center gap-1.5 py-3 rounded-2xl border transition-all ${
+                              tab === id
+                                ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
+                                : 'border-slate-800/60 bg-slate-900/50 text-slate-500 active:text-slate-200 active:border-slate-600'
+                            }`}>
+                            <Icon size={17} />
+                            <span className="text-[10px] font-bold">{label}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -172,8 +220,17 @@ function PageFallback() {
 }
 
 export default function App() {
+  // Checked here rather than inside RootApp so no hook is skipped by the branch.
+  if (DEV_SHELL) return <AppShell />
   return <RootApp />
 }
+
+// Dev-only shell bypass at ?app. The whole app sits behind a licence key, so
+// there is otherwise no way to open a tool locally (no Supabase env → no login).
+// import.meta.env.DEV is the literal false in a production build, so this branch
+// is dead code there and cannot be used to skip auth.
+const DEV_SHELL =
+  import.meta.env.DEV && new URLSearchParams(window.location.search).has('app')
 
 function RootApp() {
   const { user, loading: authLoading, signOut, attach: attachAuth } = useAuth()
@@ -262,7 +319,6 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
   const [drawdownOpen,  setDrawdownOpen]  = useState(false)
   const [mindsetOpen,   setMindsetOpen]   = useState(false)
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
-  const [moreOpen,      setMoreOpen]      = useState(false)
   const { loadSharedBuild }             = useBuilds()
   const { theme, toggle }               = useTheme()
 
@@ -387,58 +443,68 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
           <KillZoneClockCompact />
         </div>
 
-        {/* Desktop tab nav — curated primary set + a "More" dropdown for the rest */}
-        <nav className="hidden md:flex items-stretch border-t border-[var(--border)] relative">
-          {tabs.filter(t => DESKTOP_PRIMARY.includes(t.id)).map(({ id, label, Icon, badge }) => (
-            <button key={id} onClick={() => { setTab(id); setMoreOpen(false) }}
-              className={`flex-1 min-w-[46px] flex items-center justify-center gap-1.5 py-3 text-[12px] font-semibold relative transition-all duration-150 border-b-2 px-2
-                ${tab === id ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
-              <Icon size={12} />
-              <span>{label}</span>
-              {badge && (
-                <span className="absolute top-1.5 right-1.5 text-[10px] font-black tracking-wide px-1 py-px rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 leading-none">
-                  {badge}
-                </span>
-              )}
-            </button>
-          ))}
+      </header>
 
-          {/* More */}
+      {/* Shell body — grouped sidebar on desktop, full-width content on mobile */}
+      <div className="flex-1 flex overflow-hidden">
+
+        {/* Desktop sidebar */}
+        <nav className="hidden md:flex flex-col flex-shrink-0 w-[188px] overflow-y-auto border-r border-[var(--border)] bg-[var(--bg-elev)] py-3 px-2.5 gap-0.5">
+          {NAV_GROUPS.map(group => (
+            <div key={group.title || 'root'} className={group.title ? 'mt-3' : ''}>
+              {group.title && (
+                <p className="tl-eyebrow px-2.5 pb-1.5">{group.title}</p>
+              )}
+              {group.items.map(item => {
+                const { label, Icon, badge } = tabMeta(item.id)
+                // A parent stays lit while one of its children is open, so the
+                // sidebar always shows where you are.
+                const active = tab === item.id || !!item.children?.includes(tab)
+                return (
+                  <button key={item.id} onClick={() => setTab(item.id)}
+                    className={`w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-xl text-[12.5px] font-semibold transition-all relative
+                      ${active
+                        ? 'text-[var(--accent-ink)] bg-[var(--accent-soft)]'
+                        : 'text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
+                    <Icon size={14} className="flex-shrink-0" />
+                    <span className="truncate">{label}</span>
+                    {badge && (
+                      <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[var(--accent)] flex-shrink-0" />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          ))}
+        </nav>
+
+        {/* Main content — extra bottom padding on mobile for the bottom nav */}
+        <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden md:pb-0 pb-14">
+
+          {/* Sub-tab strip — only for a destination that has children */}
           {(() => {
-            const secondary = tabs.filter(t => !DESKTOP_PRIMARY.includes(t.id))
-            const activeInMore = secondary.some(t => t.id === tab)
+            const parent = parentOf(tab)
+            if (!parent.children?.length) return null
+            const siblings: Tab[] = [parent.id, ...parent.children]
             return (
-              <div className="relative flex flex-shrink-0">
-                <button onClick={() => setMoreOpen(o => !o)}
-                  className={`flex items-center justify-center gap-1.5 py-3 px-4 text-[12px] font-semibold border-b-2 transition-all duration-150
-                    ${moreOpen || activeInMore ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
-                  <MoreHorizontal size={13} />
-                  <span>More</span>
-                  <ChevronDown size={11} className={`transition-transform duration-200 ${moreOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {moreOpen && (
-                  <>
-                    <div className="fixed inset-0 z-30" onClick={() => setMoreOpen(false)} />
-                    <div className="absolute top-full right-0 mt-1.5 z-40 w-48 bg-[var(--bg-elev)] border border-[var(--border)] rounded-2xl shadow-[var(--shadow-lg)] p-1.5">
-                      {secondary.map(({ id, label, Icon }) => (
-                        <button key={id} onClick={() => { setTab(id); setMoreOpen(false) }}
-                          className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-semibold transition-all
-                            ${tab === id ? 'text-[var(--accent-ink)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
-                          <Icon size={13} className="flex-shrink-0" />
-                          <span>{label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
+              <div className="flex-shrink-0 flex items-center gap-1 px-4 md:px-6 pt-3 border-b border-[var(--border)]">
+                {siblings.map(id => {
+                  const { label, Icon } = tabMeta(id)
+                  return (
+                    <button key={id} onClick={() => setTab(id)}
+                      className={`flex items-center gap-1.5 px-3 py-2 text-[12px] font-semibold border-b-2 -mb-px transition-all
+                        ${tab === id
+                          ? 'text-[var(--accent-ink)] border-[var(--accent)]'
+                          : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)]'}`}>
+                      <Icon size={12} />
+                      <span>{label}</span>
+                    </button>
+                  )
+                })}
               </div>
             )
           })()}
-        </nav>
-      </header>
 
-      {/* Main content — extra bottom padding on mobile for the bottom nav */}
-      <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden md:pb-0 pb-14">
         <div key={tab} className="flex-1 flex flex-col overflow-hidden animate-tab-in">
         <Suspense fallback={<PageFallback />}>
         {tab === 'home'      && <Home      onNavigate={t => setTab(t as Tab)} />}
@@ -458,7 +524,8 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         {tab === 'arcade'    && <Arcade />}
         </Suspense>
         </div>
-      </main>
+        </main>
+      </div>
 
       {/* Mounted whether or not it's open: SessionNotes owns an AnimatePresence
           exit animation and persists the note from an effect, both of which are
