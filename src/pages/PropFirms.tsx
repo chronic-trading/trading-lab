@@ -235,8 +235,8 @@ export function PropFirms() {
 
       {/* Header */}
       <div className="text-center py-2">
-        <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-2">Live Rankings</p>
-        <h1 className="font-black text-[var(--text)] mb-2" style={{ fontSize: 'clamp(22px,4vw,36px)', letterSpacing: '-1px' }}>
+        <p className="tl-eyebrow mb-2">Live Rankings</p>
+        <h1 className="tl-display text-[var(--text)] mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>
           Prop Firm Comparison
         </h1>
         <p className="text-[13px] text-[var(--text-dim)]" style={{ maxWidth: '420px', margin: '0 auto' }}>

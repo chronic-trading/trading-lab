@@ -35,7 +35,7 @@ export function MyBuilds({ onLoadBuild }: Props) {
         <div className="max-w-3xl mx-auto w-full px-6 md:px-8 py-6 md:py-8 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-[16px] font-bold text-[var(--text)]">My Builds</h2>
+              <h2 className="tl-title-sm">My Builds</h2>
               <p className="text-[12px] text-[var(--text-dim)] mt-0.5">{builds.length} saved</p>
             </div>
             {builds.length >= 2 && (

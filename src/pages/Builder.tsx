@@ -264,7 +264,7 @@ export function Builder({ initialBuild }: Props) {
       <div className="flex items-center justify-between px-6 py-3.5 border-b border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0 gap-2 flex-wrap">
         <div className="min-w-0">
           <div className="flex items-center gap-2.5 flex-wrap">
-            <h2 className="text-[15px] font-bold text-[var(--text)] truncate">
+            <h2 className="tl-title-sm truncate">
               {currentBuild?.name ?? 'Untitled Build'}
             </h2>
             {currentBuild?.instrument && (

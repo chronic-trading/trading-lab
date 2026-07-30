@@ -278,7 +278,7 @@ export function Plan() {
           {view === 'plan' && (
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <h2 className="text-[15px] font-bold text-[var(--text)]">Today's Session Plan</h2>
+                <h2 className="tl-title-sm">Today's Session Plan</h2>
                 <div className="flex items-center gap-2 flex-wrap">
                   <input type="date" value={date} onChange={e => setDate(e.target.value)}
                     className="bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-1.5 text-[12px] text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-all" />

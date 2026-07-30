@@ -259,6 +259,19 @@ code, .mono {
   .tl-title { font-size: 36px; }
 }
 
+/* Compact title for the tools that lead with a dense sticky toolbar (Journal,
+   Builder, Plan, Builds) rather than a page header. Those pages need their
+   vertical space for data, so they take the serif at toolbar scale instead of
+   the full .tl-title — same voice, no cost in height. */
+.tl-title-sm {
+  font-family: var(--ct-display);
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: -0.005em;
+  color: var(--text);
+}
+
 /* The card. One shape for the whole app instead of per-page rounded-2xl +
    ad-hoc borders. Elevation is a hairline plus a soft shadow in light; in dark,
    where shadows barely read, a slightly lifted surface does the work instead. */

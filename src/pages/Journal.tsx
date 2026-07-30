@@ -320,7 +320,7 @@ export function Journal() {
       <div className="border-b border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0">
         <div className="max-w-5xl mx-auto px-5 md:px-6 py-3 flex items-center justify-between gap-2 flex-wrap">
         <div>
-          <h2 className="text-[15px] font-bold text-[var(--text)]">Trade Journal</h2>
+          <h2 className="tl-title-sm">Trade Journal</h2>
           <p className="text-[11px] text-[var(--text-dim)] mt-0.5">{total} trade{total !== 1 ? 's' : ''} total</p>
         </div>
 
