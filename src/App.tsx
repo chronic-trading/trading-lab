@@ -147,7 +147,12 @@ function MobileBottomNav({
   return (
     <>
       {/* Bottom bar */}
-      <nav className="tl-darkchrome md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#06060d]/95 backdrop-blur-md border-t border-slate-800/60"
+      {/* Warm charcoal, matching the dark theme's surfaces. These were cold
+          blue-blacks (#06060d / #08080f) chosen against the old cold palette;
+          left alone they now read blue against the warm app behind them. The
+          bar stays dark-locked in both themes by design — it's chrome, not a
+          surface — so the values are literals rather than tokens. */}
+      <nav className="tl-darkchrome md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0d0b09]/95 backdrop-blur-md border-t border-white/8"
            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-stretch">
           {primary.map(({ id, label, Icon, badge }) => (
@@ -187,7 +192,7 @@ function MobileBottomNav({
           className="md:hidden fixed inset-0 z-30"
           onClick={() => setMoreOpen(false)}>
           <div
-            className="tl-darkchrome absolute inset-x-0 bg-[#08080f] border-t border-slate-800/60 p-4 pb-2 shadow-2xl"
+            className="tl-darkchrome absolute inset-x-0 bg-[#16130f] border-t border-white/8 p-4 pb-2 shadow-2xl"
             style={{ bottom: `calc(56px + env(safe-area-inset-bottom))` }}
             onClick={e => e.stopPropagation()}>
             {/* Grouped the same way as the desktop sidebar, so the two navs
@@ -213,7 +218,7 @@ function MobileBottomNav({
                             className={`flex flex-col items-center gap-1.5 py-3 rounded-2xl border transition-all ${
                               tab === id
                                 ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
-                                : 'border-slate-800/60 bg-slate-900/50 text-slate-500 active:text-slate-200 active:border-slate-600'
+                                : 'border-white/8 bg-white/[0.04] text-slate-400 active:text-slate-200 active:border-white/20'
                             }`}>
                             <Icon size={17} />
                             <span className="text-[10px] font-bold">{label}</span>
