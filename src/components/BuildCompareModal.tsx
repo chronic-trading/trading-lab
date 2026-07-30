@@ -45,29 +45,29 @@ export function BuildCompareModal({ open, onClose }: Props) {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 8 }}
             transition={{ duration: 0.18 }}
-            className="w-full max-w-3xl bg-[#0c0c15] border border-slate-700/60 rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden"
+            className="w-full max-w-3xl bg-[var(--bg-elev)] border border-[var(--border)] rounded-2xl shadow-2xl flex flex-col max-h-[92vh] overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800/60 flex-shrink-0">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)] flex-shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-purple-500/10 border border-purple-500/25 flex items-center justify-center">
                   <GitCompare size={14} className="text-purple-400" />
                 </div>
                 <div>
-                  <p className="text-[14px] font-bold text-white">Build Comparison</p>
+                  <p className="text-[14px] font-bold text-[var(--text)]">Build Comparison</p>
                   {buildA && buildB && (
-                    <p className="text-[10px] text-slate-500 mt-0.5">{buildA.name} vs {buildB.name}</p>
+                    <p className="text-[10px] text-[var(--text-dim)] mt-0.5">{buildA.name} vs {buildB.name}</p>
                   )}
                 </div>
               </div>
-              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800 transition-all">
+              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-2)] transition-all">
                 <X size={15} />
               </button>
             </div>
 
             {/* Build selectors */}
-            <div className="grid grid-cols-2 gap-3 px-5 py-3 border-b border-slate-800/40 flex-shrink-0">
+            <div className="grid grid-cols-2 gap-3 px-5 py-3 border-b border-[var(--border)] flex-shrink-0">
               {[
                 { id: idA, setId: setIdA, other: idB, label: 'Build A', color: 'focus:border-blue-500/50', dot: 'bg-blue-400', textCol: 'text-blue-300' },
                 { id: idB, setId: setIdB, other: idA, label: 'Build B', color: 'focus:border-purple-500/50', dot: 'bg-purple-400', textCol: 'text-purple-300' },
@@ -80,7 +80,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                   <select
                     value={id}
                     onChange={e => setId(e.target.value)}
-                    className={`w-full bg-slate-900 border border-slate-700/60 rounded-xl px-3 py-2 text-[12px] text-slate-200 focus:outline-none transition-colors ${color}`}
+                    className={`w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2 text-[12px] text-[var(--text)] focus:outline-none transition-colors ${color}`}
                   >
                     <option value="">— select build —</option>
                     {builds.filter(b => b.id !== other).map(b => (
@@ -93,8 +93,8 @@ export function BuildCompareModal({ open, onClose }: Props) {
 
             {(!buildA || !buildB) ? (
               <div className="flex flex-col items-center justify-center py-16 gap-3">
-                <GitCompare size={28} className="text-slate-700" />
-                <p className="text-[12px] text-slate-600">Select two builds above to compare them</p>
+                <GitCompare size={28} className="text-[var(--text-faint)]" />
+                <p className="text-[12px] text-[var(--text-faint)]">Select two builds above to compare them</p>
               </div>
             ) : (
               <div className="flex-1 overflow-y-auto p-5 space-y-5">
@@ -106,17 +106,17 @@ export function BuildCompareModal({ open, onClose }: Props) {
                     { label: 'Synergies', a: synA, b: synB },
                     { label: 'Shared', shared: shared.length },
                   ].map(stat => (
-                    <div key={stat.label} className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-4 py-3 text-center">
-                      <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">{stat.label}</p>
+                    <div key={stat.label} className="tl-card px-4 py-3 text-center">
+                      <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-2">{stat.label}</p>
                       {'shared' in stat ? (
-                        <p className="text-[22px] font-bold text-slate-300">{stat.shared}
-                          <span className="text-[10px] text-slate-600 font-normal ml-1">in common</span>
+                        <p className="text-[22px] font-bold text-[var(--text-dim)]">{stat.shared}
+                          <span className="text-[10px] text-[var(--text-faint)] font-normal ml-1">in common</span>
                         </p>
                       ) : (
                         <div className="flex items-center justify-center gap-2.5">
-                          <span className={`text-[18px] font-bold ${(stat.a ?? 0) > (stat.b ?? 0) ? 'text-blue-400' : (stat.a ?? 0) < (stat.b ?? 0) ? 'text-slate-500' : 'text-slate-300'}`}>{stat.a}</span>
-                          <span className="text-slate-700 text-[11px]">vs</span>
-                          <span className={`text-[18px] font-bold ${(stat.b ?? 0) > (stat.a ?? 0) ? 'text-purple-400' : (stat.b ?? 0) < (stat.a ?? 0) ? 'text-slate-500' : 'text-slate-300'}`}>{stat.b}</span>
+                          <span className={`text-[18px] font-bold ${(stat.a ?? 0) > (stat.b ?? 0) ? 'text-blue-400' : (stat.a ?? 0) < (stat.b ?? 0) ? 'text-[var(--text-dim)]' : 'text-[var(--text-dim)]'}`}>{stat.a}</span>
+                          <span className="text-[var(--text-faint)] text-[11px]">vs</span>
+                          <span className={`text-[18px] font-bold ${(stat.b ?? 0) > (stat.a ?? 0) ? 'text-purple-400' : (stat.b ?? 0) < (stat.a ?? 0) ? 'text-[var(--text-dim)]' : 'text-[var(--text-dim)]'}`}>{stat.b}</span>
                         </div>
                       )}
                     </div>
@@ -124,8 +124,8 @@ export function BuildCompareModal({ open, onClose }: Props) {
                 </div>
 
                 {/* Category coverage */}
-                <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-4">
-                  <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-4">Category Coverage</p>
+                <div className="tl-card p-4">
+                  <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-4">Category Coverage</p>
                   <div className="space-y-3">
                     {CATS.map(cat => {
                       const a = catCount(buildA, cat)
@@ -133,7 +133,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                       const maxV = Math.max(a, b, 1)
                       return (
                         <div key={cat} className="flex items-center gap-2">
-                          <span className="text-[10px] text-slate-500 capitalize w-16 text-right flex-shrink-0">{cat}</span>
+                          <span className="text-[10px] text-[var(--text-dim)] capitalize w-16 text-right flex-shrink-0">{cat}</span>
                           {/* A bar (grows left→center) */}
                           <div className="flex-1 flex justify-end">
                             <div className="h-2 rounded-l-full overflow-hidden bg-blue-500/15" style={{ width: `${(a / maxV) * 100}%`, maxWidth: '100%' }}>
@@ -143,7 +143,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                           {/* Center labels */}
                           <div className="flex items-center gap-1 flex-shrink-0 w-12 justify-center">
                             <span className="text-[10px] font-bold text-blue-400">{a}</span>
-                            <span className="text-slate-700 text-[10px]">/</span>
+                            <span className="text-[var(--text-faint)] text-[10px]">/</span>
                             <span className="text-[10px] font-bold text-purple-400">{b}</span>
                           </div>
                           {/* B bar (grows center→right) */}
@@ -172,12 +172,12 @@ export function BuildCompareModal({ open, onClose }: Props) {
                 <div className="grid grid-cols-3 gap-3">
                   {[
                     { ids: onlyA, title: `Only in ${buildA.name}`, count: onlyA.length, bg: 'bg-blue-500/5', border: 'border-blue-500/15', text: 'text-blue-200/80', header: 'text-blue-400' },
-                    { ids: shared, title: 'Shared', count: shared.length, bg: 'bg-slate-800/30', border: 'border-slate-700/30', text: 'text-slate-400', header: 'text-slate-500' },
+                    { ids: shared, title: 'Shared', count: shared.length, bg: 'bg-[var(--surface-2)]', border: 'border-[var(--border)]', text: 'text-[var(--text-dim)]', header: 'text-[var(--text-dim)]' },
                     { ids: onlyB, title: `Only in ${buildB.name}`, count: onlyB.length, bg: 'bg-purple-500/5', border: 'border-purple-500/15', text: 'text-purple-200/80', header: 'text-purple-400' },
                   ].map(({ ids, title, count, bg, border, text, header }) => (
                     <div key={title}>
                       <p className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 ${header}`}>
-                        {title} <span className="text-slate-700 font-normal">({count})</span>
+                        {title} <span className="text-[var(--text-faint)] font-normal">({count})</span>
                       </p>
                       <div className="space-y-1.5">
                         {ids.map(id => {
@@ -190,7 +190,7 @@ export function BuildCompareModal({ open, onClose }: Props) {
                             </div>
                           )
                         })}
-                        {ids.length === 0 && <p className="text-[10px] text-slate-700 italic px-1">none</p>}
+                        {ids.length === 0 && <p className="text-[10px] text-[var(--text-faint)] italic px-1">none</p>}
                       </div>
                     </div>
                   ))}

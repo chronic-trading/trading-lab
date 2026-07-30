@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { syncUserDataField } from '../lib/supabase'
+import { syncUserDataField } from '../lib/sync'
 import { getCurrentUserId } from '../lib/currentUser'
 
 export type RuleCategory = 'entry' | 'risk' | 'mindset' | 'session'

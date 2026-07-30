@@ -87,7 +87,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
       <div className="grid grid-cols-1 md:grid-cols-5">
 
         {/* Map */}
-        <div className="md:col-span-3 p-4 md:p-6 md:border-r border-slate-800/50">
+        <div className="md:col-span-3 p-4 md:p-6 md:border-r border-[var(--border)]">
           <svg viewBox="-420 -420 840 840" className="w-full h-auto" style={{ maxHeight: 460 }}>
             <defs>
               <radialGradient id="map-demo-bg" cx="50%" cy="50%" r="50%">
@@ -146,7 +146,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
           </svg>
 
           {/* A tier legend would be noise here — every node is the same tier. */}
-          <p className="text-center text-[11px] text-slate-600 mt-1">
+          <p className="text-center text-[11px] text-[var(--text-faint)] mt-1">
             The {basics.length} foundations. Every other concept builds on these.
           </p>
         </div>
@@ -154,7 +154,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
         {/* Detail */}
         <div className="md:col-span-2 p-6 md:p-8 flex flex-col"
           style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 0%, rgba(96,165,250,0.04), transparent 70%)' }}>
-          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-4">
+          <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[var(--text-faint)] mb-4">
             Hover any node · {basics.length} foundations
           </p>
 
@@ -163,18 +163,18 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
               <div className="flex items-center gap-2 mb-2">
                 <span className="w-2.5 h-2.5 rounded-full" style={{ background: BASIC_FILL }} />
                 <span className="text-[10px] font-black uppercase tracking-wider" style={{ color: BASIC_FILL }}>{concept.tier}</span>
-                <span className="text-slate-700 text-[10px]">·</span>
-                <span className="text-[10px] text-slate-500 capitalize">{concept.category}</span>
+                <span className="text-[var(--text-faint)] text-[10px]">·</span>
+                <span className="text-[10px] text-[var(--text-dim)] capitalize">{concept.category}</span>
               </div>
-              <h3 className="text-[18px] font-bold text-white leading-snug mb-2.5">{concept.name}</h3>
-              <p className="text-[13px] text-slate-500 leading-relaxed line-clamp-5">{concept.description}</p>
+              <h3 className="text-[18px] font-bold text-[var(--text)] leading-snug mb-2.5">{concept.name}</h3>
+              <p className="text-[13px] text-[var(--text-dim)] leading-relaxed line-clamp-5">{concept.description}</p>
 
               {/* Only basic partners: a pill for an intermediate/advanced concept
                   would select a node this map doesn't draw, leaving the graph with
                   nothing highlighted. */}
               {basicSynergies.length > 0 && (
                 <div className="mt-4">
-                  <p className="text-[10px] font-black uppercase tracking-wider text-slate-600 mb-2">
+                  <p className="text-[10px] font-black uppercase tracking-wider text-[var(--text-faint)] mb-2">
                     Connects to {basicSynergies.length}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -183,7 +183,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
                       if (!partner) return null
                       return (
                         <button key={syn.conceptId} onClick={() => select(syn.conceptId)}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-lg bg-slate-900/60 border border-slate-800/60 text-slate-400 hover:border-slate-600 transition-colors">
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] transition-colors">
                           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                             style={{ background: syn.strength === 3 ? '#f59e0b' : syn.strength === 2 ? '#94a3b8' : '#475569' }} />
                           {partner.shortName}

@@ -27,7 +27,7 @@ const tfColor: Record<string, string> = {
   '15m': 'text-yellow-400', '1H': 'text-blue-400', '4H': 'text-purple-400', 'D': 'text-pink-400',
 }
 const instrumentColor: Record<string, string> = {
-  NQ: 'text-amber-300', ES: 'text-blue-300', GC: 'text-yellow-300', SI: 'text-slate-300',
+  NQ: 'text-amber-300', ES: 'text-blue-300', GC: 'text-yellow-300', SI: 'text-[var(--text-dim)]',
 }
 const sessionColor: Record<string, string> = {
   Asia: 'text-purple-400', London: 'text-blue-400', 'NY AM': 'text-emerald-400', 'NY PM': 'text-orange-400',
@@ -41,7 +41,7 @@ function SetupCard({ setup }: { setup: SetupExample }) {
   const tvUrl = `https://www.tradingview.com/chart/?symbol=${setup.tvSymbol}&interval=${setup.tvInterval}`
 
   return (
-    <div className="bg-[#0b0b14] border border-slate-800/60 rounded-2xl overflow-hidden transition-all duration-200 hover:border-slate-700/60">
+    <div className="tl-card overflow-hidden transition-all duration-200 hover:border-[var(--border)]">
       <button
         onClick={() => setExpanded(e => !e)}
         className="w-full text-left px-4 py-4 flex items-start gap-3"
@@ -64,9 +64,9 @@ function SetupCard({ setup }: { setup: SetupExample }) {
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               {setup.instrument}
             </span>
-            <span className="text-slate-700 text-[10px]">·</span>
+            <span className="text-[var(--text-faint)] text-[10px]">·</span>
             <span className={`text-[10px] font-bold ${tfColor[setup.timeframe]}`}>{setup.timeframe}</span>
-            <span className="text-slate-700 text-[10px]">·</span>
+            <span className="text-[var(--text-faint)] text-[10px]">·</span>
             <span className={`text-[10px] font-semibold ${sessionColor[setup.session]}`}>{setup.session}</span>
             <span className="ml-auto flex-shrink-0">
               <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${res.bg} ${res.color}`}>
@@ -75,26 +75,26 @@ function SetupCard({ setup }: { setup: SetupExample }) {
               </span>
             </span>
           </div>
-          <p className="text-[13px] font-bold text-white leading-snug">{setup.title}</p>
+          <p className="text-[13px] font-bold text-[var(--text)] leading-snug">{setup.title}</p>
           {!expanded && (
-            <p className="text-[11px] text-slate-500 mt-1 leading-relaxed line-clamp-2">{setup.what}</p>
+            <p className="text-[11px] text-[var(--text-dim)] mt-1 leading-relaxed line-clamp-2">{setup.what}</p>
           )}
         </div>
 
-        <div className="flex-shrink-0 ml-1 text-slate-600 mt-0.5">
+        <div className="flex-shrink-0 ml-1 text-[var(--text-faint)] mt-0.5">
           {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
         </div>
       </button>
 
       {/* Expanded body */}
       {expanded && (
-        <div className="px-4 pb-4 space-y-3 border-t border-slate-800/40 pt-4">
+        <div className="px-4 pb-4 space-y-3 border-t border-[var(--border)] pt-4">
           {/* Concept diagram */}
           <PlaybookDiagram conceptId={setup.conceptId} dir={setup.direction} />
 
           <div>
-            <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">What Happened</p>
-            <p className="text-[12px] text-slate-300 leading-relaxed">{setup.what}</p>
+            <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-1.5">What Happened</p>
+            <p className="text-[12px] text-[var(--text-dim)] leading-relaxed">{setup.what}</p>
           </div>
 
           {/* Entry / Target / Invalidation */}
@@ -106,7 +106,7 @@ function SetupCard({ setup }: { setup: SetupExample }) {
             ].map(row => (
               <div key={row.label} className={`rounded-xl border px-3 py-2.5 ${row.color}`}>
                 <p className={`text-[10px] font-black uppercase tracking-wider mb-1 ${row.tc}`}>{row.label}</p>
-                <p className="text-[11px] text-slate-300 leading-relaxed">{row.text}</p>
+                <p className="text-[11px] text-[var(--text-dim)] leading-relaxed">{row.text}</p>
               </div>
             ))}
           </div>
@@ -121,11 +121,11 @@ function SetupCard({ setup }: { setup: SetupExample }) {
           <div className="flex items-start justify-between flex-wrap gap-3">
             {setup.relatedConcepts.length > 0 && (
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-[10px] text-slate-600 font-semibold">Also:</span>
+                <span className="text-[10px] text-[var(--text-faint)] font-semibold">Also:</span>
                 {setup.relatedConcepts.map(cid => {
                   const c = getConceptById(cid)
                   return c ? (
-                    <span key={cid} className="text-[10px] text-slate-500 bg-slate-800/60 border border-slate-700/40 px-2 py-0.5 rounded-lg">
+                    <span key={cid} className="text-[10px] text-[var(--text-dim)] bg-[var(--surface-2)] border border-[var(--border)] px-2 py-0.5 rounded-lg">
                       {c.shortName}
                     </span>
                   ) : null
@@ -165,14 +165,14 @@ function ConceptList({
               <button key={concept.id} onClick={() => onSelect(concept.id)}
                 className={`w-full flex items-center justify-between px-4 py-3 text-left transition-all border-r-2 ${
                   isActive
-                    ? 'bg-slate-800/60 border-amber-400'
-                    : 'border-transparent hover:bg-slate-800/20'
+                    ? 'bg-[var(--surface-2)] border-amber-400'
+                    : 'border-transparent hover:bg-[var(--surface-2)]'
                 }`}
               >
-                <span className={`text-[12px] font-semibold truncate ${isActive ? 'text-white' : 'text-slate-400'}`}>
+                <span className={`text-[12px] font-semibold truncate ${isActive ? 'text-[var(--text)]' : 'text-[var(--text-dim)]'}`}>
                   {concept.shortName}
                 </span>
-                <span className={`text-[10px] font-bold ml-2 flex-shrink-0 ${isActive ? 'text-amber-400' : 'text-slate-700'}`}>
+                <span className={`text-[10px] font-bold ml-2 flex-shrink-0 ${isActive ? 'text-amber-400' : 'text-[var(--text-faint)]'}`}>
                   {count}
                 </span>
               </button>
@@ -205,7 +205,7 @@ export function Playbook() {
   }
 
   return (
-    <div className="flex h-full overflow-hidden bg-[#05050a]">
+    <div className="flex h-full overflow-hidden bg-[var(--bg)]">
 
       {/* ── Concept list panel ───────────────────────────────────────────
           Mobile: full screen when mobileView === 'list'
@@ -213,14 +213,14 @@ export function Playbook() {
       <div className={`
         ${mobileView === 'list' ? 'flex' : 'hidden'} md:flex
         w-full md:w-[220px] flex-shrink-0
-        border-r border-slate-800/50 flex-col overflow-hidden bg-[#06060d]
+        border-r border-[var(--border)] flex-col overflow-hidden bg-[var(--bg-elev)]
       `}>
-        <div className="px-4 py-4 border-b border-slate-800/40 flex-shrink-0">
+        <div className="px-4 py-4 border-b border-[var(--border)] flex-shrink-0">
           <div className="flex items-center gap-2 mb-0.5">
             <GraduationCap size={13} className="text-amber-400" />
-            <span className="text-[13px] font-bold text-white">Playbook</span>
+            <span className="text-[13px] font-bold text-[var(--text)]">Playbook</span>
           </div>
-          <p className="text-[10px] text-slate-600">{totalSetups} curated ICT setups</p>
+          <p className="text-[10px] text-[var(--text-faint)]">{totalSetups} curated ICT setups</p>
         </div>
         <ConceptList grouped={grouped} selectedId={selectedId} onSelect={handleSelect} />
       </div>
@@ -235,11 +235,11 @@ export function Playbook() {
         {selected ? (
           <>
             {/* Header */}
-            <div className="flex-shrink-0 px-4 md:px-6 py-4 border-b border-slate-800/40 bg-[#06060d]">
+            <div className="flex-shrink-0 px-4 md:px-6 py-4 border-b border-[var(--border)] bg-[var(--bg-elev)]">
               {/* Mobile back button */}
               <button
                 onClick={() => setMobileView('list')}
-                className="md:hidden flex items-center gap-1.5 text-[12px] text-slate-500 hover:text-slate-200 font-semibold mb-3 transition-colors"
+                className="md:hidden flex items-center gap-1.5 text-[12px] text-[var(--text-dim)] hover:text-[var(--text)] font-semibold mb-3 transition-colors"
               >
                 <ChevronLeft size={14} /> All concepts
               </button>
@@ -249,19 +249,19 @@ export function Playbook() {
                   <span className={`text-[10px] font-black uppercase tracking-widest ${categoryColor[selected.category]}`}>
                     {categoryLabel[selected.category]}
                   </span>
-                  <h2 className="text-[16px] md:text-[18px] font-black text-white leading-tight mt-0.5">
+                  <h2 className="text-[16px] md:text-[18px] font-black text-[var(--text)] leading-tight mt-0.5">
                     {selected.name}
                   </h2>
-                  <p className="text-[11px] md:text-[12px] text-slate-500 mt-1.5 leading-relaxed line-clamp-2 md:line-clamp-none max-w-xl">
+                  <p className="text-[11px] md:text-[12px] text-[var(--text-dim)] mt-1.5 leading-relaxed line-clamp-2 md:line-clamp-none max-w-xl">
                     <GlossaryText text={selected.description} />
                   </p>
                 </div>
                 <div className="flex-shrink-0 text-right">
-                  <p className="text-[22px] md:text-[28px] font-black text-slate-200 leading-none"
+                  <p className="text-[22px] md:text-[28px] font-black text-[var(--text)] leading-none"
                      style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                     {setups.length}
                   </p>
-                  <p className="text-[10px] text-slate-600 uppercase tracking-wider mt-0.5">
+                  <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider mt-0.5">
                     setup{setups.length !== 1 ? 's' : ''}
                   </p>
                 </div>
@@ -276,7 +276,7 @@ export function Playbook() {
                 </div>
               ) : (
                 <div className="flex items-center justify-center h-40">
-                  <p className="text-[13px] text-slate-700">No setups for this concept yet.</p>
+                  <p className="text-[13px] text-[var(--text-faint)]">No setups for this concept yet.</p>
                 </div>
               )}
             </div>
@@ -284,8 +284,8 @@ export function Playbook() {
         ) : (
           <div className="flex-1 flex items-center justify-center">
             <div className="text-center">
-              <GraduationCap size={32} className="text-slate-800 mx-auto mb-3" />
-              <p className="text-[14px] text-slate-600">Select a concept to see setups</p>
+              <GraduationCap size={32} className="text-[var(--text-faint)] mx-auto mb-3" />
+              <p className="text-[14px] text-[var(--text-faint)]">Select a concept to see setups</p>
             </div>
           </div>
         )}

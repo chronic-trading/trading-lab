@@ -7,7 +7,7 @@ import type { ChecklistPhase } from '../data/checklist'
 const phaseColors: Record<ChecklistPhase, string> = {
   'pre-session': 'text-amber-400  border-amber-500/30  bg-amber-500/10',
   'draw':        'text-blue-400   border-blue-500/30   bg-blue-500/10',
-  'structure':   'text-slate-300  border-slate-600/30  bg-slate-700/10',
+  'structure':   'text-[var(--text-dim)]  border-[var(--border-strong)]  bg-[var(--surface-hover)]',
   'timing':      'text-purple-400 border-purple-500/30 bg-purple-500/10',
   'setup':       'text-emerald-400 border-emerald-500/30 bg-emerald-500/10',
   'entry':       'text-rose-400   border-rose-500/30   bg-rose-500/10',
@@ -53,17 +53,17 @@ export function Checklist({ open, onClose, conceptIds }: Props) {
             exit={{ x: 420 }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             onClick={e => e.stopPropagation()}
-            className="w-[480px] h-full bg-[#08080f] border-l border-slate-800/70 flex flex-col shadow-2xl"
+            className="w-[480px] h-full bg-[var(--bg-elev)] border-l border-[var(--border)] flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800/60">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center">
                   <ClipboardList size={15} className="text-amber-400" />
                 </div>
                 <div>
-                  <h2 className="text-[15px] font-bold text-white">Pre-Trade Checklist</h2>
-                  <p className="text-[11px] text-slate-500 mt-0.5">
+                  <h2 className="text-[15px] font-bold text-[var(--text)]">Pre-Trade Checklist</h2>
+                  <p className="text-[11px] text-[var(--text-dim)] mt-0.5">
                     {checkedCount} / {totalItems} completed
                   </p>
                 </div>
@@ -72,14 +72,14 @@ export function Checklist({ open, onClose, conceptIds }: Props) {
                 {checkedCount > 0 && (
                   <button
                     onClick={reset}
-                    className="flex items-center gap-1.5 text-[11px] text-slate-500 hover:text-slate-300 px-2.5 py-1.5 rounded-xl hover:bg-slate-800/60 transition-all"
+                    className="flex items-center gap-1.5 text-[11px] text-[var(--text-dim)] hover:text-[var(--text-dim)] px-2.5 py-1.5 rounded-xl hover:bg-[var(--surface-2)] transition-all"
                   >
                     <RotateCcw size={11} /> Reset
                   </button>
                 )}
                 <button
                   onClick={onClose}
-                  className="w-7 h-7 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all"
+                  className="w-7 h-7 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text-dim)] hover:bg-[var(--surface-2)] transition-all"
                 >
                   <X size={15} />
                 </button>
@@ -87,7 +87,7 @@ export function Checklist({ open, onClose, conceptIds }: Props) {
             </div>
 
             {/* Progress bar */}
-            <div className="h-1 bg-slate-800 flex-shrink-0">
+            <div className="h-1 bg-[var(--surface-2)] flex-shrink-0">
               <motion.div
                 className="h-full bg-gradient-to-r from-amber-500 to-amber-300 rounded-full"
                 initial={{ width: 0 }}
@@ -100,8 +100,8 @@ export function Checklist({ open, onClose, conceptIds }: Props) {
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-5">
               {sections.size === 0 ? (
                 <div className="flex flex-col items-center justify-center h-48 gap-3 text-center">
-                  <ClipboardList size={24} className="text-slate-600" />
-                  <p className="text-[13px] text-slate-500">No checklist items for current build</p>
+                  <ClipboardList size={24} className="text-[var(--text-faint)]" />
+                  <p className="text-[13px] text-[var(--text-dim)]">No checklist items for current build</p>
                 </div>
               ) : (
                 Array.from(sections.entries()).map(([phase, items]) => (
@@ -118,17 +118,17 @@ export function Checklist({ open, onClose, conceptIds }: Props) {
                             onClick={() => toggle(item.id)}
                             className={`w-full flex items-start gap-3 text-left px-3.5 py-3 rounded-xl border transition-all
                               ${done
-                                ? 'bg-slate-900/30 border-slate-800/40'
-                                : 'bg-[#0d0d16] border-slate-800/60 hover:border-slate-700/60'
+                                ? 'bg-[var(--surface)] border-[var(--border)]'
+                                : 'bg-[var(--surface)] border-[var(--border)] hover:border-[var(--border)]'
                               }`}
                           >
                             <div className="flex-shrink-0 mt-0.5">
                               {done
                                 ? <CheckSquare size={15} className="text-emerald-400" />
-                                : <Square size={15} className="text-slate-600" />
+                                : <Square size={15} className="text-[var(--text-faint)]" />
                               }
                             </div>
-                            <span className={`text-[13px] leading-relaxed transition-colors ${done ? 'text-slate-600 line-through' : 'text-slate-200'}`}>
+                            <span className={`text-[13px] leading-relaxed transition-colors ${done ? 'text-[var(--text-faint)] line-through' : 'text-[var(--text)]'}`}>
                               {item.text}
                             </span>
                           </button>
@@ -142,7 +142,7 @@ export function Checklist({ open, onClose, conceptIds }: Props) {
 
             {/* Footer */}
             {checkedCount === totalItems && totalItems > 0 && (
-              <div className="px-5 py-4 border-t border-slate-800/60">
+              <div className="px-5 py-4 border-t border-[var(--border)]">
                 <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/25 rounded-xl px-4 py-3">
                   <CheckSquare size={15} className="text-emerald-400 flex-shrink-0" />
                   <p className="text-[12px] font-semibold text-emerald-300">All checks complete. You're ready.</p>

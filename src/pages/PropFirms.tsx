@@ -64,10 +64,10 @@ function Podium({ selectedSize }: { selectedSize: number }) {
               style={{ background: `${firm.color}20`, border: `2px solid ${firm.color}40`, color: firm.color }}>
               {firm.shortName[0]}
             </div>
-            <p className="text-[14px] font-black text-white mb-1">{firm.name}</p>
+            <p className="text-[14px] font-black text-[var(--text)] mb-1">{firm.name}</p>
             <div className="flex items-center gap-1.5 mb-4">
               <ScoreBadge score={firm.score!} size="lg" />
-              <span className="text-[10px] text-slate-600">/ 100</span>
+              <span className="text-[10px] text-[var(--text-faint)]">/ 100</span>
             </div>
             <div className="w-full space-y-1.5 text-left text-[11px]">
               {[
@@ -75,16 +75,16 @@ function Podium({ selectedSize }: { selectedSize: number }) {
                 ['Split', `${firm.profitSplit}%`],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between">
-                  <span className="text-slate-500">{k}</span>
-                  <span className="text-white font-bold">{v}</span>
+                  <span className="text-[var(--text-dim)]">{k}</span>
+                  <span className="text-[var(--text)] font-bold">{v}</span>
                 </div>
               ))}
               <div className="flex justify-between items-center">
-                <span className="text-slate-500">Drawdown</span>
+                <span className="text-[var(--text-dim)]">Drawdown</span>
                 <DrawdownBadge type={firm.drawdownType} />
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-slate-500">News</span>
+                <span className="text-[var(--text-dim)]">News</span>
                 <Tag yes={firm.newsTrading} label={firm.newsTrading ? 'Allowed' : 'Blocked'} />
               </div>
             </div>
@@ -119,10 +119,10 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
         <div className="flex-shrink-0 w-12 h-12 rounded-xl flex flex-col items-center justify-center"
           style={{ background: scoreSoft(firm.score!), border: `1px solid color-mix(in srgb, ${scoreColor(firm.score!)} 25%, transparent)` }}>
           <ScoreBadge score={firm.score!} />
-          <span className="text-[10px] text-slate-600 uppercase tracking-wider">score</span>
+          <span className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider">score</span>
         </div>
         <div className="flex-shrink-0 min-w-[110px]">
-          <p className="text-[13px] font-bold text-white">{firm.name}</p>
+          <p className="text-[13px] font-bold text-[var(--text)]">{firm.name}</p>
           <div className="flex items-center gap-1 mt-0.5 flex-wrap">
             <DrawdownBadge type={firm.drawdownType} />
             {firm.liveAccount    && <span className="px-1.5 py-0.5 rounded-lg text-[10px] font-bold" style={{ background: 'var(--green-soft)', color: 'var(--green)', border: '1px solid color-mix(in srgb, var(--green) 20%, transparent)' }}>LIVE</span>}
@@ -130,11 +130,11 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
           </div>
         </div>
         <div className="hidden md:block flex-shrink-0 text-center min-w-[80px]">
-          {plan ? <><p className="text-[15px] font-black text-white">{formatPrice(plan.price)}</p><p className="text-[10px] text-slate-600">/month</p></> : <p className="text-[11px] text-slate-600">—</p>}
+          {plan ? <><p className="text-[15px] font-black text-[var(--text)]">{formatPrice(plan.price)}</p><p className="text-[10px] text-[var(--text-faint)]">/month</p></> : <p className="text-[11px] text-[var(--text-faint)]">—</p>}
         </div>
         <div className="hidden md:block flex-shrink-0 text-center min-w-[60px]">
           <p className="text-[15px] font-black" style={{ color: firm.color }}>{firm.profitSplit}%</p>
-          <p className="text-[10px] text-slate-600">split</p>
+          <p className="text-[10px] text-[var(--text-faint)]">split</p>
         </div>
         <div className="hidden lg:flex flex-wrap gap-1 flex-1">
           <Tag yes={firm.newsTrading} label="News" />
@@ -142,31 +142,31 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
           <Tag yes={firm.drawdownType === 'eod'} label="EOD" />
         </div>
         <div className="hidden md:block flex-shrink-0 text-center min-w-[50px]">
-          <p className="text-[15px] font-black text-slate-300">{firm.minTradingDays}</p>
-          <p className="text-[10px] text-slate-600">min days</p>
+          <p className="text-[15px] font-black text-[var(--text-dim)]">{firm.minTradingDays}</p>
+          <p className="text-[10px] text-[var(--text-faint)]">min days</p>
         </div>
-        <div className="flex-shrink-0 ml-auto text-slate-600 text-[12px]">{isSelected ? '▲' : '▼'}</div>
+        <div className="flex-shrink-0 ml-auto text-[var(--text-faint)] text-[12px]">{isSelected ? '▲' : '▼'}</div>
       </div>
 
       {isSelected && (
-        <div className="mt-4 pt-4 border-t border-slate-800/50 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div className="mt-4 pt-4 border-t border-[var(--border)] grid grid-cols-1 md:grid-cols-2 gap-5">
           <div>
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-500 mb-2">Account Plans</p>
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[var(--text-dim)] mb-2">Account Plans</p>
             <div className="space-y-1.5">
               {firm.accounts.map(a => (
                 <div key={a.size} className="flex items-center justify-between px-3 py-1.5 rounded-lg"
                   style={{ background: a.size === selectedSize ? `color-mix(in srgb, ${firm.color} 10%, var(--surface))` : 'var(--surface-hover)', border: `1px solid ${a.size === selectedSize ? firm.color + '22' : 'var(--border)'}` }}>
-                  <span className="text-[12px] font-bold text-white">{formatSize(a.size)}</span>
+                  <span className="text-[12px] font-bold text-[var(--text)]">{formatSize(a.size)}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-slate-400">{formatPrice(a.price)}/mo</span>
-                    <span className="text-[10px] text-slate-600">Reset: {formatPrice(a.resetPrice)}</span>
+                    <span className="text-[11px] text-[var(--text-dim)]">{formatPrice(a.price)}/mo</span>
+                    <span className="text-[10px] text-[var(--text-faint)]">Reset: {formatPrice(a.resetPrice)}</span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           <div className="space-y-2">
-            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-500 mb-2">Details</p>
+            <p className="text-[10px] font-bold tracking-[0.2em] uppercase text-[var(--text-dim)] mb-2">Details</p>
             {[
               ['Max Drawdown', `${firm.maxDrawdown}%`],
               ['Daily Loss',   firm.dailyLoss > 0 ? `${firm.dailyLoss}%` : 'None'],
@@ -174,13 +174,13 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
               ['Instruments',  firm.instruments.join(', ')],
             ].map(([k, v]) => (
               <div key={k} className="flex justify-between gap-3 text-[11px]">
-                <span className="text-slate-500 flex-shrink-0">{k}</span>
-                <span className="text-slate-300 text-right">{v}</span>
+                <span className="text-[var(--text-dim)] flex-shrink-0">{k}</span>
+                <span className="text-[var(--text-dim)] text-right">{v}</span>
               </div>
             ))}
             <div className="mt-2 space-y-1">
               {firm.highlights.map(h => (
-                <p key={h} className="text-[11px] text-slate-400 flex items-start gap-1.5">
+                <p key={h} className="text-[11px] text-[var(--text-dim)] flex items-start gap-1.5">
                   <span style={{ color: firm.color, flexShrink: 0 }}>▸</span>{h}
                 </p>
               ))}
@@ -193,7 +193,7 @@ function FirmRow({ firm, selectedSize, onSelect, isSelected }: {
             </div>
           )}
           <div className="col-span-full flex items-center justify-between flex-wrap gap-2">
-            <p className="text-[10px] text-slate-700">Last verified {firm.lastVerified} — confirm on official site.</p>
+            <p className="text-[10px] text-[var(--text-faint)]">Last verified {firm.lastVerified} — confirm on official site.</p>
             <a href={firm.website} target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg font-bold text-[11px] transition-all hover:opacity-80"
               style={{ background: `${firm.color}18`, border: `1px solid ${firm.color}30`, color: firm.color }}>
@@ -235,11 +235,11 @@ export function PropFirms() {
 
       {/* Header */}
       <div className="text-center py-2">
-        <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-2">Live Rankings</p>
-        <h1 className="font-black text-white mb-2" style={{ fontSize: 'clamp(22px,4vw,36px)', letterSpacing: '-1px' }}>
+        <p className="tl-eyebrow mb-2">Live Rankings</p>
+        <h1 className="tl-display text-[var(--text)] mb-2" style={{ fontSize: 'clamp(26px,4vw,40px)' }}>
           Prop Firm Comparison
         </h1>
-        <p className="text-[13px] text-slate-500" style={{ maxWidth: '420px', margin: '0 auto' }}>
+        <p className="text-[13px] text-[var(--text-dim)]" style={{ maxWidth: '420px', margin: '0 auto' }}>
           {FIRMS.length} futures prop firms scored for ICT and SMC traders. Real prices, real rules.
         </p>
       </div>
@@ -255,7 +255,7 @@ export function PropFirms() {
           <div key={s.label} className="rounded-xl p-3 text-center"
             style={{ background: 'var(--surface)', border: '1px solid var(--border)' }}>
             <p className="font-black text-[22px] font-mono" style={{ color: s.color, textShadow: `0 0 16px color-mix(in srgb, ${s.color} 25%, transparent)` }}>{s.val}</p>
-            <p className="text-[10px] text-slate-600 uppercase tracking-[0.15em]">{s.label}</p>
+            <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-[0.15em]">{s.label}</p>
           </div>
         ))}
       </div>
@@ -281,7 +281,7 @@ export function PropFirms() {
       <div className="rounded-xl p-3" style={{ background: 'var(--bg-elev)', border: '1px solid var(--border)' }}>
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider w-8">Size</span>
+            <span className="text-[10px] text-[var(--text-dim)] font-bold uppercase tracking-wider w-8">Size</span>
             {ACCOUNT_SIZES.map(s => (
               <button key={s} onClick={() => setSelectedSize(s)}
                 className="px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all"
@@ -291,7 +291,7 @@ export function PropFirms() {
             ))}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider w-8">Sort</span>
+            <span className="text-[10px] text-[var(--text-dim)] font-bold uppercase tracking-wider w-8">Sort</span>
             {(['score', 'price', 'split', 'days'] as const).map(s => (
               <button key={s} onClick={() => setSortBy(s)}
                 className="px-2.5 py-1 rounded-lg text-[10px] font-bold capitalize transition-all"
@@ -299,7 +299,7 @@ export function PropFirms() {
                 {s === 'days' ? 'Min Days' : s}
               </button>
             ))}
-            <div className="w-px h-4 bg-slate-800/60 mx-1" />
+            <div className="w-px h-4 bg-[var(--surface-2)] mx-1" />
             {[
               { label: 'News',    val: filterNews, set: setFilterNews },
               { label: 'EOD',     val: filterEOD,  set: setFilterEOD  },
@@ -317,7 +317,7 @@ export function PropFirms() {
 
       {/* Firm list */}
       <div>
-        <p className="text-[11px] text-slate-600 mb-3">{sorted.length} firm{sorted.length !== 1 ? 's' : ''} — click to expand · priced at {formatSize(selectedSize)}</p>
+        <p className="text-[11px] text-[var(--text-faint)] mb-3">{sorted.length} firm{sorted.length !== 1 ? 's' : ''} — click to expand · priced at {formatSize(selectedSize)}</p>
         <div className="space-y-2">
           {sorted.map(firm => (
             <FirmRow key={firm.id} firm={firm} selectedSize={selectedSize}
@@ -328,7 +328,7 @@ export function PropFirms() {
       </div>
 
       {/* Disclaimer */}
-      <p className="text-[10px] text-slate-700 text-center pb-4">
+      <p className="text-[10px] text-[var(--text-faint)] text-center pb-4">
         Prices are approximate and change frequently during promotions. Always verify on official firm sites before purchasing. Not financial advice.
       </p>
     </div>

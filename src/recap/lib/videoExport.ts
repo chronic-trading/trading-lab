@@ -439,16 +439,11 @@ async function generateMp4Montage(options: {
 }
 
 // ─── Capability detection ─────────────────────────────────────────────────────
-
-export function videoCapability(): 'mp4' | 'webm' | 'none' {
-  if (typeof VideoEncoder !== 'undefined' && typeof VideoFrame !== 'undefined') return 'mp4'
-  try {
-    const canvas = document.createElement('canvas')
-    const hasStream = typeof (canvas as HTMLCanvasElement & { captureStream?: unknown }).captureStream === 'function'
-    if (hasStream && typeof MediaRecorder !== 'undefined') return 'webm'
-  } catch { /* */ }
-  return 'none'
-}
+// Lives in ./videoCapability so callers can probe support without loading this
+// module's html2canvas/mp4-muxer payload. Re-exported here to keep the old
+// import path working.
+export { videoCapability } from './videoCapability'
+import { videoCapability } from './videoCapability'
 
 /** @deprecated kept for App.tsx compat */
 export function canUseWebM(): boolean {

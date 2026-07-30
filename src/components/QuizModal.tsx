@@ -189,25 +189,25 @@ export function QuizModal({ open, onClose }: Props) {
             exit={{ y: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
             onClick={e => e.stopPropagation()}
-            className="w-full sm:max-w-2xl bg-[#0d0d16] border-t sm:border border-slate-700/60 rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="w-full sm:max-w-2xl bg-[var(--surface)] border-t sm:border border-[var(--border)] rounded-t-2xl sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden"
             style={{ maxHeight: 'calc(100dvh - 20px)', height: 'auto' }}
           >
             {/* Drag handle (mobile visual affordance) */}
             <div className="sm:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
-              <div className="w-10 h-1 bg-slate-700 rounded-full" />
+              <div className="w-10 h-1 bg-[var(--surface-hover)] rounded-full" />
             </div>
 
             {/* ── Header ── */}
-            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-5 border-b border-slate-800/60 flex-shrink-0">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-5 border-b border-[var(--border)] flex-shrink-0">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center flex-shrink-0">
                   <Brain size={16} className="text-amber-400" />
                 </div>
                 <div>
-                  <p className="text-[15px] sm:text-[16px] font-bold text-white leading-none">Concept Quiz</p>
+                  <p className="text-[15px] sm:text-[16px] font-bold text-[var(--text)] leading-none">Concept Quiz</p>
                   {!done && (
                     <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                      <p className="text-[11px] text-slate-500">Question {idx + 1} of {questions.length}</p>
+                      <p className="text-[11px] text-[var(--text-dim)]">Question {idx + 1} of {questions.length}</p>
                       {ratedCount >= 5 && weakCount > 0 && (
                         <div className="flex items-center gap-1">
                           <Zap size={9} className="text-amber-500" />
@@ -225,7 +225,7 @@ export function QuizModal({ open, onClose }: Props) {
                     <span className="text-[10px] text-amber-600 font-semibold">pts</span>
                   </div>
                 )}
-                <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all">
+                <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text-dim)] hover:bg-[var(--surface-2)] transition-all">
                   <X size={16} />
                 </button>
               </div>
@@ -233,7 +233,7 @@ export function QuizModal({ open, onClose }: Props) {
 
             {/* ── Progress bar ── */}
             {!done && (
-              <div className="h-1 sm:h-1.5 bg-slate-800/80 flex-shrink-0">
+              <div className="h-1 sm:h-1.5 bg-[var(--surface-2)] flex-shrink-0">
                 <motion.div
                   className="h-full bg-gradient-to-r from-amber-500 to-amber-300"
                   animate={{ width: `${((idx + (selected ? 1 : 0)) / questions.length) * 100}%` }}
@@ -250,13 +250,13 @@ export function QuizModal({ open, onClose }: Props) {
                     <Trophy size={30} className="text-amber-400" />
                   </div>
                   <div>
-                    <p className="text-[40px] sm:text-[40px] font-black text-white leading-none">
-                      {score}<span className="text-[22px] sm:text-[22px] text-slate-500 font-semibold">/{questions.length}</span>
+                    <p className="text-[40px] sm:text-[40px] font-black text-[var(--text)] leading-none">
+                      {score}<span className="text-[22px] sm:text-[22px] text-[var(--text-dim)] font-semibold">/{questions.length}</span>
                     </p>
                     <p className="text-[15px] sm:text-[16px] font-bold mt-2" style={{ color: pct >= 80 ? '#34d399' : pct >= 60 ? '#f59e0b' : '#f87171' }}>
                       {pct}% correct
                     </p>
-                    <p className="text-[13px] sm:text-[13px] text-slate-400 mt-2 leading-relaxed max-w-sm mx-auto">
+                    <p className="text-[13px] sm:text-[13px] text-[var(--text-dim)] mt-2 leading-relaxed max-w-sm mx-auto">
                       {pct >= 80 ? 'Sharp. You know your ICT concepts cold.' : pct >= 60 ? 'Getting there — drill the ones you missed.' : 'Keep going. Repetition is how these concepts stick.'}
                     </p>
                   </div>
@@ -272,11 +272,11 @@ export function QuizModal({ open, onClose }: Props) {
                           return (
                             <div key={id} className="flex items-center gap-2.5 bg-red-500/5 border border-red-500/15 rounded-xl px-3 py-2">
                               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierDot[c.tier]}`} />
-                              <span className="text-[12px] font-semibold text-slate-200 flex-1">{c.name}</span>
+                              <span className="text-[12px] font-semibold text-[var(--text)] flex-1">{c.name}</span>
                               <div className="flex items-center gap-1.5 flex-shrink-0">
                                 <div className="flex gap-0.5">
                                   {[1,2,3,4,5].map(n => (
-                                    <div key={n} className={`w-2 h-2 rounded-full border ${n <= lvl ? MASTERY_COLORS[lvl] + ' border-transparent' : 'border-slate-700'}`} />
+                                    <div key={n} className={`w-2 h-2 rounded-full border ${n <= lvl ? MASTERY_COLORS[lvl] + ' border-transparent' : 'border-[var(--border)]'}`} />
                                   ))}
                                 </div>
                                 <span className={`text-[10px] font-bold ${MASTERY_TEXT[lvl]}`}>{MASTERY_LABELS[lvl]}</span>
@@ -294,7 +294,7 @@ export function QuizModal({ open, onClose }: Props) {
                       <RotateCcw size={14} /> Try Again
                     </button>
                     <button onClick={onClose}
-                      className="px-5 py-3 rounded-2xl border border-slate-700 text-slate-300 text-[14px] font-semibold hover:border-slate-500 hover:text-white transition-all">
+                      className="px-5 py-3 rounded-2xl border border-[var(--border)] text-[var(--text-dim)] text-[14px] font-semibold hover:border-[var(--border-strong)] hover:text-[var(--text)] transition-all">
                       Close
                     </button>
                   </div>
@@ -307,8 +307,8 @@ export function QuizModal({ open, onClose }: Props) {
                       <div className="flex items-center gap-2 flex-wrap">
                         <div className={`w-2 h-2 rounded-full flex-shrink-0 ${tierDot[concept.tier]}`} />
                         <span className={`text-[11px] font-bold uppercase tracking-wider ${tierLabel[concept.tier]}`}>{concept.tier}</span>
-                        <span className="text-slate-700 text-[10px]">·</span>
-                        <span className="text-[11px] text-slate-500 capitalize">{concept.category}</span>
+                        <span className="text-[var(--text-faint)] text-[10px]">·</span>
+                        <span className="text-[11px] text-[var(--text-dim)] capitalize">{concept.category}</span>
                         {q.type === 'synergy' && (
                           <span className="text-[10px] font-semibold text-amber-500/70 uppercase tracking-wide">· Synergy</span>
                         )}
@@ -316,7 +316,7 @@ export function QuizModal({ open, onClose }: Props) {
                       <div className="flex items-center gap-1 flex-shrink-0">
                         <div className="flex gap-0.5">
                           {[1,2,3,4,5].map(n => (
-                            <div key={n} className={`w-2 h-2 rounded-full border transition-all ${n <= cLevel ? MASTERY_COLORS[cLevel] + ' border-transparent' : 'border-slate-700/60'}`} />
+                            <div key={n} className={`w-2 h-2 rounded-full border transition-all ${n <= cLevel ? MASTERY_COLORS[cLevel] + ' border-transparent' : 'border-[var(--border)]'}`} />
                           ))}
                         </div>
                         <span className={`text-[10px] font-bold ml-1 ${MASTERY_TEXT[cLevel]}`}>{MASTERY_LABELS[cLevel]}</span>
@@ -325,8 +325,8 @@ export function QuizModal({ open, onClose }: Props) {
                   )}
 
                   {/* Question — larger text, less padding on mobile */}
-                  <div className="bg-slate-900/50 border border-slate-800/60 rounded-2xl px-4 py-3.5 sm:px-5 sm:py-4">
-                    <p className="text-[15px] sm:text-[15px] text-slate-100 leading-relaxed font-medium">{q.question}</p>
+                  <div className="tl-card px-4 py-3.5 sm:px-5 sm:py-4">
+                    <p className="text-[15px] sm:text-[15px] text-[var(--text)] leading-relaxed font-medium">{q.question}</p>
                   </div>
 
                   {/* Options — tighter vertical padding on mobile so all 4 fit */}
@@ -335,10 +335,10 @@ export function QuizModal({ open, onClose }: Props) {
                       const isSelected = selected === opt
                       const reveal     = !!selected
                       const isRight    = opt === q.correct
-                      let cls = 'border-slate-800/80 bg-slate-900/30 text-slate-300 hover:border-slate-600 hover:bg-slate-800/50 cursor-pointer'
+                      let cls = 'border-[var(--border)] bg-[var(--surface)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-2)] cursor-pointer'
                       if (reveal && isRight)         cls = 'border-emerald-500/70 bg-emerald-500/12 text-emerald-100'
                       else if (reveal && isSelected) cls = 'border-red-500/70 bg-red-500/12 text-red-200'
-                      else if (reveal)               cls = 'border-slate-800/40 bg-transparent text-slate-600 opacity-50'
+                      else if (reveal)               cls = 'border-[var(--border)] bg-transparent text-[var(--text-faint)] opacity-50'
                       return (
                         <button key={opt} onClick={() => pick(opt)} disabled={!!selected}
                           className={`w-full text-left px-3.5 sm:px-5 py-3 sm:py-4 rounded-2xl border transition-all flex items-start gap-3 sm:gap-4 ${cls}`}
@@ -346,8 +346,8 @@ export function QuizModal({ open, onClose }: Props) {
                           <span className={`flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 rounded-xl border flex items-center justify-center text-[11px] sm:text-[12px] font-bold transition-all mt-0.5
                             ${reveal && isRight ? 'border-emerald-500/60 bg-emerald-500/20 text-emerald-300'
                             : reveal && isSelected ? 'border-red-500/60 bg-red-500/20 text-red-300'
-                            : reveal ? 'border-slate-700/40 text-slate-600'
-                            : 'border-slate-700 text-slate-500'}`}>
+                            : reveal ? 'border-[var(--border)] text-[var(--text-faint)]'
+                            : 'border-[var(--border)] text-[var(--text-dim)]'}`}>
                             {reveal && isRight ? <CheckCircle size={13} className="text-emerald-400" />
                             : reveal && isSelected ? <XCircle size={13} className="text-red-400" />
                             : OPTION_LABELS[i]}
@@ -371,7 +371,7 @@ export function QuizModal({ open, onClose }: Props) {
                           </p>
                         </div>
                         <button onClick={next}
-                          className="w-full py-3.5 rounded-2xl bg-slate-700/60 border border-slate-600/50 text-white text-[14px] font-semibold hover:bg-slate-700 transition-all">
+                          className="w-full py-3.5 rounded-2xl bg-[var(--surface-hover)] border border-[var(--border-strong)] text-[var(--text)] text-[14px] font-semibold hover:bg-[var(--surface-hover)] transition-all">
                           {idx + 1 >= questions.length ? 'See Results →' : 'Next Question →'}
                         </button>
                       </motion.div>

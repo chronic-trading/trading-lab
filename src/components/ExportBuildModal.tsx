@@ -94,23 +94,23 @@ export function ExportBuildModal({ build, open, onClose }: Props) {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 8 }}
             transition={{ duration: 0.18 }}
-            className="w-full max-w-2xl bg-[#0c0c15] border border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
+            className="w-full max-w-2xl bg-[var(--bg-elev)] border border-[var(--border)] rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/60 flex-shrink-0">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] flex-shrink-0">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-blue-500/10 border border-blue-500/25 flex items-center justify-center">
                   <FileText size={14} className="text-blue-400" />
                 </div>
                 <div>
-                  <p className="text-[14px] font-bold text-white">Export Build</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">{build.name}</p>
+                  <p className="text-[14px] font-bold text-[var(--text)]">Export Build</p>
+                  <p className="text-[11px] text-[var(--text-dim)] mt-0.5">{build.name}</p>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800 transition-all"
+                className="w-8 h-8 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-2)] transition-all"
               >
                 <X size={15} />
               </button>
@@ -119,7 +119,7 @@ export function ExportBuildModal({ build, open, onClose }: Props) {
             {/* Text preview */}
             <div className="flex-1 overflow-y-auto p-4">
               <pre
-                className="text-[12px] text-slate-300 leading-relaxed whitespace-pre-wrap bg-slate-900/60 border border-slate-800/60 rounded-2xl p-4 font-mono"
+                className="text-[12px] text-[var(--text-dim)] leading-relaxed whitespace-pre-wrap tl-card p-4 font-mono"
                 style={{ fontFamily: "'JetBrains Mono', monospace" }}
               >
                 {text}
@@ -127,10 +127,10 @@ export function ExportBuildModal({ build, open, onClose }: Props) {
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-slate-800/60 flex-shrink-0">
+            <div className="flex items-center justify-end gap-2.5 px-6 py-4 border-t border-[var(--border)] flex-shrink-0">
               <button
                 onClick={onClose}
-                className="px-4 py-2 rounded-xl text-[12px] font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all"
+                className="px-4 py-2 rounded-xl text-[12px] font-semibold text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-2)] transition-all"
               >
                 Close
               </button>

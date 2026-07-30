@@ -51,26 +51,26 @@ export function TradingRules({ open, onClose }: Props) {
             initial={{ x: 420 }} animate={{ x: 0 }} exit={{ x: 420 }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             onClick={e => e.stopPropagation()}
-            className="w-[480px] h-full bg-[#08080f] border-l border-slate-800/70 flex flex-col shadow-2xl"
+            className="w-[480px] h-full bg-[var(--bg-elev)] border-l border-[var(--border)] flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800/60">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-red-500/10 border border-red-500/25 flex items-center justify-center">
                   <Shield size={14} className="text-red-400" />
                 </div>
                 <div>
-                  <p className="text-[15px] font-bold text-white">Trading Rules</p>
-                  <p className="text-[10px] text-slate-600 mt-0.5">{activeCount} active rules</p>
+                  <p className="text-[15px] font-bold text-[var(--text)]">Trading Rules</p>
+                  <p className="text-[10px] text-[var(--text-faint)] mt-0.5">{activeCount} active rules</p>
                 </div>
               </div>
-              <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all">
+              <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text-dim)] hover:bg-[var(--surface-2)] transition-all">
                 <X size={14} />
               </button>
             </div>
 
             {/* Category filter */}
-            <div className="flex gap-1.5 px-5 py-4 border-b border-slate-800/40 flex-wrap">
+            <div className="flex gap-1.5 px-5 py-4 border-b border-[var(--border)] flex-wrap">
               {(['all', ...cats] as const).map(cat => (
                 <button
                   key={cat}
@@ -78,9 +78,9 @@ export function TradingRules({ open, onClose }: Props) {
                   className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-lg border transition-all capitalize
                     ${filterCat === cat
                       ? cat === 'all'
-                        ? 'bg-slate-700 border-slate-600 text-slate-100'
+                        ? 'bg-[var(--surface-hover)] border-[var(--border-strong)] text-[var(--text)]'
                         : catConfig[cat as RuleCategory].color + ' border-opacity-50'
-                      : 'border-slate-800 text-slate-600 hover:border-slate-600 hover:text-slate-400'
+                      : 'border-[var(--border)] text-[var(--text-faint)] hover:border-[var(--border-strong)] hover:text-[var(--text-dim)]'
                     }`}
                 >
                   {cat === 'all' ? 'All' : catConfig[cat as RuleCategory].label}
@@ -98,10 +98,10 @@ export function TradingRules({ open, onClose }: Props) {
                     initial={{ opacity: 0, x: 10 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
-                    className={`rounded-2xl border p-3.5 transition-all ${rule.active ? 'bg-[#0d0d16] border-slate-800/60' : 'bg-slate-900/20 border-slate-800/30 opacity-50'}`}
+                    className={`rounded-2xl border p-3.5 transition-all ${rule.active ? 'bg-[var(--surface)] border-[var(--border)]' : 'bg-[var(--surface)] border-[var(--border)] opacity-50'}`}
                   >
                     <div className="flex items-start gap-2.5">
-                      <button onClick={() => toggleActive(rule.id)} className="flex-shrink-0 mt-0.5 text-slate-600 hover:text-slate-300 transition-colors">
+                      <button onClick={() => toggleActive(rule.id)} className="flex-shrink-0 mt-0.5 text-[var(--text-faint)] hover:text-[var(--text-dim)] transition-colors">
                         {rule.active
                           ? <ToggleRight size={16} className="text-emerald-400" />
                           : <ToggleLeft size={16} />}
@@ -114,11 +114,11 @@ export function TradingRules({ open, onClose }: Props) {
                             onChange={e => setEditText(e.target.value)}
                             onBlur={saveEdit}
                             onKeyDown={e => { if (e.key === 'Enter') saveEdit(); if (e.key === 'Escape') setEditingId(null) }}
-                            className="w-full bg-slate-900 border border-slate-600 rounded-lg px-2 py-1 text-[13px] text-slate-100 focus:outline-none"
+                            className="w-full bg-[var(--surface)] border border-[var(--border-strong)] rounded-lg px-2 py-1 text-[13px] text-[var(--text)] focus:outline-none"
                           />
                         ) : (
                           <p
-                            className={`text-[13px] leading-relaxed cursor-text ${rule.active ? 'text-slate-100' : 'text-slate-600'}`}
+                            className={`text-[13px] leading-relaxed cursor-text ${rule.active ? 'text-[var(--text)]' : 'text-[var(--text-faint)]'}`}
                             onClick={() => startEdit(rule.id, rule.text)}
                           >
                             {rule.text}
@@ -130,7 +130,7 @@ export function TradingRules({ open, onClose }: Props) {
                       </div>
                       <button
                         onClick={() => deleteRule(rule.id)}
-                        className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-lg text-slate-700 hover:text-red-400 hover:bg-red-400/10 transition-all"
+                        className="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-lg text-[var(--text-faint)] hover:text-red-400 hover:bg-red-400/10 transition-all"
                       >
                         <Trash2 size={11} />
                       </button>
@@ -140,19 +140,19 @@ export function TradingRules({ open, onClose }: Props) {
               </AnimatePresence>
 
               {displayed.length === 0 && (
-                <div className="flex items-center justify-center h-24 text-slate-700 text-[12px]">No rules in this category</div>
+                <div className="flex items-center justify-center h-24 text-[var(--text-faint)] text-[12px]">No rules in this category</div>
               )}
             </div>
 
             {/* Add rule */}
-            <div className="px-5 py-5 border-t border-slate-800/60 space-y-2.5">
+            <div className="px-5 py-5 border-t border-[var(--border)] space-y-2.5">
               <div className="flex gap-1.5">
                 {cats.map(cat => (
                   <button
                     key={cat}
                     onClick={() => setNewCat(cat)}
                     className={`flex-1 py-1.5 rounded-xl border text-[10px] font-bold uppercase tracking-wider transition-all
-                      ${newCat === cat ? catConfig[cat].color : 'border-slate-800 text-slate-600'}`}
+                      ${newCat === cat ? catConfig[cat].color : 'border-[var(--border)] text-[var(--text-faint)]'}`}
                   >
                     {catConfig[cat].label}
                   </button>
@@ -164,17 +164,17 @@ export function TradingRules({ open, onClose }: Props) {
                   onChange={e => setNewText(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && handleAdd()}
                   placeholder="Write a rule..."
-                  className="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-[13px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors"
+                  className="flex-1 bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2.5 text-[13px] text-[var(--text)] placeholder-[var(--text-faint)] focus:outline-none focus:border-[var(--border-strong)] transition-colors"
                 />
                 <button
                   onClick={handleAdd}
                   disabled={!newText.trim()}
-                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800 border border-slate-700 text-slate-400 hover:text-slate-100 hover:bg-slate-700 transition-all disabled:opacity-30"
+                  className="w-10 h-10 flex items-center justify-center rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-hover)] transition-all disabled:opacity-30"
                 >
                   <Plus size={16} />
                 </button>
               </div>
-              <p className="text-[10px] text-slate-700">Click any rule text to edit it · Toggle to include in pre-trade checklist</p>
+              <p className="text-[10px] text-[var(--text-faint)]">Click any rule text to edit it · Toggle to include in pre-trade checklist</p>
             </div>
           </motion.div>
         </motion.div>

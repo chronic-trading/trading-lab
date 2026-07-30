@@ -3,8 +3,8 @@ import {
   FlaskConical, Package, Beaker, Network,
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
-  ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical, MoreHorizontal, ChevronDown,
-  Gamepad2, Layers, Sun, Moon, Gauge, LayoutDashboard,
+  ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical,
+  Gamepad2, Layers, Sun, Moon, Gauge, LayoutDashboard, Search,
 } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
 import { Landing }        from './pages/Landing'
@@ -27,18 +27,31 @@ const PropFirms    = lazy(() => import('./pages/PropFirms').then(m => ({ default
 const Arcade       = lazy(() => import('./pages/Arcade').then(m => ({ default: m.Arcade })))
 const TradeGrader  = lazy(() => import('./pages/TradeGrader').then(m => ({ default: m.TradeGrader })))
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
-import { SessionNotes }   from './components/SessionNotes'
+// SessionNotes and the modals below reach Supabase (directly or via a sync hook),
+// so importing them here would pull the auth client into the entry chunk and put
+// it back on the landing page's critical path. They only ever render inside the
+// signed-in shell, so they load with it.
+const SessionNotes = lazy(() => import('./components/SessionNotes').then(m => ({ default: m.SessionNotes })))
 import { TradingRules }   from './components/TradingRules'
 // QuizModal pulls in the full concept dataset — keep it out of the entry chunk
 // (the landing would otherwise download all 52 concepts just to render a hero).
 const QuizModal = lazy(() => import('./components/QuizModal').then(m => ({ default: m.QuizModal })))
-import { SettingsModal }  from './components/SettingsModal'
+const SettingsModal = lazy(() => import('./components/SettingsModal').then(m => ({ default: m.SettingsModal })))
 import { DrawdownGuard }  from './components/DrawdownGuard'
 import { MindsetCheck }   from './components/MindsetCheck'
-import { LoginScreen }    from './components/LoginScreen'
+// LoginScreen imports the Supabase client directly — the single biggest reason
+// the client used to land in the entry chunk. It renders only once the visitor
+// chooses to sign in, which is exactly when loading the client is warranted.
+const LoginScreen = lazy(() => import('./components/LoginScreen').then(m => ({ default: m.LoginScreen })))
+// Loaded on first ⌘K rather than with the shell — it pulls the concept dataset
+// in to make concepts searchable, which is a big chunk to pay for up front.
+const CommandPalette = lazy(() => import('./components/CommandPalette').then(m => ({ default: m.CommandPalette })))
+import type { Command } from './components/CommandPalette'
 import { useBuilds }      from './hooks/useBuilds'
 import { useAuth }        from './hooks/useAuth'
-import { syncOnLogin }    from './lib/dataSync'
+// dataSync reaches Supabase, so it is imported dynamically at the call site
+// below — a static import here would pull the client back into the entry chunk
+// that useAuth was just changed to keep it out of.
 import type { Build }     from './types'
 
 const SUPABASE_CONFIGURED = !!(
@@ -68,8 +81,55 @@ const tabs: { id: Tab; label: string; Icon: React.ElementType; badge?: string }[
   { id: 'arcade',    label: 'Arcade',    Icon: Gamepad2       },
 ]
 
-// Always-visible on the desktop tab bar; the rest live in a "More" dropdown.
-const DESKTOP_PRIMARY: Tab[] = ['home', 'builder', 'grader', 'map', 'review', 'journal', 'backtest', 'recap', 'playbook']
+/* ── Navigation model ────────────────────────────────────────────────────────
+   Fifteen flat tabs meant nine competed for the bar and six were effectively
+   undiscoverable behind "More". They are now grouped by what you are trying to
+   do, and the six tools that are really facets of a bigger one became children
+   of it: Builds and Templates belong to the Builder, Recap reads the Journal's
+   trades, and Levels and Calendar are both things you set up while planning.
+   A child is reached from its parent's sub-tab strip, so the sidebar lists ten
+   destinations instead of fifteen while everything stays one or two clicks away.
+   Tab ids are unchanged, so the pages themselves needed no edits.            */
+type NavItem = { id: Tab; children?: Tab[] }
+type NavGroup = { title: string; items: NavItem[] }
+
+const NAV_GROUPS: NavGroup[] = [
+  { title: '',         items: [{ id: 'home' }] },
+  { title: 'Practice', items: [{ id: 'grader' }, { id: 'backtest' }, { id: 'review' }, { id: 'arcade' }] },
+  { title: 'Build',    items: [{ id: 'builder', children: ['builds', 'templates'] }] },
+  { title: 'Journal',  items: [{ id: 'journal', children: ['recap'] }] },
+  { title: 'Learn',    items: [{ id: 'playbook' }, { id: 'map' }] },
+  { title: 'Plan',     items: [{ id: 'plan', children: ['chart', 'calendar'] }] },
+]
+
+const tabMeta = (id: Tab) => tabs.find(t => t.id === id)!
+
+/** Search aliases for the command palette — see the keywords note where used. */
+const TAB_ALIASES: Partial<Record<Tab, string>> = {
+  home:      'today dashboard overview sessions',
+  builder:   'build model setup concepts',
+  grader:    'grade score confluence trade',
+  map:       'concept map graph network',
+  review:    'spaced repetition mastery drill flashcards',
+  journal:   'trades log analytics equity',
+  backtest:  'replay backtest practice bar by bar',
+  recap:     'montage share export csv',
+  playbook:  'lessons setups course learn',
+  plan:      'session plan risk checklist',
+  chart:     'key levels price',
+  calendar:  'economic news events red folder',
+  templates: 'starter presets models',
+  builds:    'saved builds my builds',
+  arcade:    'game practice tape reading',
+}
+
+/** The nav entry a tab is shown under — itself, or its parent if it's a child. */
+function parentOf(tab: Tab): NavItem {
+  for (const g of NAV_GROUPS)
+    for (const item of g.items)
+      if (item.id === tab || item.children?.includes(tab)) return item
+  return { id: 'home' }
+}
 
 // Primary tabs always visible on mobile bottom bar (kept to 4 + More so the bar
 // stays thumb-friendly — the rest live in the More sheet).
@@ -87,7 +147,12 @@ function MobileBottomNav({
   return (
     <>
       {/* Bottom bar */}
-      <nav className="tl-darkchrome md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#06060d]/95 backdrop-blur-md border-t border-slate-800/60"
+      {/* Warm charcoal, matching the dark theme's surfaces. These were cold
+          blue-blacks (#06060d / #08080f) chosen against the old cold palette;
+          left alone they now read blue against the warm app behind them. The
+          bar stays dark-locked in both themes by design — it's chrome, not a
+          surface — so the values are literals rather than tokens. */}
+      <nav className="tl-darkchrome md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0d0b09]/95 backdrop-blur-md border-t border-white/8"
            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-stretch">
           {primary.map(({ id, label, Icon, badge }) => (
@@ -127,23 +192,43 @@ function MobileBottomNav({
           className="md:hidden fixed inset-0 z-30"
           onClick={() => setMoreOpen(false)}>
           <div
-            className="tl-darkchrome absolute inset-x-0 bg-[#08080f] border-t border-slate-800/60 p-4 pb-2 shadow-2xl"
+            className="tl-darkchrome absolute inset-x-0 bg-[#16130f] border-t border-white/8 p-4 pb-2 shadow-2xl"
             style={{ bottom: `calc(56px + env(safe-area-inset-bottom))` }}
             onClick={e => e.stopPropagation()}>
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-3 px-1">All tabs</p>
-            <div className="grid grid-cols-4 gap-2 pb-2">
-              {secondary.map(({ id, label, Icon }) => (
-                <button key={id}
-                  onClick={() => { setTab(id); setMoreOpen(false) }}
-                  className={`flex flex-col items-center gap-1.5 py-3 rounded-2xl border transition-all ${
-                    tab === id
-                      ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
-                      : 'border-slate-800/60 bg-slate-900/50 text-slate-500 active:text-slate-200 active:border-slate-600'
-                  }`}>
-                  <Icon size={17} />
-                  <span className="text-[10px] font-bold">{label}</span>
-                </button>
-              ))}
+            {/* Grouped the same way as the desktop sidebar, so the two navs
+                teach the same map of the app rather than two different ones. */}
+            <div className="max-h-[58vh] overflow-y-auto pb-2 space-y-3">
+              {NAV_GROUPS.map(group => {
+                // Flatten parents with their children — on mobile there is no
+                // sub-tab strip, so every destination must be reachable here.
+                const ids = group.items.flatMap(i => [i.id, ...(i.children ?? [])])
+                          .filter(id => !MOBILE_PRIMARY.includes(id))
+                if (!ids.length) return null
+                return (
+                  <div key={group.title || 'root'}>
+                    {group.title && (
+                      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-2 px-1">{group.title}</p>
+                    )}
+                    <div className="grid grid-cols-4 gap-2">
+                      {ids.map(id => {
+                        const { label, Icon } = tabMeta(id)
+                        return (
+                          <button key={id}
+                            onClick={() => { setTab(id); setMoreOpen(false) }}
+                            className={`flex flex-col items-center gap-1.5 py-3 rounded-2xl border transition-all ${
+                              tab === id
+                                ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
+                                : 'border-white/8 bg-white/[0.04] text-slate-400 active:text-slate-200 active:border-white/20'
+                            }`}>
+                            <Icon size={17} />
+                            <span className="text-[10px] font-bold">{label}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
             </div>
           </div>
         </div>
@@ -163,11 +248,20 @@ function PageFallback() {
 }
 
 export default function App() {
+  // Checked here rather than inside RootApp so no hook is skipped by the branch.
+  if (DEV_SHELL) return <AppShell />
   return <RootApp />
 }
 
+// Dev-only shell bypass at ?app. The whole app sits behind a licence key, so
+// there is otherwise no way to open a tool locally (no Supabase env → no login).
+// import.meta.env.DEV is the literal false in a production build, so this branch
+// is dead code there and cannot be used to skip auth.
+const DEV_SHELL =
+  import.meta.env.DEV && new URLSearchParams(window.location.search).has('app')
+
 function RootApp() {
-  const { user, loading: authLoading, signOut } = useAuth()
+  const { user, loading: authLoading, signOut, attach: attachAuth } = useAuth()
   const [synced, setSynced] = useState(false)
   const [view,   setView]   = useState<View>('landing')
   const prevUserRef = useRef(user)
@@ -176,7 +270,11 @@ function RootApp() {
     if (!SUPABASE_CONFIGURED) { setSynced(true); return }
     if (authLoading) return
     if (!user) { setSynced(true); return }
-    syncOnLogin(user.id).finally(() => setSynced(true))
+    import('./lib/dataSync')
+      .then(({ syncOnLogin }) => syncOnLogin(user.id))
+      // Never strand the app on the loading spinner if the chunk or sync fails.
+      .catch(() => {})
+      .finally(() => setSynced(true))
   }, [user, authLoading])
 
   // After successful login → go straight to app
@@ -197,13 +295,22 @@ function RootApp() {
     return (
       <div className="flex items-center justify-center h-screen bg-[var(--bg)] gap-3">
         <div className="w-5 h-5 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
-        <span className="text-[13px] text-slate-500 font-medium">Loading…</span>
+        <span className="text-[13px] text-[var(--text-dim)] font-medium">Loading…</span>
       </div>
     )
   }
 
   if (view === 'login') {
-    return <LoginScreen onBack={() => setView('landing')} />
+    return (
+      <Suspense fallback={
+        <div className="flex items-center justify-center h-screen bg-[var(--bg)] gap-3">
+          <div className="w-5 h-5 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
+          <span className="text-[13px] text-[var(--text-dim)] font-medium">Loading…</span>
+        </div>
+      }>
+        <LoginScreen onBack={() => setView('landing')} />
+      </Suspense>
+    )
   }
 
   if (view === 'app' && user) {
@@ -219,7 +326,10 @@ function RootApp() {
   return (
     <Landing
       isAuthenticated={!!user}
-      onSignIn={() => setView('login')}
+      // attachAuth before showing the login screen: a signed-out visitor never
+      // loaded the Supabase client, so the session listener has to be started
+      // here for a successful sign-in to actually navigate into the app.
+      onSignIn={() => { attachAuth(); setView('login') }}
       onLaunch={user ? () => setView('app') : undefined}
     />
   )
@@ -237,7 +347,8 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
   const [drawdownOpen,  setDrawdownOpen]  = useState(false)
   const [mindsetOpen,   setMindsetOpen]   = useState(false)
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
-  const [moreOpen,      setMoreOpen]      = useState(false)
+  const [paletteOpen,   setPaletteOpen]   = useState(false)
+  const [focusConcept,  setFocusConcept]  = useState<string | null>(null)
   const { loadSharedBuild }             = useBuilds()
   const { theme, toggle }               = useTheme()
 
@@ -247,6 +358,22 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
     const label = tabs.find(t => t.id === tab)?.label
     document.title = label ? `${label} — Trading Lab` : 'Trading Lab'
   }, [tab])
+
+  // ⌘K / Ctrl-K opens the palette from anywhere. Ignored while typing so the
+  // shortcut can't hijack a keystroke inside the journal's notes field.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== 'k' || !(e.metaKey || e.ctrlKey)) return
+      const el = document.activeElement
+      const typing = el instanceof HTMLElement &&
+        (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable)
+      if (typing && !paletteOpen) return
+      e.preventDefault()
+      setPaletteOpen(o => !o)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [paletteOpen])
 
   useEffect(() => {
     const shared = loadSharedBuild()
@@ -265,6 +392,36 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
     }, 0)
     return () => clearTimeout(timer)
   }, [tab])
+
+  // Every destination and utility as one searchable list. Concepts are added
+  // lazily by the palette itself — see conceptCommands below.
+  const commands: Command[] = [
+    ...tabs.map(t => ({
+      id: `go:${t.id}`,
+      label: t.label,
+      section: 'Go to',
+      // The sidebar labels are deliberately terse ("Map", "Levels"), which makes
+      // them poor search targets on their own — nobody types "map" looking for
+      // the concept graph. These are the words people actually reach for.
+      keywords: `${TAB_ALIASES[t.id] ?? ''} ${parentOf(t.id).id !== t.id ? tabMeta(parentOf(t.id).id).label : ''}`,
+      Icon: t.Icon,
+      run: () => setTab(t.id),
+    })),
+    { id: 'tool:notes',    label: 'Session notes',   section: 'Tools', Icon: StickyNote,  run: () => setNotesOpen(true) },
+    { id: 'tool:rules',    label: 'Trading rules',   section: 'Tools', Icon: Shield,      run: () => setRulesOpen(true) },
+    { id: 'tool:quiz',     label: 'Concept quiz',    section: 'Tools', Icon: Brain,       run: () => setQuizOpen(true) },
+    { id: 'tool:guard',    label: 'Drawdown guard',  section: 'Tools', Icon: ShieldAlert, run: () => setDrawdownOpen(true) },
+    { id: 'tool:mindset',  label: 'Mindset check',   section: 'Tools', Icon: Smile,       run: () => setMindsetOpen(true) },
+    { id: 'tool:props',    label: 'Prop firm compare', section: 'Tools', Icon: Building2, run: () => setPropsOpen(true) },
+    { id: 'tool:settings', label: 'Settings',        section: 'Tools', Icon: Settings,    run: () => setSettingsOpen(true) },
+    {
+      id: 'tool:theme',
+      label: theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode',
+      section: 'Tools', keywords: 'theme appearance dark light',
+      Icon: theme === 'light' ? Moon : Sun,
+      run: toggle,
+    },
+  ]
 
   const handleLoadBuild = (build: Build) => {
     setLoadedBuild(build)
@@ -302,6 +459,14 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
           {/* Desktop: full utility buttons */}
           <div className="hidden md:flex items-center gap-2 flex-shrink-0">
+            {/* The search affordance carries the shortcut, so ⌘K is discoverable
+                rather than something you have to already know about. */}
+            <button onClick={() => setPaletteOpen(true)} title="Search (⌘K)"
+              className="flex items-center gap-2 text-[11px] font-semibold pl-2.5 pr-2 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text)] transition-all">
+              <Search size={12} />
+              <span className="hidden lg:inline">Search</span>
+              <kbd className="hidden lg:inline text-[10px] font-semibold border border-[var(--border)] rounded-md px-1 py-px leading-none">⌘K</kbd>
+            </button>
             <a href="https://chronic-trading.github.io/ict-replay/" target="_blank" rel="noopener noreferrer" title="ICT Replay Trainer" className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:border-cyan-500/40 hover:text-cyan-400 hover:bg-cyan-500/8 transition-all"><Crosshair size={12} /><span className="hidden xl:inline">Trainer</span></a>
             <a href="https://chronic-trading.github.io/ict-glossary/" target="_blank" rel="noopener noreferrer" title="ICT Glossary" className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:border-teal-500/40 hover:text-teal-400 hover:bg-teal-500/8 transition-all"><BookOpen size={12} /><span className="hidden xl:inline">Glossary</span></a>
             <div className="w-px h-4 bg-[var(--border)] mx-0.5" />
@@ -341,7 +506,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
                 { label: 'Quiz',     Icon: Brain,       color: 'text-purple-400', onClick: () => { setQuizOpen(true);      setMobileToolsOpen(false) } },
                 { label: 'Rules',    Icon: Shield,      color: 'text-red-400',    onClick: () => { setRulesOpen(true);     setMobileToolsOpen(false) } },
                 { label: 'Notes',    Icon: StickyNote,  color: 'text-amber-400',  onClick: () => { setNotesOpen(true);     setMobileToolsOpen(false) } },
-                { label: 'Settings', Icon: Settings,    color: 'text-slate-400',  onClick: () => { setSettingsOpen(true);  setMobileToolsOpen(false) } },
+                { label: 'Settings', Icon: Settings,    color: 'text-[var(--text-dim)]',  onClick: () => { setSettingsOpen(true);  setMobileToolsOpen(false) } },
                 { label: 'Trainer',  Icon: Crosshair,   color: 'text-cyan-400',   onClick: () => { window.open('https://chronic-trading.github.io/ict-replay/', '_blank');   setMobileToolsOpen(false) } },
                 { label: 'Glossary', Icon: BookOpen,    color: 'text-teal-400',   onClick: () => { window.open('https://chronic-trading.github.io/ict-glossary/', '_blank'); setMobileToolsOpen(false) } },
                 { label: theme === 'light' ? 'Dark' : 'Light', Icon: theme === 'light' ? Moon : Sun, color: 'text-[var(--accent-ink)]', onClick: () => { toggle(); setMobileToolsOpen(false) } },
@@ -362,65 +527,75 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
           <KillZoneClockCompact />
         </div>
 
-        {/* Desktop tab nav — curated primary set + a "More" dropdown for the rest */}
-        <nav className="hidden md:flex items-stretch border-t border-[var(--border)] relative">
-          {tabs.filter(t => DESKTOP_PRIMARY.includes(t.id)).map(({ id, label, Icon, badge }) => (
-            <button key={id} onClick={() => { setTab(id); setMoreOpen(false) }}
-              className={`flex-1 min-w-[46px] flex items-center justify-center gap-1.5 py-3 text-[12px] font-semibold relative transition-all duration-150 border-b-2 px-2
-                ${tab === id ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
-              <Icon size={12} />
-              <span>{label}</span>
-              {badge && (
-                <span className="absolute top-1.5 right-1.5 text-[10px] font-black tracking-wide px-1 py-px rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30 leading-none">
-                  {badge}
-                </span>
-              )}
-            </button>
-          ))}
+      </header>
 
-          {/* More */}
+      {/* Shell body — grouped sidebar on desktop, full-width content on mobile */}
+      <div className="flex-1 flex overflow-hidden">
+
+        {/* Desktop sidebar */}
+        <nav className="hidden md:flex flex-col flex-shrink-0 w-[188px] overflow-y-auto border-r border-[var(--border)] bg-[var(--bg-elev)] py-3 px-2.5 gap-0.5">
+          {NAV_GROUPS.map(group => (
+            <div key={group.title || 'root'} className={group.title ? 'mt-3' : ''}>
+              {group.title && (
+                <p className="tl-eyebrow px-2.5 pb-1.5">{group.title}</p>
+              )}
+              {group.items.map(item => {
+                const { label, Icon, badge } = tabMeta(item.id)
+                // A parent stays lit while one of its children is open, so the
+                // sidebar always shows where you are.
+                const active = tab === item.id || !!item.children?.includes(tab)
+                return (
+                  <button key={item.id} onClick={() => setTab(item.id)}
+                    className={`w-full flex items-center gap-2.5 px-2.5 py-[7px] rounded-xl text-[12.5px] font-semibold transition-all relative
+                      ${active
+                        ? 'text-[var(--accent-ink)] bg-[var(--accent-soft)]'
+                        : 'text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
+                    <Icon size={14} className="flex-shrink-0" />
+                    <span className="truncate">{label}</span>
+                    {badge && (
+                      <span className="ml-auto w-1.5 h-1.5 rounded-full bg-[var(--accent)] flex-shrink-0" />
+                    )}
+                  </button>
+                )
+              })}
+            </div>
+          ))}
+        </nav>
+
+        {/* Main content — extra bottom padding on mobile for the bottom nav */}
+        <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden md:pb-0 pb-14">
+
+          {/* Sub-tab strip — only for a destination that has children */}
           {(() => {
-            const secondary = tabs.filter(t => !DESKTOP_PRIMARY.includes(t.id))
-            const activeInMore = secondary.some(t => t.id === tab)
+            const parent = parentOf(tab)
+            if (!parent.children?.length) return null
+            const siblings: Tab[] = [parent.id, ...parent.children]
             return (
-              <div className="relative flex flex-shrink-0">
-                <button onClick={() => setMoreOpen(o => !o)}
-                  className={`flex items-center justify-center gap-1.5 py-3 px-4 text-[12px] font-semibold border-b-2 transition-all duration-150
-                    ${moreOpen || activeInMore ? 'text-[var(--accent-ink)] border-[var(--accent)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
-                  <MoreHorizontal size={13} />
-                  <span>More</span>
-                  <ChevronDown size={11} className={`transition-transform duration-200 ${moreOpen ? 'rotate-180' : ''}`} />
-                </button>
-                {moreOpen && (
-                  <>
-                    <div className="fixed inset-0 z-30" onClick={() => setMoreOpen(false)} />
-                    <div className="absolute top-full right-0 mt-1.5 z-40 w-48 bg-[var(--bg-elev)] border border-[var(--border)] rounded-2xl shadow-[var(--shadow-lg)] p-1.5">
-                      {secondary.map(({ id, label, Icon }) => (
-                        <button key={id} onClick={() => { setTab(id); setMoreOpen(false) }}
-                          className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-[12px] font-semibold transition-all
-                            ${tab === id ? 'text-[var(--accent-ink)] bg-[var(--accent-soft)]' : 'text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-hover)]'}`}>
-                          <Icon size={13} className="flex-shrink-0" />
-                          <span>{label}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
+              <div className="flex-shrink-0 flex items-center gap-1 px-4 md:px-6 pt-3 border-b border-[var(--border)]">
+                {siblings.map(id => {
+                  const { label, Icon } = tabMeta(id)
+                  return (
+                    <button key={id} onClick={() => setTab(id)}
+                      className={`flex items-center gap-1.5 px-3 py-2 text-[12px] font-semibold border-b-2 -mb-px transition-all
+                        ${tab === id
+                          ? 'text-[var(--accent-ink)] border-[var(--accent)]'
+                          : 'text-[var(--text-dim)] border-transparent hover:text-[var(--text)]'}`}>
+                      <Icon size={12} />
+                      <span>{label}</span>
+                    </button>
+                  )
+                })}
               </div>
             )
           })()}
-        </nav>
-      </header>
 
-      {/* Main content — extra bottom padding on mobile for the bottom nav */}
-      <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden md:pb-0 pb-14">
         <div key={tab} className="flex-1 flex flex-col overflow-hidden animate-tab-in">
         <Suspense fallback={<PageFallback />}>
         {tab === 'home'      && <Home      onNavigate={t => setTab(t as Tab)} />}
         {tab === 'builder'   && <Builder   initialBuild={loadedBuild} />}
         {tab === 'grader'    && <TradeGrader />}
         {tab === 'chart'     && <Chart />}
-        {tab === 'map'       && <ConceptMap />}
+        {tab === 'map'       && <ConceptMap focusConceptId={focusConcept} />}
         {tab === 'review'    && <Review />}
         {tab === 'plan'      && <Plan />}
         {tab === 'journal'   && <Journal />}
@@ -433,32 +608,49 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         {tab === 'arcade'    && <Arcade />}
         </Suspense>
         </div>
-      </main>
+        </main>
+      </div>
 
-      <SessionNotes  open={notesOpen}    onClose={() => setNotesOpen(false)} />
+      {/* Mounted whether or not it's open: SessionNotes owns an AnimatePresence
+          exit animation and persists the note from an effect, both of which are
+          lost if the component is unmounted on close. The lazy import alone is
+          what keeps it out of the entry chunk. */}
+      <Suspense fallback={null}>
+        <SessionNotes open={notesOpen} onClose={() => setNotesOpen(false)} />
+      </Suspense>
       <TradingRules  open={rulesOpen}    onClose={() => setRulesOpen(false)} />
       {quizOpen && (
         <Suspense fallback={null}>
           <QuizModal open onClose={() => setQuizOpen(false)} />
         </Suspense>
       )}
-      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      {/* Also always-mounted — SettingsModal animates on exit too. */}
+      <Suspense fallback={null}>
+        <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      </Suspense>
       <DrawdownGuard open={drawdownOpen} onClose={() => setDrawdownOpen(false)} />
       <MindsetCheck  open={mindsetOpen}  onClose={() => setMindsetOpen(false)} />
+
+      {paletteOpen && (
+        <Suspense fallback={null}>
+          <CommandPalette open onClose={() => setPaletteOpen(false)} commands={commands}
+            onSelectConcept={id => { setFocusConcept(id); setTab('map') }} />
+        </Suspense>
+      )}
 
       {/* Mobile bottom nav */}
       <MobileBottomNav tab={tab} setTab={setTab} />
 
       {/* Prop Firms modal */}
       {propsOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-[#05050a]">
-          <div className="flex items-center justify-between px-5 py-3 border-b border-slate-800/50 flex-shrink-0">
+        <div className="fixed inset-0 z-50 flex flex-col bg-[var(--bg)]">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border)] flex-shrink-0">
             <div className="flex items-center gap-2">
               <Building2 size={14} className="text-emerald-400" />
-              <span className="text-[13px] font-bold text-white">Prop Firm Compare</span>
+              <span className="text-[13px] font-bold text-[var(--text)]">Prop Firm Compare</span>
             </div>
             <button onClick={() => setPropsOpen(false)}
-              className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-xl border border-slate-800 text-slate-500 hover:text-slate-300 hover:border-slate-600 transition-all">
+              className="flex items-center gap-1.5 text-[12px] font-semibold px-3 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-all">
               <X size={12} strokeWidth={2.5} /> Close
             </button>
           </div>

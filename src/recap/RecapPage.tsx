@@ -1,8 +1,12 @@
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react'
 import { parseCSV, detectColumns, buildTrades, combineTrades } from './lib/csvParser'
 import type { Trade, ColumnMap } from './lib/csvParser'
-import { exportToPng, exportAllCardsToPng } from './lib/export'
-import { generateVideoMontage, videoCapability } from './lib/videoExport'
+// The PNG and video exporters pull in html2canvas (~4MB installed) and, for
+// video, mp4-muxer. Nobody pays for them just by opening Recap — they load on
+// the first click of an export button. videoCapability is a sync feature probe
+// (canvas + MediaRecorder codec support) with no heavy deps, so it stays static:
+// it runs during render to decide which export buttons to show.
+import { videoCapability } from './lib/videoCapability'
 import { THEMES } from './lib/themes'
 import type { ThemeKey } from './lib/themes'
 import { TradeCard } from './components/TradeCard'
@@ -174,6 +178,7 @@ export function RecapPage() {
   const exportMontage = useCallback(async () => {
     if (!montageRef.current) return
     setIsExporting(true)
+    const { exportToPng } = await import('./lib/export')
     await exportToPng(montageRef.current, `trade-montage-${Date.now()}.png`)
     setIsExporting(false)
   }, [])
@@ -182,6 +187,7 @@ export function RecapPage() {
     const els = cardRefs.current.filter(Boolean) as HTMLElement[]
     if (!els.length) return
     setIsExporting(true)
+    const { exportAllCardsToPng } = await import('./lib/export')
     await exportAllCardsToPng(els)
     setIsExporting(false)
   }, [])
@@ -198,6 +204,7 @@ export function RecapPage() {
     if (!els.length) { container.style.cssText = prev; setVideoError('No cards found.'); return }
     setIsExporting(true); setExportProgress(0)
     try {
+      const { generateVideoMontage } = await import('./lib/videoExport')
       await generateVideoMontage({
         trades: activeTrades, cardElements: els, theme,
         label: montageLabel || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),

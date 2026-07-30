@@ -110,31 +110,32 @@ export function TradeGrader() {
   const avgScore = gradedCount ? Math.round(grades.reduce((s, g) => s + g.score, 0) / gradedCount) : 0
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#05050a]">
+    <div className="flex-1 overflow-y-auto bg-[var(--bg)]">
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-5">
 
         {/* ── Header ── */}
-        <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-end justify-between gap-4 flex-wrap tl-page-head">
           <div>
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-500 flex items-center justify-center shadow-md shadow-amber-500/25">
-                <Gauge size={18} className="text-white" />
-              </div>
-              <div>
-                <h1 className="text-[22px] md:text-[22px] font-black text-white tracking-tight leading-none">Trade Grader</h1>
-                <p className="text-[12px] text-slate-500 mt-1">Score a setup's confluence before you risk a dollar.</p>
-              </div>
+            <div className="flex items-center gap-2 mb-1.5">
+              {/* White, not var(--text): this icon sits on the solid amber chip,
+                  where the theme ink would be dark-on-amber in light mode. */}
+              <Gauge size={13} className="text-amber-500" />
+              <span className="tl-eyebrow">Trade Grader</span>
             </div>
+            <h1 className="tl-title">Score it before you risk it.</h1>
+            <p className="text-[13px] text-[var(--text-dim)] mt-2 max-w-md leading-relaxed">
+              Check off the confluence you actually have. The grade is what your setup earns — not what you hope it is.
+            </p>
           </div>
           {gradedCount > 0 && (
-            <div className="flex items-center gap-4 bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-4 py-2.5">
+            <div className="flex items-center gap-4 tl-card px-4 py-2.5">
               <div className="text-center">
-                <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Graded</p>
-                <p className="text-[15px] font-bold text-slate-200" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{gradedCount}</p>
+                <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider font-semibold">Graded</p>
+                <p className="text-[15px] font-bold text-[var(--text)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{gradedCount}</p>
               </div>
-              <div className="w-px h-7 bg-slate-800" />
+              <div className="w-px h-7 bg-[var(--surface-2)]" />
               <div className="text-center">
-                <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Avg Score</p>
+                <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider font-semibold">Avg Score</p>
                 <p className="text-[15px] font-bold text-amber-400" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{avgScore}</p>
               </div>
             </div>
@@ -147,8 +148,8 @@ export function TradeGrader() {
           <div className="lg:col-span-3 space-y-5">
 
             {/* Setup context */}
-            <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-5 space-y-4">
-              <span className="text-[12px] font-bold text-slate-400 uppercase tracking-wider">The Setup</span>
+            <div className="tl-card p-5 space-y-4">
+              <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">The Setup</span>
 
               {/* Direction + instrument */}
               <div className="flex flex-wrap gap-3">
@@ -158,7 +159,7 @@ export function TradeGrader() {
                       className={`flex items-center gap-1.5 px-4 py-2 rounded-xl border text-[12px] font-bold transition-all ${
                         direction === d
                           ? d === 'long' ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300' : 'bg-red-500/15 border-red-500/40 text-red-300'
-                          : 'border-slate-800 text-slate-500 hover:border-slate-700 hover:text-slate-300'
+                          : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)]'
                       }`}>
                       {d === 'long' ? <TrendingUp size={13} /> : <TrendingDown size={13} />}
                       {d === 'long' ? 'Long' : 'Short'}
@@ -166,24 +167,24 @@ export function TradeGrader() {
                   ))}
                 </div>
                 <select value={instrument} onChange={e => setInstrument(e.target.value as Instrument)}
-                  className="bg-slate-900/70 border border-slate-800 rounded-xl px-3 py-2 text-[12px] font-bold text-slate-200 focus:outline-none focus:border-slate-600 transition-all"
+                  className="bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2 text-[12px] font-bold text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-all"
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                   {INSTRUMENTS.map(i => <option key={i} value={i}>{i}</option>)}
                 </select>
                 <select value={session} onChange={e => setSession(e.target.value)}
-                  className="flex-1 min-w-[130px] bg-slate-900/70 border border-slate-800 rounded-xl px-3 py-2 text-[12px] font-semibold text-slate-200 focus:outline-none focus:border-slate-600 transition-all">
+                  className="flex-1 min-w-[130px] bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2 text-[12px] font-semibold text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-all">
                   {SESSIONS.map(s => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
 
               {/* R:R */}
               <div className="flex items-center gap-3">
-                <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Planned R:R</span>
+                <span className="text-[11px] font-semibold text-[var(--text-dim)] uppercase tracking-wider">Planned R:R</span>
                 <div className="flex gap-1.5">
                   {['1', '1.5', '2', '3', '4'].map(v => (
                     <button key={v} onClick={() => { setRr(v); setSavedFlash(false) }}
                       className={`w-11 py-1.5 rounded-lg border text-[12px] font-bold transition-all ${
-                        rr === v ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-slate-800 text-slate-500 hover:border-slate-700'
+                        rr === v ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)]'
                       }`} style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                       {v}R
                     </button>
@@ -193,11 +194,11 @@ export function TradeGrader() {
 
               {/* Build check */}
               {builds.length > 0 && (
-                <div className="flex items-center gap-2.5 border-t border-slate-800/40 pt-4">
+                <div className="flex items-center gap-2.5 border-t border-[var(--border)] pt-4">
                   <Package size={13} className="text-amber-400 flex-shrink-0" />
-                  <span className="text-[11px] font-semibold text-slate-500">Grade against build:</span>
+                  <span className="text-[11px] font-semibold text-[var(--text-dim)]">Grade against build:</span>
                   <select value={buildId} onChange={e => setBuildId(e.target.value)}
-                    className="flex-1 min-w-0 bg-slate-900/70 border border-slate-800 rounded-xl px-3 py-1.5 text-[12px] font-semibold text-slate-200 focus:outline-none focus:border-slate-600 transition-all">
+                    className="flex-1 min-w-0 bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-1.5 text-[12px] font-semibold text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-all">
                     <option value="">— none —</option>
                     {builds.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
                   </select>
@@ -206,10 +207,10 @@ export function TradeGrader() {
             </div>
 
             {/* Confluence checklist */}
-            <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-5 space-y-5">
+            <div className="tl-card p-5 space-y-5">
               <div className="flex items-center justify-between">
-                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-wider">Confluence Checklist</span>
-                <span className="text-[10px] text-slate-600 font-semibold">{checked.size}/{ALL_FACTORS.length} checked</span>
+                <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Confluence Checklist</span>
+                <span className="text-[10px] text-[var(--text-faint)] font-semibold">{checked.size}/{ALL_FACTORS.length} checked</span>
               </div>
 
               {GROUPS.map(group => {
@@ -225,14 +226,14 @@ export function TradeGrader() {
                     return (
                       <button key={f.id} onClick={() => toggle(f.id)}
                         className={`w-full flex items-center gap-3 text-left px-3.5 py-2.5 rounded-xl border transition-all ${
-                          on ? 'bg-slate-900/60 border-slate-700/70' : 'bg-slate-900/20 border-slate-800/50 hover:border-slate-700/60'
+                          on ? 'bg-[var(--surface)] border-[var(--border)]' : 'bg-[var(--surface)] border-[var(--border)] hover:border-[var(--border)]'
                         }`}>
                         <span className={`w-5 h-5 rounded-lg flex items-center justify-center flex-shrink-0 border transition-all ${
-                          on ? 'border-transparent' : 'border-slate-700'
+                          on ? 'border-transparent' : 'border-[var(--border)]'
                         }`} style={on ? { background: gc } : undefined}>
                           {on && <Check size={13} className="text-[#0b0b12]" strokeWidth={3} />}
                         </span>
-                        <span className={`text-[13px] leading-snug ${on ? 'text-slate-200 font-medium' : 'text-slate-400'}`}>{f.label}</span>
+                        <span className={`text-[13px] leading-snug ${on ? 'text-[var(--text)] font-medium' : 'text-[var(--text-dim)]'}`}>{f.label}</span>
                         {f.essential && (
                           <span className="ml-auto text-[10px] font-black uppercase tracking-wider text-amber-500/70 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded-lg flex-shrink-0">Key</span>
                         )}
@@ -244,7 +245,7 @@ export function TradeGrader() {
               })}
 
               <button onClick={reset}
-                className="flex items-center gap-1.5 text-[11px] text-slate-600 hover:text-slate-300 transition-colors pt-1">
+                className="flex items-center gap-1.5 text-[11px] text-[var(--text-faint)] hover:text-[var(--text-dim)] transition-colors pt-1">
                 <RotateCcw size={11} /> Reset checklist
               </button>
             </div>
@@ -255,31 +256,33 @@ export function TradeGrader() {
             <div className="lg:sticky lg:top-4 space-y-5">
 
               {/* Grade card */}
-              <div className="relative bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-6 overflow-hidden">
+              <div className="relative tl-card p-6 overflow-hidden">
                 <div className="absolute top-0 inset-x-0 h-[2px] opacity-70"
                   style={{ background: `linear-gradient(90deg,transparent,${result.color},transparent)` }} />
 
                 <Gauge180 score={result.score} color={result.color} />
 
+                {/* The grade is the page's hero moment, so it carries the display
+                    serif rather than the mono used for ordinary figures. */}
                 <div className="text-center -mt-6">
-                  <p className="font-black leading-none" style={{ fontSize: '52px', color: result.color, textShadow: `0 0 34px ${result.color}66`, fontFamily: "'JetBrains Mono', monospace" }}>
+                  <p className="tl-display leading-none" style={{ fontSize: '68px', color: result.color }}>
                     {result.letter}
                   </p>
-                  <p className="text-[11px] text-slate-500 mt-1 uppercase tracking-[0.2em] font-semibold">
-                    Score <span className="text-slate-300" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{result.score}</span> / 100
+                  <p className="text-[11px] text-[var(--text-dim)] mt-1.5 uppercase tracking-[0.2em] font-semibold">
+                    Score <span className="tl-figure text-[var(--text)]">{result.score}</span> / 100
                   </p>
                 </div>
 
-                <div className="mt-4 text-center">
-                  <p className="text-[14px] font-bold text-white">{result.verdict.headline}</p>
-                  <p className="text-[12px] text-slate-500 leading-relaxed mt-1.5">{result.verdict.body}</p>
+                <div className="mt-5 text-center">
+                  <p className="tl-display text-[21px] text-[var(--text)]">{result.verdict.headline}</p>
+                  <p className="text-[12px] text-[var(--text-dim)] leading-relaxed mt-2">{result.verdict.body}</p>
                 </div>
 
                 {/* Risk suggestion */}
-                <div className="mt-5 flex items-center justify-between bg-slate-900/50 border border-slate-800/50 rounded-xl px-4 py-3">
+                <div className="mt-5 flex items-center justify-between bg-[var(--surface)] border border-[var(--border)] rounded-xl px-4 py-3">
                   <div>
-                    <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold">Suggested risk</p>
-                    <p className="text-[10px] text-slate-500 mt-0.5">{Math.round(result.verdict.riskMult * 100)}% of your ${Math.round(baseRisk).toLocaleString()} plan</p>
+                    <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider font-semibold">Suggested risk</p>
+                    <p className="text-[10px] text-[var(--text-dim)] mt-0.5">{Math.round(result.verdict.riskMult * 100)}% of your ${Math.round(baseRisk).toLocaleString()} plan</p>
                   </div>
                   <p className="text-[22px] font-black" style={{ color: result.color, fontFamily: "'JetBrains Mono', monospace" }}>
                     ${suggestedRisk.toLocaleString()}
@@ -296,7 +299,7 @@ export function TradeGrader() {
 
               {/* Gaps */}
               {result.essentialsMissing.length > 0 && (
-                <div className="bg-[#0b0b12] border border-red-500/15 rounded-2xl p-5 space-y-3">
+                <div className="bg-[var(--surface)] border border-red-500/15 rounded-2xl p-5 space-y-3">
                   <div className="flex items-center gap-2">
                     <AlertTriangle size={13} className="text-red-400" />
                     <span className="text-[12px] font-bold text-red-300 uppercase tracking-wider">Missing Essentials</span>
@@ -305,8 +308,8 @@ export function TradeGrader() {
                     <div key={f.id} className="flex gap-2.5">
                       <X size={13} className="text-red-400/70 flex-shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-[12px] font-semibold text-slate-300">{f.label}</p>
-                        <p className="text-[11px] text-slate-500 leading-relaxed mt-0.5">{f.why}</p>
+                        <p className="text-[12px] font-semibold text-[var(--text-dim)]">{f.label}</p>
+                        <p className="text-[11px] text-[var(--text-dim)] leading-relaxed mt-0.5">{f.why}</p>
                       </div>
                     </div>
                   ))}
@@ -315,7 +318,7 @@ export function TradeGrader() {
 
               {/* Strengths */}
               {result.strengths.length > 0 && (
-                <div className="bg-[#0b0b12] border border-emerald-500/15 rounded-2xl p-5 space-y-2.5">
+                <div className="bg-[var(--surface)] border border-emerald-500/15 rounded-2xl p-5 space-y-2.5">
                   <div className="flex items-center gap-2">
                     <Sparkles size={13} className="text-emerald-400" />
                     <span className="text-[12px] font-bold text-emerald-300 uppercase tracking-wider">What's Working</span>
@@ -323,8 +326,8 @@ export function TradeGrader() {
                   {result.strengths.map(f => (
                     <div key={f.id} className="flex items-center gap-2.5">
                       <Check size={13} className="text-emerald-400/80 flex-shrink-0" />
-                      <span className="text-[12px] text-slate-300 flex-1">{f.label}</span>
-                      <span className="text-[10px] text-slate-600 font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>+{f.weight}</span>
+                      <span className="text-[12px] text-[var(--text-dim)] flex-1">{f.label}</span>
+                      <span className="text-[10px] text-[var(--text-faint)] font-bold" style={{ fontFamily: "'JetBrains Mono', monospace" }}>+{f.weight}</span>
                     </div>
                   ))}
                 </div>
@@ -332,26 +335,26 @@ export function TradeGrader() {
 
               {/* Build coverage */}
               {buildCoverage && (
-                <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-5 space-y-3">
+                <div className="tl-card p-5 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Package size={13} className="text-amber-400" />
-                      <span className="text-[12px] font-bold text-slate-400 uppercase tracking-wider">System Match</span>
+                      <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">System Match</span>
                     </div>
                     <span className="text-[12px] font-bold text-amber-400" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                       {buildCoverage.covered}/{buildCoverage.total}
                     </span>
                   </div>
-                  <div className="flex h-2 rounded-full overflow-hidden bg-slate-800/60">
+                  <div className="flex h-2 rounded-full overflow-hidden bg-[var(--surface-2)]">
                     <div className="bg-amber-400 transition-all duration-500" style={{ flex: buildCoverage.covered || 0.001 }} />
-                    <div className="bg-slate-800/60" style={{ flex: buildCoverage.total - buildCoverage.covered || 0.001 }} />
+                    <div className="bg-[var(--surface-2)]" style={{ flex: buildCoverage.total - buildCoverage.covered || 0.001 }} />
                   </div>
                   {buildCoverage.missing.length > 0 ? (
                     <div>
-                      <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold mb-1.5">In your build, not in this setup</p>
+                      <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider font-semibold mb-1.5">In your build, not in this setup</p>
                       <div className="flex flex-wrap gap-1.5">
                         {buildCoverage.missing.map(cid => (
-                          <span key={cid} className="text-[11px] text-slate-400 bg-slate-900/60 border border-slate-800/60 rounded-lg px-2 py-0.5">
+                          <span key={cid} className="text-[11px] text-[var(--text-dim)] bg-[var(--surface)] border border-[var(--border)] rounded-lg px-2 py-0.5">
                             {getConceptById(cid)?.shortName ?? cid}
                           </span>
                         ))}
@@ -371,13 +374,13 @@ export function TradeGrader() {
 
         {/* ── History ── */}
         {grades.length > 0 && (
-          <div className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl p-5 space-y-3">
+          <div className="tl-card p-5 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Award size={13} className="text-amber-400" />
-                <span className="text-[12px] font-bold text-slate-400 uppercase tracking-wider">Recent Grades</span>
+                <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Recent Grades</span>
               </div>
-              <button onClick={clear} className="flex items-center gap-1 text-[10px] text-slate-600 hover:text-red-400 transition-colors">
+              <button onClick={clear} className="flex items-center gap-1 text-[10px] text-[var(--text-faint)] hover:text-red-400 transition-colors">
                 <Trash2 size={11} /> Clear
               </button>
             </div>
@@ -385,20 +388,20 @@ export function TradeGrader() {
               {grades.map(g => {
                 const { color } = letterFor(g.score, lightTheme)
                 return (
-                  <div key={g.id} className="flex items-center gap-3 bg-slate-900/40 border border-slate-800/50 rounded-xl px-3.5 py-2.5">
+                  <div key={g.id} className="flex items-center gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3.5 py-2.5">
                     <span className="w-8 h-8 rounded-lg flex items-center justify-center font-black text-[14px] flex-shrink-0"
                       style={{ color, background: `${color}18`, border: `1px solid ${color}33`, fontFamily: "'JetBrains Mono', monospace" }}>
                       {g.letter}
                     </span>
                     <div className="flex items-center gap-1.5 min-w-0">
                       {g.direction === 'long' ? <TrendingUp size={12} className="text-emerald-400 flex-shrink-0" /> : <TrendingDown size={12} className="text-red-400 flex-shrink-0" />}
-                      <span className="text-[12px] font-bold text-slate-200" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{g.instrument}</span>
+                      <span className="text-[12px] font-bold text-[var(--text)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{g.instrument}</span>
                     </div>
-                    <span className="text-[11px] text-slate-500 truncate hidden sm:inline">{g.session}</span>
-                    <span className="text-[11px] text-slate-600 flex-shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{g.rr}R</span>
+                    <span className="text-[11px] text-[var(--text-dim)] truncate hidden sm:inline">{g.session}</span>
+                    <span className="text-[11px] text-[var(--text-faint)] flex-shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{g.rr}R</span>
                     <span className="ml-auto flex items-center gap-3 flex-shrink-0">
-                      <span className="text-[11px] text-slate-500">{new Date(g.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
-                      <button onClick={() => remove(g.id)} className="text-slate-700 hover:text-red-400 transition-colors">
+                      <span className="text-[11px] text-[var(--text-dim)]">{new Date(g.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                      <button onClick={() => remove(g.id)} className="text-[var(--text-faint)] hover:text-red-400 transition-colors">
                         <X size={13} />
                       </button>
                     </span>
@@ -410,7 +413,7 @@ export function TradeGrader() {
         )}
 
         {/* Footer hint */}
-        <p className="text-[11px] text-slate-700 text-center flex items-center justify-center gap-1.5 pb-2">
+        <p className="text-[11px] text-[var(--text-faint)] text-center flex items-center justify-center gap-1.5 pb-2">
           <ChevronRight size={11} /> The grade is a discipline mirror, not a signal — it reflects the confluence you can see.
         </p>
 

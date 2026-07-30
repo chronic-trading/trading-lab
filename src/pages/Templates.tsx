@@ -32,7 +32,7 @@ function TemplateCard({ t, i, onLoad }: CardProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: i * 0.06 }}
-      className="bg-[#0b0b12] border border-slate-800/60 rounded-2xl overflow-hidden hover:border-slate-700/50 transition-all group flex flex-col"
+      className="tl-card overflow-hidden hover:border-[var(--border)] transition-all group flex flex-col"
     >
       <div className={`h-[3px] w-full ${tierBar[t.difficulty]}`} />
 
@@ -46,13 +46,13 @@ function TemplateCard({ t, i, onLoad }: CardProps) {
                 {t.instrument}
               </span>
             </div>
-            <h2 className="text-[14px] font-bold text-white leading-snug">{t.name}</h2>
+            <h2 className="text-[14px] font-bold text-[var(--text)] leading-snug">{t.name}</h2>
           </div>
           {/* Tier breakdown dots */}
           <div className="flex flex-col gap-1 flex-shrink-0 pt-0.5">
             {(Object.entries(tierCounts) as [string, number][]).filter(([, n]) => n > 0).map(([tier, n]) => (
               <div key={tier} className="flex items-center gap-1 justify-end">
-                <span className="text-[10px] text-slate-600">{n}</span>
+                <span className="text-[10px] text-[var(--text-faint)]">{n}</span>
                 <div className={`w-1.5 h-1.5 rounded-full ${tierBar[tier]}`} />
               </div>
             ))}
@@ -60,31 +60,31 @@ function TemplateCard({ t, i, onLoad }: CardProps) {
         </div>
 
         {/* Description */}
-        <p className="text-[12px] text-slate-300 leading-relaxed">{t.description}</p>
+        <p className="text-[12px] text-[var(--text-dim)] leading-relaxed">{t.description}</p>
 
         {/* Concept chips */}
         <div className="flex flex-wrap gap-1.5">
           {conceptList.map(c => c && (
-            <div key={c.id} className="flex items-center gap-1 bg-slate-900/60 border border-slate-800/50 rounded-lg px-1.5 py-1">
+            <div key={c.id} className="flex items-center gap-1 bg-[var(--surface)] border border-[var(--border)] rounded-lg px-1.5 py-1">
               <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierBar[c.tier]}`} />
-              <span className="flex items-center text-[10px] text-slate-600">{catIcons[c.category]}</span>
-              <span className="text-[11px] font-medium text-slate-300">{c.shortName}</span>
+              <span className="flex items-center text-[10px] text-[var(--text-faint)]">{catIcons[c.category]}</span>
+              <span className="text-[11px] font-medium text-[var(--text-dim)]">{c.shortName}</span>
             </div>
           ))}
         </div>
 
         {/* Notes */}
         {t.notes && (
-          <div className="flex gap-2 bg-slate-900/40 rounded-xl p-2.5 border border-slate-800/40">
-            <BookOpen size={12} className="text-slate-500 mt-0.5 flex-shrink-0" />
-            <p className="text-[11px] text-slate-400 leading-relaxed">{t.notes}</p>
+          <div className="flex gap-2 bg-[var(--surface)] rounded-xl p-2.5 border border-[var(--border)]">
+            <BookOpen size={12} className="text-[var(--text-dim)] mt-0.5 flex-shrink-0" />
+            <p className="text-[11px] text-[var(--text-dim)] leading-relaxed">{t.notes}</p>
           </div>
         )}
 
         {/* Load button */}
         <button
           onClick={() => onLoad(t.id)}
-          className="mt-auto flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-slate-800/50 border border-slate-700/40 text-[12px] font-semibold text-slate-300 hover:bg-slate-700/50 hover:text-white hover:border-slate-600/50 transition-all"
+          className="mt-auto flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] text-[12px] font-semibold text-[var(--text-dim)] hover:bg-[var(--surface-hover)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-all"
         >
           Load into Builder <ArrowRight size={12} />
         </button>
@@ -119,9 +119,10 @@ export function Templates({ onLoad }: Props) {
     <div className="flex-1 overflow-y-auto">
       <div className="max-w-6xl mx-auto px-6 md:px-8 py-8 space-y-10">
         {/* Page header */}
-        <div>
-          <h1 className="text-[22px] font-bold text-white tracking-tight">Build Templates</h1>
-          <p className="text-[13px] text-slate-400 mt-1.5">
+        <div className="tl-page-head">
+          <div className="tl-eyebrow mb-1.5">Build Templates</div>
+          <h1 className="tl-title">Start from a model.</h1>
+          <p className="text-[13px] text-[var(--text-dim)] mt-2 max-w-md leading-relaxed">
             Pre-built models to load into the builder and make your own. Each one is a starting point, not a rulebook.
           </p>
         </div>
@@ -138,7 +139,7 @@ export function Templates({ onLoad }: Props) {
                     {diff.label}
                   </span>
                 </span>
-                <span className="text-[11px] text-slate-600">{group.length} template{group.length !== 1 ? 's' : ''}</span>
+                <span className="text-[11px] text-[var(--text-faint)]">{group.length} template{group.length !== 1 ? 's' : ''}</span>
               </div>
               <div className={`grid ${cols} gap-4`}>
                 {group.map((t, i) => <TemplateCard key={t.id} t={t} i={i} onLoad={handleLoad} />)}

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { syncUserDataField } from '../lib/supabase'
+import { syncUserDataField } from '../lib/sync'
 import { getCurrentUserId } from '../lib/currentUser'
 import type { Instrument } from '../types'
 

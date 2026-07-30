@@ -20,7 +20,7 @@ const GRADES: { g: Grade; label: string; key: string; c: string; soft: string }[
 
 function Stat({ value, label, icon, color }: { value: number | string; label: string; icon: React.ReactNode; color: string }) {
   return (
-    <div className="flex items-center gap-2.5 bg-[var(--surface)] border border-[var(--border)] rounded-2xl px-3.5 py-3 flex-1 min-w-0 shadow-[var(--shadow-sm)]">
+    <div className="flex items-center gap-2.5 tl-card px-3.5 py-3 flex-1 min-w-0 shadow-[var(--shadow-sm)]">
       <div className="flex-shrink-0" style={{ color }}>{icon}</div>
       <div className="min-w-0">
         <p className="text-[18px] font-extrabold text-[var(--text)] leading-none">{value}</p>
@@ -90,14 +90,15 @@ export function Review() {
       <div className="max-w-2xl mx-auto px-4 py-6 md:py-9 space-y-5">
 
         {/* ── Header ── */}
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-[var(--accent-soft)] flex items-center justify-center flex-shrink-0">
-            <Layers size={19} className="text-[var(--accent-ink)]" />
+        <div className="tl-page-head">
+          <div className="flex items-center gap-2 mb-1.5">
+            <Layers size={13} className="text-[var(--accent-ink)]" />
+            <span className="tl-eyebrow">Daily Review</span>
           </div>
-          <div>
-            <h1 className="text-[22px] font-extrabold text-[var(--text)] leading-tight tracking-tight">Daily Review</h1>
-            <p className="text-[12px] text-[var(--text-dim)] mt-0.5">A few minutes a day keeps every concept sharp.</p>
-          </div>
+          <h1 className="tl-title">A few minutes a day.</h1>
+          <p className="text-[13px] text-[var(--text-dim)] mt-2 max-w-md leading-relaxed">
+            Spaced repetition keeps every concept sharp — the ones you keep missing come back sooner.
+          </p>
         </div>
 
         {/* ── Stats strip ── */}
@@ -210,7 +211,7 @@ export function Review() {
               ) : (
                 <div className="border-t border-[var(--border)] p-4">
                   <button onClick={() => setRevealed(true)}
-                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-white text-[14px] font-bold shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
+                    className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl text-[var(--text)] text-[14px] font-bold shadow-[var(--shadow-sm)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-md)]"
                     style={{ background: 'linear-gradient(180deg, #fbbf24, var(--accent))' }}>
                     <Eye size={16} /> Show answer
                     <span className="hidden md:inline text-[10px] opacity-70 font-bold ml-1">space</span>

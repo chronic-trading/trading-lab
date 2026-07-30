@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { syncUserDataField } from '../lib/supabase'
+import { syncUserDataField } from '../lib/sync'
 import { getCurrentUserId } from '../lib/currentUser'
 
 export type MasteryLevel = 0 | 1 | 2 | 3 | 4 | 5

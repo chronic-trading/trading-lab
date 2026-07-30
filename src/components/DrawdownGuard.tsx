@@ -63,20 +63,20 @@ export function DrawdownGuard({ open, onClose }: Props) {
             initial={{ x: 440 }} animate={{ x: 0 }} exit={{ x: 440 }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             onClick={e => e.stopPropagation()}
-            className="w-[440px] h-full bg-[#08080f] border-l border-slate-800/70 flex flex-col shadow-2xl"
+            className="w-[440px] h-full bg-[var(--bg-elev)] border-l border-[var(--border)] flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800/60">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
                 <div className={`w-8 h-8 rounded-xl border flex items-center justify-center ${dangerStyles.icon}`}>
                   <ShieldAlert size={14} className={dangerStyles.text} />
                 </div>
                 <div>
-                  <p className="text-[15px] font-bold text-white">Drawdown Guard</p>
-                  <p className="text-[10px] text-slate-600 mt-0.5">Today · {todayStr}</p>
+                  <p className="text-[15px] font-bold text-[var(--text)]">Drawdown Guard</p>
+                  <p className="text-[10px] text-[var(--text-faint)] mt-0.5">Today · {todayStr}</p>
                 </div>
               </div>
-              <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all">
+              <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text-dim)] hover:bg-[var(--surface-2)] transition-all">
                 <X size={14} />
               </button>
             </div>
@@ -85,25 +85,25 @@ export function DrawdownGuard({ open, onClose }: Props) {
 
               {/* Today's P&L */}
               <div className={`rounded-2xl border px-4 py-4 ${todayPnL >= 0 ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-red-500/5 border-red-500/20'}`}>
-                <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold mb-1">Today's P&L</p>
+                <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider font-semibold mb-1">Today's P&L</p>
                 <p className={`text-[28px] font-black leading-none ${todayPnL >= 0 ? 'text-emerald-400' : 'text-red-400'}`}
                    style={{ fontFamily: "'JetBrains Mono', monospace" }}>
                   {todayPnL >= 0 ? '+' : '-'}${Math.abs(todayPnL).toLocaleString('en-US', { maximumFractionDigits: 0 })}
                 </p>
-                <p className="text-[11px] text-slate-600 mt-1">{todayEntries.length} trade{todayEntries.length !== 1 ? 's' : ''} logged today</p>
+                <p className="text-[11px] text-[var(--text-faint)] mt-1">{todayEntries.length} trade{todayEntries.length !== 1 ? 's' : ''} logged today</p>
               </div>
 
               {/* Drawdown limit meter */}
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Daily Drawdown Limit</span>
+                  <span className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Daily Drawdown Limit</span>
                   {editingLimit ? (
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[11px] text-slate-500">$</span>
+                      <span className="text-[11px] text-[var(--text-dim)]">$</span>
                       <input
                         autoFocus value={limitInput} onChange={e => setLimitInput(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') saveLimit(); if (e.key === 'Escape') setEditingLimit(false) }}
-                        className="w-20 bg-slate-900 border border-slate-600 rounded-lg px-2 py-1 text-[12px] text-slate-100 focus:outline-none"
+                        className="w-20 bg-[var(--surface)] border border-[var(--border-strong)] rounded-lg px-2 py-1 text-[12px] text-[var(--text)] focus:outline-none"
                       />
                       <button onClick={saveLimit} className="w-6 h-6 flex items-center justify-center rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
                         <Check size={11} />
@@ -111,18 +111,18 @@ export function DrawdownGuard({ open, onClose }: Props) {
                     </div>
                   ) : (
                     <button onClick={() => { setLimitInput(settings.dailyLimit.toString()); setEditingLimit(true) }}
-                      className="flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-300 transition-colors">
+                      className="flex items-center gap-1 text-[11px] text-[var(--text-dim)] hover:text-[var(--text-dim)] transition-colors">
                       <Edit3 size={10} /> ${settings.dailyLimit.toLocaleString()}
                     </button>
                   )}
                 </div>
-                <div className="h-3 bg-slate-900 rounded-full overflow-hidden">
+                <div className="h-3 bg-[var(--surface)] rounded-full overflow-hidden">
                   <div className={`h-full rounded-full transition-all duration-500 ${dangerStyles.bar}`}
                        style={{ width: `${drawdownPct}%` }} />
                 </div>
                 <div className="flex justify-between text-[10px]">
                   <span className={dangerStyles.text}>{drawdownPct.toFixed(0)}% used</span>
-                  <span className="text-slate-600">${drawdownAbs.toLocaleString()} / ${settings.dailyLimit.toLocaleString()}</span>
+                  <span className="text-[var(--text-faint)]">${drawdownAbs.toLocaleString()} / ${settings.dailyLimit.toLocaleString()}</span>
                 </div>
                 {danger === 'critical' && (
                   <div className="rounded-xl border border-red-500/30 bg-red-500/8 px-3 py-2.5 text-center">
@@ -139,14 +139,14 @@ export function DrawdownGuard({ open, onClose }: Props) {
               {/* Profit target meter */}
               <div className="space-y-2.5">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Daily Profit Target</span>
+                  <span className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Daily Profit Target</span>
                   {editingTarget ? (
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[11px] text-slate-500">$</span>
+                      <span className="text-[11px] text-[var(--text-dim)]">$</span>
                       <input
                         autoFocus value={targetInput} onChange={e => setTargetInput(e.target.value)}
                         onKeyDown={e => { if (e.key === 'Enter') saveTarget(); if (e.key === 'Escape') setEditingTarget(false) }}
-                        className="w-20 bg-slate-900 border border-slate-600 rounded-lg px-2 py-1 text-[12px] text-slate-100 focus:outline-none"
+                        className="w-20 bg-[var(--surface)] border border-[var(--border-strong)] rounded-lg px-2 py-1 text-[12px] text-[var(--text)] focus:outline-none"
                       />
                       <button onClick={saveTarget} className="w-6 h-6 flex items-center justify-center rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
                         <Check size={11} />
@@ -154,18 +154,18 @@ export function DrawdownGuard({ open, onClose }: Props) {
                     </div>
                   ) : (
                     <button onClick={() => { setTargetInput(settings.profitTarget.toString()); setEditingTarget(true) }}
-                      className="flex items-center gap-1 text-[11px] text-slate-500 hover:text-slate-300 transition-colors">
+                      className="flex items-center gap-1 text-[11px] text-[var(--text-dim)] hover:text-[var(--text-dim)] transition-colors">
                       <Edit3 size={10} /> ${settings.profitTarget.toLocaleString()}
                     </button>
                   )}
                 </div>
-                <div className="h-3 bg-slate-900 rounded-full overflow-hidden">
+                <div className="h-3 bg-[var(--surface)] rounded-full overflow-hidden">
                   <div className="h-full rounded-full bg-blue-500 transition-all duration-500"
                        style={{ width: `${profitPct}%` }} />
                 </div>
                 <div className="flex justify-between text-[10px]">
                   <span className="text-blue-400">{profitPct.toFixed(0)}% reached</span>
-                  <span className="text-slate-600">${Math.max(0, todayPnL).toLocaleString()} / ${settings.profitTarget.toLocaleString()}</span>
+                  <span className="text-[var(--text-faint)]">${Math.max(0, todayPnL).toLocaleString()} / ${settings.profitTarget.toLocaleString()}</span>
                 </div>
                 {todayPnL >= settings.profitTarget && (
                   <div className="rounded-xl border border-blue-500/30 bg-blue-500/8 px-3 py-2.5 text-center">
@@ -177,18 +177,18 @@ export function DrawdownGuard({ open, onClose }: Props) {
               {/* Today's trades */}
               {todayEntries.length > 0 ? (
                 <div>
-                  <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2.5">Today's Trades</p>
+                  <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-2.5">Today's Trades</p>
                   <div className="space-y-1.5">
                     {todayEntries.map(e => {
                       const pnl = e.points !== null ? e.points * POINT_VALUES[e.instrument] : null
                       return (
-                        <div key={e.id} className="flex items-center gap-3 bg-slate-900/40 border border-slate-800/50 rounded-xl px-3 py-2.5">
+                        <div key={e.id} className="flex items-center gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2.5">
                           <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                            e.result === 'win' ? 'bg-emerald-400' : e.result === 'loss' ? 'bg-red-400' : 'bg-slate-500'
+                            e.result === 'win' ? 'bg-emerald-400' : e.result === 'loss' ? 'bg-red-400' : 'bg-[var(--border-strong)]'
                           }`} />
                           <span className="text-[11px] font-bold text-amber-400/80"
                                 style={{ fontFamily: "'JetBrains Mono', monospace" }}>{e.instrument}</span>
-                          <span className="text-[11px] text-slate-400 flex-1 capitalize">{e.result}</span>
+                          <span className="text-[11px] text-[var(--text-dim)] flex-1 capitalize">{e.result}</span>
                           {pnl !== null && (
                             <span className={`text-[11px] font-bold ${pnl >= 0 ? 'text-emerald-400' : 'text-red-400'}`}
                                   style={{ fontFamily: "'JetBrains Mono', monospace" }}>
@@ -202,7 +202,7 @@ export function DrawdownGuard({ open, onClose }: Props) {
                 </div>
               ) : (
                 <div className="flex items-center justify-center py-6">
-                  <p className="text-[12px] text-slate-700">No trades logged today</p>
+                  <p className="text-[12px] text-[var(--text-faint)]">No trades logged today</p>
                 </div>
               )}
 

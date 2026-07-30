@@ -111,18 +111,18 @@ export function SettingsModal({ open, onClose }: Props) {
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 8 }}
             transition={{ duration: 0.17 }}
-            className="w-full max-w-sm bg-[#0c0c15] border border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden"
+            className="w-full max-w-sm bg-[var(--bg-elev)] border border-[var(--border)] rounded-2xl shadow-2xl overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800/60">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-xl bg-slate-800 border border-slate-700/60 flex items-center justify-center">
-                  <Settings size={14} className="text-slate-300" />
+                <div className="w-8 h-8 rounded-xl bg-[var(--surface-2)] border border-[var(--border)] flex items-center justify-center">
+                  <Settings size={14} className="text-[var(--text-dim)]" />
                 </div>
-                <p className="text-[14px] font-bold text-white">Settings</p>
+                <p className="text-[14px] font-bold text-[var(--text)]">Settings</p>
               </div>
-              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-200 hover:bg-slate-800 transition-all">
+              <button onClick={onClose} className="w-8 h-8 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-2)] transition-all">
                 <X size={15} />
               </button>
             </div>
@@ -131,15 +131,15 @@ export function SettingsModal({ open, onClose }: Props) {
 
               {/* Account Size */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Account Size</label>
+                <label className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Account Size</label>
                 <div className="relative">
-                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-[13px] font-semibold">$</span>
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-dim)] text-[13px] font-semibold">$</span>
                   <input
                     type="number"
                     value={accountSize}
                     onChange={e => setAccountSize(e.target.value)}
                     placeholder="50000"
-                    className="w-full bg-slate-900 border border-slate-700/60 rounded-xl pl-7 pr-4 py-2.5 text-[13px] text-slate-100 focus:outline-none focus:border-slate-500 transition-colors"
+                    className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl pl-7 pr-4 py-2.5 text-[13px] text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-colors"
                     style={{ fontFamily: "'JetBrains Mono', monospace" }}
                   />
                 </div>
@@ -147,7 +147,7 @@ export function SettingsModal({ open, onClose }: Props) {
 
               {/* Risk Per Trade */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Risk Per Trade</label>
+                <label className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Risk Per Trade</label>
                 <div className="flex gap-2 items-center">
                   <div className="relative flex-1">
                     <input
@@ -156,10 +156,10 @@ export function SettingsModal({ open, onClose }: Props) {
                       onChange={e => setRiskPercent(e.target.value)}
                       step="0.1"
                       placeholder="1"
-                      className="w-full bg-slate-900 border border-slate-700/60 rounded-xl px-3.5 pr-8 py-2.5 text-[13px] text-slate-100 focus:outline-none focus:border-slate-500 transition-colors"
+                      className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3.5 pr-8 py-2.5 text-[13px] text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-colors"
                       style={{ fontFamily: "'JetBrains Mono', monospace" }}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-[12px]">%</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-dim)] text-[12px]">%</span>
                   </div>
                   {riskDollar > 0 && (
                     <span className="text-[12px] font-semibold text-amber-400 flex-shrink-0" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
@@ -171,12 +171,12 @@ export function SettingsModal({ open, onClose }: Props) {
 
               {/* Default Instrument */}
               <div className="space-y-1.5">
-                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Default Instrument</label>
+                <label className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Default Instrument</label>
                 <div className="grid grid-cols-4 gap-2">
                   {INSTRUMENTS.map(i => (
                     <button key={i}
                       onClick={() => setInstrument(i)}
-                      className={`py-2.5 rounded-xl border text-[12px] font-bold transition-all ${instrument === i ? 'bg-amber-500/15 border-amber-500/45 text-amber-300' : 'border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300'}`}
+                      className={`py-2.5 rounded-xl border text-[12px] font-bold transition-all ${instrument === i ? 'bg-amber-500/15 border-amber-500/45 text-amber-300' : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text-dim)]'}`}
                       style={{ fontFamily: "'JetBrains Mono', monospace" }}
                     >
                       {i}
@@ -186,22 +186,22 @@ export function SettingsModal({ open, onClose }: Props) {
               </div>
 
               {/* Point values reference */}
-              <div className="bg-slate-900/50 border border-slate-800/50 rounded-xl p-4">
-                <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2">Point Values (reference)</p>
+              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-xl p-4">
+                <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-2">Point Values (reference)</p>
                 <div className="grid grid-cols-2 gap-x-4 gap-y-1">
                   {INSTRUMENTS.map(i => (
                     <div key={i} className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-amber-400" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{i}</span>
-                      <span className="text-[11px] text-slate-400">${POINT_VALUES[i]}/pt</span>
+                      <span className="text-[11px] text-[var(--text-dim)]">${POINT_VALUES[i]}/pt</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Data backup */}
-              <div className="space-y-2 border-t border-slate-800/50 pt-4">
-                <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Data Backup</label>
-                <p className="text-[11px] text-slate-600 leading-relaxed">
+              <div className="space-y-2 border-t border-[var(--border)] pt-4">
+                <label className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Data Backup</label>
+                <p className="text-[11px] text-[var(--text-faint)] leading-relaxed">
                   All your builds, journal entries, mastery ratings, plans, and notes are stored locally. Export a backup to protect against data loss.
                 </p>
                 <div className="flex gap-2">
@@ -216,7 +216,7 @@ export function SettingsModal({ open, onClose }: Props) {
                     className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl border text-[12px] font-semibold transition-all
                       ${importState === 'success' ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300'
                       : importState === 'error'   ? 'border-red-500/40 bg-red-500/10 text-red-300'
-                      : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200'}`}
+                      : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text)]'}`}
                   >
                     {importState === 'success' ? <><Check size={13} /> Imported!</>
                     : importState === 'error'  ? <><AlertTriangle size={13} /> Failed</>
@@ -240,8 +240,8 @@ export function SettingsModal({ open, onClose }: Props) {
             </div>
 
             {/* Footer */}
-            <div className="flex gap-2.5 px-5 py-4 border-t border-slate-800/60">
-              <button onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-slate-700 text-[12px] text-slate-400 hover:text-slate-200 hover:border-slate-500 transition-all">
+            <div className="flex gap-2.5 px-5 py-4 border-t border-[var(--border)]">
+              <button onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-[var(--border)] text-[12px] text-[var(--text-dim)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-all">
                 Cancel
               </button>
               <button

@@ -559,8 +559,12 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
           {/* Headline */}
           <div {...anim(80)} className={`${anim(80).className} mb-5 w-full`} style={anim(80).style}>
-            <h1 className="font-black leading-[0.88] tracking-tight select-none text-center"
-              style={{ fontSize: 'clamp(50px, 10vw, 94px)', letterSpacing: '-3px' }}>
+            {/* Display serif, sized up and with the heavy negative tracking
+                eased off — Instrument Serif runs optically smaller than the
+                black-weight sans it replaces, and -3px closes its thin strokes
+                into each other at hero scale. */}
+            <h1 className="tl-display leading-[0.92] select-none text-center"
+              style={{ fontSize: 'clamp(54px, 10.5vw, 104px)', letterSpacing: '-0.02em' }}>
               <span className="text-white">Learn ICT</span><br />
               <span className="animate-gradient-pan" style={{
                 background: 'linear-gradient(125deg, #fbbf24 0%, #f59e0b 20%, #fde68a 50%, #f59e0b 80%, #fbbf24 100%)',
@@ -657,7 +661,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{ boxShadow: '0 0 6px #34d399' }} />
               <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-emerald-400/90">Try it now · no login</span>
             </div>
-            <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Grade a setup in ten seconds.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
@@ -674,7 +678,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="max-w-5xl mx-auto pt-24">
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The Foundation</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Where people get stuck.
             </h2>
           </div>
@@ -706,7 +710,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="max-w-5xl mx-auto pt-24">
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The process</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Three steps to your first model.
             </h2>
           </div>
@@ -751,7 +755,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="max-w-5xl mx-auto pt-24">
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">What's inside</p>
-            <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Fifteen tools for learning ICT.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Build models, drill the concepts, journal your trades, and track what you actually know.</p>
@@ -798,13 +802,17 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400" style={{ boxShadow: '0 0 6px #60a5fa' }} />
               <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-400/90">See inside · live</span>
             </div>
-            <h2 className="font-black text-white mb-4" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Start with the ten foundations.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
               This is the <span className="text-slate-400 font-semibold">real Concept Map</span> from inside the Lab,
               showing the ten basics every ICT trader learns first. Hover one to see what it connects to.
-              The other 42 concepts build on top of these.
+              {/* Deliberately not an exact count. Landing is the entry chunk and
+                  cannot import the concept dataset to derive one, so a literal
+                  here goes stale every time the library grows — it already read
+                  "42" against a library of 52. This matches the 50+ used above. */}
+              {' '}The rest of the 50+ concept library builds on top of these.
             </p>
           </div>
           <LazyOnVisible minHeight={460}>
@@ -825,7 +833,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="max-w-5xl mx-auto pt-24">
           <div className="text-center mb-10">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Who it's for</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               People learning ICT.
             </h2>
           </div>
@@ -844,7 +852,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="max-w-4xl mx-auto pt-24">
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The difference</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               What changes.
             </h2>
           </div>
@@ -876,7 +884,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="relative max-w-5xl mx-auto">
           <div className="text-center mb-16">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Everything included</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               What comes with the license.
             </h2>
           </div>
@@ -910,7 +918,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="relative max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Under the hood</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Everything loads. Every time.
             </h2>
           </div>
@@ -923,7 +931,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Why pay for it</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Why it's worth paying for.
             </h2>
           </div>
@@ -954,7 +962,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="relative max-w-lg mx-auto">
           <div className="text-center mb-12">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">One license</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Everything. Forever.
             </h2>
           </div>
@@ -1029,7 +1037,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-14">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Questions</p>
-            <h2 className="font-black text-white" style={{ fontSize: 'clamp(26px,4vw,40px)', letterSpacing: '-1px' }}>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Common questions.
             </h2>
           </div>
@@ -1065,10 +1073,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             </span>
           </div>
 
-          {/* Same clamp as the hero h1: the opening and closing statements share one
-              display size, so the page has three display steps (94/52/40). */}
-          <h2 className="font-black text-white mb-8 w-full"
-            style={{ fontSize: 'clamp(50px, 10vw, 94px)', lineHeight: 0.88, letterSpacing: '-3px' }}>
+          {/* Same clamp as the hero h1: the opening and closing statements share
+              one display size, so the page keeps three display steps
+              (104 hero/closer, 46 section, 40 price). */}
+          <h2 className="tl-display text-white mb-8 w-full"
+            style={{ fontSize: 'clamp(54px, 10.5vw, 104px)', lineHeight: 0.92, letterSpacing: '-0.02em' }}>
             {/* Static gradient here on purpose: the panning animation is the hero's
                 one signature moment. Running it again at the bottom made the page
                 read as two competing heroes. */}

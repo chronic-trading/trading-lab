@@ -17,9 +17,9 @@ const tiers: Tier[] = ['basic', 'intermediate', 'advanced']
 const categories: Category[] = ['structure', 'liquidity', 'entry', 'timing', 'bias', 'model']
 
 const tierStyles: Record<Tier, { active: string; idle: string; dot: string }> = {
-  basic:        { active: 'bg-emerald-500/12 border-emerald-500/45 text-emerald-300', idle: 'border-slate-800 text-slate-500 hover:border-emerald-500/30 hover:text-emerald-400/80', dot: 'bg-emerald-400' },
-  intermediate: { active: 'bg-blue-500/12 border-blue-500/45 text-blue-300',         idle: 'border-slate-800 text-slate-500 hover:border-blue-500/30 hover:text-blue-400/80',     dot: 'bg-blue-400'    },
-  advanced:     { active: 'bg-purple-500/12 border-purple-500/45 text-purple-300',   idle: 'border-slate-800 text-slate-500 hover:border-purple-500/30 hover:text-purple-400/80', dot: 'bg-purple-400'  },
+  basic:        { active: 'bg-emerald-500/12 border-emerald-500/45 text-emerald-300', idle: 'border-[var(--border)] text-[var(--text-dim)] hover:border-emerald-500/30 hover:text-emerald-400/80', dot: 'bg-emerald-400' },
+  intermediate: { active: 'bg-blue-500/12 border-blue-500/45 text-blue-300',         idle: 'border-[var(--border)] text-[var(--text-dim)] hover:border-blue-500/30 hover:text-blue-400/80',     dot: 'bg-blue-400'    },
+  advanced:     { active: 'bg-purple-500/12 border-purple-500/45 text-purple-300',   idle: 'border-[var(--border)] text-[var(--text-dim)] hover:border-purple-500/30 hover:text-purple-400/80', dot: 'bg-purple-400'  },
 }
 
 const tierBar: Record<string, string> = {
@@ -104,16 +104,16 @@ export function Builder({ initialBuild }: Props) {
     <div className="flex flex-col flex-1 overflow-hidden">
 
       {/* Library / Mastery toggle */}
-      <div className="flex bg-slate-900/60 border border-slate-800/60 rounded-xl p-0.5 gap-0.5 mx-6 mt-5 mb-3 flex-shrink-0">
+      <div className="flex bg-[var(--surface)] border border-[var(--border)] rounded-xl p-0.5 gap-0.5 mx-6 mt-5 mb-3 flex-shrink-0">
         <button
           onClick={() => setLeftTab('library')}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${leftTab === 'library' ? 'bg-slate-700 text-slate-100' : 'text-slate-500 hover:text-slate-300'}`}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${leftTab === 'library' ? 'bg-[var(--surface-hover)] text-[var(--text)]' : 'text-[var(--text-dim)] hover:text-[var(--text-dim)]'}`}
         >
           <Library size={11} /> Library
         </button>
         <button
           onClick={() => setLeftTab('mastery')}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${leftTab === 'mastery' ? 'bg-slate-700 text-slate-100' : 'text-slate-500 hover:text-slate-300'}`}
+          className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${leftTab === 'mastery' ? 'bg-[var(--surface-hover)] text-[var(--text)]' : 'text-[var(--text-dim)] hover:text-[var(--text-dim)]'}`}
         >
           <BarChart2 size={11} /> Mastery
         </button>
@@ -124,24 +124,24 @@ export function Builder({ initialBuild }: Props) {
       ) : (
         <>
           {/* Search + filters */}
-          <div className="px-6 pb-5 pt-1 space-y-3 border-b border-slate-800/40 flex-shrink-0">
+          <div className="px-6 pb-5 pt-1 space-y-3 border-b border-[var(--border)] flex-shrink-0">
             <div className="relative">
               <input
                 ref={searchRef}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
                 placeholder="Search concepts or tags..."
-                className="w-full bg-slate-900/70 border border-slate-800 rounded-2xl pl-4 pr-9 py-2.5 text-[13px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-600 focus:bg-slate-900 transition-all"
+                className="w-full tl-card pl-4 pr-9 py-2.5 text-[13px] text-[var(--text)] placeholder-[var(--text-faint)] focus:outline-none focus:border-[var(--border-strong)] focus:bg-[var(--surface)] transition-all"
               />
               {search ? (
                 <button
                   onClick={() => setSearch('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-200 hover:bg-slate-700 transition-all"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center rounded-lg text-[var(--text-dim)] hover:text-[var(--text)] hover:bg-[var(--surface-hover)] transition-all"
                 >
                   <X size={11} />
                 </button>
               ) : (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-700 tracking-wider select-none">⌘K</span>
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[var(--text-faint)] tracking-wider select-none">⌘K</span>
               )}
             </div>
 
@@ -160,7 +160,7 @@ export function Builder({ initialBuild }: Props) {
                     {tier}
                     {/* A color tier, not opacity: opacity-40 pushed these counts
                         to ~1.6:1 in dark and ~1.8:1 in light. */}
-                    <span className="text-[10px] text-slate-500">{count}</span>
+                    <span className="text-[10px] text-[var(--text-dim)]">{count}</span>
                   </button>
                 )
               })}
@@ -174,7 +174,7 @@ export function Builder({ initialBuild }: Props) {
                   className={`flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded-xl border capitalize transition-all
                     ${catFilter === cat
                       ? 'border-amber-500/50 bg-amber-500/12 text-amber-300'
-                      : 'border-slate-800 text-slate-500 hover:border-slate-700 hover:text-slate-300'}`}
+                      : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)]'}`}
                 >
                   {catMeta[cat].icon}
                   <span className="ml-0.5">{cat}</span>
@@ -187,7 +187,7 @@ export function Builder({ initialBuild }: Props) {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     onClick={() => { setTierFilter(null); setCatFilter(null); setSearch('') }}
-                    className="flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-xl border border-slate-700/60 text-slate-500 hover:text-slate-200 hover:border-slate-600 hover:bg-slate-800/40 transition-all ml-auto"
+                    className="flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:text-[var(--text)] hover:border-[var(--border-strong)] hover:bg-[var(--surface-2)] transition-all ml-auto"
                   >
                     <RotateCcw size={10} /> Reset
                   </motion.button>
@@ -216,9 +216,9 @@ export function Builder({ initialBuild }: Props) {
                     {pinnedConcepts.map(c => {
                       if (!c) return null
                       return (
-                        <div key={c.id} className="flex items-center gap-1.5 bg-[#0d0d16] border border-amber-500/20 rounded-xl px-2.5 py-1">
+                        <div key={c.id} className="flex items-center gap-1.5 bg-[var(--surface)] border border-amber-500/20 rounded-xl px-2.5 py-1">
                           <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${tierBar[c.tier]}`} />
-                          <span className="text-[11px] font-semibold text-slate-200">{c.shortName}</span>
+                          <span className="text-[11px] font-semibold text-[var(--text)]">{c.shortName}</span>
                           <button
                             onClick={() => toggleBookmark(c.id)}
                             className="w-3.5 h-3.5 flex items-center justify-center text-amber-500/40 hover:text-red-400 transition-colors flex-shrink-0"
@@ -248,7 +248,7 @@ export function Builder({ initialBuild }: Props) {
             </AnimatePresence>
             {filtered.length === 0 && (
               <div className="flex flex-col items-center justify-center h-32 gap-2">
-                <p className="text-[12px] text-slate-600">No concepts match your filters</p>
+                <p className="text-[12px] text-[var(--text-faint)]">No concepts match your filters</p>
               </div>
             )}
           </div>
@@ -261,10 +261,10 @@ export function Builder({ initialBuild }: Props) {
   const WorkbenchPanel = (
     <div className="flex flex-col flex-1 overflow-hidden min-w-0">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-3.5 border-b border-slate-800/50 bg-[#06060d] flex-shrink-0 gap-2 flex-wrap">
+      <div className="flex items-center justify-between px-6 py-3.5 border-b border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0 gap-2 flex-wrap">
         <div className="min-w-0">
           <div className="flex items-center gap-2.5 flex-wrap">
-            <h2 className="text-[15px] font-bold text-white truncate">
+            <h2 className="tl-title-sm truncate">
               {currentBuild?.name ?? 'Untitled Build'}
             </h2>
             {currentBuild?.instrument && (
@@ -273,7 +273,7 @@ export function Builder({ initialBuild }: Props) {
               </span>
             )}
           </div>
-          <p className="text-[12px] text-slate-500 mt-0.5">
+          <p className="text-[12px] text-[var(--text-dim)] mt-0.5">
             {selectedIds.length === 0
               ? 'Pick concepts from the library'
               : `${selectedIds.length} concept${selectedIds.length !== 1 ? 's' : ''} · ${synergyCount} synerg${synergyCount !== 1 ? 'ies' : 'y'}`}
@@ -284,7 +284,7 @@ export function Builder({ initialBuild }: Props) {
           {selectedIds.length > 0 && (
             <button
               onClick={() => { setSelectedIds([]); setCurrentBuild(null) }}
-              className="flex items-center gap-1.5 text-[12px] text-slate-500 hover:text-slate-300 px-2.5 py-1.5 rounded-xl hover:bg-slate-800/60 transition-all"
+              className="flex items-center gap-1.5 text-[12px] text-[var(--text-dim)] hover:text-[var(--text-dim)] px-2.5 py-1.5 rounded-xl hover:bg-[var(--surface-2)] transition-all"
             >
               <RotateCcw size={11} /> Clear
             </button>
@@ -293,7 +293,7 @@ export function Builder({ initialBuild }: Props) {
             <button
               onClick={handleShare}
               className={`flex items-center gap-1.5 text-[12px] font-medium px-2.5 py-1.5 rounded-xl border transition-all
-                ${copied ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300' : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-slate-200'}`}
+                ${copied ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300' : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text)]'}`}
             >
               {copied ? <Check size={12} /> : <Share2 size={12} />}
               {copied ? 'Copied!' : 'Share'}
@@ -302,7 +302,7 @@ export function Builder({ initialBuild }: Props) {
           <button
             onClick={() => setChecklistOpen(true)}
             disabled={selectedIds.length === 0}
-            className="flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1.5 rounded-xl border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white transition-all disabled:opacity-25 disabled:cursor-not-allowed"
+            className="flex items-center gap-1.5 text-[12px] font-semibold px-2.5 py-1.5 rounded-xl border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] hover:text-[var(--text)] transition-all disabled:opacity-25 disabled:cursor-not-allowed"
           >
             <ClipboardList size={12} /> Checklist
           </button>
@@ -320,10 +320,10 @@ export function Builder({ initialBuild }: Props) {
       <div className="flex-1 overflow-y-auto p-5 md:p-6">
         {selectedIds.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full gap-5 text-center">
-            <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-slate-800 flex items-center justify-center text-[22px]">⚗️</div>
+            <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-[var(--border)] flex items-center justify-center text-[22px]">⚗️</div>
             <div>
-              <p className="text-[14px] font-semibold text-slate-300">Build is empty</p>
-              <p className="text-[12px] text-slate-600 mt-1.5 max-w-52 leading-relaxed">
+              <p className="text-[14px] font-semibold text-[var(--text-dim)]">Build is empty</p>
+              <p className="text-[12px] text-[var(--text-faint)] mt-1.5 max-w-52 leading-relaxed">
                 Select concepts from the library to start crafting your model
               </p>
             </div>
@@ -342,22 +342,22 @@ export function Builder({ initialBuild }: Props) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: 12, scale: 0.97 }}
                     transition={{ duration: 0.15 }}
-                    className="flex items-center gap-3 bg-[#0b0b12] border border-slate-800/60 rounded-2xl px-4 py-3 group hover:border-slate-700/60 transition-all relative overflow-hidden"
+                    className="flex items-center gap-3 tl-card px-4 py-3 group hover:border-[var(--border)] transition-all relative overflow-hidden"
                   >
                     <div className={`absolute left-0 inset-y-0 w-[3px] rounded-r-lg ${tierBar[c.tier]}`} />
-                    <span className="text-[12px] text-slate-600 w-5 text-center flex-shrink-0 ml-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{idx + 1}</span>
+                    <span className="text-[12px] text-[var(--text-faint)] w-5 text-center flex-shrink-0 ml-0.5" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{idx + 1}</span>
                     <div className={`w-2 h-2 rounded-full flex-shrink-0 ${tierBar[c.tier]}`} />
                     <div className="flex-1 min-w-0">
-                      <span className="text-[13px] font-semibold text-slate-100">{c.name}</span>
+                      <span className="text-[13px] font-semibold text-[var(--text)]">{c.name}</span>
                       <div className="flex items-center gap-2 mt-0.5">
                         <span className={`text-[11px] font-semibold ${tierText[c.tier]}`}>{c.tier}</span>
-                        <span className="text-slate-700 text-[10px]">·</span>
-                        <span className="text-[11px] text-slate-500 capitalize">{c.category}</span>
+                        <span className="text-[var(--text-faint)] text-[10px]">·</span>
+                        <span className="text-[11px] text-[var(--text-dim)] capitalize">{c.category}</span>
                       </div>
                     </div>
                     <button
                       onClick={() => toggle(id)}
-                      className="w-6 h-6 rounded-full flex items-center justify-center text-slate-600 hover:text-red-400 hover:bg-red-400/10 transition-all opacity-0 group-hover:opacity-100 flex-shrink-0"
+                      className="w-6 h-6 rounded-full flex items-center justify-center text-[var(--text-faint)] hover:text-red-400 hover:bg-red-400/10 transition-all opacity-0 group-hover:opacity-100 flex-shrink-0"
                     >
                       <X size={12} />
                     </button>
@@ -374,11 +374,11 @@ export function Builder({ initialBuild }: Props) {
   // ── Synergy panel
   const SynergyPanelContent = (
     <div className="flex flex-col flex-1 overflow-hidden">
-      <div className="flex items-center gap-2.5 px-6 py-4 border-b border-slate-800/50 flex-shrink-0">
+      <div className="flex items-center gap-2.5 px-6 py-4 border-b border-[var(--border)] flex-shrink-0">
         <div className="w-6 h-6 rounded-lg bg-amber-500/10 border border-amber-500/25 flex items-center justify-center">
           <Zap size={12} className="text-amber-400" />
         </div>
-        <span className="text-[13px] font-semibold text-slate-200">Synergies</span>
+        <span className="text-[13px] font-semibold text-[var(--text)]">Synergies</span>
         {synergyCount > 0 && (
           <span className="ml-auto text-[11px] font-bold text-amber-400 bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 rounded-full" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
             {synergyCount}
@@ -400,7 +400,7 @@ export function Builder({ initialBuild }: Props) {
           The three columns need ~1280px (540 library + 270 synergies + a usable
           workbench). Below xl they don't fit: the workbench collapsed to ~48px
           and the synergies panel ran off-screen. Use the tabbed layout instead. */}
-      <div className="flex xl:hidden border-b border-slate-800/50 bg-[#06060d] flex-shrink-0">
+      <div className="flex xl:hidden border-b border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0">
         {([
           { id: 'library',  label: 'Library',  icon: Library    },
           { id: 'build',    label: 'Build',     icon: Zap        },
@@ -410,7 +410,7 @@ export function Builder({ initialBuild }: Props) {
             key={id}
             onClick={() => setMobileTab(id)}
             className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold transition-all border-b-2
-              ${mobileTab === id ? 'text-amber-300 border-amber-400 bg-slate-800/20' : 'text-slate-600 border-transparent hover:text-slate-300'}`}
+              ${mobileTab === id ? 'text-amber-300 border-amber-400 bg-[var(--surface-2)]' : 'text-[var(--text-faint)] border-transparent hover:text-[var(--text-dim)]'}`}
           >
             <Icon size={13} /> {label}
           </button>
@@ -421,7 +421,7 @@ export function Builder({ initialBuild }: Props) {
       <div className="flex flex-1 overflow-hidden">
 
         {/* Left: Library (all three visible from xl / below xl only the active tab) */}
-        <div className={`${mobileTab === 'library' ? 'flex' : 'hidden'} xl:flex flex-col xl:w-[540px] 2xl:w-[560px] flex-shrink-0 border-r border-slate-800/50 bg-[#06060d] w-full`}>
+        <div className={`${mobileTab === 'library' ? 'flex' : 'hidden'} xl:flex flex-col xl:w-[540px] 2xl:w-[560px] flex-shrink-0 border-r border-[var(--border)] bg-[var(--bg-elev)] w-full`}>
           {LibraryPanel}
         </div>
 
@@ -431,7 +431,7 @@ export function Builder({ initialBuild }: Props) {
         </div>
 
         {/* Right: Synergies */}
-        <div className={`${mobileTab === 'synergy' ? 'flex' : 'hidden'} xl:flex flex-col xl:w-[270px] flex-shrink-0 border-l border-slate-800/50 bg-[#06060d] w-full`}>
+        <div className={`${mobileTab === 'synergy' ? 'flex' : 'hidden'} xl:flex flex-col xl:w-[270px] flex-shrink-0 border-l border-[var(--border)] bg-[var(--bg-elev)] w-full`}>
           {SynergyPanelContent}
         </div>
       </div>

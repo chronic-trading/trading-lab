@@ -141,13 +141,13 @@ function VerdictCard({
         {/* Should trade */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Should you trade?</span>
+            <span className="text-[10px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Should you trade?</span>
             <span className={`text-[13px] font-black ${v.textColor}`}
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               {v.shouldTrade}%
             </span>
           </div>
-          <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--surface-2)] rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${v.shouldTrade}%` }}
@@ -160,13 +160,13 @@ function VerdictCard({
         {/* Loss probability */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Chance of losing money</span>
+            <span className="text-[10px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Chance of losing money</span>
             <span className={`text-[13px] font-black ${v.lossChance >= 60 ? 'text-red-400' : v.lossChance >= 35 ? 'text-amber-400' : 'text-emerald-400'}`}
                   style={{ fontFamily: "'JetBrains Mono', monospace" }}>
               {v.lossChance}%
             </span>
           </div>
-          <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-[var(--surface-2)] rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${v.lossChance}%` }}
@@ -178,20 +178,20 @@ function VerdictCard({
       </div>
 
       {/* Message */}
-      <p className="text-[12px] text-slate-400 leading-relaxed">{v.message}</p>
+      <p className="text-[12px] text-[var(--text-dim)] leading-relaxed">{v.message}</p>
 
       {/* Historical data — your own numbers */}
       {historical && (
         <div className={`rounded-xl border ${v.borderColor} px-3 py-2.5`}>
-          <p className="text-[10px] font-black uppercase tracking-widest text-slate-600 mb-1">Your data</p>
-          <p className="text-[12px] text-slate-300">
+          <p className="text-[10px] font-black uppercase tracking-widest text-[var(--text-faint)] mb-1">Your data</p>
+          <p className="text-[12px] text-[var(--text-dim)]">
             When you've rated{' '}
             <span className={`font-bold ${v.textColor}`}>{score}/5</span>
             {' '}before, your win rate that day was{' '}
             <span className={`font-black ${historical.winRate >= 55 ? 'text-emerald-400' : historical.winRate >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
               {historical.winRate}%
             </span>
-            <span className="text-slate-600 text-[10px] ml-1">({historical.sampleSize} trades)</span>
+            <span className="text-[var(--text-faint)] text-[10px] ml-1">({historical.sampleSize} trades)</span>
           </p>
         </div>
       )}
@@ -242,24 +242,24 @@ export function MindsetCheck({ open, onClose }: Props) {
             initial={{ x: 440 }} animate={{ x: 0 }} exit={{ x: 440 }}
             transition={{ type: 'spring', damping: 28, stiffness: 300 }}
             onClick={e => e.stopPropagation()}
-            className="w-[440px] h-full bg-[#08080f] border-l border-slate-800/70 flex flex-col shadow-2xl"
+            className="w-[440px] h-full bg-[var(--bg-elev)] border-l border-[var(--border)] flex flex-col shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-800/60">
+            <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-violet-500/10 border border-violet-500/25 flex items-center justify-center">
                   <Smile size={14} className="text-violet-400" />
                 </div>
                 <div>
-                  <p className="text-[15px] font-bold text-white">Mindset Check</p>
-                  <p className="text-[10px] text-slate-600 mt-0.5">
+                  <p className="text-[15px] font-bold text-[var(--text)]">Mindset Check</p>
+                  <p className="text-[10px] text-[var(--text-faint)] mt-0.5">
                     {entries.length > 0
                       ? `${entries.length} check-in${entries.length !== 1 ? 's' : ''} · avg ${avgScore.toFixed(1)}/5`
                       : 'No check-ins yet'}
                   </p>
                 </div>
               </div>
-              <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-xl text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-all">
+              <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-xl text-[var(--text-dim)] hover:text-[var(--text-dim)] hover:bg-[var(--surface-2)] transition-all">
                 <X size={14} />
               </button>
             </div>
@@ -270,18 +270,18 @@ export function MindsetCheck({ open, onClose }: Props) {
               {todayEntry ? (
                 <>
                   <div className={`rounded-2xl border px-4 py-4 ${SCORES[todayEntry.score - 1].bg}`}>
-                    <p className="text-[10px] text-slate-600 uppercase tracking-wider font-semibold mb-2">Today's Mindset</p>
+                    <p className="text-[10px] text-[var(--text-faint)] uppercase tracking-wider font-semibold mb-2">Today's Mindset</p>
                     <div className="flex items-center gap-3">
                       <span className="text-[28px] leading-none">{SCORES[todayEntry.score - 1].emoji}</span>
                       <div>
                         <p className={`text-[22px] font-black leading-none ${SCORES[todayEntry.score - 1].color}`}>
                           {SCORES[todayEntry.score - 1].label}
                         </p>
-                        <p className="text-[10px] text-slate-600 mt-0.5">{todayEntry.score} / 5</p>
+                        <p className="text-[10px] text-[var(--text-faint)] mt-0.5">{todayEntry.score} / 5</p>
                       </div>
                     </div>
                     {todayEntry.note && (
-                      <p className="text-[12px] text-slate-400 mt-3 leading-relaxed">{todayEntry.note}</p>
+                      <p className="text-[12px] text-[var(--text-dim)] mt-3 leading-relaxed">{todayEntry.note}</p>
                     )}
                   </div>
 
@@ -292,16 +292,16 @@ export function MindsetCheck({ open, onClose }: Props) {
                 <>
                   {/* Score picker */}
                   <div>
-                    <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-3">How are you feeling right now?</p>
+                    <p className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider mb-3">How are you feeling right now?</p>
                     <div className="grid grid-cols-5 gap-2">
                       {SCORES.map(s => (
                         <button key={s.score} onClick={() => setSelected(s.score)}
                           className={`flex flex-col items-center gap-1.5 py-3 rounded-xl border transition-all ${
-                            selected === s.score ? s.bg : 'border-slate-800 bg-slate-900/30 hover:border-slate-700'
+                            selected === s.score ? s.bg : 'border-[var(--border)] bg-[var(--surface)] hover:border-[var(--border)]'
                           }`}
                         >
                           <span className="text-[22px] leading-none">{s.emoji}</span>
-                          <span className={`text-[10px] font-bold uppercase tracking-wide ${selected === s.score ? s.color : 'text-slate-600'}`}>
+                          <span className={`text-[10px] font-bold uppercase tracking-wide ${selected === s.score ? s.color : 'text-[var(--text-faint)]'}`}>
                             {s.label}
                           </span>
                         </button>
@@ -322,7 +322,7 @@ export function MindsetCheck({ open, onClose }: Props) {
                       value={note} onChange={e => setNote(e.target.value)}
                       placeholder="Optional note (e.g. poor sleep, after a loss, big news day...)"
                       rows={2}
-                      className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-[12px] text-slate-100 placeholder-slate-600 focus:outline-none focus:border-slate-500 transition-colors resize-none"
+                      className="w-full bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2.5 text-[12px] text-[var(--text)] placeholder-[var(--text-faint)] focus:outline-none focus:border-[var(--border-strong)] transition-colors resize-none"
                     />
                     <button
                       onClick={handleSave} disabled={!selected}
@@ -337,7 +337,7 @@ export function MindsetCheck({ open, onClose }: Props) {
               {/* History */}
               {entries.length > 0 && (
                 <div>
-                  <p className="text-[10px] font-bold text-slate-600 uppercase tracking-wider mb-2.5">History</p>
+                  <p className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider mb-2.5">History</p>
                   <div className="space-y-1.5">
                     {entries.map(e => {
                       const s = SCORES[e.score - 1]
@@ -346,18 +346,18 @@ export function MindsetCheck({ open, onClose }: Props) {
                         weekday: 'short', month: 'short', day: 'numeric',
                       })
                       return (
-                        <div key={e.id} className="flex items-start gap-3 bg-slate-900/40 border border-slate-800/50 rounded-xl px-3 py-2.5">
+                        <div key={e.id} className="flex items-start gap-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-2.5">
                           <span className="text-[18px] leading-none flex-shrink-0">{s.emoji}</span>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 flex-wrap">
                               <span className={`text-[11px] font-bold ${s.color}`}>{s.label}</span>
-                              <span className="text-[10px] text-slate-600">{dateLabel}</span>
+                              <span className="text-[10px] text-[var(--text-faint)]">{dateLabel}</span>
                               <span className={`text-[10px] font-bold ml-auto ${v.textColor}`}>{v.verdict}</span>
                             </div>
-                            {e.note && <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{e.note}</p>}
+                            {e.note && <p className="text-[11px] text-[var(--text-dim)] mt-0.5 line-clamp-1">{e.note}</p>}
                           </div>
                           <button onClick={() => deleteEntry(e.id)}
-                            className="w-5 h-5 flex items-center justify-center text-slate-700 hover:text-red-400 transition-colors flex-shrink-0">
+                            className="w-5 h-5 flex items-center justify-center text-[var(--text-faint)] hover:text-red-400 transition-colors flex-shrink-0">
                             <Trash2 size={10} />
                           </button>
                         </div>

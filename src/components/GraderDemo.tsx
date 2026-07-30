@@ -67,9 +67,9 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
       <div className="grid grid-cols-1 md:grid-cols-5">
 
         {/* Checklist — second on mobile so the grade + CTA lead (see below) */}
-        <div className="order-2 md:order-1 md:col-span-3 p-6 md:p-8 md:border-r border-slate-800/50">
+        <div className="order-2 md:order-1 md:col-span-3 p-6 md:p-8 md:border-r border-[var(--border)]">
           <div className="flex items-center justify-between mb-5">
-            <span className="text-[11px] font-black uppercase tracking-[0.18em] text-slate-500">Tap what your setup has</span>
+            <span className="text-[11px] font-black uppercase tracking-[0.18em] text-[var(--text-dim)]">Tap what your setup has</span>
             <span className="text-[10px] font-bold text-amber-400/80" style={{ fontFamily: "'JetBrains Mono',monospace" }}>{checked.size}/{ALL_FACTORS.length}</span>
           </div>
 
@@ -87,7 +87,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
                     // slate scale, and one-off hexes read as extra colors.
                     return (
                       <button key={f.id} onClick={() => toggle(f.id)}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all ${on ? 'text-white' : 'text-slate-500'}`}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all ${on ? 'text-[var(--text)]' : 'text-[var(--text-dim)]'}`}
                         style={{
                           background: on ? `${group.color}1c` : 'rgba(255,255,255,0.02)',
                           border: `1px solid ${on ? group.color + '55' : 'rgba(255,255,255,0.07)'}`,
@@ -106,11 +106,11 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
           </div>
 
           {/* R:R */}
-          <div className="flex items-center gap-2.5 mt-5 pt-4 border-t border-slate-800/50">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">R:R</span>
+          <div className="flex items-center gap-2.5 mt-5 pt-4 border-t border-[var(--border)]">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-dim)]">R:R</span>
             {[1, 1.5, 2, 3, 4].map(v => (
               <button key={v} onClick={() => { trackOnce('demo-used', 'Interacted with the live Grader demo'); setRr(v) }}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all font-mono ${rr === v ? 'text-amber-400' : 'text-slate-500'}`}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all font-mono ${rr === v ? 'text-amber-400' : 'text-[var(--text-dim)]'}`}
                 style={{
                   background: rr === v ? 'rgba(245,158,11,0.15)' : 'transparent',
                   border: `1px solid ${rr === v ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.08)'}`,
@@ -125,7 +125,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
             would bury the gauge, grade and CTA below the fold, so a phone visitor
             would tap chips with the payoff off-screen. Desktop is side-by-side,
             where the natural checklist-then-result order reads better. */}
-        <div className="order-1 md:order-2 md:col-span-2 p-6 md:p-8 flex flex-col items-center justify-center text-center border-b md:border-b-0 border-slate-800/50"
+        <div className="order-1 md:order-2 md:col-span-2 p-6 md:p-8 flex flex-col items-center justify-center text-center border-b md:border-b-0 border-[var(--border)]"
           style={{ background: 'radial-gradient(ellipse 90% 70% at 50% 0%, rgba(245,158,11,0.04), transparent 70%)' }}>
           <Gauge score={score} color={color} />
           {/* 52px joins the page's statement step — 58 was the only display size
@@ -133,11 +133,11 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
           <p className="font-black leading-none -mt-5 font-mono" style={{ fontSize: '52px', color, textShadow: `0 0 34px ${color}66` }}>
             {letter}
           </p>
-          <p className="text-[10px] text-slate-500 mt-1 uppercase tracking-[0.2em] font-semibold">
-            Score <span className="text-slate-400 font-mono">{score}</span>/100
+          <p className="text-[10px] text-[var(--text-dim)] mt-1 uppercase tracking-[0.2em] font-semibold">
+            Score <span className="text-[var(--text-dim)] font-mono">{score}</span>/100
           </p>
-          <p className="text-[14px] font-bold text-white mt-4">{verdict.headline}</p>
-          <p className="text-[12px] text-slate-500 leading-relaxed mt-1.5 max-w-[240px]">{verdict.body}</p>
+          <p className="text-[14px] font-bold text-[var(--text)] mt-4">{verdict.headline}</p>
+          <p className="text-[12px] text-[var(--text-dim)] leading-relaxed mt-1.5 max-w-[240px]">{verdict.body}</p>
 
           <button onClick={onCTA}
             className="group mt-6 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-[14px] transition-all hover:scale-[1.02] active:scale-[0.98]"
@@ -145,7 +145,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
             {ctaLabel}
             <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
           </button>
-          <p className="text-[10px] text-slate-600 mt-2.5">Full version saves your history, suggests position size &amp; grades against your own system.</p>
+          <p className="text-[10px] text-[var(--text-faint)] mt-2.5">Full version saves your history, suggests position size &amp; grades against your own system.</p>
         </div>
       </div>
     </div>

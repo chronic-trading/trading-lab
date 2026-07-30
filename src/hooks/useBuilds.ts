@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import type { Build } from '../types'
-import { supabase } from '../lib/supabase'
 import { getCurrentUserId } from '../lib/currentUser'
+
+// App.tsx calls useBuilds at the shell level, so a static Supabase import here
+// would land the client in the entry chunk and back onto the landing page's
+// critical path. Both call sites are already gated on a signed-in user, so the
+// client is fetched at the point of the write instead — the local state and
+// localStorage update immediately either way.
 
 const STORAGE_KEY = 'trading-lab-builds'
 
@@ -23,8 +28,11 @@ export function useBuilds() {
         ? prev.map(b => b.id === build.id ? build : b)
         : [...prev, build]
       const uid = getCurrentUserId()
-      if (uid) supabase.from('builds')
-        .upsert({ ...build, user_id: uid }, { onConflict: 'id' }).then()
+      if (uid) {
+        import('../lib/supabase').then(({ supabase }) =>
+          supabase.from('builds').upsert({ ...build, user_id: uid }, { onConflict: 'id' }).then()
+        )
+      }
       return next
     })
   }
@@ -32,7 +40,11 @@ export function useBuilds() {
   const deleteBuild = (id: string) => {
     setBuilds(prev => prev.filter(b => b.id !== id))
     const uid = getCurrentUserId()
-    if (uid) supabase.from('builds').delete().eq('id', id).eq('user_id', uid).then()
+    if (uid) {
+      import('../lib/supabase').then(({ supabase }) =>
+        supabase.from('builds').delete().eq('id', id).eq('user_id', uid).then()
+      )
+    }
   }
 
   const getBuildShareUrl = (build: Build) => {
