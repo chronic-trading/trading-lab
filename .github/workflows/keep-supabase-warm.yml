@@ -1,0 +1,59 @@
+name: Keep Supabase warm
+
+# Supabase pauses a free-tier project after ~7 days without activity, which
+# takes down auth AND the validate-whop edge function — so a paying customer
+# cannot activate their licence key. That has already happened in production.
+# This pings the database every 3 days so the project never goes idle.
+#
+# Two things this does NOT do, both deliberate:
+#   • It cannot WAKE a project that is already paused — only the dashboard can.
+#     Resume it by hand first; this keeps it from happening again.
+#   • It does not run silently. If the ping fails the job fails, so the repo
+#     owner gets the usual Actions failure email — an early warning that auth is
+#     about to break, rather than finding out from a refund request.
+
+on:
+  schedule:
+    # Every 3 days. Well inside the ~7-day pause window, so a single missed run
+    # (GitHub drops scheduled jobs under load) still leaves plenty of margin.
+    - cron: '17 6 */3 * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Query the database so the project counts as active
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_URL}" ] || [ -z "${SUPABASE_ANON_KEY}" ]; then
+            echo "::error::VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY are not set on this repo."
+            exit 1
+          fi
+
+          # Hit PostgREST rather than /auth/v1/health: the health endpoint can be
+          # served without touching Postgres, and it is Postgres activity that
+          # decides whether the project is idle. RLS denies anon access, so this
+          # returns an empty array — the query still executes, which is the point.
+          # No user data is read or written.
+          code=$(curl -sS --max-time 30 -o response.txt -w '%{http_code}' \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/rest/v1/journal_entries?select=id&limit=1")
+
+          echo "HTTP ${code}"
+          echo "Response: $(cat response.txt)"
+
+          if [ "${code}" != "200" ]; then
+            echo "::error::Supabase did not answer with 200 (got ${code}). The project may be paused — auth and licence activation are likely broken right now."
+            exit 1
+          fi
+
+          echo "Supabase is awake."
