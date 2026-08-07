@@ -39,7 +39,12 @@ const WHOP_URL = import.meta.env.VITE_WHOP_BUY_URL as string | undefined
 
 // Set your Whop price here to show it on the pricing card (e.g. '$97').
 // Leave empty to show the offer terms without a number and send buyers to Whop.
-const PRICE = (import.meta.env.VITE_PRICE as string | undefined) ?? '$9.99'
+// Keep this in step with the actual Whop product price — the default said $9.99
+// while checkout charged $8, so the page advertised a price nobody was charged.
+// Deliberately NOT wired to a VITE_PRICE secret in deploy.yml: an unset secret
+// arrives as '', which ?? treats as a real value, and the card would silently
+// lose its price. Editing this line is the safe way to change it.
+const PRICE = (import.meta.env.VITE_PRICE as string | undefined) ?? '$8'
 
 // Your money-back guarantee wording (e.g. '7-day money-back guarantee').
 // Leave empty to omit the guarantee entirely — nothing false is ever shown.
