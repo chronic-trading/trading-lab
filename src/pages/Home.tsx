@@ -84,11 +84,11 @@ function KeyLevelsPanel() {
         </div>
         {/* Wraps: six instrument pills on one row overflowed the card (and the
             page) on narrower desktop widths. */}
-        <div className="flex gap-1 flex-wrap justify-end">
+        <div className="tl-chiprow flex gap-1 flex-wrap justify-end">
           {INSTRUMENTS.map(i => (
             <button key={i}
               onClick={() => setInst(i)}
-              className={`px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)]'}`}
+              className={`tl-chip px-2.5 py-1 rounded-lg border text-[11px] font-bold transition-all ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)]'}`}
               style={{ fontFamily: "'JetBrains Mono', monospace" }}
             >
               {i}
@@ -118,7 +118,7 @@ function KeyLevelsPanel() {
           {(['resistance', 'support', 'neutral'] as const).map(t => (
             <button key={t}
               onClick={() => setType(t)}
-              className={`w-8 h-8 rounded-xl border text-[10px] font-bold transition-all ${type === t ? typeConfig[t].active : 'border-[var(--border)] text-[var(--text-faint)] hover:border-[var(--border)]'}`}
+              className={`tl-touch-sq w-8 h-8 flex items-center justify-center rounded-xl border text-[10px] font-bold transition-all ${type === t ? typeConfig[t].active : 'border-[var(--border)] text-[var(--text-faint)] hover:border-[var(--border)]'}`}
             >
               {typeConfig[t].label}
             </button>
@@ -127,7 +127,7 @@ function KeyLevelsPanel() {
         <button
           onClick={submit}
           disabled={!label.trim() || !price.trim()}
-          className="flex items-center gap-1 px-3 py-2 rounded-xl border border-amber-500/35 bg-amber-500/12 text-amber-300 text-[11px] font-semibold hover:bg-amber-500/22 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+          className="tl-tap-h flex items-center justify-center gap-1 px-3 py-2 rounded-xl border border-amber-500/35 bg-amber-500/12 text-amber-300 text-[11px] font-semibold hover:bg-amber-500/22 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
         >
           <Plus size={11} /> Add
         </button>
@@ -311,7 +311,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
             {total === 0 ? (
               <div className="text-center py-6">
                 <p className="text-[12px] text-[var(--text-faint)]">No trades logged yet</p>
-                <button onClick={() => onNavigate?.('journal')} className="text-[11px] text-amber-400 hover:underline mt-1 block mx-auto">
+                <button onClick={() => onNavigate?.('journal')} className="tl-tap text-[11px] text-amber-400 hover:underline mt-1 mx-auto flex items-center justify-center">
                   Go to Journal →
                 </button>
               </div>
@@ -371,7 +371,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
                 <TrendingUp size={13} className="text-purple-400" />
                 <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Mastery Progress</span>
               </div>
-              <button onClick={() => onNavigate?.('builder')} className="text-[10px] text-[var(--text-faint)] hover:text-purple-400 transition-colors font-semibold">
+              <button onClick={() => onNavigate?.('builder')} className="tl-hit text-[10px] text-[var(--text-faint)] hover:text-purple-400 transition-colors font-semibold">
                 View overview →
               </button>
             </div>
@@ -417,7 +417,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
                 <Package size={13} className="text-amber-400" />
                 <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Latest Build</span>
               </div>
-              <button onClick={() => onNavigate?.('builds')} className="text-[10px] text-[var(--text-faint)] hover:text-amber-400 transition-colors font-semibold">
+              <button onClick={() => onNavigate?.('builds')} className="tl-hit text-[10px] text-[var(--text-faint)] hover:text-amber-400 transition-colors font-semibold">
                 All builds →
               </button>
             </div>
@@ -425,7 +425,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
             {!latestBuild ? (
               <div className="text-center py-6">
                 <p className="text-[12px] text-[var(--text-faint)]">No builds saved yet</p>
-                <button onClick={() => onNavigate?.('builder')} className="text-[11px] text-amber-400 hover:underline mt-1 block mx-auto">
+                <button onClick={() => onNavigate?.('builder')} className="tl-tap text-[11px] text-amber-400 hover:underline mt-1 mx-auto flex items-center justify-center">
                   Open Builder →
                 </button>
               </div>

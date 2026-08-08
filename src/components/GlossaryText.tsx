@@ -103,6 +103,11 @@ export function GlossaryText({ text }: { text: string }) {
             type="button"
             onClick={openPop(s.term)}
             title={`${s.term.term} — tap for definition`}
+            /* tl-inline opts this out of the 44px mobile touch floor. These sit
+               inside running prose, and a 44px box in a 21px line inflates every
+               paragraph containing one by ~50%. Inline links are the recognised
+               exception to touch-target minimums for exactly this reason. */
+            className="tl-inline"
             style={{
               background: 'none', border: 'none', padding: 0, margin: 0,
               font: 'inherit', color: 'inherit', cursor: 'pointer',

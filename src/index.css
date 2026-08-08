@@ -507,12 +507,114 @@ html[data-theme="dark"] .tl-card {
    .tl-dot  — the 1-5 mastery rating dots are 20px and ADJACENT, so the usual
               trick of expanding the hit area past the visual bounds would make
               neighbouring dots overlap and steal each other's taps. They get
-              real size instead; five 32px dots plus gaps still fit the card.
+              real size instead. Held at 32px while the row could not wrap;
+              now that it does, a full 44px fits with zero overflow (measured
+              across all 330 dots in Builder), so they meet the minimum too.
    Both are media queries rather than md: variants for the ordering reason
    documented above. */
 @media (max-width: 767px) {
   .tl-tap { min-height: 44px; }
-  .tl-dot { width: 32px; height: 32px; }
+  .tl-dot { width: 44px; height: 44px; }
+
+  /* .tl-touch already exists above for square controls. This adds the case the
+     app hits most: a control that is wide enough but too short, where forcing
+     min-width would stretch it out of its row. */
+  .tl-tap-h { min-height: 44px; }
+
+  /* Adjacent square toggles (the R/S/N level-type picker, and anything like
+     it). Same reasoning as .tl-dot: neighbours are touching, so a hit area
+     grown past the visual bounds would steal the next control's taps. */
+  .tl-touch-sq { width: 44px; height: 44px; }
+
+  /* Isolated small links — the "View overview →" style action in a card header.
+     Growing the button itself would inflate the header row it shares with a
+     title, so instead an invisible 44px pseudo-element carries the touch area
+     while layout stays exactly as designed. Only safe because nothing sits
+     adjacent to these; use .tl-touch-sq where neighbours are touching. */
+  .tl-hit { position: relative; }
+  .tl-hit::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 44px;
+    width: 100%;
+    min-width: 44px;
+  }
+}
+
+/* Instrument pickers are ten chips. At a 44px touch height they wrap to three
+   rows on a phone and swallow the card, so on mobile they become a single
+   scrolling row instead — the standard chip-row idiom, and it keeps the
+   selected chip's row position stable. Desktop keeps the wrapping layout. */
+@media (max-width: 767px) {
+  .tl-chiprow {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Bleed to the card edges so the row reads as scrollable rather than
+       clipped, and the last chip is not jammed against the padding. */
+    margin-inline: -14px;
+    padding-inline: 14px;
+  }
+  .tl-chiprow::-webkit-scrollbar { display: none; }
+  .tl-chiprow > * { flex: 0 0 auto; scroll-snap-align: start; }
+  /* min-width matters as much as height here: the futures tickers are two
+     characters ("NQ", "ES"), which renders a 35px-wide chip. */
+  .tl-chip {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Every field was 42-43px — just under the minimum, everywhere, because the
+   padding scale lands there. One rule beats chasing each call site. */
+@media (max-width: 767px) {
+  html input:not([type="checkbox"]):not([type="radio"]),
+  html select,
+  html textarea { min-height: 44px; }
+}
+
+/* The floor. Rather than chase every sub-tab strip, filter pill and R-multiple
+   button one at a time — they sit at 30-42px and appear on nearly every page —
+   set the minimum once and opt out the few controls that must stay small.
+
+   Two exclusions, both measured rather than assumed:
+   • .tl-inline — Builder's 251 glossary links sit inside running prose and are
+     inline-block, so min-height DOES apply to them: measured, a 44px box in a
+     21px line inflated every paragraph containing one from 43px to 65px, +51%.
+     Inline links are the recognised exception to touch-target minimums.
+   • .tl-dot — sets an exact 32px height for ADJACENT rating dots. min-height
+     would override it and make neighbours overlap and steal each other's taps.
+
+   Buttons only. Anchors are frequently inline text links inside copy, where a
+   44px box would be wrong.
+
+   min-width matters as much as min-height: short labels ("NQ", "Go", "1m",
+   "All") render 27-40px wide, so height alone would leave them missable. */
+@media (max-width: 767px) {
+  html button:not(.tl-dot):not(.tl-inline) { min-height: 44px; min-width: 44px; }
+}
+
+/* Square icon buttons — modal closes, and the share/export/load/delete actions
+   on cards. The app has eighteen of these at w-7/w-8 (28-32px), which is the
+   single most repeated touch-target miss in the codebase. Fixing the pattern
+   once keeps them from drifting apart the way eighteen separate edits would.
+
+   `~=` matches a whole space-separated class token, so this cannot catch w-80
+   or h-80 the way `*=` would. Icons stay their original size; only the button
+   box grows, so nothing looks inflated. */
+@media (max-width: 767px) {
+  html button[class~="w-7"][class~="h-7"],
+  html button[class~="w-8"][class~="h-8"] { width: 44px; height: 44px; }
 }
 
 /* Wide letter-spacing costs real width, and the labels that use it are the ones

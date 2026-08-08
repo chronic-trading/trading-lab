@@ -287,10 +287,10 @@ export function Plan() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <input type="date" value={date} onChange={e => setDate(e.target.value)}
                     className="bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-1.5 text-[12px] text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-all" />
-                  <div className="flex gap-1.5 flex-wrap">
+                  <div className="tl-chiprow flex gap-1.5 flex-wrap">
                     {INSTRUMENTS.map(i => (
                       <button key={i} onClick={() => setInstrument(i)}
-                        className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all
+                        className={`tl-chip px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all
                           ${instrument === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-faint)] hover:border-[var(--border-strong)]'}`}
                         style={{ fontFamily: "'JetBrains Mono', monospace" }}>{i}</button>
                     ))}
@@ -598,10 +598,10 @@ function KeyLevelsWidget({ currentInstrument }: { currentInstrument: Instrument 
           <Target size={11} className="text-amber-400" />
           <span className="text-[11px] font-bold text-[var(--text)]">Key Levels</span>
         </div>
-        <div className="flex flex-wrap gap-1">
+        <div className="tl-chiprow flex flex-wrap gap-1">
           {INSTRUMENTS.map(i => (
             <button key={i} onClick={() => setInst(i)}
-              className={`px-1.5 py-0.5 rounded-lg border text-[10px] font-bold transition-all font-mono ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-faint)] hover:text-[var(--text-dim)]'}`}>{i}
+              className={`tl-chip px-1.5 py-0.5 rounded-lg border text-[10px] font-bold transition-all font-mono ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-faint)] hover:text-[var(--text-dim)]'}`}>{i}
             </button>
           ))}
         </div>
