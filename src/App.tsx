@@ -30,6 +30,7 @@ const TradeGrader  = lazy(() => import('./pages/TradeGrader').then(m => ({ defau
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
 import { PageSkeleton, ChartSkeleton } from './components/Skeleton'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { OfflineBanner } from './components/OfflineBanner'
 // SessionNotes and the modals below reach Supabase (directly or via a sync hook),
 // so importing them here would pull the auth client into the entry chunk and put
 // it back on the landing page's critical path. They only ever render inside the
@@ -339,6 +340,9 @@ export default function App() {
 const DEV_SHELL =
   import.meta.env.DEV && new URLSearchParams(window.location.search).has('app')
 
+/** How long to wait for the first data sync before opening the app anyway. */
+const SYNC_TIMEOUT_MS = 8000
+
 function RootApp() {
   const { user, loading: authLoading, signOut, attach: attachAuth } = useAuth()
   const [synced, setSynced] = useState(false)
@@ -349,8 +353,23 @@ function RootApp() {
     if (!SUPABASE_CONFIGURED) { setSynced(true); return }
     if (authLoading) return
     if (!user) { setSynced(true); return }
-    import('./lib/dataSync')
-      .then(({ syncOnLogin }) => syncOnLogin(user.id))
+
+    // Offline there is nothing to sync with, and every request would fail
+    // slowly. Local data is already complete, so open the app immediately.
+    if (navigator.onLine === false) { setSynced(true); return }
+
+    // Backstop for the case this gate did not previously cover: online, but the
+    // server unreachable. useAuth races its own timeout for exactly this reason
+    // — a paused Supabase project (which this one has done) or a captive portal
+    // leaves the request neither resolving nor rejecting, and without a race
+    // `finally` never runs and the app sits on the boot splash indefinitely.
+    // The sync is best-effort anyway: local data is the source of truth here.
+    const timeout = new Promise<void>(resolve => setTimeout(resolve, SYNC_TIMEOUT_MS))
+
+    Promise.race([
+      import('./lib/dataSync').then(({ syncOnLogin }) => syncOnLogin(user.id)),
+      timeout,
+    ])
       // Never strand the app on the loading spinner if the chunk or sync fails.
       .catch(() => {})
       .finally(() => setSynced(true))
@@ -577,6 +596,10 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         </div>
 
       </header>
+
+      {/* Directly under the header so it is the first thing read, and outside
+          the scroll area so it cannot be scrolled away while still true. */}
+      <OfflineBanner />
 
       {/* Shell body — grouped sidebar on desktop, full-width content on mobile */}
       <div className="flex-1 flex overflow-hidden">
