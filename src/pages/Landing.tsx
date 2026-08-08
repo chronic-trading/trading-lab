@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, lazy, Suspense, type ReactNode } from 'react'
 import {
-  FlaskConical, ArrowRight, ExternalLink, TrendingUp, Brain, Target,
+  FlaskConical, ArrowRight, TrendingUp, Brain, Target,
   Gauge, Beaker, LineChart, Network, BookOpen, CalendarDays, BarChart2,
   LayoutDashboard, Layers, Crosshair, GraduationCap, ClipboardCheck,
   LayoutTemplate, Package, Gamepad2, Infinity as InfinityIcon,
@@ -554,8 +554,13 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
         <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center">
 
-          {/* Badge */}
-          <div {...anim(0)} className={`${anim(0).className} mb-8`} style={anim(0).style}>
+          {/* Badge.
+              The spacing from here down was tuned at desktop scale. On a 375px
+              screen it pushed the first CTA to y=479 and left a 133px empty band
+              between the tagline and the buttons — the most valuable strip of
+              the page, blank, while 80% of visitors leave before scrolling a
+              quarter. Each step is tightened below sm and unchanged above it. */}
+          <div {...anim(0)} className={`${anim(0).className} mb-5 sm:mb-8`} style={anim(0).style}>
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: '0 0 8px #f59e0b' }} />
               <span className="text-[11px] font-bold tracking-[0.22em] uppercase text-amber-400/85">a Chronic Trading tool</span>
@@ -563,7 +568,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </div>
 
           {/* Headline */}
-          <div {...anim(80)} className={`${anim(80).className} mb-5 w-full`} style={anim(80).style}>
+          <div {...anim(80)} className={`${anim(80).className} mb-4 sm:mb-5 w-full`} style={anim(80).style}>
             {/* Display serif, sized up and with the heavy negative tracking
                 eased off — Instrument Serif runs optically smaller than the
                 black-weight sans it replaces, and -3px closes its thin strokes
@@ -579,14 +584,14 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </div>
 
           {/* Tagline */}
-          <div {...anim(140)} className={`${anim(140).className} mb-4`} style={anim(140).style}>
+          <div {...anim(140)} className={`${anim(140).className} mb-3 sm:mb-4`} style={anim(140).style}>
             <p className="text-[13px] font-semibold tracking-[0.18em] uppercase text-slate-500 text-center">
               ICT · SMC · Futures · Learn it in one place
             </p>
           </div>
 
           {/* Sub */}
-          <div {...anim(200)} className={`${anim(200).className} mb-11`} style={anim(200).style}>
+          <div {...anim(200)} className={`${anim(200).className} mb-6 sm:mb-11`} style={anim(200).style}>
             <p className="text-slate-400 max-w-lg mx-auto leading-relaxed text-center"
               style={{ fontSize: 'clamp(15px, 2vw, 18px)' }}>
               {/* The trailing space matters: on mobile the <br> is hidden, and JSX
@@ -598,19 +603,36 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             </p>
           </div>
 
-          {/* CTAs */}
-          <div {...anim(270)} className={`${anim(270).className} flex flex-col sm:flex-row items-center justify-center gap-3 mb-16`} style={anim(270).style}>
-            <button onClick={handleCTA}
+          {/* CTAs.
+              The hierarchy here was inverted for acquisition: the large gradient
+              button read "Sign In with License Key" — an action only an existing
+              customer can complete — while buying was the demoted outline button
+              beside it. With four customers and roughly twenty visitors a month,
+              almost everyone who lands here has no key, so the most prominent
+              control on the page did nothing for them.
+              Buying is now primary and carries the price. The offer terms sit
+              directly underneath because they are the strongest argument on the
+              page and previously appeared at screen 19.5 of 22.8, where the
+              scroll data says almost nobody arrives. Sign-in drops to a text
+              link — returning customers are looking for it and will find it. */}
+          <div {...anim(270)} className={`${anim(270).className} flex flex-col items-center gap-3 mb-10 sm:mb-16`} style={anim(270).style}>
+            <button onClick={isAuthenticated ? handleCTA : goBuy('hero')}
               className="group flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-[15px] transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
               style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
-              {ctaLabel}
+              {isAuthenticated ? ctaLabel : (PRICE ? `Get Access — ${PRICE}` : 'Get Access')}
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </button>
-            {WHOP_URL && !isAuthenticated && (
-              <a href={WHOP_URL} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 px-7 py-4 rounded-2xl font-semibold text-[14px] border border-slate-700/60 text-slate-400 hover:border-slate-500 hover:text-white hover:bg-slate-800/30 transition-all">
-                Get Access on Whop <ExternalLink size={13} />
-              </a>
+
+            {!isAuthenticated && (
+              <>
+                <p className="text-[12px] text-slate-400 text-center">
+                  One-time payment · Lifetime access · No subscription
+                </p>
+                <button onClick={handleCTA}
+                  className="text-[13px] text-slate-500 hover:text-slate-300 underline underline-offset-4 decoration-slate-700 transition-colors">
+                  Already have a license key? Sign in
+                </button>
+              </>
             )}
           </div>
 
@@ -1009,17 +1031,21 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               ))}
             </div>
 
-            <button onClick={handleCTA}
+            {/* The button on the pricing card itself said "Sign In with License
+                Key" to someone who has just read the price — the one place on
+                the page where intent is highest, spent on an action only an
+                existing customer can take. */}
+            <button onClick={isAuthenticated ? handleCTA : goBuy('pricing')}
               className="group w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-[15px] transition-all hover:scale-[1.02] active:scale-[0.98]"
               style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
-              {ctaLabel}
+              {isAuthenticated ? ctaLabel : (PRICE ? `Get Access — ${PRICE}` : 'Get Access')}
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
             </button>
-            {WHOP_URL && !isAuthenticated && (
-              <a href={WHOP_URL} target="_blank" rel="noopener noreferrer"
-                className="mt-3 flex items-center justify-center gap-2 text-[13px] font-semibold text-slate-500 hover:text-amber-300 transition-colors">
-                See full details on Whop <ExternalLink size={12} />
-              </a>
+            {!isAuthenticated && (
+              <button onClick={handleCTA}
+                className="mt-3 w-full text-center text-[13px] text-slate-500 hover:text-slate-300 underline underline-offset-4 decoration-slate-700 transition-colors">
+                Already have a license key? Sign in
+              </button>
             )}
 
             {/* Reassurance row */}
@@ -1107,19 +1133,20 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               : 'One license gets you every tool, with lifetime access and sync across all your devices.'}
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
-            <button onClick={handleCTA}
+          <div className="flex flex-col items-center justify-center gap-4 w-full">
+            {/* Closing statement — same inversion as the hero and the pricing
+                card, and the last chance the page gets. */}
+            <button onClick={isAuthenticated ? handleCTA : goBuy('footer')}
               className="group flex items-center gap-3 rounded-2xl font-bold text-[16px] transition-all hover:scale-[1.03] active:scale-[0.97]"
               style={{ padding: '1.1rem 3rem', background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
-              {ctaLabel}
+              {isAuthenticated ? ctaLabel : (PRICE ? `Get Access — ${PRICE}` : 'Get Access')}
               <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
             </button>
-            {WHOP_URL && !isAuthenticated && (
-              <a href={WHOP_URL} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-2 rounded-2xl font-semibold text-[14px] border border-slate-700/60 text-slate-400 hover:border-amber-500/35 hover:text-amber-300 hover:bg-amber-500/5 transition-all"
-                style={{ padding: '1.1rem 2.2rem' }}>
-                Get Access on Whop <ExternalLink size={13} />
-              </a>
+            {!isAuthenticated && (
+              <button onClick={handleCTA}
+                className="text-[13px] text-slate-500 hover:text-slate-300 underline underline-offset-4 decoration-slate-700 transition-colors">
+                Already have a license key? Sign in
+              </button>
             )}
           </div>
 
