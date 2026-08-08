@@ -1,18 +1,36 @@
 import { useState, useEffect, useRef } from 'react'
 import {
   Play, Pause, SkipBack, ChevronRight, ChevronLeft,
-  TrendingUp, TrendingDown, Crosshair, KeyRound,
-  ChevronDown, ChevronUp, Trash2, Search, X, Check,
+  TrendingUp, TrendingDown, Crosshair,
+  ChevronDown, ChevronUp, Trash2, Search, X,
 } from 'lucide-react'
 import { ReplayChart } from '../components/ReplayChart'
-import { useReplayData, TD_KEY_STORAGE, type OHLCVBar } from '../hooks/useReplayData'
+import { useReplayData, type OHLCVBar } from '../hooks/useReplayData'
 import { calcRPlanned, calcRActual, calcPnl, sessionStats, type BacktestTrade } from '../hooks/useBacktest'
 import { concepts, getConceptById } from '../data/concepts'
+import { REPLAY_INSTRUMENTS as INSTRUMENTS } from '../data/instruments'
 import type { Instrument } from '../types'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const INSTRUMENTS: Instrument[] = ['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD']
-const TIMEFRAMES = ['1m','5m','15m','1H','4H'] as const
+// Must match what scripts/fetch-market-data.mjs writes into public/data —
+// offering a timeframe with no dataset behind it just 404s.
+const TIMEFRAMES = ['1m','5m','15m','1H','4H','D'] as const
+
+/**
+ * How far back to start the replay, per timeframe. A single fixed lookback does
+ * not work across this range: one month of Daily bars is 23 candles (barely a
+ * replay at all), while one month of 1m is more than the dataset even holds.
+ * These are tuned to give a few hundred bars to work through in every case.
+ */
+const LOOKBACK_DAYS: Record<string, number> = {
+  '1m': 5, '5m': 14, '15m': 30, '1H': 120, '4H': 365, 'D': 1825,
+}
+
+function defaultStart(tf: string): string {
+  const d = new Date()
+  d.setDate(d.getDate() - (LOOKBACK_DAYS[tf] ?? 30))
+  return d.toISOString().slice(0, 10)
+}
 const INITIAL_CONTEXT = 80  // bars shown on load before replay starts
 const TRADES_KEY = 'tl:replay-trades'
 const SPEEDS = [0.5, 1, 2, 4] as const
@@ -154,14 +172,9 @@ function TradeCard({ trade, onDelete }: { trade: BacktestTrade; onDelete: (id: s
 export function BacktestPage() {
   const { bars, loading, error, load } = useReplayData()
 
-  const [instrument, setInstrument] = useState<Instrument>('EURUSD')
+  const [instrument, setInstrument] = useState<Instrument>('NQ')
   const [tf,         setTf]         = useState<TF>('15m')
-  const [startDate,  setStartDate]  = useState(() => {
-    const d = new Date(); d.setMonth(d.getMonth() - 1); return d.toISOString().slice(0,10)
-  })
-  const [apiKey,     setApiKey]     = useState(() => localStorage.getItem(TD_KEY_STORAGE) ?? '')
-  const [showKeyInput, setShowKeyInput] = useState(false)
-  const [keyDraft,   setKeyDraft]   = useState('')
+  const [startDate,  setStartDate]  = useState(() => defaultStart('15m'))
 
   const [cursor,     setCursor]     = useState(INITIAL_CONTEXT)
   const [playing,    setPlaying]    = useState(false)
@@ -215,9 +228,10 @@ export function BacktestPage() {
     if (result) closeTrade(result, exitPrice)
   }, [cursor]) // eslint-disable-line
 
-  // ── Auto-load on mount if API key is already configured ─────────────────────
+  // The dataset ships with the app, so there is nothing to configure first —
+  // load straight away and let the user land on a chart rather than a setup step.
   useEffect(() => {
-    if (apiKey.trim()) load(instrument, tf, startDate, apiKey)
+    load(instrument, tf, startDate)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   // ── Reset cursor when new data loads ────────────────────────────────────────
@@ -234,15 +248,7 @@ export function BacktestPage() {
   const handleLoad = () => {
     setPlaying(false)
     setActiveTrade(null)
-    load(instrument, tf, startDate, apiKey)
-  }
-
-  const saveKey = () => {
-    const k = keyDraft.trim()
-    setApiKey(k)
-    localStorage.setItem(TD_KEY_STORAGE, k)
-    setShowKeyInput(false)
-    setKeyDraft('')
+    load(instrument, tf, startDate)
   }
 
   const openTrade = () => {
@@ -321,7 +327,10 @@ export function BacktestPage() {
         {/* Timeframe */}
         <div className="flex gap-1">
           {TIMEFRAMES.map(t => (
-            <button key={t} onClick={() => setTf(t)}
+            // Move the start date with the timeframe: the lookback that suits
+            // 15m leaves Daily with 23 bars and asks 1m for more history than
+            // the dataset holds.
+            <button key={t} onClick={() => { setTf(t); setStartDate(defaultStart(t)) }}
               className={`text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border transition-all ${
                 tf === t
                   ? 'bg-[var(--surface-hover)] border-[var(--border-strong)] text-[var(--text)]'
@@ -347,31 +356,6 @@ export function BacktestPage() {
           {loading ? 'Loading…' : 'Load'}
         </button>
 
-        {/* API key indicator */}
-        <div className="ml-auto flex items-center gap-2">
-          {showKeyInput ? (
-            <div className="flex items-center gap-1.5">
-              <input autoFocus value={keyDraft} onChange={e => setKeyDraft(e.target.value)}
-                onKeyDown={e => { if (e.key==='Enter') saveKey(); if (e.key==='Escape') setShowKeyInput(false) }}
-                placeholder="Paste Twelve Data API key…"
-                className="w-56 bg-[var(--surface)] border border-amber-500/40 rounded-lg px-3 py-1.5 text-[11px] text-[var(--text)] placeholder-[var(--text-faint)] focus:outline-none" />
-              <button onClick={saveKey} disabled={!keyDraft.trim()}
-                className="text-[10px] font-bold px-2.5 py-1.5 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-300 disabled:opacity-30 hover:bg-amber-500/25 transition-all">Save</button>
-              <button onClick={() => setShowKeyInput(false)} aria-label="Cancel"
-                className="text-[var(--text-faint)] hover:text-[var(--text-dim)] transition-colors"><X size={12} strokeWidth={2.5} /></button>
-            </div>
-          ) : (
-            <button onClick={() => { setKeyDraft(apiKey); setShowKeyInput(true) }}
-              className={`flex items-center gap-1.5 text-[11px] px-2.5 py-1.5 rounded-lg border transition-all ${
-                apiKey
-                  ? 'border-emerald-500/25 text-emerald-400/70 bg-emerald-500/5 hover:bg-emerald-500/10'
-                  : 'border-red-500/25 text-red-400/70 bg-red-500/5 hover:bg-red-500/10 animate-pulse'
-              }`}>
-              {apiKey ? <Check size={10} strokeWidth={3} /> : <KeyRound size={10} />}
-              {apiKey ? 'API key saved' : 'Add API key'}
-            </button>
-          )}
-        </div>
       </div>
 
       {/* ── Main area ────────────────────────────────────────────────────────── */}
@@ -384,21 +368,7 @@ export function BacktestPage() {
           <div className="flex-1 overflow-hidden relative">
             {!hasData && !loading && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10">
-                {error === 'no-key' ? (
-                  <>
-                    <KeyRound size={32} className="text-amber-500/30" />
-                    <div className="text-center">
-                      <p className="text-[14px] font-bold text-[var(--text-dim)] mb-1">API key required</p>
-                      <p className="text-[12px] text-[var(--text-faint)] max-w-xs leading-relaxed">
-                        Get a free key at <span className="text-amber-400">twelvedata.com</span> — takes 30 seconds, 800 requests/day included free.
-                      </p>
-                    </div>
-                    <button onClick={() => { setKeyDraft(''); setShowKeyInput(true) }}
-                      className="px-5 py-2.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-300 text-[12px] font-bold hover:bg-amber-500/18 transition-all">
-                      Add API key →
-                    </button>
-                  </>
-                ) : error ? (
+                {error ? (
                   <>
                     <p className="text-[13px] font-bold text-red-400">Failed to load</p>
                     <p className="text-[11px] text-[var(--text-faint)] max-w-xs text-center">{error}</p>

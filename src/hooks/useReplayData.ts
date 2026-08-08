@@ -8,77 +8,86 @@ export interface OHLCVBar {
   close: number
 }
 
-const CACHE_PREFIX = 'tl:replay-cache:'
-const CACHE_TTL    = 1000 * 60 * 60 * 24 // 24h
+/**
+ * Replay bars, served from the dataset bundled with the app.
+ *
+ * This used to call Twelve Data and required EVERY USER to register for an
+ * account and paste their own API key before the Replay tab would do anything.
+ * The data now ships with the app: scripts/fetch-market-data.mjs writes
+ * public/data/<SYMBOL>-<TF>.json ahead of time, so the browser loads a plain
+ * static file. No key, no signup, no third party between the user and the tool,
+ * no rate limit, and it keeps working when everything else is down.
+ *
+ * It has to be prebuilt rather than fetched live because no futures data source
+ * sends CORS headers — Yahoo and Stooq were both verified to block direct
+ * browser calls. The fetch happens server-side in CI instead.
+ */
 
-interface CacheEntry { bars: OHLCVBar[]; savedAt: number }
-
-function tdSymbol(inst: string) {
-  if (inst.length === 6) return `${inst.slice(0,3)}/${inst.slice(3)}`
-  return inst
+/** Columnar payload written by scripts/fetch-market-data.mjs. */
+interface Dataset {
+  symbol: string
+  timeframe: string
+  bars: number
+  from: string
+  to: string
+  t: number[]
+  o: number[]
+  h: number[]
+  l: number[]
+  c: number[]
 }
 
-function tdInterval(tf: string) {
-  const map: Record<string, string> = {
-    '1m':'1min','5m':'5min','15m':'15min','1H':'1h','4H':'4h','D':'1day',
-  }
-  return map[tf] ?? '15min'
-}
+// Vite rewrites BASE_URL for the GitHub Pages subpath, so this resolves both
+// locally ("/") and in production ("/trading-lab/").
+const DATA_BASE = `${import.meta.env.BASE_URL}data`
 
-export const TD_KEY_STORAGE = 'tl:tdkey'
+// Parsed datasets, kept for the session. These files are immutable between
+// deploys, so re-parsing on every instrument switch is pure waste.
+const memoryCache = new Map<string, OHLCVBar[]>()
 
 export function useReplayData() {
   const [bars,    setBars]    = useState<OHLCVBar[]>([])
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState<string | null>(null)
 
-  const load = async (instrument: string, tf: string, startDate: string, apiKey: string) => {
-    if (!apiKey.trim()) {
-      setError('no-key')
-      return
-    }
-
-    const ck = `${CACHE_PREFIX}${instrument}-${tf}-${startDate}`
-    try {
-      const raw = localStorage.getItem(ck)
-      if (raw) {
-        const entry: CacheEntry = JSON.parse(raw)
-        if (Date.now() - entry.savedAt < CACHE_TTL) {
-          setBars(entry.bars)
-          setError(null)
-          return
-        }
-      }
-    } catch {}
-
+  /**
+   * Load bars for an instrument/timeframe, starting at startDate.
+   * `startDate` is an ISO date ('2026-07-01'); bars before it are trimmed so
+   * the replay begins where the user asked.
+   */
+  const load = async (instrument: string, tf: string, startDate: string) => {
+    const key = `${instrument}-${tf}`
     setLoading(true)
     setError(null)
+
     try {
-      const sym = tdSymbol(instrument)
-      const ivl = tdInterval(tf)
-      const url = `https://api.twelvedata.com/time_series?symbol=${encodeURIComponent(sym)}&interval=${ivl}&start_date=${startDate}&outputsize=500&apikey=${apiKey.trim()}`
-      const res  = await fetch(url)
-      if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const data = await res.json()
-      if (data.status === 'error') throw new Error(data.message ?? 'Twelve Data error')
-      if (!Array.isArray(data.values) || data.values.length === 0)
-        throw new Error('No data for this instrument/date — try a different date or check the instrument name.')
+      let all = memoryCache.get(key)
 
-      const parsed: OHLCVBar[] = (data.values as Record<string, string>[])
-        .reverse()
-        .map(v => ({
-          time:  Math.floor(new Date(v.datetime).getTime() / 1000),
-          open:  parseFloat(v.open),
-          high:  parseFloat(v.high),
-          low:   parseFloat(v.low),
-          close: parseFloat(v.close),
+      if (!all) {
+        const res = await fetch(`${DATA_BASE}/${key}.json`)
+        if (res.status === 404) throw new Error(`No bundled data for ${instrument} ${tf}.`)
+        if (!res.ok) throw new Error(`Could not load ${instrument} ${tf} (HTTP ${res.status}).`)
+
+        const d: Dataset = await res.json()
+        // Columnar -> the bar objects lightweight-charts expects.
+        all = d.t.map((time, i) => ({
+          time, open: d.o[i], high: d.h[i], low: d.l[i], close: d.c[i],
         }))
+        memoryCache.set(key, all)
+      }
 
-      try {
-        localStorage.setItem(ck, JSON.stringify({ bars: parsed, savedAt: Date.now() } satisfies CacheEntry))
-      } catch {}
+      const from = Math.floor(new Date(`${startDate}T00:00:00Z`).getTime() / 1000)
+      const sliced = all.filter(b => b.time >= from)
 
-      setBars(parsed)
+      if (!sliced.length) {
+        // Distinguish "you picked a date outside the dataset" from "no data at
+        // all" — the first is a fixable user choice and deserves the range.
+        const earliest = all.length ? new Date(all[0].time * 1000).toISOString().slice(0, 10) : '?'
+        const latest   = all.length ? new Date(all.at(-1)!.time * 1000).toISOString().slice(0, 10) : '?'
+        throw new Error(`No bars after ${startDate}. ${instrument} ${tf} covers ${earliest} to ${latest}.`)
+      }
+
+      setBars(sliced)
     } catch (e: unknown) {
       setError((e as Error).message ?? 'Failed to load data')
       setBars([])

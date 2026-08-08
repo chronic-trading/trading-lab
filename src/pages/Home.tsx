@@ -10,9 +10,10 @@ import { useSettings, POINT_VALUES } from '../hooks/useSettings'
 import { getSynergiesFor } from '../data/concepts'
 import { concepts } from '../data/concepts'
 import { FOMC_2026, WEEKLY_SCHEDULE } from '../data/calendarData'
+import { INSTRUMENTS } from '../data/instruments'
 import type { Instrument } from '../types'
 
-const INSTRUMENTS: Instrument[] = ['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]// ── Upcoming trading days (today + next 4 trading days) ───────────────────────
+// ── Upcoming trading days (today + next 4 trading days) ───────────────────────
 function getUpcomingDays() {
   const result: { date: Date; dateStr: string; dayName: string; events: string[]; isFOMC: boolean; isToday: boolean }[] = []
   const now = new Date()
@@ -55,7 +56,7 @@ function getStreak(entries: ReturnType<typeof useJournal>['entries']): { count: 
 // ── Key Levels section ────────────────────────────────────────────────────────
 function KeyLevelsPanel() {
   const { levels, add, remove, clear } = useKeyLevels()
-  const [inst, setInst] = useState<Instrument>('EURUSD')
+  const [inst, setInst] = useState<Instrument>('NQ')
   const [label, setLabel] = useState('')
   const [price, setPrice] = useState('')
   const [type, setType]   = useState<KeyLevel['type']>('neutral')

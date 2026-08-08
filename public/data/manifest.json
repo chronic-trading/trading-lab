@@ -1,0 +1,221 @@
+{
+  "generatedAt": "2026-08-08T01:57:28.331Z",
+  "datasets": [
+    {
+      "symbol": "NQ",
+      "timeframe": "1m",
+      "file": "NQ-1m.json",
+      "bars": 7856,
+      "from": "2026-07-31T04:09:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 328
+    },
+    {
+      "symbol": "NQ",
+      "timeframe": "5m",
+      "file": "NQ-5m.json",
+      "bars": 13810,
+      "from": "2026-05-28T04:05:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 574
+    },
+    {
+      "symbol": "NQ",
+      "timeframe": "15m",
+      "file": "NQ-15m.json",
+      "bars": 4625,
+      "from": "2026-05-28T04:00:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 192
+    },
+    {
+      "symbol": "NQ",
+      "timeframe": "1H",
+      "file": "NQ-1H.json",
+      "bars": 13699,
+      "from": "2024-03-15T04:00:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 570
+    },
+    {
+      "symbol": "NQ",
+      "timeframe": "4H",
+      "file": "NQ-4H.json",
+      "bars": 3425,
+      "from": "2024-03-15T04:00:00.000Z",
+      "to": "2026-08-07T19:00:00.000Z",
+      "kb": 143
+    },
+    {
+      "symbol": "NQ",
+      "timeframe": "D",
+      "file": "NQ-D.json",
+      "bars": 2515,
+      "from": "2016-08-08T04:00:00.000Z",
+      "to": "2026-08-07T04:00:00.000Z",
+      "kb": 101
+    },
+    {
+      "symbol": "ES",
+      "timeframe": "1m",
+      "file": "ES-1m.json",
+      "bars": 7856,
+      "from": "2026-07-31T04:09:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 299
+    },
+    {
+      "symbol": "ES",
+      "timeframe": "5m",
+      "file": "ES-5m.json",
+      "bars": 13810,
+      "from": "2026-05-28T04:05:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 526
+    },
+    {
+      "symbol": "ES",
+      "timeframe": "15m",
+      "file": "ES-15m.json",
+      "bars": 4625,
+      "from": "2026-05-28T04:00:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 176
+    },
+    {
+      "symbol": "ES",
+      "timeframe": "1H",
+      "file": "ES-1H.json",
+      "bars": 13701,
+      "from": "2024-03-15T04:00:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 521
+    },
+    {
+      "symbol": "ES",
+      "timeframe": "4H",
+      "file": "ES-4H.json",
+      "bars": 3426,
+      "from": "2024-03-15T04:00:00.000Z",
+      "to": "2026-08-07T20:59:59.000Z",
+      "kb": 130
+    },
+    {
+      "symbol": "ES",
+      "timeframe": "D",
+      "file": "ES-D.json",
+      "bars": 2515,
+      "from": "2016-08-08T04:00:00.000Z",
+      "to": "2026-08-07T04:00:00.000Z",
+      "kb": 95
+    },
+    {
+      "symbol": "GC",
+      "timeframe": "1m",
+      "file": "GC-1m.json",
+      "bars": 7886,
+      "from": "2026-07-31T04:00:00.000Z",
+      "to": "2026-08-07T20:59:55.000Z",
+      "kb": 365
+    },
+    {
+      "symbol": "GC",
+      "timeframe": "5m",
+      "file": "GC-5m.json",
+      "bars": 13851,
+      "from": "2026-05-28T04:00:00.000Z",
+      "to": "2026-08-07T20:59:55.000Z",
+      "kb": 617
+    },
+    {
+      "symbol": "GC",
+      "timeframe": "15m",
+      "file": "GC-15m.json",
+      "bars": 4625,
+      "from": "2026-05-28T04:00:00.000Z",
+      "to": "2026-08-07T20:59:55.000Z",
+      "kb": 206
+    },
+    {
+      "symbol": "GC",
+      "timeframe": "1H",
+      "file": "GC-1H.json",
+      "bars": 13742,
+      "from": "2024-03-15T04:00:00.000Z",
+      "to": "2026-08-07T20:59:55.000Z",
+      "kb": 590
+    },
+    {
+      "symbol": "GC",
+      "timeframe": "4H",
+      "file": "GC-4H.json",
+      "bars": 3436,
+      "from": "2024-03-15T04:00:00.000Z",
+      "to": "2026-08-07T20:00:00.000Z",
+      "kb": 147
+    },
+    {
+      "symbol": "GC",
+      "timeframe": "D",
+      "file": "GC-D.json",
+      "bars": 2513,
+      "from": "2016-08-08T04:00:00.000Z",
+      "to": "2026-08-07T04:00:00.000Z",
+      "kb": 96
+    },
+    {
+      "symbol": "SI",
+      "timeframe": "1m",
+      "file": "SI-1m.json",
+      "bars": 7572,
+      "from": "2026-07-31T04:00:00.000Z",
+      "to": "2026-08-07T20:59:56.000Z",
+      "kb": 271
+    },
+    {
+      "symbol": "SI",
+      "timeframe": "5m",
+      "file": "SI-5m.json",
+      "bars": 13843,
+      "from": "2026-05-28T04:00:00.000Z",
+      "to": "2026-08-07T20:59:56.000Z",
+      "kb": 495
+    },
+    {
+      "symbol": "SI",
+      "timeframe": "15m",
+      "file": "SI-15m.json",
+      "bars": 4625,
+      "from": "2026-05-28T04:00:00.000Z",
+      "to": "2026-08-07T20:59:56.000Z",
+      "kb": 165
+    },
+    {
+      "symbol": "SI",
+      "timeframe": "1H",
+      "file": "SI-1H.json",
+      "bars": 13768,
+      "from": "2024-03-15T04:00:00.000Z",
+      "to": "2026-08-07T20:59:56.000Z",
+      "kb": 494
+    },
+    {
+      "symbol": "SI",
+      "timeframe": "4H",
+      "file": "SI-4H.json",
+      "bars": 3442,
+      "from": "2024-03-15T04:00:00.000Z",
+      "to": "2026-08-07T18:00:00.000Z",
+      "kb": 124
+    },
+    {
+      "symbol": "SI",
+      "timeframe": "D",
+      "file": "SI-D.json",
+      "bars": 2513,
+      "from": "2016-08-08T04:00:00.000Z",
+      "to": "2026-08-07T04:00:00.000Z",
+      "kb": 92
+    }
+  ]
+}
