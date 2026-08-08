@@ -28,6 +28,7 @@ const PropFirms    = lazy(() => import('./pages/PropFirms').then(m => ({ default
 const Arcade       = lazy(() => import('./pages/Arcade').then(m => ({ default: m.Arcade })))
 const TradeGrader  = lazy(() => import('./pages/TradeGrader').then(m => ({ default: m.TradeGrader })))
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
+import { PageSkeleton, ChartSkeleton } from './components/Skeleton'
 // SessionNotes and the modals below reach Supabase (directly or via a sync hook),
 // so importing them here would pull the auth client into the entry chunk and put
 // it back on the landing page's critical path. They only ever render inside the
@@ -280,12 +281,47 @@ function MobileBottomNav({
 }
 
 // Shown briefly while a code-split tab's JS loads.
-function PageFallback() {
+/**
+ * Full-screen boot state, for session restore and the login chunk. This markup
+ * was duplicated verbatim in two places; one copy means they cannot drift.
+ * role="status" so the wait is announced rather than being a silent blank.
+ */
+function BootSplash() {
   return (
-    <div className="flex-1 flex items-center justify-center gap-3">
+    <div className="flex items-center justify-center h-screen bg-[var(--bg)] gap-3" role="status" aria-live="polite">
       <div className="w-5 h-5 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
-      <span className="text-[13px] text-[var(--text-faint)] font-medium">Loading…</span>
+      <span className="text-[13px] text-[var(--text-dim)] font-medium">Loading…</span>
     </div>
+  )
+}
+
+/**
+ * The column width each page centres its content in. The skeleton has to match
+ * the page it is standing in for, or the header and first cards jump sideways
+ * the moment the real page arrives — which is more distracting than the spinner
+ * this replaced. Pages absent from this map get the default.
+ */
+const PAGE_WIDTH: Partial<Record<Tab, string>> = {
+  home: 'max-w-6xl', templates: 'max-w-6xl', grader: 'max-w-6xl',
+  journal: 'max-w-5xl', calendar: 'max-w-5xl',
+  plan: 'max-w-3xl',
+  review: 'max-w-2xl',
+}
+
+/** Tabs that are one large canvas rather than a column of cards. */
+const CHART_TABS: Tab[] = ['backtest', 'chart']
+
+function PageFallback({ tab }: { tab: Tab }) {
+  if (CHART_TABS.includes(tab)) return <ChartSkeleton />
+  // Review is a single flashcard, not a feed; Map and Arcade are canvases with
+  // no stats strip. Anything else gets the standard header + stats + cards.
+  const bare = tab === 'map' || tab === 'arcade'
+  return (
+    <PageSkeleton
+      maxWidth={PAGE_WIDTH[tab] ?? 'max-w-5xl'}
+      stats={bare ? 0 : 3}
+      cards={tab === 'review' ? 1 : 3}
+    />
   )
 }
 
@@ -333,23 +369,14 @@ function RootApp() {
     if (view !== 'app') document.title = 'Trading Lab — ICT · SMC · Futures Workspace | Chronic Trading'
   }, [view])
 
-  if (authLoading || !synced) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-[var(--bg)] gap-3">
-        <div className="w-5 h-5 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
-        <span className="text-[13px] text-[var(--text-dim)] font-medium">Loading…</span>
-      </div>
-    )
-  }
+  // Boot: session restore and the first data sync. A skeleton would be wrong
+  // here — there is no layout yet to hold a place for, and this is the one
+  // moment the app has nothing at all to show.
+  if (authLoading || !synced) return <BootSplash />
 
   if (view === 'login') {
     return (
-      <Suspense fallback={
-        <div className="flex items-center justify-center h-screen bg-[var(--bg)] gap-3">
-          <div className="w-5 h-5 border-2 border-amber-500/30 border-t-amber-400 rounded-full animate-spin" />
-          <span className="text-[13px] text-[var(--text-dim)] font-medium">Loading…</span>
-        </div>
-      }>
+      <Suspense fallback={<BootSplash />}>
         <LoginScreen onBack={() => setView('landing')} />
       </Suspense>
     )
@@ -589,11 +616,11 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             pb-14 left the last row of content behind the indicator on an
             iPhone. Scoped to phones in CSS — an inline style would out-specify
             md:pb-0 and pad the desktop layout too. */}
-        {/* key={tab} restarts the entrance animation on every navigation, so a
-            tab change reads as new content arriving rather than a hard cut.
-            Keying the <main> also resets its scroll position, which is the
-            behaviour you want when moving between tools anyway. */}
-        <main key={tab} ref={mainRef} className="tl-page-in tl-main-pad flex-1 flex flex-col overflow-hidden md:pb-0">
+        {/* No key/animation here: the inner <div key={tab}> below already
+            carries .animate-tab-in, and the effect on [tab] already resets
+            scroll. Keying this element too would remount the whole subtree —
+            Suspense boundary included — and run a second, nested entrance. */}
+        <main ref={mainRef} className="tl-main-pad flex-1 flex flex-col overflow-hidden md:pb-0">
 
           {/* Sub-tab strip — only for a destination that has children */}
           {(() => {
@@ -620,7 +647,7 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
           })()}
 
         <div key={tab} className="flex-1 flex flex-col overflow-hidden animate-tab-in">
-        <Suspense fallback={<PageFallback />}>
+        <Suspense fallback={<PageFallback tab={tab} />}>
         {tab === 'home'      && <Home      onNavigate={t => setTab(t as Tab)} />}
         {tab === 'builder'   && <Builder   initialBuild={loadedBuild} />}
         {tab === 'grader'    && <TradeGrader />}
@@ -704,7 +731,9 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             </button>
           </div>
           <div className="flex-1 overflow-y-auto">
-            <Suspense fallback={<PageFallback />}>
+            {/* Already inside a scrolling panel with its own heading, so this
+                one skips the page head's stats strip. */}
+            <Suspense fallback={<PageSkeleton maxWidth="max-w-5xl" stats={0} cards={4} />}>
               <PropFirms />
             </Suspense>
           </div>

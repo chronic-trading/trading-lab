@@ -9,6 +9,7 @@ import { useReplayData, type OHLCVBar } from '../hooks/useReplayData'
 import { calcRPlanned, calcRActual, calcPnl, sessionStats, type BacktestTrade } from '../hooks/useBacktest'
 import { concepts, getConceptById } from '../data/concepts'
 import { REPLAY_INSTRUMENTS as INSTRUMENTS } from '../data/instruments'
+import { Skeleton } from '../components/Skeleton'
 import type { Instrument } from '../types'
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -366,6 +367,18 @@ export function BacktestPage() {
 
           {/* Chart */}
           <div className="flex-1 overflow-hidden relative">
+            {/* While bars are fetching the chart area was simply blank — the
+                empty state hides itself on `loading` and nothing replaced it,
+                so the only feedback was the Load button's label. */}
+            {loading && (
+              <div
+                className="absolute inset-0 z-10 p-4 bg-[var(--bg)]"
+                role="status" aria-live="polite" aria-busy="true"
+              >
+                <span className="sr-only">Loading price data…</span>
+                <Skeleton className="w-full h-full rounded-xl" />
+              </div>
+            )}
             {!hasData && !loading && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-10">
                 {error ? (

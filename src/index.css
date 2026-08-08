@@ -732,17 +732,48 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 .tl-sheet-in { animation: tl-sheet-in 0.26s var(--ease-out) both; }
 .tl-scrim-in { animation: tl-scrim-in 0.2s var(--ease-out) both; }
 
-/* Page changes. A hard cut between tabs reads as a page load; a short rise
-   reads as the same surface changing contents. Short enough not to sit between
-   the user and the app — this fires on every navigation. */
-@keyframes tl-page-in {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.tl-page-in { animation: tl-page-in 0.22s var(--ease-out) both; }
+/* Tab entrance already exists as .animate-tab-in / @keyframes tabIn above —
+   same 6px rise, same intent. Not duplicated here. */
 
 /* The existing prefers-reduced-motion block above already collapses animation
    and transition durations to ~0, so everything here degrades to an instant
    state change for users who ask for that. framer-motion is handled separately
    by MotionConfig reducedMotion="user" in App.tsx, because inline JS transforms
    are not governed by CSS. */
+
+/* ── Skeletons ──────────────────────────────────────────────────────────────
+   A sweep rather than a pulse. Pulsing opacity reads as "broken/retrying";
+   a sweep reads as "arriving", which is what is actually happening. */
+@keyframes tl-shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+.tl-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-2);
+  border-radius: 8px;
+}
+
+.tl-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--text) 7%, transparent),
+    transparent
+  );
+  animation: tl-shimmer 1.5s ease-in-out infinite;
+}
+
+/* The global reduce-motion block collapses animation-duration to 0.01ms, which
+   would leave the sweep stuttering at the far edge rather than stopping. Remove
+   the sweep entirely instead — the grey block alone still communicates
+   "loading" without any movement at all. */
+@media (prefers-reduced-motion: reduce) {
+  .tl-skeleton::after { display: none; }
+}
