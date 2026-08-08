@@ -395,9 +395,12 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
                 { val: started - proficient,   label: 'Learning',  color: 'text-yellow-400' },
                 { val: concepts.length - started, label: 'Not yet', color: 'text-[var(--text-faint)]' },
               ].map(s => (
-                <div key={s.label} className="text-center">
+                <div key={s.label} className="text-center min-w-0">
                   <p className={`text-[18px] font-bold leading-none ${s.color}`}>{s.val}</p>
-                  <p className="text-[10px] text-[var(--text-faint)] mt-1 uppercase tracking-wider">{s.label}</p>
+                  {/* Four columns leave ~67px each on a phone. "Proficient" at the
+                      lifted mobile size plus wide tracking exceeds that, so the
+                      tracking is dropped below md rather than clipping the word. */}
+                  <p className="text-[10px] text-[var(--text-faint)] mt-1 uppercase tracking-normal md:tracking-wider">{s.label}</p>
                 </div>
               ))}
             </div>

@@ -108,7 +108,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
 
           <button
             onClick={e => { e.stopPropagation(); onToggle(concept.id) }}
-            className={`flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-150
+            className={`tl-dot flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-150
               ${selected ? cfg.addBtnActive : cfg.addBtnIdle}`}
           >
             {selected ? <Check size={13} /> : <Plus size={13} />}
@@ -122,7 +122,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
         <p className={`text-[13px] text-[var(--text-dim)] leading-relaxed ${expanded ? '' : 'line-clamp-2'}`}><GlossaryText text={concept.description} /></p>
 
         {/* Mastery rating */}
-        <div className="flex items-center gap-2.5 mt-3">
+        <div className="flex items-center gap-2.5 mt-3 flex-wrap">
           <span className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider flex-shrink-0">Mastery</span>
           <div className="flex gap-1.5">
             {([1,2,3,4,5] as MasteryLevel[]).map(n => (
@@ -130,7 +130,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
                 key={n}
                 title={MASTERY_LABELS[n]}
                 onClick={e => { e.stopPropagation(); setMastery(level === n ? 0 as MasteryLevel : n) }}
-                className={`w-5 h-5 rounded-full border-2 transition-all duration-150 hover:scale-125 flex-shrink-0
+                className={`tl-dot w-5 h-5 rounded-full border-2 transition-all duration-150 hover:scale-125 flex-shrink-0
                   ${n <= level
                     ? level === 5 ? 'bg-amber-400 border-amber-300 shadow-md shadow-amber-400/40'
                     : level >= 4 ? 'bg-emerald-500 border-emerald-400 shadow-sm shadow-emerald-500/30'
@@ -157,7 +157,7 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
         <div className="flex items-center justify-between mt-4 pt-3 border-t border-[var(--border)]">
           <button
             onClick={e => { e.stopPropagation(); setExpanded(x => !x) }}
-            className="flex items-center gap-1.5 text-[12px] font-medium text-[var(--text-dim)] hover:text-amber-400 transition-colors"
+            className="tl-tap flex items-center gap-1.5 text-[12px] font-medium text-[var(--text-dim)] hover:text-amber-400 transition-colors"
           >
             <ChevronDown size={12} className={`transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
             {expanded ? 'show less' : 'how to use'}
@@ -167,14 +167,14 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
             <button
               onClick={e => { e.stopPropagation(); toggleBookmark(concept.id) }}
               title={bookmarked ? 'Remove from Studying Now' : 'Pin to Studying Now'}
-              className={`flex items-center gap-1 text-[12px] font-medium transition-colors ${bookmarked ? 'text-amber-400 hover:text-amber-300' : 'text-[var(--text-faint)] hover:text-[var(--text-dim)]'}`}
+              className={`tl-tap flex items-center gap-1 text-[12px] font-medium transition-colors ${bookmarked ? 'text-amber-400 hover:text-amber-300' : 'text-[var(--text-faint)] hover:text-[var(--text-dim)]'}`}
             >
               <Bookmark size={12} className={bookmarked ? 'fill-amber-400' : ''} />
               {bookmarked ? 'pinned' : 'pin'}
             </button>
             <button
               onClick={e => { e.stopPropagation(); setNotesOpen(x => !x) }}
-              className={`flex items-center gap-1 text-[12px] font-medium transition-colors ${hasNote ? 'text-amber-400 hover:text-amber-300' : 'text-[var(--text-faint)] hover:text-[var(--text-dim)]'}`}
+              className={`tl-tap flex items-center gap-1 text-[12px] font-medium transition-colors ${hasNote ? 'text-amber-400 hover:text-amber-300' : 'text-[var(--text-faint)] hover:text-[var(--text-dim)]'}`}
             >
               <StickyNote size={12} />
               {hasNote ? 'note' : 'add note'}

@@ -110,7 +110,7 @@ export function Calendar() {
 
   return (
     <div className="flex-1 overflow-y-auto bg-[var(--bg)]">
-      <div className="max-w-5xl mx-auto px-6 md:px-8 py-8 space-y-8">
+      <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 md:py-8 space-y-6 md:space-y-8">
 
         {/* Header */}
         <div className="flex items-end justify-between gap-6 tl-page-head">
@@ -143,7 +143,10 @@ export function Calendar() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
+        {/* Single column on phones. This was a hardcoded three-column grid with
+            no mobile branch, which forced the page 388px wide inside a 375px
+            screen and clipped every card in the process. */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
 
           {/* Upcoming FOMC */}
           <div className="col-span-1 space-y-3">

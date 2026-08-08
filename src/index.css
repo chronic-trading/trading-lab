@@ -481,3 +481,48 @@ html[data-theme="dark"] .tl-card {
 @media (max-width: 767px) {
   .tl-touch { min-height: 44px; min-width: 44px; }
 }
+
+/* ── Mobile readability ──────────────────────────────────────────────────────
+   The UI was drawn at desktop viewing distance, where 10px labels are fine.
+   82% of real traffic is phones, and 327 elements use text-[10px] — below the
+   ~11px floor that stays legible at arm's length on a handset. Rather than edit
+   every call site (and lose the tighter desktop density that works), lift the
+   two smallest tiers on phones only.
+
+   Selector note: `html &` rather than a bare class. Tailwind v4 emits arbitrary
+   utilities in a late layer, so a single-class rule here loses on source order
+   no matter where it sits in this file — the same ordering trap that made
+   `md:min-h-0` fail against `min-h-[44px]`. Adding the element bumps
+   specificity so it wins outright. */
+@media (max-width: 767px) {
+  html .text-\[10px\] { font-size: 11.5px; }
+  html .text-\[11px\] { font-size: 12px; }
+  html .text-\[9px\]  { font-size: 11px; }
+}
+
+/* Small inline controls on phones.
+   .tl-tap  — text actions ("pin", "how to use") sit at 18px tall, well under
+              the 44px touch minimum. They are standalone, so growing the
+              button's own height is enough.
+   .tl-dot  — the 1-5 mastery rating dots are 20px and ADJACENT, so the usual
+              trick of expanding the hit area past the visual bounds would make
+              neighbouring dots overlap and steal each other's taps. They get
+              real size instead; five 32px dots plus gaps still fit the card.
+   Both are media queries rather than md: variants for the ordering reason
+   documented above. */
+@media (max-width: 767px) {
+  .tl-tap { min-height: 44px; }
+  .tl-dot { width: 32px; height: 32px; }
+}
+
+/* Wide letter-spacing costs real width, and the labels that use it are the ones
+   in the narrowest columns — 3- and 4-up stat grids where each cell is ~52px.
+   Lifting those labels to 11.5px above pushed several past their column. Drop
+   the tracking on phones: it is a stylistic flourish at this size, and the
+   column width is not negotiable. */
+@media (max-width: 767px) {
+  html .text-\[10px\].tracking-wider,
+  html .text-\[10px\].tracking-widest,
+  html .text-\[11px\].tracking-wider,
+  html .text-\[11px\].tracking-widest { letter-spacing: 0; }
+}

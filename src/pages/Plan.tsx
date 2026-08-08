@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { useRules } from '../hooks/useRules'
 import { useKeyLevels } from '../hooks/useKeyLevels'
+import { INSTRUMENTS } from '../data/instruments'
 import type { Instrument } from '../types'
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -119,12 +120,16 @@ function RiskCalc({ defaultInstrument }: { defaultInstrument: Instrument }) {
   return (
     <div className="space-y-4">
       {/* Instrument */}
-      <div className="grid grid-cols-4 gap-1.5">
-        {(['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]).map(i => (
+      {/* Futures lead, matching the rest of the app. This picker offered forex
+          only, even though SPECS above already carries the correct NQ/ES/GC/SI
+          tick sizes — so the contract sizing this tool exists to calculate was
+          unreachable for the instruments it actually teaches. */}
+      <div className="grid grid-cols-3 md:grid-cols-5 gap-1.5">
+        {INSTRUMENTS.map(i => (
           <button
             key={i}
             onClick={() => setInst(i)}
-            className={`py-2 rounded-xl border text-[11px] font-bold transition-all
+            className={`tl-touch py-2 rounded-xl border text-[11px] font-bold transition-all
               ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-faint)] hover:border-[var(--border-strong)]'}`}
             style={{ fontFamily: "'JetBrains Mono', monospace" }}
           >
@@ -208,7 +213,7 @@ export function Plan() {
 
   // Plan form state
   const today = new Date().toISOString().slice(0, 10)
-  const [instrument, setInstrument] = useState<Instrument>('EURUSD')
+  const [instrument, setInstrument] = useState<Instrument>('NQ')
   const [date,        setDate]       = useState(today)
   const [weeklyBias,  setWeeklyBias] = useState<Bias>('bullish')
   const [dailyBias,   setDailyBias]  = useState<Bias>('bullish')
@@ -294,7 +299,7 @@ export function Plan() {
               </div>
 
               {/* Quarterly phases */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Weekly Phase</label>
                   <div className="flex gap-1.5">{(['Q1','Q2','Q3','Q4'] as QPhase[]).map(q => <QBtn key={q} phase={q} current={weeklyPhase} onChange={setWeeklyPhase} />)}</div>
@@ -306,7 +311,7 @@ export function Plan() {
               </div>
 
               {/* Bias */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-[11px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Weekly Bias</label>
                   <div className="flex gap-1.5">
