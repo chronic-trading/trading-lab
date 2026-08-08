@@ -4,6 +4,7 @@ import { X, StickyNote, RotateCcw } from 'lucide-react'
 import { syncUserDataField } from '../lib/sync'
 import { getCurrentUserId } from '../lib/currentUser'
 import { useModalBackButton } from '../hooks/useModalBackButton'
+import { overlayFade, useDrawerMotion, DRAWER_OVERLAY_CLASS, DRAWER_PANEL_CLASS } from '../lib/motion'
 
 const KEY = 'trading-lab-session-notes'
 
@@ -18,6 +19,7 @@ interface Props {
 
 export function SessionNotes({ open, onClose }: Props) {
   useModalBackButton(open, onClose)
+  const drawer = useDrawerMotion(440)
   const [note, setNote] = useState(load)
 
   useEffect(() => {
@@ -31,20 +33,18 @@ export function SessionNotes({ open, onClose }: Props) {
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-stretch justify-end bg-black/50 backdrop-blur-sm"
+          {...overlayFade}
+          className={DRAWER_OVERLAY_CLASS}
           onClick={onClose}
         >
           <motion.div
-            initial={{ x: 380 }}
-            animate={{ x: 0 }}
-            exit={{ x: 380 }}
-            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+            {...drawer}
             onClick={e => e.stopPropagation()}
-            className="w-[440px] h-full bg-[var(--bg-elev)] border-l border-[var(--border)] flex flex-col shadow-2xl"
+            className={`${DRAWER_PANEL_CLASS} sm:w-[440px]`}
           >
+            <div className="sm:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
+              <div className="w-10 h-1 rounded-full bg-[var(--surface-hover)]" />
+            </div>
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center">

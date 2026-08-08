@@ -5,6 +5,7 @@ import { useJournal } from '../hooks/useJournal'
 import { useDrawdown } from '../hooks/useDrawdown'
 import { POINT_VALUES } from '../hooks/useSettings'
 import { useModalBackButton } from '../hooks/useModalBackButton'
+import { overlayFade, useDrawerMotion, DRAWER_OVERLAY_CLASS, DRAWER_PANEL_CLASS } from '../lib/motion'
 
 interface Props {
   open: boolean
@@ -15,6 +16,7 @@ export function DrawdownGuard({ open, onClose }: Props) {
   const { entries } = useJournal()
   const { settings, update } = useDrawdown()
   useModalBackButton(open, onClose)
+  const drawer = useDrawerMotion(440)
   const [editingLimit,  setEditingLimit]  = useState(false)
   const [editingTarget, setEditingTarget] = useState(false)
   const [limitInput,    setLimitInput]    = useState('')
@@ -55,16 +57,18 @@ export function DrawdownGuard({ open, onClose }: Props) {
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-stretch justify-end bg-black/50 backdrop-blur-sm"
+          {...overlayFade}
+          className={DRAWER_OVERLAY_CLASS}
           onClick={onClose}
         >
           <motion.div
-            initial={{ x: 440 }} animate={{ x: 0 }} exit={{ x: 440 }}
-            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+            {...drawer}
             onClick={e => e.stopPropagation()}
-            className="w-[440px] h-full bg-[var(--bg-elev)] border-l border-[var(--border)] flex flex-col shadow-2xl"
+            className={`${DRAWER_PANEL_CLASS} sm:w-[440px]`}
           >
+            <div className="sm:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
+              <div className="w-10 h-1 rounded-full bg-[var(--surface-hover)]" />
+            </div>
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">

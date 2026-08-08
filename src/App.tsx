@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react'
+import { MotionConfig } from 'framer-motion'
 import {
   FlaskConical, Package, Beaker, Network,
   LayoutTemplate, BookOpen, LineChart, StickyNote,
@@ -203,10 +204,12 @@ function MobileBottomNav({
       {/* More sheet */}
       {moreOpen && (
         <div
-          className="md:hidden fixed inset-0 z-30"
+          /* The scrim was fully transparent, so the sheet had nothing to sit
+             against and the page behind it stayed at full contrast. */
+          className="tl-scrim-in md:hidden fixed inset-0 z-30 bg-black/40"
           onClick={() => setMoreOpen(false)}>
           <div
-            className="tl-darkchrome absolute inset-x-0 bg-[#16130f] border-t border-white/8 p-4 pb-2 shadow-2xl"
+            className="tl-sheet-in tl-darkchrome absolute inset-x-0 bg-[#16130f] border-t border-white/8 p-4 pb-2 shadow-2xl"
             style={{ bottom: `calc(56px + env(safe-area-inset-bottom))` }}
             onClick={e => e.stopPropagation()}>
             {/* Grouped the same way as the desktop sidebar, so the two navs
@@ -467,6 +470,15 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
   }
 
   return (
+    /* reducedMotion="user" makes every motion component in the app honour the
+       OS "reduce motion" setting. index.css already had a
+       prefers-reduced-motion block, but that only governs CSS transitions and
+       animations — framer-motion writes inline transforms from JS, so all
+       sixteen animated files ignored it and still played at full amplitude for
+       users who had explicitly asked for less. Transforms are dropped and
+       opacity fades are kept, which is the documented behaviour and the right
+       trade: the interface stays legible without the movement. */
+    <MotionConfig reducedMotion="user">
     <div className="flex flex-col h-screen bg-[var(--bg)] overflow-hidden">
       {/* tl-safe-top/x: with viewport-fit=cover the page now extends under the
           notch and the rounded corners, so the header has to inset itself or the
@@ -577,7 +589,11 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             pb-14 left the last row of content behind the indicator on an
             iPhone. Scoped to phones in CSS — an inline style would out-specify
             md:pb-0 and pad the desktop layout too. */}
-        <main ref={mainRef} className="tl-main-pad flex-1 flex flex-col overflow-hidden md:pb-0">
+        {/* key={tab} restarts the entrance animation on every navigation, so a
+            tab change reads as new content arriving rather than a hard cut.
+            Keying the <main> also resets its scroll position, which is the
+            behaviour you want when moving between tools anyway. */}
+        <main key={tab} ref={mainRef} className="tl-page-in tl-main-pad flex-1 flex flex-col overflow-hidden md:pb-0">
 
           {/* Sub-tab strip — only for a destination that has children */}
           {(() => {
@@ -696,5 +712,6 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
       )}
 
     </div>
+    </MotionConfig>
   )
 }

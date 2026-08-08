@@ -683,3 +683,66 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 @media (max-width: 767px) {
   .tl-main-pad { padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Motion
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Strong decelerate. Things arrive quickly then ease into place, which is
+     what makes movement feel driven by the touch rather than by a timer. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Press feedback. A touch UI with no press state feels dead on a phone: there
+   is no cursor and no hover, so the tap itself has to answer. Scoped to touch
+   pointers so desktop keeps hover as its feedback channel.
+
+   Deliberately excluded: .tl-inline (glossary links inside prose — scaling a
+   word mid-paragraph reflows the line) and anything inside the chart, where a
+   transform would fight the canvas. */
+@media (hover: none) and (pointer: coarse) {
+  button:not(.tl-inline):not(:disabled),
+  [role="button"]:not(.tl-inline) {
+    transition: transform 0.14s var(--ease-out), opacity 0.14s var(--ease-out),
+                background-color 0.14s var(--ease-out), border-color 0.14s var(--ease-out);
+  }
+  button:not(.tl-inline):not(:disabled):active,
+  [role="button"]:not(.tl-inline):active {
+    transform: scale(0.97);
+  }
+  /* Full-bleed rows would look like the whole page shrank, so they dim
+     instead of scaling. */
+  .tl-row:active { transform: none; opacity: 0.7; }
+}
+
+/* The bottom-nav More sheet is plain conditional markup rather than a
+   framer component, so its entrance lives here. Sheets rise from the edge they
+   are anchored to; a fade would read as a dialog and break the relationship
+   with the bar it came from. */
+@keyframes tl-sheet-in {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@keyframes tl-scrim-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.tl-sheet-in { animation: tl-sheet-in 0.26s var(--ease-out) both; }
+.tl-scrim-in { animation: tl-scrim-in 0.2s var(--ease-out) both; }
+
+/* Page changes. A hard cut between tabs reads as a page load; a short rise
+   reads as the same surface changing contents. Short enough not to sit between
+   the user and the app — this fires on every navigation. */
+@keyframes tl-page-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tl-page-in { animation: tl-page-in 0.22s var(--ease-out) both; }
+
+/* The existing prefers-reduced-motion block above already collapses animation
+   and transition durations to ~0, so everything here degrades to an instant
+   state change for users who ask for that. framer-motion is handled separately
+   by MotionConfig reducedMotion="user" in App.tsx, because inline JS transforms
+   are not governed by CSS. */

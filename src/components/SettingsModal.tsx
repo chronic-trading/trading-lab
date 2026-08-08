@@ -5,6 +5,7 @@ import { useSettings, POINT_VALUES } from '../hooks/useSettings'
 import { INSTRUMENTS } from '../data/instruments'
 import type { Instrument } from '../types'
 import { useModalBackButton } from '../hooks/useModalBackButton'
+import { overlayFade, sheetPanel, SHEET_OVERLAY_CLASS } from '../lib/motion'
 
 const BACKUP_KEYS = [
   'trading-lab-journal',
@@ -102,18 +103,20 @@ export function SettingsModal({ open, onClose }: Props) {
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          {...overlayFade}
+          className={SHEET_OVERLAY_CLASS}
           onClick={onClose}
         >
           <motion.div
-            initial={{ scale: 0.95, opacity: 0, y: 8 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            exit={{ scale: 0.95, opacity: 0, y: 8 }}
-            transition={{ duration: 0.17 }}
-            className="w-full max-w-sm bg-[var(--bg-elev)] border border-[var(--border)] rounded-2xl shadow-2xl overflow-hidden"
+            {...sheetPanel}
+            className="w-full sm:max-w-sm bg-[var(--bg-elev)] border-t sm:border border-[var(--border)] rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden"
             onClick={e => e.stopPropagation()}
           >
+            {/* Grab handle. Purely an affordance — it is what tells you this
+                panel belongs to the bottom edge and can be dismissed downward. */}
+            <div className="sm:hidden flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1 rounded-full bg-[var(--surface-hover)]" />
+            </div>
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
@@ -127,7 +130,11 @@ export function SettingsModal({ open, onClose }: Props) {
               </button>
             </div>
 
-            <div className="p-5 space-y-5 max-h-[70vh] overflow-y-auto">
+            {/* dvh, not vh: on iOS vh is the tallest the viewport ever gets, so
+                a 70vh sheet plus header and footer overflows while the URL bar
+                is showing and the footer sits offscreen. Lower on phones to
+                leave room for the handle, header and action row. */}
+            <div className="p-5 space-y-5 max-h-[58dvh] sm:max-h-[70vh] overflow-y-auto">
 
               {/* Account Size */}
               <div className="space-y-1.5">
@@ -239,8 +246,12 @@ export function SettingsModal({ open, onClose }: Props) {
               </div>
             </div>
 
-            {/* Footer */}
-            <div className="flex gap-2.5 px-5 py-4 border-t border-[var(--border)]">
+            {/* Footer. The bottom inset keeps the actions clear of the iOS home
+                indicator now that the sheet sits flush against the screen edge. */}
+            <div
+              className="flex gap-2.5 px-5 py-4 border-t border-[var(--border)]"
+              style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+            >
               <button onClick={onClose} className="flex-1 py-2.5 rounded-xl border border-[var(--border)] text-[12px] text-[var(--text-dim)] hover:text-[var(--text)] hover:border-[var(--border-strong)] transition-all">
                 Cancel
               </button>

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, Plus, Trash2, Shield, ToggleLeft, ToggleRight } from 'lucide-react'
 import { useRules, type RuleCategory } from '../hooks/useRules'
 import { useModalBackButton } from '../hooks/useModalBackButton'
+import { overlayFade, useDrawerMotion, DRAWER_OVERLAY_CLASS, DRAWER_PANEL_CLASS } from '../lib/motion'
 
 const catConfig: Record<RuleCategory, { label: string; color: string }> = {
   entry:   { label: 'Entry',   color: 'text-blue-400 bg-blue-500/10 border-blue-500/25'     },
@@ -20,6 +21,7 @@ interface Props {
 
 export function TradingRules({ open, onClose }: Props) {
   useModalBackButton(open, onClose)
+  const drawer = useDrawerMotion(480)
   const { rules, addRule, deleteRule, toggleActive, updateText } = useRules()
   const [newText,    setNewText]    = useState('')
   const [newCat,     setNewCat]     = useState<RuleCategory>('entry')
@@ -43,16 +45,18 @@ export function TradingRules({ open, onClose }: Props) {
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 flex items-stretch justify-end bg-black/50 backdrop-blur-sm"
+          {...overlayFade}
+          className={DRAWER_OVERLAY_CLASS}
           onClick={onClose}
         >
           <motion.div
-            initial={{ x: 420 }} animate={{ x: 0 }} exit={{ x: 420 }}
-            transition={{ type: 'spring', damping: 28, stiffness: 300 }}
+            {...drawer}
             onClick={e => e.stopPropagation()}
-            className="w-[480px] h-full bg-[var(--bg-elev)] border-l border-[var(--border)] flex flex-col shadow-2xl"
+            className={`${DRAWER_PANEL_CLASS} sm:w-[480px]`}
           >
+            <div className="sm:hidden flex justify-center pt-3 pb-1 flex-shrink-0">
+              <div className="w-10 h-1 rounded-full bg-[var(--surface-hover)]" />
+            </div>
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
               <div className="flex items-center gap-3">
