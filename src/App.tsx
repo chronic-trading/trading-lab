@@ -3,7 +3,7 @@ import {
   FlaskConical, Package, Beaker, Network,
   LayoutTemplate, BookOpen, LineChart, StickyNote,
   Shield, ClipboardCheck, Brain, CalendarDays, Settings, LogOut, BarChart2, Building2,
-  ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X, MoreVertical,
+  ShieldAlert, Smile, GraduationCap, Crosshair, Grid3X3, X,
   Gamepad2, Layers, Sun, Moon, Gauge, LayoutDashboard, Search,
 } from 'lucide-react'
 import { useTheme } from './hooks/useTheme'
@@ -135,10 +135,24 @@ function parentOf(tab: Tab): NavItem {
 // stays thumb-friendly — the rest live in the More sheet).
 const MOBILE_PRIMARY: Tab[] = ['home', 'grader', 'builder', 'journal']
 
-// Mobile bottom nav
+type MobileTool = { label: string; Icon: React.ElementType; color: string; onClick: () => void }
+
+// Mobile bottom nav.
+//
+// This sheet is the *only* menu on mobile. Pages and utility tools used to live
+// in two separate ones — pages under this More button, tools under a ⋮ in the
+// top-right corner — so "where is Notes?" had two places to look and no way to
+// tell which. Worse, the top-right corner is the hardest point on a phone to
+// reach one-handed, and Search existed only there and on ⌘K, so on a touch
+// device it was unreachable entirely. Everything now hangs off the thumb.
 function MobileBottomNav({
-  tab, setTab,
-}: { tab: Tab; setTab: (t: Tab) => void }) {
+  tab, setTab, tools, onSearch,
+}: {
+  tab: Tab
+  setTab: (t: Tab) => void
+  tools: MobileTool[]
+  onSearch: () => void
+}) {
   const [moreOpen, setMoreOpen] = useState(false)
   const primary   = tabs.filter(t => MOBILE_PRIMARY.includes(t.id))
   const secondary = tabs.filter(t => !MOBILE_PRIMARY.includes(t.id))
@@ -197,7 +211,16 @@ function MobileBottomNav({
             onClick={e => e.stopPropagation()}>
             {/* Grouped the same way as the desktop sidebar, so the two navs
                 teach the same map of the app rather than two different ones. */}
-            <div className="max-h-[58vh] overflow-y-auto pb-2 space-y-3">
+            <div className="max-h-[62vh] overflow-y-auto pb-2 space-y-3">
+              {/* Search leads: it reaches any tab or tool in one tap, and it had
+                  no mobile affordance at all before — ⌘K needs a keyboard. */}
+              <button
+                onClick={() => { onSearch(); setMoreOpen(false) }}
+                className="w-full flex items-center gap-2.5 px-3.5 min-h-[44px] rounded-2xl border border-white/10 bg-white/[0.06] text-slate-300 active:border-white/25 active:text-white transition-all">
+                <Search size={16} />
+                <span className="text-[13px] font-semibold">Search everything</span>
+              </button>
+
               {NAV_GROUPS.map(group => {
                 // Flatten parents with their children — on mobile there is no
                 // sub-tab strip, so every destination must be reachable here.
@@ -229,6 +252,22 @@ function MobileBottomNav({
                   </div>
                 )
               })}
+
+              {/* Utility tools — modals and external links rather than tabs, so
+                  they get their own group instead of sitting among the pages. */}
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-600 mb-2 px-1">Tools</p>
+                <div className="grid grid-cols-4 gap-2">
+                  {tools.map(({ label, Icon, color, onClick }) => (
+                    <button key={label}
+                      onClick={() => { onClick(); setMoreOpen(false) }}
+                      className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-white/8 bg-white/[0.04] text-slate-400 active:text-slate-200 active:border-white/20 transition-all">
+                      <Icon size={17} className={color} />
+                      <span className="text-[10px] font-bold">{label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -346,7 +385,6 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
   const [propsOpen,     setPropsOpen]     = useState(false)
   const [drawdownOpen,  setDrawdownOpen]  = useState(false)
   const [mindsetOpen,   setMindsetOpen]   = useState(false)
-  const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
   const [paletteOpen,   setPaletteOpen]   = useState(false)
   const [focusConcept,  setFocusConcept]  = useState<string | null>(null)
   const { loadSharedBuild }             = useBuilds()
@@ -486,44 +524,12 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
             )}
           </div>
 
-          {/* Mobile: just the ⋮ tools button — clock gets its own row below */}
-          <div className="flex md:hidden items-center gap-2 flex-shrink-0">
-            <button
-              onClick={() => setMobileToolsOpen(o => !o)}
-              className={`flex items-center justify-center w-8 h-8 rounded-xl border transition-all ${
-                mobileToolsOpen ? 'border-[var(--accent-ring)] bg-[var(--accent-soft)] text-[var(--accent-ink)]' : 'border-[var(--border)] text-[var(--text-dim)]'
-              }`}>
-              {mobileToolsOpen ? <X size={14} /> : <MoreVertical size={14} />}
-            </button>
-          </div>
+          {/* No mobile utility menu here any more. It used to be a ⋮ in this
+              corner — the furthest point from a right thumb, and a second place
+              to hunt for things. Tools now live in the bottom nav's More sheet
+              alongside the pages. */}
         </div>
 
-        {/* Mobile tools sheet */}
-        {mobileToolsOpen && (
-          <div className="md:hidden border-t border-[var(--border)] bg-[var(--bg-elev)] px-4 py-3">
-            <div className="grid grid-cols-4 gap-2">
-              {[
-                { label: 'Guard',    Icon: ShieldAlert, color: 'text-orange-400', onClick: () => { setDrawdownOpen(true);  setMobileToolsOpen(false) } },
-                { label: 'Mindset',  Icon: Smile,       color: 'text-violet-400', onClick: () => { setMindsetOpen(true);   setMobileToolsOpen(false) } },
-                { label: 'Props',    Icon: Building2,   color: 'text-emerald-400',onClick: () => { setPropsOpen(true);     setMobileToolsOpen(false) } },
-                { label: 'Quiz',     Icon: Brain,       color: 'text-purple-400', onClick: () => { setQuizOpen(true);      setMobileToolsOpen(false) } },
-                { label: 'Rules',    Icon: Shield,      color: 'text-red-400',    onClick: () => { setRulesOpen(true);     setMobileToolsOpen(false) } },
-                { label: 'Notes',    Icon: StickyNote,  color: 'text-amber-400',  onClick: () => { setNotesOpen(true);     setMobileToolsOpen(false) } },
-                { label: 'Settings', Icon: Settings,    color: 'text-[var(--text-dim)]',  onClick: () => { setSettingsOpen(true);  setMobileToolsOpen(false) } },
-                { label: 'Trainer',  Icon: Crosshair,   color: 'text-cyan-400',   onClick: () => { window.open('https://chronic-trading.github.io/ict-replay/', '_blank');   setMobileToolsOpen(false) } },
-                { label: 'Glossary', Icon: BookOpen,    color: 'text-teal-400',   onClick: () => { window.open('https://chronic-trading.github.io/ict-glossary/', '_blank'); setMobileToolsOpen(false) } },
-                { label: theme === 'light' ? 'Dark' : 'Light', Icon: theme === 'light' ? Moon : Sun, color: 'text-[var(--accent-ink)]', onClick: () => { toggle(); setMobileToolsOpen(false) } },
-                ...(signOut ? [{ label: 'Sign out', Icon: LogOut, color: 'text-red-400', onClick: () => { signOut(); setMobileToolsOpen(false) } }] : []),
-              ].map(({ label, Icon, color, onClick }) => (
-                <button key={label} onClick={onClick}
-                  className="flex flex-col items-center gap-1.5 py-2.5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] transition-all active:border-[var(--border-strong)]">
-                  <Icon size={16} className={color} />
-                  <span className={`text-[10px] font-bold ${color}`}>{label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
         {/* Compact clock row — used below 1560px, where the full clock can't share
             the header row with the logo + utility buttons. */}
         <div className="min-[1560px]:hidden flex items-center px-4 pb-2 pt-0.5 gap-2">
@@ -647,7 +653,26 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
       )}
 
       {/* Mobile bottom nav */}
-      <MobileBottomNav tab={tab} setTab={setTab} />
+      {/* Same tools the desktop header exposes, in the same order, so the two
+          layouts teach one map of the app rather than two. */}
+      <MobileBottomNav
+        tab={tab}
+        setTab={setTab}
+        onSearch={() => setPaletteOpen(true)}
+        tools={[
+          { label: 'Guard',    Icon: ShieldAlert, color: 'text-orange-400',        onClick: () => setDrawdownOpen(true) },
+          { label: 'Mindset',  Icon: Smile,       color: 'text-violet-400',        onClick: () => setMindsetOpen(true)  },
+          { label: 'Props',    Icon: Building2,   color: 'text-emerald-400',       onClick: () => setPropsOpen(true)    },
+          { label: 'Quiz',     Icon: Brain,       color: 'text-purple-400',        onClick: () => setQuizOpen(true)     },
+          { label: 'Rules',    Icon: Shield,      color: 'text-red-400',           onClick: () => setRulesOpen(true)    },
+          { label: 'Notes',    Icon: StickyNote,  color: 'text-amber-400',         onClick: () => setNotesOpen(true)    },
+          { label: 'Settings', Icon: Settings,    color: 'text-[var(--text-dim)]', onClick: () => setSettingsOpen(true) },
+          { label: 'Trainer',  Icon: Crosshair,   color: 'text-cyan-400',          onClick: () => window.open('https://chronic-trading.github.io/ict-replay/', '_blank') },
+          { label: 'Glossary', Icon: BookOpen,    color: 'text-teal-400',          onClick: () => window.open('https://chronic-trading.github.io/ict-glossary/', '_blank') },
+          { label: theme === 'light' ? 'Dark' : 'Light', Icon: theme === 'light' ? Moon : Sun, color: 'text-[var(--accent-ink)]', onClick: toggle },
+          ...(signOut ? [{ label: 'Sign out', Icon: LogOut, color: 'text-red-400', onClick: signOut }] : []),
+        ]}
+      />
 
       {/* Prop Firms modal */}
       {propsOpen && (
