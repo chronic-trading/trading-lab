@@ -1,4 +1,4 @@
-import type { Instrument } from '../types'
+import { INSTRUMENTS } from '../data/instruments'
 import { KILLZONES, type JournalEntry } from '../hooks/useJournal'
 import { getConceptById } from '../data/concepts'
 import { POINT_VALUES } from '../hooks/useSettings'
@@ -312,9 +312,10 @@ export function JournalAnalytics({ entries }: Props) {
     return { kz, wins: kw, total: ke.length, pts: kPts, rate: ke.length > 0 ? Math.round((kw / ke.length) * 100) : 0 }
   }).filter(s => s.total > 0)
 
-  // Instrument breakdown
-  const instruments = ['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]
-  const instStats = instruments.map(inst => {
+  // Instrument breakdown. Must cover every instrument the app can log, not just
+  // forex — this list previously omitted the futures contracts, so an NQ trade
+  // was silently dropped from the breakdown instead of appearing in it.
+  const instStats = INSTRUMENTS.map(inst => {
     const ie = entries.filter(e => e.instrument === inst)
     const iw = ie.filter(e => e.result === 'win').length
     return { inst, total: ie.length, wins: iw, rate: ie.length > 0 ? Math.round((iw / ie.length) * 100) : 0 }

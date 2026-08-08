@@ -32,7 +32,7 @@ export function MyBuilds({ onLoadBuild }: Props) {
   return (
     <>
       <div className="flex-1 overflow-y-auto">
-        <div className="max-w-3xl mx-auto w-full px-6 md:px-8 py-6 md:py-8 space-y-4">
+        <div className="max-w-3xl mx-auto w-full px-4 md:px-8 py-6 md:py-8 space-y-4">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="tl-title-sm">My Builds</h2>

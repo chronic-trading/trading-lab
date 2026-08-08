@@ -1062,7 +1062,7 @@ export const concepts: Concept[] = [
      charts, Discords and YouTube videos actually use. Traders arrive already
      saying "BOS" and "CHoCH", and the two are constantly confused with each
      other — which is a structural mistake, not a naming one, so each entry is
-     explicit about what separates them.                                      */
+     explicit about what separates them.                                      */
   {
     id: 'supply-demand-zone',
     name: 'Supply & Demand Zone',
@@ -1073,14 +1073,14 @@ export const concepts: Concept[] = [
       'The area a strong move originated from, drawn as a zone rather than a line: demand below price, supply above. It is the broader retail cousin of the order block, and the distinction matters — an order block is the specific candle before displacement, while a supply or demand zone is the whole base the move left behind. The order block is the refined version of the same idea.',
     howToUse:
       'Mark the consolidation immediately before a strong impulsive move, then wait for price to return to it. Prefer zones that are still fresh (untested), that produced displacement rather than a drift, and that sit on the correct side of the dealing range — demand in discount, supply in premium. Once you can identify the order block inside the zone, trade that instead: same idea, tighter risk.',
-    instruments: ['EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDUSD', 'NZDUSD'],
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
     tags: ['supply', 'demand', 'zone', 'smc', 'base'],
     synergies: [
       { conceptId: 'order-block', strength: 3, note: 'The order block is the refined version — same logic, a fraction of the risk.' },
       { conceptId: 'premium-discount', strength: 2, note: 'A demand zone in premium is the common trap; position zones against the dealing range.' },
       { conceptId: 'displacement', strength: 2, note: 'A zone is only worth marking if what left it was impulsive.' },
     ],
-  },
+  },
   {
     id: 'daily-profiles',
     name: 'Daily Profiles',
@@ -1091,7 +1091,7 @@ export const concepts: Concept[] = [
       'The handful of shapes a trading day actually takes: a normal day that sets its high or low in one session and trends away from it, a consolidation day that never expands, a reversal day that runs one side before turning, and a seek-and-destroy day that takes both sides and trends nowhere. Naming the likely profile early tells you which of your models is even usable that day.',
     howToUse:
       'Form a view before the session from the weekly draw and where price sits in the range, then let the first session confirm or reject it. The practical value is negative: recognising a seek-and-destroy day, where both sides get swept and nothing follows through, is what keeps you from forcing three losing entries into chop.',
-    instruments: ['EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDUSD', 'NZDUSD'],
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
     tags: ['daily profile', 'seek and destroy', 'consolidation', 'reversal day'],
     synergies: [
       { conceptId: 'daily-bias', strength: 3, note: 'The profile is the shape your daily bias is expected to arrive in.' },
@@ -1110,7 +1110,7 @@ export const concepts: Concept[] = [
       'The 50% level of an order block — the midpoint between the candle\'s open and close, or its full range. Rather than entering at the edge of a block and risking the whole zone, the mean threshold is where the block is considered genuinely engaged, which halves the distance to invalidation. The order block equivalent of consequent encroachment on an FVG.',
     howToUse:
       'Mark the block, then mark its 50%. Let price trade to that level before entering and place the stop beyond the block\'s far edge. The cost is missed trades on blocks that only tag the edge; the benefit is that the ones you do take carry roughly half the risk, which is what moves an ordinary win rate onto a workable R.',
-    instruments: ['EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDUSD', 'NZDUSD'],
+    instruments: ['NQ', 'ES', 'GC', 'SI'],
     tags: ['mean threshold', '50%', 'order block', 'refinement', 'entry'],
     synergies: [
       { conceptId: 'order-block', strength: 3, note: 'Meaningless without a block to measure — this is purely a refinement of the OB entry.' },

@@ -9,9 +9,9 @@ import { useTheme } from '../hooks/useTheme'
 import { useTradeGrades } from '../hooks/useTradeGrades'
 import { getConceptById } from '../data/concepts'
 import { GROUPS, ALL_FACTORS, TOTAL_WEIGHT, letterFor, rrAdjust, verdictFor, groupColor } from '../lib/grader'
+import { INSTRUMENTS } from '../data/instruments'
 import type { Instrument } from '../types'
 
-const INSTRUMENTS: Instrument[] = ['NQ', 'ES', 'GC', 'SI', 'EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDUSD', 'NZDUSD']
 const SESSIONS = ['London Open', 'NY AM', 'Silver Bullet AM', 'NY Lunch', 'NY PM', 'Silver Bullet PM', 'London Close', 'Asian Range', 'Outside kill zone']
 
 // ── Gauge ─────────────────────────────────────────────────────────────────────

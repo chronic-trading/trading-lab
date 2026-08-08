@@ -526,3 +526,58 @@ html[data-theme="dark"] .tl-card {
   html .text-\[11px\].tracking-wider,
   html .text-\[11px\].tracking-widest { letter-spacing: 0; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Native-feel layer (phones)
+   None of this existed. The app is also shipped through Capacitor to iOS and
+   Android, where a web page that behaves like a web page is immediately obvious.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* iOS Safari and WKWebView auto-zoom the whole page whenever a focused field is
+   under 16px. Every input here was 12-13px, so tapping any field — logging a
+   trade, adding a key level — lurched the layout and left the user pinching
+   back out. 16px is the threshold, not a preference. */
+@media (max-width: 767px) {
+  html input, html textarea, html select { font-size: 16px; }
+}
+
+/* Kill the grey/blue flash iOS and Android paint over any tapped element, and
+   opt every control out of the legacy 300ms double-tap-to-zoom delay. That
+   delay is the single biggest reason a web UI feels laggy next to a native one. */
+button, a, [role="button"], input, select, textarea, label {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Long-pressing a control on mobile otherwise selects its label or raises the
+   copy/define callout. Chrome (the app frame) should not behave like a document;
+   real content keeps normal selection. */
+button, [role="button"], nav, .tl-darkchrome {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Rotating an iPhone re-flows text larger unless this is pinned. */
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* Scrolling a panel to its end otherwise chains the gesture to the page behind
+   it, so the whole app rubber-bands while you are trying to scroll a list. */
+.overflow-y-auto, .overflow-auto, .overflow-y-scroll {
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe areas. index.html now carries viewport-fit=cover, which is what makes
+   env(safe-area-inset-*) resolve to anything other than zero — without it the
+   values are 0 and this is dead code. The bottom nav already handled its own
+   inset; the header did not, so it sat under the notch. */
+@supports (padding: env(safe-area-inset-top)) {
+  .tl-safe-top   { padding-top:   env(safe-area-inset-top); }
+  .tl-safe-x     { padding-left:  env(safe-area-inset-left);
+                   padding-right: env(safe-area-inset-right); }
+}
+
+/* Content clearance for the fixed bottom nav (56px + home-indicator inset). */
+@media (max-width: 767px) {
+  .tl-main-pad { padding-bottom: calc(56px + env(safe-area-inset-bottom)); }
+}

@@ -430,7 +430,10 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
 
   return (
     <div className="flex flex-col h-screen bg-[var(--bg)] overflow-hidden">
-      <header className="relative flex-shrink-0 bg-[var(--bg-elev)] border-b border-[var(--border)] shadow-[0_6px_20px_-14px_rgba(74,58,28,0.22)] z-20">
+      {/* tl-safe-top/x: with viewport-fit=cover the page now extends under the
+          notch and the rounded corners, so the header has to inset itself or the
+          logo sits behind the camera cutout on an iPhone. */}
+      <header className="tl-safe-top tl-safe-x relative flex-shrink-0 bg-[var(--bg-elev)] border-b border-[var(--border)] shadow-[0_6px_20px_-14px_rgba(74,58,28,0.22)] z-20">
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-amber-500/40 to-transparent" />
         <div className="relative flex items-center px-4 md:px-6 h-12 md:h-16 gap-4">
 
@@ -563,7 +566,12 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         </nav>
 
         {/* Main content — extra bottom padding on mobile for the bottom nav */}
-        <main ref={mainRef} className="flex-1 flex flex-col overflow-hidden md:pb-0 pb-14">
+        {/* tl-main-pad: the bottom nav is 56px PLUS the home-indicator inset,
+            which is only non-zero now that viewport-fit=cover is set. A flat
+            pb-14 left the last row of content behind the indicator on an
+            iPhone. Scoped to phones in CSS — an inline style would out-specify
+            md:pb-0 and pad the desktop layout too. */}
+        <main ref={mainRef} className="tl-main-pad flex-1 flex flex-col overflow-hidden md:pb-0">
 
           {/* Sub-tab strip — only for a destination that has children */}
           {(() => {

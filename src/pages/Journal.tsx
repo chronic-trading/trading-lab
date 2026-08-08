@@ -7,9 +7,9 @@ import { concepts, getConceptById } from '../data/concepts'
 import { useBuilds } from '../hooks/useBuilds'
 import { useTradeGrades } from '../hooks/useTradeGrades'
 import { POINT_VALUES } from '../hooks/useSettings'
+import { INSTRUMENTS as instruments } from '../data/instruments'
 import type { Instrument } from '../types'
 
-const instruments: Instrument[] = ['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]
 const resultConfig = {
   win:       { label: 'Win',       icon: TrendingUp,   color: 'text-emerald-400', bg: 'bg-emerald-500/10 border-emerald-500/30' },
   loss:      { label: 'Loss',      icon: TrendingDown, color: 'text-red-400',     bg: 'bg-red-500/10 border-red-500/30'         },
@@ -35,7 +35,7 @@ function LogModal({ open, onClose, onSave, existing }: {
 }) {
   const { builds } = useBuilds()
   const [date,       setDate]       = useState(existing?.date       ?? new Date().toISOString().slice(0,10))
-  const [instrument, setInstrument] = useState<Instrument>(existing?.instrument ?? 'EURUSD')
+  const [instrument, setInstrument] = useState<Instrument>(existing?.instrument ?? 'NQ')
   const [direction,  setDirection]  = useState<'long'|'short'>(existing?.direction ?? 'long')
   const [result,     setResult]     = useState<'win'|'loss'|'breakeven'>(existing?.result ?? 'win')
   const [mode,       setMode]       = useState<JournalMode>(existing?.mode ?? 'live')
@@ -318,7 +318,7 @@ export function Journal() {
 
       {/* Header */}
       <div className="border-b border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0">
-        <div className="max-w-5xl mx-auto px-5 md:px-6 py-3 flex items-center justify-between gap-2 flex-wrap">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between gap-2 flex-wrap">
         <div>
           <h2 className="tl-title-sm">Trade Journal</h2>
           <p className="text-[11px] text-[var(--text-dim)] mt-0.5">{total} trade{total !== 1 ? 's' : ''} total</p>
@@ -403,7 +403,7 @@ export function Journal() {
 
             {/* Entry list */}
             <div className="flex-1 overflow-y-auto">
-            <div className="max-w-5xl mx-auto px-6 md:px-8 py-5 space-y-3">
+            <div className="max-w-5xl mx-auto px-4 md:px-8 py-5 space-y-3">
               {filtered.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full gap-4">
                   <div className="w-14 h-14 rounded-2xl border-2 border-dashed border-[var(--border)] flex items-center justify-center text-[22px]">📓</div>

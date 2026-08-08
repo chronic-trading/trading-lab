@@ -257,7 +257,7 @@ export function Plan() {
 
         {/* Sub-nav */}
         <div className="border-b border-[var(--border)] bg-[var(--bg-elev)]">
-          <div className="max-w-3xl mx-auto px-5 md:px-8 flex items-center">
+          <div className="max-w-3xl mx-auto px-4 md:px-8 flex items-center">
             {([
               ['plan',    'Session Plan', CalendarDays ],
               ['calc',    'Risk Calc',    Calculator   ],
@@ -277,7 +277,7 @@ export function Plan() {
         </div>
 
         <div className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto px-6 md:px-8 py-6">
+          <div className="max-w-3xl mx-auto px-4 md:px-8 py-6">
 
           {/* SESSION PLAN */}
           {view === 'plan' && (
@@ -288,7 +288,7 @@ export function Plan() {
                   <input type="date" value={date} onChange={e => setDate(e.target.value)}
                     className="bg-[var(--surface)] border border-[var(--border)] rounded-xl px-3 py-1.5 text-[12px] text-[var(--text)] focus:outline-none focus:border-[var(--border-strong)] transition-all" />
                   <div className="flex gap-1.5 flex-wrap">
-                    {(['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]).map(i => (
+                    {INSTRUMENTS.map(i => (
                       <button key={i} onClick={() => setInstrument(i)}
                         className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all
                           ${instrument === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-faint)] hover:border-[var(--border-strong)]'}`}
@@ -599,7 +599,7 @@ function KeyLevelsWidget({ currentInstrument }: { currentInstrument: Instrument 
           <span className="text-[11px] font-bold text-[var(--text)]">Key Levels</span>
         </div>
         <div className="flex flex-wrap gap-1">
-          {(['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]).map(i => (
+          {INSTRUMENTS.map(i => (
             <button key={i} onClick={() => setInst(i)}
               className={`px-1.5 py-0.5 rounded-lg border text-[10px] font-bold transition-all font-mono ${inst === i ? 'bg-amber-500/15 border-amber-500/40 text-amber-300' : 'border-[var(--border)] text-[var(--text-faint)] hover:text-[var(--text-dim)]'}`}>{i}
             </button>
