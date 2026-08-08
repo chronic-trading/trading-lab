@@ -210,15 +210,19 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
       <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-5">
 
         {/* ── Greeting ── */}
-        <div className="flex items-end justify-between gap-4 flex-wrap tl-page-head">
-          <div>
-            <div className="tl-eyebrow mb-1.5">{todayFull} · New York</div>
+        {/* .tl-page-head is flex-direction: column, so the items-end /
+            justify-between that used to sit alongside it were being read in a
+            column — items-end right-aligned the whole header and the clock
+            floated under a left-aligned title. The row now lives inside it. */}
+        <div className="tl-page-head">
+          <div className="tl-eyebrow">{todayFull} · New York</div>
+          <div className="flex items-end justify-between gap-3 flex-wrap">
             <h1 className="tl-title">{greeting}, trader.</h1>
-          </div>
-          <div className="flex items-center gap-2 tl-card px-4 py-2.5">
+            <div className="flex items-center gap-2 tl-card px-4 py-2.5">
             <Clock size={13} className="text-[var(--text-dim)]" />
             <span className="text-[16px] font-bold text-[var(--text)]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>{time.display}</span>
-            <span className="text-[10px] text-[var(--text-faint)] font-semibold">NY</span>
+              <span className="text-[10px] text-[var(--text-faint)] font-semibold">NY</span>
+            </div>
           </div>
         </div>
 

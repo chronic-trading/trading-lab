@@ -124,22 +124,32 @@ export function ConceptCard({ concept, selected, onToggle }: Props) {
         {/* Mastery rating */}
         <div className="flex items-center gap-2.5 mt-3 flex-wrap">
           <span className="text-[10px] font-bold text-[var(--text-faint)] uppercase tracking-wider flex-shrink-0">Mastery</span>
-          <div className="flex gap-1.5">
+          {/* The touch target and the dot are deliberately different sizes.
+              Growing the dot itself to be tappable turned five filled circles
+              with a glow into a row of blobs that dominated the card. The button
+              is the hit area — invisible, and wide enough to tap — while the
+              span inside stays a small mark. */}
+          <div className="flex -mx-1">
             {([1,2,3,4,5] as MasteryLevel[]).map(n => (
               <button
                 key={n}
                 title={MASTERY_LABELS[n]}
+                aria-label={`Set mastery to ${MASTERY_LABELS[n]}`}
                 onClick={e => { e.stopPropagation(); setMastery(level === n ? 0 as MasteryLevel : n) }}
-                className={`tl-dot w-5 h-5 rounded-full border-2 transition-all duration-150 hover:scale-125 flex-shrink-0
-                  ${n <= level
-                    ? level === 5 ? 'bg-amber-400 border-amber-300 shadow-md shadow-amber-400/40'
-                    : level >= 4 ? 'bg-emerald-500 border-emerald-400 shadow-sm shadow-emerald-500/30'
-                    : level === 3 ? 'bg-yellow-500 border-yellow-400'
-                    : level === 2 ? 'bg-orange-500 border-orange-400'
-                    : 'bg-red-500 border-red-400'
-                    : 'bg-[var(--surface-2)] border-[var(--border)] hover:border-[var(--border-strong)]'
-                  }`}
-              />
+                className="group/dot flex items-center justify-center flex-shrink-0"
+              >
+                <span
+                  className={`block w-[18px] h-[18px] rounded-full border-2 transition-all duration-150 group-hover/dot:scale-125
+                    ${n <= level
+                      ? level === 5 ? 'bg-amber-400 border-amber-300'
+                      : level >= 4 ? 'bg-emerald-500 border-emerald-400'
+                      : level === 3 ? 'bg-yellow-500 border-yellow-400'
+                      : level === 2 ? 'bg-orange-500 border-orange-400'
+                      : 'bg-red-500 border-red-400'
+                      : 'bg-[var(--surface-2)] border-[var(--border)] group-hover/dot:border-[var(--border-strong)]'
+                    }`}
+                />
+              </button>
             ))}
           </div>
           <span className={`text-[11px] font-semibold transition-all

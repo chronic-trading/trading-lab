@@ -232,10 +232,14 @@ code, .mono {
 
 /* Page header — the editorial anchor at the top of every tool. An eyebrow
    (small, spaced, uppercase) over a serif title, with a hairline rule under. */
+/* Rule of the page header: spacing and the underline, nothing about layout.
+   It used to set display:flex + flex-direction:column, which quietly broke every
+   page that put a title and an action side by side — Home, Calendar and Grader
+   all carried `flex items-end justify-between` on this same element, and in a
+   column that reads as "right-align everything and stack it". The Today header
+   shipped with the clock floating under a right-aligned title because of it.
+   Children stack naturally as blocks, so the column pages are unaffected. */
 .tl-page-head {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
   padding-bottom: 14px;
   margin-bottom: 20px;
   border-bottom: 1px solid var(--border);
@@ -777,3 +781,5 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 @media (prefers-reduced-motion: reduce) {
   .tl-skeleton::after { display: none; }
 }
+
+

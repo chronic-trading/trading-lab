@@ -103,8 +103,11 @@ export function Builder({ initialBuild }: Props) {
   const LibraryPanel = (
     <div className="flex flex-col flex-1 overflow-hidden">
 
-      {/* Library / Mastery toggle */}
-      <div className="flex bg-[var(--surface)] border border-[var(--border)] rounded-xl p-0.5 gap-0.5 mx-6 mt-5 mb-3 flex-shrink-0">
+      {/* Library / Mastery toggle.
+          Hidden below xl, where the panel tab bar carries Mastery as a peer of
+          Library instead. Showing both stacked three nav rows on a phone — and
+          two of them said "Library" — which cost 50px and read as a bug. */}
+      <div className="hidden xl:flex bg-[var(--surface)] border border-[var(--border)] rounded-xl p-0.5 gap-0.5 mx-6 mt-5 mb-3 flex-shrink-0">
         <button
           onClick={() => setLeftTab('library')}
           className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[11px] font-semibold transition-all ${leftTab === 'library' ? 'bg-[var(--surface-hover)] text-[var(--text)]' : 'text-[var(--text-dim)] hover:text-[var(--text-dim)]'}`}
@@ -141,7 +144,9 @@ export function Builder({ initialBuild }: Props) {
                   <X size={11} />
                 </button>
               ) : (
-                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[var(--text-faint)] tracking-wider select-none">⌘K</span>
+                /* Hidden below md: there is no ⌘ key on a phone, so the hint is
+                   noise taking up space in the field on the majority platform. */
+                <span className="hidden md:block absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-[var(--text-faint)] tracking-wider select-none">⌘K</span>
               )}
             </div>
 
@@ -166,7 +171,10 @@ export function Builder({ initialBuild }: Props) {
               })}
             </div>
 
-            <div className="flex items-center gap-1.5 flex-wrap">
+            {/* Six category chips wrapped to two rows on a phone, 94px of filter
+                UI above the first result. tl-chiprow scrolls them horizontally
+                instead — same idiom as the instrument pickers. */}
+            <div className="tl-chiprow flex items-center gap-1.5 flex-wrap">
               {categories.map(cat => (
                 <button
                   key={cat}
@@ -401,20 +409,29 @@ export function Builder({ initialBuild }: Props) {
           workbench). Below xl they don't fit: the workbench collapsed to ~48px
           and the synergies panel ran off-screen. Use the tabbed layout instead. */}
       <div className="flex xl:hidden border-b border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0">
+        {/* Mastery is a peer here rather than a nested toggle, so the phone gets
+            one nav row instead of three. It still drives leftTab underneath —
+            the desktop three-column layout is unchanged. */}
         {([
-          { id: 'library',  label: 'Library',  icon: Library    },
-          { id: 'build',    label: 'Build',     icon: Zap        },
-          { id: 'synergy',  label: 'DNA',       icon: BarChart2  },
-        ] as { id: MobileTab; label: string; icon: React.ElementType }[]).map(({ id, label, icon: Icon }) => (
-          <button
-            key={id}
-            onClick={() => setMobileTab(id)}
-            className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold transition-all border-b-2
-              ${mobileTab === id ? 'text-amber-300 border-amber-400 bg-[var(--surface-2)]' : 'text-[var(--text-faint)] border-transparent hover:text-[var(--text-dim)]'}`}
-          >
-            <Icon size={13} /> {label}
-          </button>
-        ))}
+          { id: 'library',  label: 'Library',  icon: Library,   left: 'library' as LeftTab },
+          { id: 'library',  label: 'Mastery',  icon: BarChart2, left: 'mastery' as LeftTab },
+          { id: 'build',    label: 'Build',    icon: Zap        },
+          { id: 'synergy',  label: 'DNA',      icon: BarChart2  },
+        ] as { id: MobileTab; label: string; icon: React.ElementType; left?: LeftTab }[]).map(({ id, label, icon: Icon, left }) => {
+          const active = left
+            ? mobileTab === 'library' && leftTab === left
+            : mobileTab === id
+          return (
+            <button
+              key={label}
+              onClick={() => { setMobileTab(id); if (left) setLeftTab(left) }}
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[12px] font-semibold transition-all border-b-2
+                ${active ? 'text-amber-300 border-amber-400 bg-[var(--surface-2)]' : 'text-[var(--text-faint)] border-transparent hover:text-[var(--text-dim)]'}`}
+            >
+              <Icon size={13} /> {label}
+            </button>
+          )
+        })}
       </div>
 
       {/* ── 3-column from xl | single tabbed panel below ── */}
