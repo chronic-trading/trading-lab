@@ -1,0 +1,60 @@
+name: Refresh market data
+
+# Rebuilds the bundled replay dataset in public/data and commits it.
+#
+# This job exists because no futures data source sends CORS headers — a page on
+# chronic-trading.github.io cannot fetch Yahoo or Stooq directly (both verified
+# to block browser calls). A runner has no such restriction, so the data is
+# fetched here and shipped as static JSON. The result: users get real CME
+# futures bars with no API key, no signup, and no third-party service between
+# them and the tool they paid for.
+#
+# Committing to main triggers the existing Pages deploy, so refreshed data goes
+# live on its own.
+
+on:
+  schedule:
+    # 09:20 UTC on Saturdays — after the CME week has closed, so the final
+    # session is complete rather than half-formed.
+    - cron: '20 9 * * 6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-market-data
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Fetch candles
+        run: node scripts/fetch-market-data.mjs
+
+      - name: Commit if anything changed
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git diff --quiet -- public/data; then
+            echo "No change in public/data — nothing to commit."
+            exit 0
+          fi
+
+          # Report the size of what is about to ship. These files are downloaded
+          # by real users, so a sudden jump is worth seeing in the log.
+          du -sh public/data
+          git add public/data
+          git commit -m "Data: refresh replay candles ($(date -u +%Y-%m-%d))"
+          git push

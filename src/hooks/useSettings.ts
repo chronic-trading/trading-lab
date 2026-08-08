@@ -19,7 +19,7 @@ export const POINT_VALUES: Record<Instrument, number> = {
 
 const DEFAULT: Settings = {
   accountSize: 50000,
-  defaultInstrument: 'EURUSD',
+  defaultInstrument: 'NQ',
   riskPercent: 1,
 }
 

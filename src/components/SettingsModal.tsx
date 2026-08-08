@@ -2,10 +2,10 @@ import { useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Settings, Check, Download, Upload, AlertTriangle } from 'lucide-react'
 import { useSettings, POINT_VALUES } from '../hooks/useSettings'
+import { INSTRUMENTS } from '../data/instruments'
 import type { Instrument } from '../types'
 import { useModalBackButton } from '../hooks/useModalBackButton'
 
-const INSTRUMENTS: Instrument[] = ['EURUSD','GBPUSD','USDJPY','GBPJPY','AUDUSD','NZDUSD'] as Instrument[]
 const BACKUP_KEYS = [
   'trading-lab-journal',
   'trading-lab-builds',
