@@ -314,7 +314,7 @@ export function BacktestPage() {
         <div className="flex gap-1 flex-wrap">
           {INSTRUMENTS.map(i => (
             <button key={i} onClick={() => setInstrument(i)}
-              className={`text-[11px] font-bold px-2.5 py-1.5 rounded-lg border transition-all ${
+              className={`flex items-center justify-center tl-touch text-[11px] font-bold px-2.5 py-1.5 rounded-lg border transition-all ${
                 instrument === i
                   ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
                   : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)]'
@@ -331,7 +331,7 @@ export function BacktestPage() {
             // 15m leaves Daily with 23 bars and asks 1m for more history than
             // the dataset holds.
             <button key={t} onClick={() => { setTf(t); setStartDate(defaultStart(t)) }}
-              className={`text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border transition-all ${
+              className={`flex items-center justify-center tl-touch text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border transition-all ${
                 tf === t
                   ? 'bg-[var(--surface-hover)] border-[var(--border-strong)] text-[var(--text)]'
                   : 'border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)]'
@@ -343,13 +343,13 @@ export function BacktestPage() {
 
         {/* Date */}
         <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)}
-          max={today()}
+          max={today()} aria-label="Replay start date"
           style={{ colorScheme: 'dark' }}
-          className="bg-[var(--surface)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-[11px] text-[var(--text-dim)] focus:outline-none focus:border-[var(--border-strong)] transition-all" />
+          className="tl-touch bg-[var(--surface)] border border-[var(--border)] rounded-lg px-2.5 py-1.5 text-[11px] text-[var(--text-dim)] focus:outline-none focus:border-[var(--border-strong)] transition-all" />
 
         {/* Load button */}
         <button onClick={handleLoad} disabled={loading}
-          className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg border border-amber-500/35 bg-amber-500/12 text-amber-300 text-[11px] font-bold hover:bg-amber-500/22 transition-all disabled:opacity-50">
+          className="flex items-center justify-center gap-1.5 tl-touch px-4 py-1.5 rounded-lg border border-amber-500/35 bg-amber-500/12 text-amber-300 text-[11px] font-bold hover:bg-amber-500/22 transition-all disabled:opacity-50">
           {loading
             ? <span className="w-3 h-3 border border-amber-400/40 border-t-amber-300 rounded-full animate-spin flex-shrink-0" />
             : <Crosshair size={11} />}
@@ -393,25 +393,28 @@ export function BacktestPage() {
             <ReplayChart bars={bars} cursor={cursor} activeTrade={activeTrade} />
           </div>
 
-          {/* Replay controls bar */}
+          {/* Replay transport bar. Wraps on phones: the eleven controls need
+              667px in one row, so at 375px everything past "+5" used to sit
+              off-screen and unreachable. Buttons also carry a 44px minimum
+              touch target below md — the desktop sizing put them at 27px. */}
           {hasData && (
-            <div className="flex items-center gap-3 px-4 py-2.5 border-t border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0">
+            <div className="flex flex-wrap items-center gap-2 md:gap-3 px-3 md:px-4 py-2 md:py-2.5 border-t border-[var(--border)] bg-[var(--bg-elev)] flex-shrink-0">
               {/* Reset */}
               <button onClick={() => { setPlaying(false); setCursor(Math.min(INITIAL_CONTEXT, Math.floor(bars.length/2))) }}
-                title="Reset to start"
-                className="w-7 h-7 flex items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)] transition-all">
+                title="Reset to start" aria-label="Reset to start"
+                className="tl-touch w-7 h-7 flex items-center justify-center rounded-lg border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)] transition-all">
                 <SkipBack size={12} />
               </button>
 
               {/* Step back */}
-              <button onClick={() => step(-1)}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)] text-[11px] font-bold transition-all">
+              <button onClick={() => step(-1)} aria-label="Step back one bar"
+                className="flex items-center justify-center gap-1 tl-touch px-3 md:px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)] text-[11px] font-bold transition-all">
                 <ChevronLeft size={11} /> 1
               </button>
 
               {/* Play/Pause */}
               <button onClick={() => setPlaying(p => !p)}
-                className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg border text-[11px] font-bold transition-all ${
+                className={`flex items-center justify-center gap-1.5 tl-touch px-4 py-1.5 rounded-lg border text-[11px] font-bold transition-all ${
                   playing
                     ? 'bg-amber-500/15 border-amber-500/40 text-amber-300'
                     : 'border-[var(--border)] text-[var(--text-dim)] hover:border-amber-500/40 hover:text-amber-300'
@@ -422,19 +425,19 @@ export function BacktestPage() {
 
               {/* Step forward */}
               {([1,5,15] as const).map(n => (
-                <button key={n} onClick={() => step(n)}
-                  className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)] text-[11px] font-bold transition-all">
+                <button key={n} onClick={() => step(n)} aria-label={`Step forward ${n} bars`}
+                  className="flex items-center justify-center gap-1 tl-touch px-3 md:px-2.5 py-1.5 rounded-lg border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border)] hover:text-[var(--text-dim)] text-[11px] font-bold transition-all">
                   +{n} <ChevronRight size={11} />
                 </button>
               ))}
 
-              <div className="w-px h-4 bg-[var(--surface-2)] mx-0.5" />
+              <div className="hidden md:block w-px h-4 bg-[var(--surface-2)] mx-0.5" />
 
               {/* Speed selector */}
               <div className="flex items-center gap-0.5">
                 {SPEEDS.map(s => (
-                  <button key={s} onClick={() => setSpeed(s)}
-                    className={`px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
+                  <button key={s} onClick={() => setSpeed(s)} aria-label={`Playback speed ${s}x`}
+                    className={`flex items-center justify-center tl-touch px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all ${
                       speed === s
                         ? 'bg-amber-500/15 border border-amber-500/30 text-amber-300'
                         : 'text-[var(--text-faint)] hover:text-[var(--text-dim)]'
@@ -445,8 +448,10 @@ export function BacktestPage() {
               </div>
 
               {/* Bar info */}
+              {/* Drops onto its own line on phones rather than being pushed off
+                  the right edge by ml-auto. */}
               {barInfo && (
-                <div className="ml-auto flex items-center gap-2 text-[11px]" style={monoStyle}>
+                <div className="w-full md:w-auto md:ml-auto flex items-center gap-2 text-[11px]" style={monoStyle}>
                   <span className="text-[var(--text-dim)]">{barInfo.date}</span>
                   <span className="text-[var(--text-faint)]">{barInfo.time}</span>
                   <span className="text-[var(--text-faint)]">·</span>

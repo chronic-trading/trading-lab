@@ -471,3 +471,13 @@ html[data-theme="dark"] .tl-card {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── Touch targets ───────────────────────────────────────────────────────────
+   44px minimum (Apple HIG) on phones only, where 82% of this app's traffic is.
+   Defined as a real media query rather than Tailwind's `md:` variant because
+   v4 emits arbitrary utilities (min-h-[44px]) in a later layer than variant
+   utilities, so `min-h-[44px] md:min-h-0` kept the 44px at desktop width and
+   pushed the Replay transport bar onto three rows. This has no such ambiguity. */
+@media (max-width: 767px) {
+  .tl-touch { min-height: 44px; min-width: 44px; }
+}
