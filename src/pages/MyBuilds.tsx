@@ -3,11 +3,16 @@ import { Package, GitCompare } from 'lucide-react'
 import { useBuilds } from '../hooks/useBuilds'
 import { BuildCard } from '../components/BuildCard'
 import { BuildCompareModal } from '../components/BuildCompareModal'
+import { EmptyState } from '../components/EmptyState'
 import type { Build } from '../types'
 
-interface Props { onLoadBuild: (build: Build) => void }
+interface Props {
+  onLoadBuild: (build: Build) => void
+  /** Lets the empty state open the Builder instead of just naming it. */
+  onNavigate?: (tab: string) => void
+}
 
-export function MyBuilds({ onLoadBuild }: Props) {
+export function MyBuilds({ onLoadBuild, onNavigate }: Props) {
   const { builds, deleteBuild, getBuildShareUrl } = useBuilds()
   const [compareOpen, setCompareOpen] = useState(false)
 
@@ -17,15 +22,12 @@ export function MyBuilds({ onLoadBuild }: Props) {
 
   if (builds.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center flex-1 gap-5 text-center py-24">
-        <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-[var(--border)] flex items-center justify-center">
-          <Package size={24} className="text-[var(--text-faint)]" />
-        </div>
-        <div>
-          <p className="text-[15px] font-semibold text-[var(--text-dim)]">No saved builds yet</p>
-          <p className="text-[12px] text-[var(--text-faint)] mt-2 leading-relaxed">Craft a model in the Builder and hit Save Build</p>
-        </div>
-      </div>
+      <EmptyState
+        icon={<Package size={24} />}
+        title="No saved builds yet"
+        description="Pick the concepts your model uses in the Builder, then hit Save Build."
+        action={onNavigate ? { label: 'Open Builder', onClick: () => onNavigate('builder') } : undefined}
+      />
     )
   }
 

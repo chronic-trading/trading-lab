@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import {
   Plus, Trash2, Save, TrendingUp, TrendingDown, Minus, Check,
-  Calculator, CalendarDays, Target, BookOpen, Clock, X,
+  Calculator, CalendarDays, Target, BookOpen, Clock, X, ClipboardCheck,
 } from 'lucide-react'
 import { useRules } from '../hooks/useRules'
 import { useKeyLevels } from '../hooks/useKeyLevels'
 import { INSTRUMENTS } from '../data/instruments'
+import { EmptyState } from '../components/EmptyState'
 import type { Instrument } from '../types'
 
 // ── Types ────────────────────────────────────────────────────────────────────
@@ -459,7 +460,12 @@ export function Plan() {
             <div className="space-y-3">
               <h2 className="text-[16px] font-bold text-[var(--text)]">Past Plans</h2>
               {plans.length === 0 ? (
-                <p className="text-[12px] text-[var(--text-faint)] py-8 text-center">No saved plans yet. Fill out today\'s session plan and save it.</p>
+                <EmptyState
+                  icon={<ClipboardCheck size={22} />}
+                  title="No saved plans yet"
+                  description="Fill out today’s session plan and save it — past plans collect here so you can see what you actually followed."
+                  action={{ label: 'Write today’s plan', onClick: () => setView('plan') }}
+                />
               ) : (
                 plans.map(p => (
                   <div key={p.id} className="tl-card p-4 space-y-3">

@@ -29,6 +29,7 @@ const Arcade       = lazy(() => import('./pages/Arcade').then(m => ({ default: m
 const TradeGrader  = lazy(() => import('./pages/TradeGrader').then(m => ({ default: m.TradeGrader })))
 import { KillZoneClock, KillZoneClockCompact } from './components/KillZoneClock'
 import { PageSkeleton, ChartSkeleton } from './components/Skeleton'
+import { ErrorBoundary } from './components/ErrorBoundary'
 // SessionNotes and the modals below reach Supabase (directly or via a sync hook),
 // so importing them here would pull the auth client into the entry chunk and put
 // it back on the landing page's critical path. They only ever render inside the
@@ -647,6 +648,13 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
           })()}
 
         <div key={tab} className="flex-1 flex flex-col overflow-hidden animate-tab-in">
+        {/* Per-tab boundary. The only one was at the root, so a single lazy
+            chunk failing to fetch — a tunnel, a lift, patchy signal — replaced
+            the entire app with a full-screen error and took the nav and every
+            other working tab with it. Scoped here, a failed page stays a failed
+            page: the shell survives and you can switch tabs or retry. The
+            wrapper is already keyed on `tab`, so navigating away resets it. */}
+        <ErrorBoundary scope="tab" label={tabMeta(tab).label}>
         <Suspense fallback={<PageFallback tab={tab} />}>
         {tab === 'home'      && <Home      onNavigate={t => setTab(t as Tab)} />}
         {tab === 'builder'   && <Builder   initialBuild={loadedBuild} />}
@@ -658,12 +666,13 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
         {tab === 'journal'   && <Journal />}
         {tab === 'calendar'  && <Calendar />}
         {tab === 'templates' && <Templates onLoad={handleLoadBuild} />}
-        {tab === 'builds'    && <MyBuilds  onLoadBuild={handleLoadBuild} />}
+        {tab === 'builds'    && <MyBuilds  onLoadBuild={handleLoadBuild} onNavigate={t => setTab(t as Tab)} />}
         {tab === 'recap'     && <RecapPage />}
         {tab === 'playbook'  && <Playbook />}
         {tab === 'backtest'  && <BacktestPage />}
         {tab === 'arcade'    && <Arcade />}
         </Suspense>
+        </ErrorBoundary>
         </div>
         </main>
       </div>

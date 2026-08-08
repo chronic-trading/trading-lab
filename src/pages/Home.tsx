@@ -11,6 +11,7 @@ import { getSynergiesFor } from '../data/concepts'
 import { concepts } from '../data/concepts'
 import { FOMC_2026, WEEKLY_SCHEDULE } from '../data/calendarData'
 import { INSTRUMENTS } from '../data/instruments'
+import { EmptyState } from '../components/EmptyState'
 import type { Instrument } from '../types'
 
 // ── Upcoming trading days (today + next 4 trading days) ───────────────────────
@@ -135,7 +136,15 @@ function KeyLevelsPanel() {
 
       {/* Level list */}
       {currentLevels.length === 0 ? (
-        <p className="text-[11px] text-[var(--text-faint)] text-center py-2">No levels set for {inst}</p>
+        /* Inline: this sits inside the Key Levels card, directly under the form
+           that fills it, so it stays compact and needs no action button — the
+           thing to do next is already on screen. */
+        <EmptyState
+          size="inline"
+          icon={<Target size={18} />}
+          title={`No levels set for ${inst}`}
+          description="Add the highs, lows and gaps you are watching so they are in front of you at the open."
+        />
       ) : (
         <div className="space-y-1.5">
           {currentLevels.map(lv => (

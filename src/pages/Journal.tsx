@@ -8,6 +8,7 @@ import { useBuilds } from '../hooks/useBuilds'
 import { useTradeGrades } from '../hooks/useTradeGrades'
 import { POINT_VALUES } from '../hooks/useSettings'
 import { INSTRUMENTS as instruments } from '../data/instruments'
+import { EmptyState } from '../components/EmptyState'
 import type { Instrument } from '../types'
 
 const resultConfig = {
@@ -405,13 +406,25 @@ export function Journal() {
             <div className="flex-1 overflow-y-auto">
             <div className="max-w-5xl mx-auto px-4 md:px-8 py-5 space-y-3">
               {filtered.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full gap-4">
-                  <div className="w-14 h-14 rounded-2xl border-2 border-dashed border-[var(--border)] flex items-center justify-center text-[22px]">📓</div>
-                  <div className="text-center">
-                    <p className="text-[14px] font-semibold text-[var(--text-dim)]">{entries.length === 0 ? 'No trades logged yet' : 'No trades match this filter'}</p>
-                    <p className="text-[12px] text-[var(--text-faint)] mt-1.5">{entries.length === 0 ? 'Hit "Log Trade" to start tracking' : 'Switch the filter above to see other trades'}</p>
-                  </div>
-                </div>
+                /* Two genuinely different situations. With no trades at all the
+                   next step is to log one, so the button does it rather than
+                   pointing at another button. With trades hidden by a filter,
+                   the data is fine and the fix is the filter — offering "Log
+                   Trade" there would answer a question nobody asked. */
+                entries.length === 0 ? (
+                  <EmptyState
+                    icon={<BookOpen size={22} />}
+                    title="No trades logged yet"
+                    description="Log your first trade to start tracking what actually works."
+                    action={{ label: 'Log a trade', onClick: () => { setEditing(null); setLogOpen(true) } }}
+                  />
+                ) : (
+                  <EmptyState
+                    icon={<BookOpen size={22} />}
+                    title="No trades match this filter"
+                    description="Switch the filter above to see your other trades."
+                  />
+                )
               ) : (
                 <AnimatePresence mode="popLayout">
                   {filtered.map(entry => {
