@@ -77,7 +77,7 @@ function KeyLevelsPanel() {
   const currentLevels = levels[inst] ?? []
 
   return (
-    <div className="tl-card p-5 space-y-4">
+    <div className="tl-card p-4 md:p-5 space-y-3.5 md:space-y-4">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <div className="flex items-center gap-2">
           <Target size={13} className="text-amber-400" />
@@ -207,7 +207,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
 
   return (
     <div className="flex-1 overflow-y-auto bg-[var(--bg)]">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-6 md:py-8 space-y-5">
+      <div className="max-w-6xl mx-auto px-4 md:px-6 py-5 md:py-8 space-y-4 md:space-y-5">
 
         {/* ── Greeting ── */}
         {/* .tl-page-head is flex-direction: column, so the items-end /
@@ -227,10 +227,10 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         </div>
 
         {/* ── Top grid: Kill Zone + Events ── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
 
           {/* Kill Zone card */}
-          <div className="tl-card p-5 space-y-4">
+          <div className="tl-card p-4 md:p-5 space-y-3.5 md:space-y-4">
             <div className="flex items-center gap-2">
               <Radio size={13} className="text-[var(--text-dim)]" />
               <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Kill Zones</span>
@@ -272,7 +272,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
           </div>
 
           {/* This week's events */}
-          <div className="md:col-span-2 tl-card p-5">
+          <div className="md:col-span-2 tl-card p-4 md:p-5">
             <div className="flex items-center gap-2 mb-3">
               <Zap size={13} className="text-red-400" />
               <span className="text-[12px] font-bold text-[var(--text-dim)] uppercase tracking-wider">Upcoming Red Events</span>
@@ -308,7 +308,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
           {/* Recent P&L */}
-          <div className="tl-card p-5 space-y-4">
+          <div className="tl-card p-4 md:p-5 space-y-3.5 md:space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <BarChart2 size={13} className="text-blue-400" />
@@ -378,7 +378,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
           {/* Mastery progress */}
-          <div className="tl-card p-5 space-y-4">
+          <div className="tl-card p-4 md:p-5 space-y-3.5 md:space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <TrendingUp size={13} className="text-purple-400" />
@@ -424,7 +424,7 @@ export function Home({ onNavigate }: { onNavigate?: (tab: string) => void }) {
           </div>
 
           {/* Latest build */}
-          <div className="tl-card p-5 space-y-4">
+          <div className="tl-card p-4 md:p-5 space-y-3.5 md:space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Package size={13} className="text-amber-400" />

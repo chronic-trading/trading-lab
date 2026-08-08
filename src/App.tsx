@@ -526,7 +526,12 @@ function AppShell({ signOut, userEmail }: { signOut?: () => void; userEmail?: st
        opacity fades are kept, which is the documented behaviour and the right
        trade: the interface stays legible without the movement. */
     <MotionConfig reducedMotion="user">
-    <div className="flex flex-col h-screen bg-[var(--bg)] overflow-hidden">
+    {/* h-screen is 100vh, which on iOS Safari means the height with the address
+        bar hidden — so the app is taller than the visible area and the bottom of
+        every page sits under the browser chrome. h-[100dvh] tracks the viewport
+        as that bar collapses. Both classes are kept: a browser without dvh drops
+        the invalid declaration and falls back to 100vh. */}
+    <div className="flex flex-col h-screen h-[100dvh] bg-[var(--bg)] overflow-hidden">
       {/* tl-safe-top/x: with viewport-fit=cover the page now extends under the
           notch and the rounded corners, so the header has to inset itself or the
           logo sits behind the camera cutout on an iPhone. */}

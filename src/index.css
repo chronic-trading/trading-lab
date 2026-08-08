@@ -673,14 +673,23 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   -webkit-overflow-scrolling: touch;
 }
 
-/* Safe areas. index.html now carries viewport-fit=cover, which is what makes
-   env(safe-area-inset-*) resolve to anything other than zero — without it the
-   values are 0 and this is dead code. The bottom nav already handled its own
-   inset; the header did not, so it sat under the notch. */
+/* Safe areas. index.html carries viewport-fit=cover, which is what makes
+   env(safe-area-inset-*) resolve to anything other than zero.
+   The floor matters as much as the inset. In iOS Safari with the address bar at
+   the bottom — the default now — the inset reports 0, because Safari already
+   places the page below the status bar. The logo then sits hard against the
+   system clock with no breathing room, which reads as an overlap. max() gives
+   the notch its full inset where there is one and a minimum gutter where there
+   is not, so the header never crowds the status bar on either. */
 @supports (padding: env(safe-area-inset-top)) {
   .tl-safe-top   { padding-top:   env(safe-area-inset-top); }
   .tl-safe-x     { padding-left:  env(safe-area-inset-left);
                    padding-right: env(safe-area-inset-right); }
+}
+/* The floor is phone-only: a desktop header has no status bar to clear, and
+   10px there would just make the chrome taller than it was designed to be. */
+@media (max-width: 767px) {
+  .tl-safe-top { padding-top: max(env(safe-area-inset-top, 0px), 10px); }
 }
 
 /* Content clearance for the fixed bottom nav (56px + home-indicator inset). */
