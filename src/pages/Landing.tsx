@@ -261,92 +261,6 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   )
 }
 
-// ── Terminal boot sequence ────────────────────────────────────────────────────
-const BOOT_LINES = [
-  { text: 'TRADING LAB  /  SYSTEM INITIALIZING',          type: 'header'  },
-  { text: '─────────────────────────────────────────────', type: 'divider' },
-  { text: '▸  market structure analysis ........  LOADED', type: 'item'    },
-  { text: '▸  liquidity zone mapping ...........  LOADED', type: 'item'    },
-  { text: '▸  fvg + order block engine .........  LOADED', type: 'item'    },
-  { text: '▸  amd cycle framework ..............  LOADED', type: 'item'    },
-  { text: '▸  kill zone scheduler ..............  LOADED', type: 'item'    },
-  { text: '▸  trade journal + analytics ........  LOADED', type: 'item'    },
-  { text: '▸  synergy detection engine .........  LOADED', type: 'item'    },
-  { text: '▸  recap + video export engine ......  LOADED', type: 'item'    },
-  { text: '▸  drawdown guard ...................  LOADED', type: 'item'    },
-  { text: '▸  mindset check-in tracker .........  LOADED', type: 'item'    },
-  { text: '─────────────────────────────────────────────', type: 'divider' },
-  { text: '✓  ALL SYSTEMS ONLINE',                        type: 'success'  },
-]
-
-function Terminal() {
-  const [count, setCount] = useState(0)
-  const ref = useRef<HTMLDivElement>(null)
-  const started = useRef(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !started.current) {
-        started.current = true
-        BOOT_LINES.forEach((_, i) => {
-          setTimeout(() => setCount(i + 1), i * 280)
-        })
-        observer.disconnect()
-      }
-    }, { threshold: 0.35 })
-    if (ref.current) observer.observe(ref.current)
-    return () => observer.disconnect()
-  }, [])
-
-  return (
-    <div ref={ref} className="relative rounded-2xl overflow-hidden mx-auto"
-      style={{ background: '#080810', border: '1px solid rgba(245,158,11,0.15)', maxWidth: '680px',
-        boxShadow: '0 0 60px rgba(245,158,11,0.08), 0 0 120px rgba(245,158,11,0.04), inset 0 1px 0 rgba(255,255,255,0.04)' }}>
-
-      {/* Terminal top bar */}
-      <div className="flex items-center gap-2 px-5 py-3 border-b border-slate-800/60"
-        style={{ background: 'rgba(255,255,255,0.02)' }}>
-        <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-        <div className="w-2.5 h-2.5 rounded-full bg-amber-500/60" />
-        <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-        <span className="ml-3 text-[10px] text-slate-600 font-mono tracking-widest uppercase">tradinglab — bash</span>
-      </div>
-
-      {/* Terminal body */}
-      <div className="px-6 py-6 min-h-[320px]" style={{ fontFamily: "'JetBrains Mono', monospace" }}>
-        {BOOT_LINES.slice(0, count).map((line, i) => (
-          <div key={i} className="leading-relaxed"
-            style={{
-              fontSize: 'clamp(11px, 2.2vw, 13px)',
-              color: line.type === 'header'  ? '#f59e0b'
-                   : line.type === 'success' ? '#34d399'
-                   : line.type === 'divider' ? 'rgba(255,255,255,0.08)'
-                   : 'rgba(148,163,184,0.7)',
-              fontWeight: line.type === 'header' || line.type === 'success' ? 700 : 400,
-              marginBottom: line.type === 'divider' ? '4px' : '2px',
-              letterSpacing: line.type === 'header' || line.type === 'success' ? '0.1em' : '0.04em',
-              textShadow: line.type === 'success' ? '0 0 20px rgba(52,211,153,0.5)' : line.type === 'header' ? '0 0 20px rgba(245,158,11,0.4)' : 'none',
-            }}>
-            {line.text}
-            {/* "LOADED" in green */}
-            {line.type === 'item' && (
-              <span style={{ color: '#34d399', fontWeight: 600 }}></span>
-            )}
-          </div>
-        ))}
-        {/* Blinking cursor */}
-        {count > 0 && count < BOOT_LINES.length && (
-          <span className="inline-block w-2 h-3.5 ml-0.5 animate-pulse"
-            style={{ background: '#f59e0b', verticalAlign: 'middle', opacity: 0.8 }} />
-        )}
-      </div>
-
-      {/* Ambient glow lines */}
-      <div className="absolute bottom-0 inset-x-0 h-[1px]"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(52,211,153,0.3), transparent)' }} />
-    </div>
-  )
-}
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
@@ -519,7 +433,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       <main>
 
       {/* ── Hero ──────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-14 pb-28 px-5 text-center overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-center justify-center pt-14 pb-14 md:pb-28 px-5 text-center overflow-hidden">
 
         {/* Concept map — parallax wrapper */}
         <div ref={heroMapRef} className="absolute inset-0 will-change-transform">
@@ -681,8 +595,8 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       </div>
 
       {/* ── Live demo — the real Trade Grader, no login ───────────── */}
-      <section className="px-5 pb-28 border-t border-slate-800/30">
-        <div className="max-w-5xl mx-auto pt-24">
+      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-12 md:pt-24">
           <div className="text-center mb-12">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{ boxShadow: '0 0 6px #34d399' }} />
@@ -700,290 +614,8 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         </div>
       </section>
 
-      {/* ── The Foundation ────────────────────────────────────────── */}
-      <section className="px-5 pb-28 border-t border-slate-800/30">
-        <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The Foundation</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              Where people get stuck.
-            </h2>
-          </div>
-          {/* Single large card — same dark style as The Process */}
-          <div className="relative group rounded-2xl p-10 md:p-14 overflow-hidden text-center"
-            style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div className="absolute top-0 inset-x-0 h-[1px] opacity-50"
-              style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.6),transparent)' }} />
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.04), transparent 65%)' }} />
-            <div className="relative max-w-2xl mx-auto">
-              <p className="font-black leading-[0.9] mb-10 text-center"
-                style={{ fontSize: 'clamp(28px,5.5vw,52px)', letterSpacing: '-2px' }}>
-                <span className="text-slate-400">ICT has a lot of</span><br />
-                <span style={{ background: 'linear-gradient(125deg,#fbbf24,#f59e0b 45%,#fde68a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>moving parts.</span>
-              </p>
-              <div className="h-px max-w-[120px] mx-auto mb-10"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.35), transparent)' }} />
-              <p className="text-[14px] text-slate-500 leading-relaxed max-w-lg mx-auto">
-                Order blocks, liquidity, kill zones, displacement. Each one makes sense on its own. Putting them together into a model you can actually trade is the hard part. That is what the builder is for.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── How It Works ──────────────────────────────────────────── */}
-      <section className="px-5 pb-28 border-t border-slate-800/30">
-        <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The process</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              Three steps to your first model.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {STEPS.map((s, i) => {
-              const Icon = s.icon
-              return (
-                <div key={s.n} className="relative group rounded-2xl p-7 text-center overflow-hidden"
-                  style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                  <div className="absolute top-0 inset-x-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.6),transparent)' }} />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.05), transparent 70%)' }} />
-                  {i < STEPS.length - 1 && (
-                    <div className="hidden md:block absolute top-1/2 -right-[11px] w-[22px] h-px bg-gradient-to-r from-slate-700/80 to-transparent z-10" />
-                  )}
-                  {/* Step number */}
-                  <p className="font-black leading-none mb-5 text-center"
-                    style={{ fontSize: '40px', fontFamily: "'JetBrains Mono',monospace",
-                      background: 'linear-gradient(135deg,rgba(245,158,11,0.25),rgba(245,158,11,0.06))',
-                      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                    {s.n}
-                  </p>
-                  {/* Icon */}
-                  <div className="flex items-center justify-center mb-4">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center"
-                      style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)' }}>
-                      <Icon size={16} className="text-amber-400" />
-                    </div>
-                  </div>
-                  <h3 className="text-[15px] font-bold text-white mb-3">{s.title}</h3>
-                  <p className="text-[13px] text-slate-500 leading-relaxed">{s.body}</p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Tools ─────────────────────────────────────────────────── */}
-      <section className="px-5 pb-28 border-t border-slate-800/30">
-        <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">What's inside</p>
-            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              Fifteen tools for learning ICT.
-            </h2>
-            <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Build models, drill the concepts, journal your trades, and track what you actually know.</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {TOOLS.map(t => (
-              <div key={t.name}
-                className="group relative rounded-2xl p-6 overflow-hidden transition-all duration-300 cursor-default hover:-translate-y-2 text-center flex flex-col items-center"
-                style={{ background: 'rgba(6,6,12,0.98)', border: `1px solid rgba(255,255,255,0.055)` }}>
-                <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-2xl opacity-35 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `linear-gradient(90deg,transparent,${t.color},transparent)` }} />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: `radial-gradient(ellipse 90% 55% at 50% 0%,${t.color}0c,transparent 70%)` }} />
-                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 flex-shrink-0"
-                  style={{ background: `${t.color}14`, border: `1px solid ${t.color}2e` }}>
-                  <t.Icon size={19} strokeWidth={1.75} style={{ color: t.color }} />
-                </span>
-                <span className="text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-0.5 rounded-full mb-4"
-                  style={{ color: t.color, background: `${t.color}12`, border: `1px solid ${t.color}25` }}>
-                  {t.tag}
-                </span>
-                <h3 className="text-[14px] font-bold text-white mb-2">{t.name}</h3>
-                <p className="text-[13px] text-slate-500 leading-relaxed">{t.desc}</p>
-                <div className="mt-5 flex items-center justify-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: t.color, opacity: 0.7 }} />
-                  <div className="h-px w-10" style={{ background: `linear-gradient(90deg,${t.color}50,transparent)` }} />
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* The header utilities aren't counted in the 15 — they ride along free. */}
-          <p className="text-center text-[13px] text-slate-500 mt-10 max-w-xl mx-auto leading-relaxed">
-            Plus the utility belt in the header: a prop-firm comparison of 12 futures firms,
-            a drawdown guard, mindset check-ins, a concept quiz, your trading rules, and session notes.
-          </p>
-        </div>
-      </section>
-
-      {/* ── See inside — live Concept Map ─────────────────────────── */}
-      <section className="px-5 pb-28 border-t border-slate-800/30">
-        <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/25 bg-blue-500/8 mb-5">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" style={{ boxShadow: '0 0 6px #60a5fa' }} />
-              <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-400/90">See inside · live</span>
-            </div>
-            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              Start with the ten foundations.
-            </h2>
-            <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
-              This is the <span className="text-slate-400 font-semibold">real Concept Map</span> from inside the Lab,
-              showing the ten basics every ICT trader learns first. Hover one to see what it connects to.
-              {/* Deliberately not an exact count. Landing is the entry chunk and
-                  cannot import the concept dataset to derive one, so a literal
-                  here goes stale every time the library grows — it already read
-                  "42" against a library of 52. This matches the 50+ used above. */}
-              {' '}The rest of the 50+ concept library builds on top of these.
-            </p>
-          </div>
-          <LazyOnVisible minHeight={460}>
-            <Suspense fallback={
-              <div className="flex items-center justify-center gap-3 rounded-2xl" style={{ minHeight: 460, background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)' }}>
-                <div className="w-5 h-5 border-2 border-blue-500/30 border-t-blue-400 rounded-full animate-spin" />
-                <span className="text-[13px] text-slate-600 font-medium">Loading the map…</span>
-              </div>
-            }>
-              <MapDemo onCTA={goBuy('map-demo')} ctaLabel={buyLabel} />
-            </Suspense>
-          </LazyOnVisible>
-        </div>
-      </section>
-
-      {/* ── Who it's for ──────────────────────────────────────────── */}
-      <section className="px-5 pb-28 border-t border-slate-800/30">
-        <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-10">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Who it's for</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              People learning ICT.
-            </h2>
-          </div>
-          <div className="max-w-xl mx-auto text-center">
-            <p className="text-[15px] text-slate-400 leading-relaxed">
-              If you are new to ICT and trying to actually learn and master the concepts, this is built for you.
-              The library, the model builder, the drills, and the review are all in one place, so you are not
-              stitching the framework together from twelve different tabs.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* ── The old way vs Trading Lab ─────────────────────────────── */}
-      <section className="px-5 pb-28 border-t border-slate-800/30">
-        <div className="max-w-4xl mx-auto pt-24">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The difference</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              What changes.
-            </h2>
-          </div>
-          <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div className="grid grid-cols-2 text-[10px] font-black uppercase tracking-[0.16em]">
-              <div className="px-5 md:px-7 py-4 text-slate-600 border-b border-slate-800/50">The old way</div>
-              <div className="px-5 md:px-7 py-4 text-amber-400 border-b border-l border-slate-800/50 bg-amber-500/[0.03]">With Trading Lab</div>
-            </div>
-            {COMPARISON.map((row, i) => (
-              <div key={i} className="grid grid-cols-2">
-                <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
-                  <X size={13} strokeWidth={2.5} className="text-slate-700 mt-0.5 flex-shrink-0" />
-                  <span className="text-[13px] text-slate-500 leading-snug">{row.old}</span>
-                </div>
-                <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 border-l border-slate-800/40 bg-amber-500/[0.02] ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
-                  <Check size={13} strokeWidth={2.5} className="text-emerald-400 mt-0.5 flex-shrink-0" />
-                  <span className="text-[13px] text-slate-400 leading-snug">{row.now}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Everything included — horizontal stacked cards ────────── */}
-      <section className="relative px-5 py-28 border-t border-slate-800/30 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,158,11,0.03) 0%, transparent 70%)' }} />
-        <div className="relative max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Everything included</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              What comes with the license.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {FEATURE_COLS.map(col => (
-              <div key={col.heading} className="relative rounded-2xl p-7 overflow-hidden text-center flex flex-col items-center"
-                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div className="absolute top-0 inset-x-0 h-[1px]"
-                  style={{ background: `linear-gradient(90deg,transparent,${col.color}55,transparent)` }} />
-                <div className="w-[2px] h-8 rounded-full mb-4" style={{ background: col.color, opacity: 0.7 }} />
-                <p className="text-[11px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: col.color }}>{col.heading}</p>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {col.items.map(item => (
-                    <span key={item}
-                      className="px-3 py-1 rounded-lg text-[12px] font-medium text-slate-400"
-                      style={{ background: `${col.color}0d`, border: `1px solid ${col.color}22` }}>
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── System boot terminal ──────────────────────────────────── */}
-      <section className="relative px-5 py-28 border-t border-slate-800/30 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 50% 80% at 50% 50%, rgba(52,211,153,0.03) 0%, transparent 70%)' }} />
-        <div className="relative max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Under the hood</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              Everything loads. Every time.
-            </h2>
-          </div>
-          <Terminal />
-        </div>
-      </section>
-
-      {/* ── Why pay (trust band) ──────────────────────────────────── */}
-      <section className="px-5 py-24 border-t border-slate-800/30">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Why pay for it</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              Why it's worth paying for.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              { Icon: Network,      color: '#c084fc', title: 'Concepts → system', body: 'YouTube hands you 50 disconnected ideas. This connects them into one framework, grades your setups against it, and tracks whether it actually works.' },
-              { Icon: Target,       color: '#34d399', title: 'No signals to follow', body: 'No signals, no guru calls, no group to copy. You learn the concepts and build your own reads instead of waiting on someone else.' },
-              { Icon: InfinityIcon, color: '#f59e0b', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
-            ].map(c => (
-              <div key={c.title} className="rounded-2xl p-7 text-center flex flex-col items-center"
-                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 flex-shrink-0"
-                  style={{ background: `${c.color}14`, border: `1px solid ${c.color}2e` }}>
-                  <c.Icon size={19} strokeWidth={1.75} style={{ color: c.color }} />
-                </span>
-                <h3 className="text-[14px] font-bold text-white mb-2.5">{c.title}</h3>
-                <p className="text-[13px] text-slate-500 leading-relaxed">{c.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ── Pricing ───────────────────────────────────────────────── */}
-      <section className="relative px-5 py-28 border-t border-slate-800/30 overflow-hidden">
+      <section className="relative px-5 py-14 md:py-28 border-t border-slate-800/30 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'radial-gradient(ellipse 60% 70% at 50% 40%, rgba(245,158,11,0.05) 0%, transparent 70%)' }} />
         <div className="relative max-w-lg mx-auto">
@@ -1063,10 +695,279 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         </div>
       </section>
 
+      {/* ── The Foundation ────────────────────────────────────────── */}
+      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-24">
+          <div className="text-center mb-8 md:mb-16">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The Foundation</p>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              Where people get stuck.
+            </h2>
+          </div>
+          {/* Single large card — same dark style as The Process */}
+          <div className="relative group rounded-2xl p-10 md:p-14 overflow-hidden text-center"
+            style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="absolute top-0 inset-x-0 h-[1px] opacity-50"
+              style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.6),transparent)' }} />
+            <div className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.04), transparent 65%)' }} />
+            <div className="relative max-w-2xl mx-auto">
+              <p className="font-black leading-[0.9] mb-10 text-center"
+                style={{ fontSize: 'clamp(28px,5.5vw,52px)', letterSpacing: '-2px' }}>
+                <span className="text-slate-400">ICT has a lot of</span><br />
+                <span style={{ background: 'linear-gradient(125deg,#fbbf24,#f59e0b 45%,#fde68a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>moving parts.</span>
+              </p>
+              <div className="h-px max-w-[120px] mx-auto mb-10"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.35), transparent)' }} />
+              <p className="text-[14px] text-slate-500 leading-relaxed max-w-lg mx-auto">
+                Order blocks, liquidity, kill zones, displacement. Each one makes sense on its own. Putting them together into a model you can actually trade is the hard part. That is what the builder is for.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── How It Works ──────────────────────────────────────────── */}
+      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-24">
+          <div className="text-center mb-16">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The process</p>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              Three steps to your first model.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {STEPS.map((s, i) => {
+              const Icon = s.icon
+              return (
+                <div key={s.n} className="relative group rounded-2xl p-7 text-center overflow-hidden"
+                  style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  <div className="absolute top-0 inset-x-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.6),transparent)' }} />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.05), transparent 70%)' }} />
+                  {i < STEPS.length - 1 && (
+                    <div className="hidden md:block absolute top-1/2 -right-[11px] w-[22px] h-px bg-gradient-to-r from-slate-700/80 to-transparent z-10" />
+                  )}
+                  {/* Step number */}
+                  <p className="font-black leading-none mb-5 text-center"
+                    style={{ fontSize: '40px', fontFamily: "'JetBrains Mono',monospace",
+                      background: 'linear-gradient(135deg,rgba(245,158,11,0.25),rgba(245,158,11,0.06))',
+                      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                    {s.n}
+                  </p>
+                  {/* Icon */}
+                  <div className="flex items-center justify-center mb-4">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+                      style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)' }}>
+                      <Icon size={16} className="text-amber-400" />
+                    </div>
+                  </div>
+                  <h3 className="text-[15px] font-bold text-white mb-3">{s.title}</h3>
+                  <p className="text-[13px] text-slate-500 leading-relaxed">{s.body}</p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Tools ─────────────────────────────────────────────────── */}
+      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-24">
+          <div className="text-center mb-16">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">What's inside</p>
+            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              Fifteen tools for learning ICT.
+            </h2>
+            <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Build models, drill the concepts, journal your trades, and track what you actually know.</p>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4">
+            {TOOLS.map(t => (
+              <div key={t.name}
+                className="group relative rounded-2xl p-[14px] md:p-[24px] overflow-hidden transition-all duration-300 cursor-default hover:-translate-y-2 text-center flex flex-col items-center"
+                style={{ background: 'rgba(6,6,12,0.98)', border: `1px solid rgba(255,255,255,0.055)` }}>
+                <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-2xl opacity-35 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: `linear-gradient(90deg,transparent,${t.color},transparent)` }} />
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{ background: `radial-gradient(ellipse 90% 55% at 50% 0%,${t.color}0c,transparent 70%)` }} />
+                <span className="w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center mb-2.5 md:mb-4 flex-shrink-0"
+                  style={{ background: `${t.color}14`, border: `1px solid ${t.color}2e` }}>
+                  <t.Icon size={19} strokeWidth={1.75} style={{ color: t.color }} />
+                </span>
+                <span className="hidden md:inline-block text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-0.5 rounded-full mb-4"
+                  style={{ color: t.color, background: `${t.color}12`, border: `1px solid ${t.color}25` }}>
+                  {t.tag}
+                </span>
+                <h3 className="text-[14px] font-bold text-white mb-2">{t.name}</h3>
+                <p className="hidden md:block text-[13px] text-slate-500 leading-relaxed">{t.desc}</p>
+                <div className="hidden md:flex mt-5 items-center justify-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: t.color, opacity: 0.7 }} />
+                  <div className="h-px w-10" style={{ background: `linear-gradient(90deg,${t.color}50,transparent)` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* The header utilities aren't counted in the 15 — they ride along free. */}
+          <p className="text-center text-[13px] text-slate-500 mt-10 max-w-xl mx-auto leading-relaxed">
+            Plus the utility belt in the header: a prop-firm comparison of 12 futures firms,
+            a drawdown guard, mindset check-ins, a concept quiz, your trading rules, and session notes.
+          </p>
+        </div>
+      </section>
+
+      {/* ── See inside — live Concept Map ─────────────────────────── */}
+      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-24">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/25 bg-blue-500/8 mb-5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-400" style={{ boxShadow: '0 0 6px #60a5fa' }} />
+              <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-400/90">See inside · live</span>
+            </div>
+            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              Start with the ten foundations.
+            </h2>
+            <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
+              This is the <span className="text-slate-400 font-semibold">real Concept Map</span> from inside the Lab,
+              showing the ten basics every ICT trader learns first. Hover one to see what it connects to.
+              {/* Deliberately not an exact count. Landing is the entry chunk and
+                  cannot import the concept dataset to derive one, so a literal
+                  here goes stale every time the library grows — it already read
+                  "42" against a library of 52. This matches the 50+ used above. */}
+              {' '}The rest of the 50+ concept library builds on top of these.
+            </p>
+          </div>
+          <LazyOnVisible minHeight={460}>
+            <Suspense fallback={
+              <div className="flex items-center justify-center gap-3 rounded-2xl" style={{ minHeight: 460, background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)' }}>
+                <div className="w-5 h-5 border-2 border-blue-500/30 border-t-blue-400 rounded-full animate-spin" />
+                <span className="text-[13px] text-slate-600 font-medium">Loading the map…</span>
+              </div>
+            }>
+              <MapDemo onCTA={goBuy('map-demo')} ctaLabel={buyLabel} />
+            </Suspense>
+          </LazyOnVisible>
+        </div>
+      </section>
+
+      {/* ── Who it's for ──────────────────────────────────────────── */}
+      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
+        <div className="max-w-5xl mx-auto pt-24">
+          <div className="text-center mb-10">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Who it's for</p>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              People learning ICT.
+            </h2>
+          </div>
+          <div className="max-w-xl mx-auto text-center">
+            <p className="text-[15px] text-slate-400 leading-relaxed">
+              If you are new to ICT and trying to actually learn and master the concepts, this is built for you.
+              The library, the model builder, the drills, and the review are all in one place, so you are not
+              stitching the framework together from twelve different tabs.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── The old way vs Trading Lab ─────────────────────────────── */}
+      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
+        <div className="max-w-4xl mx-auto pt-24">
+          <div className="text-center mb-16">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The difference</p>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              What changes.
+            </h2>
+          </div>
+          <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <div className="grid grid-cols-2 text-[10px] font-black uppercase tracking-[0.16em]">
+              <div className="px-5 md:px-7 py-4 text-slate-600 border-b border-slate-800/50">The old way</div>
+              <div className="px-5 md:px-7 py-4 text-amber-400 border-b border-l border-slate-800/50 bg-amber-500/[0.03]">With Trading Lab</div>
+            </div>
+            {COMPARISON.map((row, i) => (
+              <div key={i} className="grid grid-cols-2">
+                <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
+                  <X size={13} strokeWidth={2.5} className="text-slate-700 mt-0.5 flex-shrink-0" />
+                  <span className="text-[13px] text-slate-500 leading-snug">{row.old}</span>
+                </div>
+                <div className={`px-5 md:px-7 py-4 flex items-start gap-2.5 border-l border-slate-800/40 bg-amber-500/[0.02] ${i < COMPARISON.length - 1 ? 'border-b border-slate-800/40' : ''}`}>
+                  <Check size={13} strokeWidth={2.5} className="text-emerald-400 mt-0.5 flex-shrink-0" />
+                  <span className="text-[13px] text-slate-400 leading-snug">{row.now}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Everything included — horizontal stacked cards ────────── */}
+      <section className="relative px-5 py-14 md:py-28 border-t border-slate-800/30 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,158,11,0.03) 0%, transparent 70%)' }} />
+        <div className="relative max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Everything included</p>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              What comes with the license.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {FEATURE_COLS.map(col => (
+              <div key={col.heading} className="relative rounded-2xl p-7 overflow-hidden text-center flex flex-col items-center"
+                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <div className="absolute top-0 inset-x-0 h-[1px]"
+                  style={{ background: `linear-gradient(90deg,transparent,${col.color}55,transparent)` }} />
+                <div className="w-[2px] h-8 rounded-full mb-4" style={{ background: col.color, opacity: 0.7 }} />
+                <p className="text-[11px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: col.color }}>{col.heading}</p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {col.items.map(item => (
+                    <span key={item}
+                      className="px-3 py-1 rounded-lg text-[12px] font-medium text-slate-400"
+                      style={{ background: `${col.color}0d`, border: `1px solid ${col.color}22` }}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ── Why pay (trust band) ──────────────────────────────────── */}
+      <section className="px-5 py-12 md:py-24 border-t border-slate-800/30">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8 md:mb-14">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Why pay for it</p>
+            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              Why it's worth paying for.
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {[
+              { Icon: Network,      color: '#c084fc', title: 'Concepts → system', body: 'YouTube hands you 50 disconnected ideas. This connects them into one framework, grades your setups against it, and tracks whether it actually works.' },
+              { Icon: Target,       color: '#34d399', title: 'No signals to follow', body: 'No signals, no guru calls, no group to copy. You learn the concepts and build your own reads instead of waiting on someone else.' },
+              { Icon: InfinityIcon, color: '#f59e0b', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
+            ].map(c => (
+              <div key={c.title} className="rounded-2xl p-7 text-center flex flex-col items-center"
+                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 flex-shrink-0"
+                  style={{ background: `${c.color}14`, border: `1px solid ${c.color}2e` }}>
+                  <c.Icon size={19} strokeWidth={1.75} style={{ color: c.color }} />
+                </span>
+                <h3 className="text-[14px] font-bold text-white mb-2.5">{c.title}</h3>
+                <p className="text-[13px] text-slate-500 leading-relaxed">{c.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       {/* ── FAQ ───────────────────────────────────────────────────── */}
-      <section className="px-5 py-28 border-t border-slate-800/30">
+      <section className="px-5 py-14 md:py-28 border-t border-slate-800/30">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="text-center mb-8 md:mb-14">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Questions</p>
             <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
               Common questions.
@@ -1095,7 +996,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="absolute top-0 inset-x-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.5), transparent)' }} />
 
-        <div className="relative z-10 max-w-3xl mx-auto px-5 py-32 flex flex-col items-center text-center">
+        <div className="relative z-10 max-w-3xl mx-auto px-5 py-16 md:py-32 flex flex-col items-center text-center">
 
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/20 bg-amber-500/6 mb-10">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: '0 0 6px #f59e0b' }} />
@@ -1127,7 +1028,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             )}
           </h2>
 
-          <p className="text-[15px] text-slate-400 max-w-xs mx-auto mb-14 leading-relaxed">
+          <p className="text-[15px] text-slate-400 max-w-xs mx-auto mb-8 md:mb-14 leading-relaxed">
             {isAuthenticated
               ? 'Jump back in. Your builds, journal, and plans are waiting.'
               : 'One license gets you every tool, with lifetime access and sync across all your devices.'}
