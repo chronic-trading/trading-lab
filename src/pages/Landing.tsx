@@ -850,35 +850,34 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         </div>
       </section>
 
-      {/* ── Who it's for ──────────────────────────────────────────── */}
-      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
-        <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-10">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Who it's for</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              People learning ICT.
+      {/* ── The case for paying ───────────────────────────────────────
+          Four sections used to make this one argument, each with its own
+          eyebrow, display heading, top border and 112px of padding: who it's
+          for, what changes, what comes with the licence, and why pay. They sat
+          between screens 10 and 15 of a 16-screen page, so the repetition was
+          spent almost entirely on people who had already left.
+          Every word of the copy is kept and the order now reads as one case —
+          who it's for, what changes, why it's worth paying, what you get —
+          under a single heading. */}
+      <section className="relative px-5 py-14 md:py-28 border-t border-slate-800/30 overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,158,11,0.03) 0%, transparent 70%)' }} />
+        <div className="relative max-w-5xl mx-auto">
+
+          <div className="text-center mb-8 md:mb-14">
+            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Why it's worth it</p>
+            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+              Why it's worth paying for.
             </h2>
-          </div>
-          <div className="max-w-xl mx-auto text-center">
-            <p className="text-[15px] text-slate-400 leading-relaxed">
+            <p className="text-[15px] text-slate-400 leading-relaxed max-w-xl mx-auto">
               If you are new to ICT and trying to actually learn and master the concepts, this is built for you.
               The library, the model builder, the drills, and the review are all in one place, so you are not
               stitching the framework together from twelve different tabs.
             </p>
           </div>
-        </div>
-      </section>
 
-      {/* ── The old way vs Trading Lab ─────────────────────────────── */}
-      <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
-        <div className="max-w-4xl mx-auto pt-24">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The difference</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              What changes.
-            </h2>
-          </div>
-          <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          {/* What changes — the old way vs Trading Lab */}
+          <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden mb-8 md:mb-14" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="grid grid-cols-2 text-[10px] font-black uppercase tracking-[0.16em]">
               <div className="px-5 md:px-7 py-4 text-slate-600 border-b border-slate-800/50">The old way</div>
               <div className="px-5 md:px-7 py-4 text-amber-400 border-b border-l border-slate-800/50 bg-amber-500/[0.03]">With Trading Lab</div>
@@ -896,23 +895,31 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ── Everything included — horizontal stacked cards ────────── */}
-      <section className="relative px-5 py-14 md:py-28 border-t border-slate-800/30 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,158,11,0.03) 0%, transparent 70%)' }} />
-        <div className="relative max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Everything included</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              What comes with the license.
-            </h2>
+          {/* Why pay */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5 mb-8 md:mb-14">
+            {[
+              { Icon: Network,      color: '#c084fc', title: 'Concepts → system', body: 'YouTube hands you 50 disconnected ideas. This connects them into one framework, grades your setups against it, and tracks whether it actually works.' },
+              { Icon: Target,       color: '#34d399', title: 'No signals to follow', body: 'No signals, no guru calls, no group to copy. You learn the concepts and build your own reads instead of waiting on someone else.' },
+              { Icon: InfinityIcon, color: '#f59e0b', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
+            ].map(c => (
+              <div key={c.title} className="rounded-2xl p-5 md:p-7 text-center flex flex-col items-center"
+                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 md:mb-5 flex-shrink-0"
+                  style={{ background: `${c.color}14`, border: `1px solid ${c.color}2e` }}>
+                  <c.Icon size={19} strokeWidth={1.75} style={{ color: c.color }} />
+                </span>
+                <h3 className="text-[14px] font-bold text-white mb-2.5">{c.title}</h3>
+                <p className="text-[13px] text-slate-500 leading-relaxed">{c.body}</p>
+              </div>
+            ))}
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+          {/* What comes with the license */}
+          <p className="text-center text-[11px] font-black tracking-[0.22em] uppercase text-slate-600 mb-5">Everything included</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5">
             {FEATURE_COLS.map(col => (
-              <div key={col.heading} className="relative rounded-2xl p-7 overflow-hidden text-center flex flex-col items-center"
+              <div key={col.heading} className="relative rounded-2xl p-5 md:p-7 overflow-hidden text-center flex flex-col items-center"
                 style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
                 <div className="absolute top-0 inset-x-0 h-[1px]"
                   style={{ background: `linear-gradient(90deg,transparent,${col.color}55,transparent)` }} />
@@ -930,36 +937,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-
-      {/* ── Why pay (trust band) ──────────────────────────────────── */}
-      <section className="px-5 py-12 md:py-24 border-t border-slate-800/30">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8 md:mb-14">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Why pay for it</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
-              Why it's worth paying for.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {[
-              { Icon: Network,      color: '#c084fc', title: 'Concepts → system', body: 'YouTube hands you 50 disconnected ideas. This connects them into one framework, grades your setups against it, and tracks whether it actually works.' },
-              { Icon: Target,       color: '#34d399', title: 'No signals to follow', body: 'No signals, no guru calls, no group to copy. You learn the concepts and build your own reads instead of waiting on someone else.' },
-              { Icon: InfinityIcon, color: '#f59e0b', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
-            ].map(c => (
-              <div key={c.title} className="rounded-2xl p-7 text-center flex flex-col items-center"
-                style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-5 flex-shrink-0"
-                  style={{ background: `${c.color}14`, border: `1px solid ${c.color}2e` }}>
-                  <c.Icon size={19} strokeWidth={1.75} style={{ color: c.color }} />
-                </span>
-                <h3 className="text-[14px] font-bold text-white mb-2.5">{c.title}</h3>
-                <p className="text-[13px] text-slate-500 leading-relaxed">{c.body}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
