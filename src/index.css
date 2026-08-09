@@ -128,15 +128,10 @@ html[data-theme="light"] {
   & [class*="text-purple-300"], & [class*="text-purple-400"], & [class*="text-violet-400"] { color: var(--violet); }
   & [class*="text-pink-300"], & [class*="text-pink-400"] { color: #db2777; }
 
-  /* Always-dark chrome (mobile bottom nav + its "More" sheet) keeps a dark
-     background even in light mode. It deliberately still uses raw slate/amber
-     utilities — being dark-locked, it wants the dark-tuned palette, not the warm
-     light tokens. These rules lift its dim stops to AA on near-black (slate-600
-     renders ~2.5:1 unaided) and keep its amber from being darkened by the block
-     above, which would otherwise paint amber-on-black at --accent-ink. */
-  & .tl-darkchrome [class*="text-amber-300"], & .tl-darkchrome [class*="text-amber-400"], & .tl-darkchrome [class*="text-amber-500"] { color: #fbbf24; }
-  & .tl-darkchrome [class*="text-slate-500"], & .tl-darkchrome [class*="text-slate-600"] { color: #94a3b8; }
-  & .tl-darkchrome [class*="text-slate-200"], & .tl-darkchrome [class*="text-slate-300"] { color: #cbd5e1; }
+  /* The bottom nav used to be dark-locked in both themes and needed its own
+     palette rules here. It now uses the theme tokens like everything else, so
+     those overrides are gone — a black bar under a warm-paper app read as a
+     rendering fault, not as deliberate chrome. */
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -658,7 +653,7 @@ button, a, [role="button"], input, select, textarea, label {
 /* Long-pressing a control on mobile otherwise selects its label or raises the
    copy/define callout. Chrome (the app frame) should not behave like a document;
    real content keeps normal selection. */
-button, [role="button"], nav, .tl-darkchrome {
+button, [role="button"], nav {
   -webkit-user-select: none;
   user-select: none;
 }

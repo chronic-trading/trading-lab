@@ -5,7 +5,14 @@ import 'jsr:@supabase/functions-js/edge-runtime.d.ts'
 const WHOP_API_KEY = Deno.env.get('WHOP_API_KEY')
 
 // Lets us open the live site without a real purchase.
-const TEST_LICENSE_KEY = Deno.env.get('TEST_LICENSE_KEY') ?? 'TRADINGLAB-TEST-2026'
+//
+// No fallback, deliberately. This repo is public, so a hardcoded default is a
+// published skeleton key to a paid product — anyone reading this file could
+// unlock it, forever, and the value would still work after the code changed
+// because the deployed function keeps whatever it was last given. With no
+// default, the bypass exists only while TEST_LICENSE_KEY is explicitly set in
+// the dashboard, and clearing that secret revokes it instantly.
+const TEST_LICENSE_KEY = Deno.env.get('TEST_LICENSE_KEY')
 
 // Statuses meaning the customer has paid and should have access. Whop's
 // lifecycle is: active, trialing, past_due, canceled, expired, completed.
@@ -44,7 +51,10 @@ Deno.serve(async (req) => {
     return json({ valid: false, error: 'No license key provided' }, 400)
   }
 
-  if (key === TEST_LICENSE_KEY) {
+  // Guard on the secret itself, not just the comparison: if TEST_LICENSE_KEY is
+  // ever unset this must be unreachable rather than depend on `key` never being
+  // undefined. A bypass that fails open is worse than no bypass.
+  if (TEST_LICENSE_KEY && key === TEST_LICENSE_KEY) {
     return json({ valid: true, status: 'active' })
   }
 

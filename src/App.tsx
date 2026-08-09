@@ -170,17 +170,17 @@ function MobileBottomNav({
           left alone they now read blue against the warm app behind them. The
           bar stays dark-locked in both themes by design — it's chrome, not a
           surface — so the values are literals rather than tokens. */}
-      <nav className="tl-darkchrome md:hidden fixed bottom-0 inset-x-0 z-40 bg-[#0d0b09]/95 backdrop-blur-md border-t border-white/8"
+      <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-[var(--bg-elev)]/95 backdrop-blur-md border-t border-[var(--border)]"
            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
         <div className="flex items-stretch">
           {primary.map(({ id, label, Icon, badge }) => (
             <button key={id}
               onClick={() => { setTab(id); setMoreOpen(false) }}
               className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 transition-all relative ${
-                tab === id && !moreOpen ? 'text-amber-400' : 'text-slate-600 active:text-slate-300'
+                tab === id && !moreOpen ? 'text-[var(--accent-ink)]' : 'text-[var(--text-dim)] active:text-[var(--text)]'
               }`}>
               {tab === id && !moreOpen && (
-                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-amber-400 rounded-full" />
+                <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-[var(--accent)] rounded-full" />
               )}
               <span className="relative">
                 <Icon size={19} />
@@ -193,10 +193,10 @@ function MobileBottomNav({
           <button
             onClick={() => setMoreOpen(o => !o)}
             className={`flex-1 flex flex-col items-center justify-center gap-1 py-2.5 transition-all relative ${
-              moreOpen || moreActive ? 'text-amber-400' : 'text-slate-600 active:text-slate-300'
+              moreOpen || moreActive ? 'text-[var(--accent-ink)]' : 'text-[var(--text-dim)] active:text-[var(--text)]'
             }`}>
             {(moreOpen || moreActive) && (
-              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-amber-400 rounded-full" />
+              <span className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-[var(--accent)] rounded-full" />
             )}
             {moreOpen ? <X size={19} /> : <Grid3X3 size={19} />}
             <span className="text-[10px] font-bold tracking-wide">More</span>
@@ -212,7 +212,7 @@ function MobileBottomNav({
           className="tl-scrim-in md:hidden fixed inset-0 z-30 bg-black/40"
           onClick={() => setMoreOpen(false)}>
           <div
-            className="tl-sheet-in tl-darkchrome absolute inset-x-0 bg-[#16130f] border-t border-white/8 p-4 pb-2 shadow-2xl"
+            className="tl-sheet-in absolute inset-x-0 bg-[var(--bg-elev)] border-t border-[var(--border)] p-4 pb-2 shadow-2xl"
             style={{ bottom: `calc(56px + env(safe-area-inset-bottom))` }}
             onClick={e => e.stopPropagation()}>
             {/* Grouped the same way as the desktop sidebar, so the two navs
@@ -246,8 +246,8 @@ function MobileBottomNav({
                             onClick={() => { setTab(id); setMoreOpen(false) }}
                             className={`flex flex-col items-center gap-1.5 py-3 rounded-2xl border transition-all ${
                               tab === id
-                                ? 'border-amber-500/40 bg-amber-500/10 text-amber-400'
-                                : 'border-white/8 bg-white/[0.04] text-slate-400 active:text-slate-200 active:border-white/20'
+                                ? 'border-[var(--accent-ring)] bg-[var(--accent-soft)] text-[var(--accent-ink)]'
+                                : 'border-[var(--border)] bg-[var(--surface)] text-[var(--text-dim)] active:text-[var(--text)] active:border-[var(--border-strong)]'
                             }`}>
                             <Icon size={17} />
                             <span className="text-[10px] font-bold">{label}</span>
@@ -267,7 +267,7 @@ function MobileBottomNav({
                   {tools.map(({ label, Icon, color, onClick }) => (
                     <button key={label}
                       onClick={() => { onClick(); setMoreOpen(false) }}
-                      className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-white/8 bg-white/[0.04] text-slate-400 active:text-slate-200 active:border-white/20 transition-all">
+                      className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-dim)] active:text-[var(--text)] active:border-[var(--border-strong)] transition-all">
                       <Icon size={17} className={color} />
                       <span className="text-[10px] font-bold">{label}</span>
                     </button>
