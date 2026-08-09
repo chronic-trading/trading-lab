@@ -222,7 +222,7 @@ function MobileBottomNav({
                   no mobile affordance at all before — ⌘K needs a keyboard. */}
               <button
                 onClick={() => { onSearch(); setMoreOpen(false) }}
-                className="w-full flex items-center gap-2.5 px-3.5 min-h-[44px] rounded-2xl border border-white/10 bg-white/[0.06] text-slate-300 active:border-white/25 active:text-white transition-all">
+                className="w-full flex items-center gap-2.5 px-3.5 min-h-[44px] rounded-2xl border border-[var(--border)] bg-[var(--surface)] text-[var(--text-dim)] active:border-[var(--border-strong)] active:text-[var(--text)] transition-all">
                 <Search size={16} />
                 <span className="text-[13px] font-semibold">Search everything</span>
               </button>
