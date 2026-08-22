@@ -359,14 +359,6 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           50%  { background-position:100% 50%; }
           100% { background-position:0% 50%; }
         }
-        @keyframes orb-float {
-          0%,100% { transform:translateY(0px) scale(1); }
-          50%      { transform:translateY(-18px) scale(1.04); }
-        }
-        @keyframes orb-float-2 {
-          0%,100% { transform:translateY(0px) scale(1); }
-          50%      { transform:translateY(14px) scale(0.97); }
-        }
         @keyframes map-drift {
           0%   { transform:translate(0px,0px); }
           18%  { transform:translate(-55px,-38px); }
@@ -444,24 +436,6 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, rgba(5,5,10,0.05) 0%, rgba(5,5,10,0.94) 30%, rgba(5,5,10,0.94) 70%, rgba(5,5,10,0.05) 100%)' }} />
 
-        {/* Floating amber orb */}
-        <div className="absolute pointer-events-none"
-          style={{ top: '18%', left: '12%', width: '280px', height: '280px',
-            background: 'radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)',
-            animation: 'orb-float 7s ease-in-out infinite', borderRadius: '50%' }} />
-
-        {/* Floating blue orb */}
-        <div className="absolute pointer-events-none"
-          style={{ bottom: '22%', right: '8%', width: '240px', height: '240px',
-            background: 'radial-gradient(circle, rgba(96,165,250,0.10) 0%, transparent 70%)',
-            animation: 'orb-float-2 9s ease-in-out infinite', borderRadius: '50%' }} />
-
-        {/* Floating purple orb */}
-        <div className="absolute pointer-events-none"
-          style={{ top: '40%', right: '15%', width: '200px', height: '200px',
-            background: 'radial-gradient(circle, rgba(192,132,252,0.08) 0%, transparent 70%)',
-            animation: 'orb-float 11s ease-in-out infinite 2s', borderRadius: '50%' }} />
-
         {/* Top amber line */}
         <div className="absolute top-14 inset-x-0 h-px pointer-events-none"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent)' }} />
@@ -490,10 +464,8 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             <h1 className="tl-display leading-[0.92] select-none text-center"
               style={{ fontSize: 'clamp(54px, 10.5vw, 104px)', letterSpacing: '-0.02em' }}>
               <span className="text-white">Learn ICT</span><br />
-              <span className="animate-gradient-pan" style={{
-                background: 'linear-gradient(125deg, #fbbf24 0%, #f59e0b 20%, #fde68a 50%, #f59e0b 80%, #fbbf24 100%)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>by building it.</span>
+              <span style={{
+                color: '#fbbf24',}}>by building it.</span>
             </h1>
           </div>
 
@@ -616,8 +588,6 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
       {/* ── Pricing ───────────────────────────────────────────────── */}
       <section className="relative px-5 py-14 md:py-28 border-t border-slate-800/30 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 70% at 50% 40%, rgba(245,158,11,0.05) 0%, transparent 70%)' }} />
         <div className="relative max-w-lg mx-auto">
           <div className="text-center mb-12">
             <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">One license</p>
@@ -709,13 +679,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="absolute top-0 inset-x-0 h-[1px] opacity-50"
               style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.6),transparent)' }} />
-            <div className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.04), transparent 65%)' }} />
             <div className="relative max-w-2xl mx-auto">
               <p className="font-black leading-[0.9] mb-10 text-center"
                 style={{ fontSize: 'clamp(28px,5.5vw,52px)', letterSpacing: '-2px' }}>
                 <span className="text-slate-400">ICT has a lot of</span><br />
-                <span style={{ background: 'linear-gradient(125deg,#fbbf24,#f59e0b 45%,#fde68a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>moving parts.</span>
+                <span style={{ color: '#fbbf24',}}>moving parts.</span>
               </p>
               <div className="h-px max-w-[120px] mx-auto mb-10"
                 style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.35), transparent)' }} />
@@ -752,8 +720,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                   {/* Step number */}
                   <p className="font-black leading-none mb-5 text-center"
                     style={{ fontSize: '40px', fontFamily: "'JetBrains Mono',monospace",
-                      background: 'linear-gradient(135deg,rgba(245,158,11,0.25),rgba(245,158,11,0.06))',
-                      WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                      color: '#fbbf24',}}>
                     {s.n}
                   </p>
                   {/* Icon */}
@@ -860,8 +827,6 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           who it's for, what changes, why it's worth paying, what you get —
           under a single heading. */}
       <section className="relative px-5 py-14 md:py-28 border-t border-slate-800/30 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 60% 80% at 50% 50%, rgba(245,158,11,0.03) 0%, transparent 70%)' }} />
         <div className="relative max-w-5xl mx-auto">
 
           <div className="text-center mb-8 md:mb-14">
@@ -968,8 +933,6 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="absolute inset-0 pointer-events-none"
           style={{ background: 'linear-gradient(to bottom, rgba(5,5,10,0.05) 0%, rgba(5,5,10,0.92) 28%, rgba(5,5,10,0.92) 72%, rgba(5,5,10,0.05) 100%)' }} />
         {/* Amber bloom from below */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse 100% 60% at 50% 100%, rgba(245,158,11,0.12) 0%, transparent 65%)' }} />
         {/* Top amber line */}
         <div className="absolute top-0 inset-x-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.5), transparent)' }} />
@@ -994,15 +957,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             {isAuthenticated ? (
               <>Your lab<br />
               <span style={{
-                background: 'linear-gradient(125deg,#fbbf24,#f59e0b 40%,#fde68a,#f59e0b 80%,#fbbf24)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>is waiting.</span></>
+                color: '#fbbf24',}}>is waiting.</span></>
             ) : (
               <>Start learning<br />
               <span style={{
-                background: 'linear-gradient(125deg,#fbbf24,#f59e0b 40%,#fde68a,#f59e0b 80%,#fbbf24)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>the framework.</span></>
+                color: '#fbbf24',}}>the framework.</span></>
             )}
           </h2>
 
