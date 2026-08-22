@@ -425,7 +425,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       <main>
 
       {/* ── Hero ──────────────────────────────────────────────────── */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-14 pb-14 md:pb-28 px-5 text-center overflow-hidden">
+      <section className="relative min-h-screen flex flex-col items-stretch justify-center pt-14 pb-14 md:pb-28 px-5 text-left overflow-hidden">
 
         {/* Concept map — parallax wrapper */}
         <div ref={heroMapRef} className="absolute inset-0 will-change-transform">
@@ -440,104 +440,86 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="absolute top-14 inset-x-0 h-px pointer-events-none"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent)' }} />
 
-        <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-center">
+        <div className="relative z-10 max-w-4xl mx-auto w-full flex flex-col items-start">
 
-          {/* Badge.
-              The spacing from here down was tuned at desktop scale. On a 375px
-              screen it pushed the first CTA to y=479 and left a 133px empty band
-              between the tagline and the buttons — the most valuable strip of
-              the page, blank, while 80% of visitors leave before scrolling a
-              quarter. Each step is tightened below sm and unchanged above it. */}
-          <div {...anim(0)} className={`${anim(0).className} mb-5 sm:mb-8`} style={anim(0).style}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: '0 0 8px #f59e0b' }} />
-              <span className="text-[11px] font-bold tracking-[0.22em] uppercase text-amber-400/85">a Chronic Trading tool</span>
+          {/* ── Terminal head ──────────────────────────────────────────
+              A status strip, the way an instrument labels itself: who it is on
+              the left, what it covers on the right, hairline rules top and
+              bottom. Replaces the pill badge, which is the single most
+              recognisable "generated landing page" component there is. */}
+          <div {...anim(0)} className={`${anim(0).className} w-full`} style={anim(0).style}>
+            <div className="tl-hair-a w-full" />
+            <div className="tl-strip flex items-center justify-between py-2.5 text-slate-500">
+              <span className="text-amber-400/90">CHRONIC TRADING</span>
+              <span className="hidden sm:inline tabular-nums">NQ · ES · GC · SI</span>
             </div>
+            <div className="tl-hair w-full" />
           </div>
 
-          {/* Headline */}
-          <div {...anim(80)} className={`${anim(80).className} mb-4 sm:mb-5 w-full`} style={anim(80).style}>
-            {/* Display serif, sized up and with the heavy negative tracking
-                eased off — Instrument Serif runs optically smaller than the
-                black-weight sans it replaces, and -3px closes its thin strokes
-                into each other at hero scale. */}
-            <h1 className="tl-display leading-[0.92] select-none text-center"
-              style={{ fontSize: 'clamp(54px, 10.5vw, 104px)', letterSpacing: '-0.02em' }}>
-              <span className="text-white">Learn ICT</span><br />
-              <span style={{
-                color: '#fbbf24',}}>by building it.</span>
+          {/* Headline — monospace banner, left-aligned, ragged right.
+              Not a display serif: that has become its own house style, and the
+              domain this teaches reads its world in a fixed-width font. */}
+          <div {...anim(80)} className={`${anim(80).className} w-full mt-8 sm:mt-14`} style={anim(80).style}>
+            <h1 className="tl-banner text-white select-none"
+              style={{ fontSize: 'clamp(38px, 8.5vw, 82px)' }}>
+              LEARN ICT<br />
+              <span className="text-amber-400">BY BUILDING IT.</span>
             </h1>
           </div>
 
-          {/* Tagline */}
-          <div {...anim(140)} className={`${anim(140).className} mb-3 sm:mb-4`} style={anim(140).style}>
-            <p className="text-[13px] font-semibold tracking-[0.18em] uppercase text-slate-500 text-center">
-              ICT · SMC · Futures · Learn it in one place
+          {/* Sub — left-aligned, measured, no centring. */}
+          <div {...anim(200)} className={`${anim(200).className} w-full mt-5 sm:mt-7`} style={anim(200).style}>
+            <p className="text-slate-400 leading-relaxed max-w-xl"
+              style={{ fontSize: 'clamp(14px, 1.7vw, 17px)' }}>
+              A model builder for traders learning ICT. Stack the concepts, watch the
+              synergies connect, and master the framework in one place.
             </p>
           </div>
 
-          {/* Sub */}
-          <div {...anim(200)} className={`${anim(200).className} mb-6 sm:mb-11`} style={anim(200).style}>
-            <p className="text-slate-400 max-w-lg mx-auto leading-relaxed text-center"
-              style={{ fontSize: 'clamp(15px, 2vw, 18px)' }}>
-              {/* The trailing space matters: on mobile the <br> is hidden, and JSX
-                  strips the newline, so without it the sentences collide
-                  ("ICT.Stack the concepts"). */}
-              A model builder for traders learning ICT.{' '}
-              <br className="hidden sm:block" />
-              Stack the concepts, watch the synergies connect, and master the framework in one place.
-            </p>
-          </div>
-
-          {/* CTAs.
-              The hierarchy here was inverted for acquisition: the large gradient
-              button read "Sign In with License Key" — an action only an existing
-              customer can complete — while buying was the demoted outline button
-              beside it. With four customers and roughly twenty visitors a month,
-              almost everyone who lands here has no key, so the most prominent
-              control on the page did nothing for them.
-              Buying is now primary and carries the price. The offer terms sit
-              directly underneath because they are the strongest argument on the
-              page and previously appeared at screen 19.5 of 22.8, where the
-              scroll data says almost nobody arrives. Sign-in drops to a text
-              link — returning customers are looking for it and will find it. */}
-          <div {...anim(270)} className={`${anim(270).className} flex flex-col items-center gap-3 mb-10 sm:mb-16`} style={anim(270).style}>
-            <button onClick={isAuthenticated ? handleCTA : goBuy('hero')}
-              className="group flex items-center gap-3 px-10 py-4 rounded-2xl font-bold text-[15px] transition-all duration-200 hover:scale-[1.03] active:scale-[0.98]"
-              style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
-              {isAuthenticated ? ctaLabel : (PRICE ? `Get Access — ${PRICE}` : 'Get Access')}
-              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-
+          {/* CTA row. Square, flat, left-aligned — the terms sit beside the
+              button as a field label rather than centred underneath it. */}
+          <div {...anim(270)} className={`${anim(270).className} w-full mt-7 sm:mt-10`} style={anim(270).style}>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5">
+              <button onClick={isAuthenticated ? handleCTA : goBuy('hero')}
+                className="tl-sq2 tl-flat group inline-flex items-center justify-center gap-3 px-7 py-3.5 font-bold text-[14px] tracking-wide transition-colors duration-150"
+                style={{ background: '#f59e0b', color: '#100e0b' }}>
+                {isAuthenticated ? ctaLabel : (PRICE ? `GET ACCESS — ${PRICE}` : 'GET ACCESS')}
+                <ArrowRight size={15} className="group-hover:translate-x-0.5 transition-transform" />
+              </button>
+              {!isAuthenticated && (
+                <span className="tl-label leading-relaxed">
+                  One-time · Lifetime access · No subscription
+                </span>
+              )}
+            </div>
             {!isAuthenticated && (
-              <>
-                <p className="text-[12px] text-slate-400 text-center">
-                  One-time payment · Lifetime access · No subscription
-                </p>
-                <button onClick={handleCTA}
-                  className="text-[13px] text-slate-500 hover:text-slate-300 underline underline-offset-4 decoration-slate-700 transition-colors">
-                  Already have a license key? Sign in
-                </button>
-              </>
+              <button onClick={handleCTA}
+                className="mt-4 text-[13px] text-slate-500 hover:text-amber-400 transition-colors">
+                Already have a license key? <span className="underline underline-offset-4 decoration-slate-700">Sign in</span>
+              </button>
             )}
           </div>
 
-          {/* Stats */}
-          <div {...anim(350)} className={`${anim(350).className} flex items-center justify-center`} style={anim(350).style}>
-            {[
-              { val: '50+', sub: 'ICT Concepts' },
-              { val: '15',  sub: 'Tools'        },
-            ].map((s, i) => (
-              <div key={s.sub} className="flex items-stretch">
-                {i > 0 && <div className="w-px bg-slate-800/80 self-stretch mx-7 sm:mx-12 md:mx-20" />}
-                <div className="text-center">
-                  <p className="font-black text-white leading-none"
-                    style={{ fontSize: 'clamp(28px,5.5vw,40px)', fontFamily: "'JetBrains Mono',monospace",
-                      textShadow: '0 0 35px rgba(245,158,11,0.45)' }}>{s.val}</p>
-                  <p className="text-[10px] text-slate-600 uppercase tracking-[0.22em] mt-2">{s.sub}</p>
+          {/* Ledger — the real dataset, stated plainly. Specificity is the thing
+              a generated page cannot borrow: these numbers come from the files
+              the replay actually loads, so they are checkable. */}
+          <div {...anim(350)} className={`${anim(350).className} w-full mt-10 sm:mt-16`} style={anim(350).style}>
+            <div className="tl-hair w-full" />
+            <div className="grid grid-cols-2 sm:grid-cols-4">
+              {[
+                { v: '52',      k: 'Concepts'   },
+                { v: '15',      k: 'Tools'      },
+                { v: '184,011', k: 'Bars'       },
+                { v: '10 yrs',  k: 'History'    },
+              ].map((s, i) => (
+                <div key={s.k}
+                  className={`py-4 sm:py-5 ${i > 0 ? 'sm:tl-vhair sm:pl-5' : ''} ${i % 2 === 1 ? 'tl-vhair pl-5 sm:pl-5' : ''}`}>
+                  <p className="tl-num text-white leading-none" style={{ fontSize: 'clamp(20px,3.4vw,30px)' }}>{s.v}</p>
+                  <p className="tl-label mt-2">{s.k}</p>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="tl-hair-a w-full" />
           </div>
         </div>
 

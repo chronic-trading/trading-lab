@@ -747,3 +747,73 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 }
 
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TERMINAL LAYER
+   The house style, and a deliberate break from what a language model reaches
+   for by default. Every rule here is the opposite of that default:
+
+     centred        -> left-aligned, ragged right
+     cards + shadow -> hairline rules, no elevation at all
+     rounded-2xl    -> square, or 2px at most
+     sans for all   -> monospace for every label, number and axis
+     colour to decorate -> one amber, used only to mean something
+
+   The reference is a trading terminal — Bloomberg, a DOM ladder, an order book.
+   Dense, tabular, flat. That is the visual language of the domain this product
+   teaches, and it is unfakeable in the way decoration is not: density needs
+   real content behind it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Field label. Terminals label everything, in small caps, tracked wide. */
+.tl-label {
+  font-family: var(--ct-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Tabular figures. Numbers must align in a column or they read as prose. */
+.tl-num {
+  font-family: var(--ct-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum' 1, 'zero' 1;
+}
+
+/* A hairline. Replaces the card: structure comes from rules, not from boxes
+   with shadows floating on a background. */
+.tl-hair   { border-top: 1px solid var(--border); }
+.tl-hair-a { border-top: 1px solid rgba(245, 158, 11, 0.28); }
+.tl-vhair  { border-left: 1px solid var(--border); }
+
+/* Square. The single most recognisable giveaway is a rounded-2xl card grid, so
+   the house radius is 0 and controls get 2px — enough to not look accidental. */
+.tl-sq  { border-radius: 0 !important; }
+.tl-sq2 { border-radius: 2px !important; }
+
+/* A terminal banner headline: monospace, uppercase, tight, left-aligned.
+   Deliberately not a display serif — that has become its own house style. */
+.tl-banner {
+  font-family: var(--ct-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.94;
+  text-align: left;
+}
+
+/* Status strip — the line of instruments and session state a terminal carries
+   along its top edge. */
+.tl-strip {
+  font-family: var(--ct-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Flat. No elevation anywhere in this layer: a terminal is a screen, not paper,
+   and soft shadows under everything is the tell this whole layer exists to
+   avoid. */
+.tl-flat { box-shadow: none !important; }
