@@ -60,7 +60,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
   }, [checked, rr])
 
   return (
-    <div className="relative rounded-2xl overflow-hidden"
+    <div className="relative tl-sq2 overflow-hidden"
       style={{ background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(245,158,11,0.18)', boxShadow: '0 0 60px rgba(245,158,11,0.06)' }}>
       <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.7),transparent)' }} />
 
@@ -87,12 +87,12 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
                     // slate scale, and one-off hexes read as extra colors.
                     return (
                       <button key={f.id} onClick={() => toggle(f.id)}
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium transition-all ${on ? 'text-[var(--text)]' : 'text-[var(--text-dim)]'}`}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 tl-sq2 text-[11px] font-medium transition-all ${on ? 'text-[var(--text)]' : 'text-[var(--text-dim)]'}`}
                         style={{
                           background: on ? `${group.color}1c` : 'rgba(255,255,255,0.02)',
                           border: `1px solid ${on ? group.color + '55' : 'rgba(255,255,255,0.07)'}`,
                         }}>
-                        <span className="w-3.5 h-3.5 rounded-lg flex items-center justify-center flex-shrink-0"
+                        <span className="w-3.5 h-3.5 tl-sq2 flex items-center justify-center flex-shrink-0"
                           style={{ background: on ? group.color : 'transparent', border: on ? 'none' : '1px solid rgba(255,255,255,0.18)' }}>
                           {on && <Check size={10} className="text-[#0b0b12]" strokeWidth={3.5} />}
                         </span>
@@ -110,7 +110,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
             <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--text-dim)]">R:R</span>
             {[1, 1.5, 2, 3, 4].map(v => (
               <button key={v} onClick={() => { trackOnce('demo-used', 'Interacted with the live Grader demo'); setRr(v) }}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all font-mono ${rr === v ? 'text-amber-400' : 'text-[var(--text-dim)]'}`}
+                className={`px-2.5 py-1 tl-sq2 text-[11px] font-bold transition-all font-mono ${rr === v ? 'text-amber-400' : 'text-[var(--text-dim)]'}`}
                 style={{
                   background: rr === v ? 'rgba(245,158,11,0.15)' : 'transparent',
                   border: `1px solid ${rr === v ? 'rgba(245,158,11,0.4)' : 'rgba(255,255,255,0.08)'}`,
@@ -140,7 +140,7 @@ export function GraderDemo({ onCTA, ctaLabel = 'Unlock the full Trade Grader' }:
           <p className="text-[12px] text-[var(--text-dim)] leading-relaxed mt-1.5 max-w-[240px]">{verdict.body}</p>
 
           <button onClick={onCTA}
-            className="group mt-6 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-[14px] transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="group mt-6 w-full flex items-center justify-center gap-2 px-5 py-3 tl-sq2 font-bold text-[14px] transition-all hover:scale-[1.02] active:scale-[0.98]"
             style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
             {ctaLabel}
             <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />

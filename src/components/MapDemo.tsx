@@ -80,7 +80,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
   const linked = useMemo(() => new Set(basicSynergies.map(s => s.conceptId)), [basicSynergies])
 
   return (
-    <div className="relative rounded-2xl overflow-hidden"
+    <div className="relative tl-sq2 overflow-hidden"
       style={{ background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)', boxShadow: '0 0 60px rgba(96,165,250,0.05)' }}>
       <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: 'linear-gradient(90deg,transparent,rgba(96,165,250,0.6),transparent)' }} />
 
@@ -183,7 +183,7 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
                       if (!partner) return null
                       return (
                         <button key={syn.conceptId} onClick={() => select(syn.conceptId)}
-                          className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 rounded-lg bg-[var(--surface)] border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] transition-colors">
+                          className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-1 tl-sq2 bg-[var(--surface)] border border-[var(--border)] text-[var(--text-dim)] hover:border-[var(--border-strong)] transition-colors">
                           <span className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                             style={{ background: syn.strength === 3 ? '#f59e0b' : syn.strength === 2 ? '#94a3b8' : '#475569' }} />
                           {partner.shortName}
@@ -197,9 +197,9 @@ export function MapDemo({ onCTA, ctaLabel = 'Get instant access' }: Props) {
           )}
 
           <button onClick={onCTA}
-            className="group mt-auto pt-6 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold text-[14px] transition-all hover:scale-[1.02] active:scale-[0.98]"
+            className="group mt-auto pt-6 w-full flex items-center justify-center gap-2 px-5 py-3 tl-sq2 font-bold text-[14px] transition-all hover:scale-[1.02] active:scale-[0.98]"
             style={{ marginTop: 'auto' }}>
-            <span className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl"
+            <span className="w-full flex items-center justify-center gap-2 px-5 py-3 tl-sq2"
               style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
               {ctaLabel}
               <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />

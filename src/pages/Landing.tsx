@@ -106,7 +106,7 @@ function ConceptMapBg({ opacity = 0.09 }: { opacity?: number }) {
           return (
             <line key={i} x1={na.x} y1={na.y} x2={nb.x} y2={nb.y}
               stroke="rgba(255,255,255,0.5)" strokeWidth="1"
-              style={{ animation: `edge-shimmer ${3 + (i % 7) * 0.4}s ease-in-out infinite`, animationDelay: `${(i * 0.18) % 3}s` }}
+              style={{ animationDelay: `${(i * 0.18) % 3}s` }}
             />
           )
         })}
@@ -114,11 +114,11 @@ function ConceptMapBg({ opacity = 0.09 }: { opacity?: number }) {
           <g key={i}>
             <circle cx={n.x} cy={n.y} r={n.r + 9} fill={n.color} fillOpacity="0"
               stroke={n.color} strokeWidth="1.5" strokeOpacity="0.15"
-              style={{ animation: `ring-breathe ${2.8 + i * 0.11}s ease-in-out infinite`, animationDelay: `${(i * 0.22) % 2.5}s` }}
+              style={{ animationDelay: `${(i * 0.22) % 2.5}s` }}
             />
             <circle cx={n.x} cy={n.y} r={n.r} fill={n.color} fillOpacity="0.3"
               stroke={n.color} strokeWidth="1.5" strokeOpacity="0.85"
-              style={{ animation: `node-breathe ${2.5 + i * 0.13}s ease-in-out infinite`, animationDelay: `${(i * 0.19) % 2}s` }}
+              style={{ animationDelay: `${(i * 0.19) % 2}s` }}
             />
             <text x={n.x} y={n.y + n.r + 12} textAnchor="middle" fill="white"
               fontSize="9" fontFamily="system-ui" fontWeight="600" fillOpacity="0.8">
@@ -141,18 +141,18 @@ const TOOLS = [
   { Icon: LayoutDashboard, name: 'Today',            desc: 'The screen you open at the start of a session: kill zones, red-folder events, key levels, and your recent performance in one place.', color: '#f59e0b', tag: 'Daily' },
   { Icon: Beaker,          name: 'Strategy Builder', desc: 'Stack ICT/SMC concepts into a living trading system. Real-time synergy detection shows you how your setups connect.', color: '#f59e0b', tag: 'Build' },
   { Icon: Gauge,           name: 'Trade Grader',     desc: 'Score any setup against 13 weighted ICT confluences and your own saved system. Get a letter grade, the missing essentials, and a position-size suggestion before you risk a dollar.', color: '#f59e0b', tag: 'New' },
-  { Icon: Network,         name: 'Synergy Map',      desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map and hover any node to trace its connections.', color: '#c084fc', tag: 'Study' },
-  { Icon: Layers,          name: 'Review',           desc: 'Spaced-repetition flashcards for every concept. Grade your own recall and the scheduler resurfaces whatever is fading.', color: '#c084fc', tag: 'Study' },
-  { Icon: BookOpen,        name: 'Trade Journal',    desc: 'Log trades with R-multiples, win rate, and streak tracking. Find the patterns in your performance over time.', color: '#34d399', tag: 'Track' },
-  { Icon: Crosshair,       name: 'Replay',           desc: 'Bar-by-bar replay of historical sessions. Practice your entries and get scored on them without risking anything.', color: '#60a5fa', tag: 'Practice' },
-  { Icon: BarChart2,       name: 'Trade Recap',      desc: 'Upload any broker CSV and get visual trade cards, weekly montages, and one-click video export.', color: '#c084fc', tag: 'Share' },
-  { Icon: GraduationCap,   name: 'Playbook',         desc: 'The lessons. Every concept explained with annotated diagrams, starting from the ten basics and building up.', color: '#34d399', tag: 'Learn' },
+  { Icon: Network,         name: 'Synergy Map',      desc: 'Interactive network of 50+ concepts. See the full ICT framework as a living map and hover any node to trace its connections.', color: '#f59e0b', tag: 'Study' },
+  { Icon: Layers,          name: 'Review',           desc: 'Spaced-repetition flashcards for every concept. Grade your own recall and the scheduler resurfaces whatever is fading.', color: '#f59e0b', tag: 'Study' },
+  { Icon: BookOpen,        name: 'Trade Journal',    desc: 'Log trades with R-multiples, win rate, and streak tracking. Find the patterns in your performance over time.', color: '#f59e0b', tag: 'Track' },
+  { Icon: Crosshair,       name: 'Replay',           desc: 'Bar-by-bar replay of historical sessions. Practice your entries and get scored on them without risking anything.', color: '#f59e0b', tag: 'Practice' },
+  { Icon: BarChart2,       name: 'Trade Recap',      desc: 'Upload any broker CSV and get visual trade cards, weekly montages, and one-click video export.', color: '#f59e0b', tag: 'Share' },
+  { Icon: GraduationCap,   name: 'Playbook',         desc: 'The lessons. Every concept explained with annotated diagrams, starting from the ten basics and building up.', color: '#f59e0b', tag: 'Learn' },
   { Icon: ClipboardCheck,  name: 'Session Planner',  desc: 'Plan kill zones, macros, and FOMC ahead of time, so a news candle or session transition never catches you off-guard.', color: '#f59e0b', tag: 'Plan' },
-  { Icon: LineChart,       name: 'Key Levels',       desc: 'A live TradingView chart with your marked levels beside it, so the lines you planned are the lines you trade.', color: '#60a5fa', tag: 'Execute' },
+  { Icon: LineChart,       name: 'Key Levels',       desc: 'A live TradingView chart with your marked levels beside it, so the lines you planned are the lines you trade.', color: '#f59e0b', tag: 'Execute' },
   { Icon: CalendarDays,    name: 'News Calendar',    desc: 'Every red-folder event on one calendar, so a scheduled release never catches you in a position.', color: '#f87171', tag: 'Plan' },
-  { Icon: LayoutTemplate,  name: 'Templates',        desc: 'Starter models to learn from. Load one into the Builder and adapt it until it is yours.', color: '#60a5fa', tag: 'Start' },
+  { Icon: LayoutTemplate,  name: 'Templates',        desc: 'Starter models to learn from. Load one into the Builder and adapt it until it is yours.', color: '#f59e0b', tag: 'Start' },
   { Icon: Package,         name: 'My Builds',        desc: 'Every model you have built, saved with its score and comparable side by side.', color: '#f59e0b', tag: 'Save' },
-  { Icon: Gamepad2,        name: 'Arcade',           desc: 'Trading mini-games with fake money and real lessons. Train discipline and execution speed with nothing on the line.', color: '#c084fc', tag: 'Train' },
+  { Icon: Gamepad2,        name: 'Arcade',           desc: 'Trading mini-games with fake money and real lessons. Train discipline and execution speed with nothing on the line.', color: '#f59e0b', tag: 'Train' },
 ]
 
 const STEPS = [
@@ -169,12 +169,12 @@ const FEATURE_COLS = [
   },
   {
     heading: 'Execution',
-    color: '#60a5fa',
+    color: '#f59e0b',
     items: ['Kill zone & macro clock', 'Live TradingView chart embed', 'Pre-market session notes', 'Daily & weekly planning tools', 'Trading rules checklist', 'Drawdown guard & daily limits', 'Mindset check-in tracker'],
   },
   {
     heading: 'Review',
-    color: '#34d399',
+    color: '#f59e0b',
     items: ['Journal with R-multiple tracking', 'Win rate & streak analytics', 'CSV broker import', 'Visual trade-card recap', 'One-click video montage export'],
   },
 ]
@@ -242,13 +242,13 @@ function FaqItem({ q, a }: { q: string; a: string }) {
   // accessible name, and a collapsed panel left in the DOM gets read out of
   // context — so it only renders when open.
   return (
-    <div className="rounded-2xl overflow-hidden"
+    <div className="tl-sq2 overflow-hidden"
       style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
       <button onClick={onToggle} aria-expanded={open} aria-controls={panelId}
         className="w-full text-left p-5 flex items-center justify-between gap-4">
         <span className="text-[14px] font-bold text-white">{q}</span>
         <span aria-hidden="true"
-          className={`flex-shrink-0 w-6 h-6 rounded-lg border border-amber-500/25 bg-amber-500/8 flex items-center justify-center text-amber-400 transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>
+          className={`flex-shrink-0 w-6 h-6 tl-sq2 border border-amber-500/25 bg-amber-500/8 flex items-center justify-center text-amber-400 transition-transform duration-300 ${open ? 'rotate-45' : ''}`}>
           <Plus size={13} strokeWidth={2.5} />
         </span>
       </button>
@@ -342,17 +342,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
       {/* ── CSS Animations ────────────────────────────────────────── */}
       <style>{`
-        @keyframes node-breathe {
-          0%,100% { fill-opacity:0.28; stroke-opacity:0.8; }
-          50%      { fill-opacity:0.52; stroke-opacity:1; }
+        
         }
-        @keyframes ring-breathe {
-          0%,100% { stroke-opacity:0.12; }
-          50%      { stroke-opacity:0.38; }
+        
         }
-        @keyframes edge-shimmer {
-          0%,100% { stroke-opacity:0.4; }
-          50%      { stroke-opacity:0.75; }
+        
         }
         @keyframes gradient-pan {
           0%   { background-position:0% 50%; }
@@ -389,7 +383,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       <nav className="fixed top-0 inset-x-0 z-50 border-b border-slate-800/50 bg-[#05050a]/90 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-amber-500/30 to-amber-600/10 border border-amber-500/35 flex items-center justify-center"
+            <div className="w-7 h-7 tl-sq2 bg-gradient-to-br from-amber-500/30 to-amber-600/10 border border-amber-500/35 flex items-center justify-center"
               style={{ boxShadow: '0 0 12px rgba(245,158,11,0.2)' }}>
               <FlaskConical size={13} className="text-amber-400" />
             </div>
@@ -405,13 +399,13 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             )}
             {isAuthenticated ? (
               <button onClick={onLaunch}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl text-[13px] font-bold transition-all hover:scale-[1.02]"
+                className="flex items-center gap-2 px-4 py-2 tl-sq2 text-[13px] font-bold transition-all"
                 style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
                 Launch Lab <ArrowRight size={13} />
               </button>
             ) : (
               <button onClick={onSignIn}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-amber-500/35 bg-amber-500/8 text-amber-300 text-[13px] font-bold hover:bg-amber-500/18 hover:border-amber-400/50 transition-all">
+                className="flex items-center gap-2 px-4 py-2 tl-sq2 border border-amber-500/35 bg-amber-500/8 text-amber-300 text-[13px] font-bold hover:bg-amber-500/18 hover:border-amber-400/50 transition-all">
                 Sign In
               </button>
             )}
@@ -539,7 +533,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
         <div className="flex items-center gap-2.5 px-8 flex-wrap justify-center">
           {PILLS.map(p => (
             <span key={p.label}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold tracking-[0.07em] uppercase whitespace-nowrap"
+              className="inline-flex items-center gap-1.5 px-3 py-1 tl-sq2 text-[11px] font-semibold tracking-[0.07em] uppercase whitespace-nowrap"
               style={{ color: p.color, background: `${p.color}10`, border: `1px solid ${p.color}25` }}>
               <span className="w-1 h-1 rounded-full flex-shrink-0" style={{ background: p.color, opacity: 0.7 }} />
               {p.label}
@@ -552,11 +546,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
         <div className="max-w-5xl mx-auto pt-12 md:pt-24">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 mb-5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 tl-sq2 border border-emerald-500/25 bg-emerald-500/8 mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" style={{ boxShadow: '0 0 6px #34d399' }} />
               <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-emerald-400/90">Try it now · no login</span>
             </div>
-            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+            <h2 className="tl-banner text-white mb-4" style={{ fontSize: 'clamp(24px,3.4vw,38px)' }}>
               Grade a setup in ten seconds.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
@@ -572,13 +566,13 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       <section className="relative px-5 py-14 md:py-28 border-t border-slate-800/30 overflow-hidden">
         <div className="relative max-w-lg mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">One license</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+            <p className="tl-label mb-3">One license</p>
+            <h2 className="tl-banner text-white" style={{ fontSize: 'clamp(24px,3.4vw,38px)' }}>
               Everything. Forever.
             </h2>
           </div>
 
-          <div className="relative rounded-2xl p-8 md:p-10 overflow-hidden"
+          <div className="relative tl-sq2 p-8 md:p-10 overflow-hidden"
             style={{ background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(245,158,11,0.22)', boxShadow: '0 0 60px rgba(245,158,11,0.08)' }}>
             <div className="absolute top-0 inset-x-0 h-[2px]" style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.7),transparent)' }} />
 
@@ -607,7 +601,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 'No signals. No subscription. Your system, your calls.',
               ].map(item => (
                 <div key={item} className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-5 h-5 rounded-lg bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 mt-0.5">
+                  <span className="flex-shrink-0 w-5 h-5 tl-sq2 bg-emerald-500/12 border border-emerald-500/25 flex items-center justify-center text-emerald-400 mt-0.5">
                     <Check size={11} strokeWidth={3} />
                   </span>
                   <span className="text-[13px] text-slate-400 leading-relaxed">{item}</span>
@@ -620,7 +614,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                 the page where intent is highest, spent on an action only an
                 existing customer can take. */}
             <button onClick={isAuthenticated ? handleCTA : goBuy('pricing')}
-              className="group w-full flex items-center justify-center gap-3 px-8 py-4 rounded-2xl font-bold text-[15px] transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="group w-full flex items-center justify-center gap-3 px-8 py-4 tl-sq2 font-bold text-[15px] transition-all"
               style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
               {isAuthenticated ? ctaLabel : (PRICE ? `Get Access — ${PRICE}` : 'Get Access')}
               <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
@@ -650,14 +644,14 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       {/* ── The Foundation ────────────────────────────────────────── */}
       <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
         <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-8 md:mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The Foundation</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+          <div className="mb-6 md:mb-10">
+            <p className="tl-label mb-3">The Foundation</p>
+            <h2 className="tl-banner text-white" style={{ fontSize: 'clamp(24px,3.4vw,38px)' }}>
               Where people get stuck.
             </h2>
           </div>
           {/* Single large card — same dark style as The Process */}
-          <div className="relative group rounded-2xl p-10 md:p-14 overflow-hidden text-center"
+          <div className="relative group tl-sq2 p-10 md:p-14 overflow-hidden text-center"
             style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="absolute top-0 inset-x-0 h-[1px] opacity-50"
               style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.6),transparent)' }} />
@@ -680,9 +674,9 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       {/* ── How It Works ──────────────────────────────────────────── */}
       <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
         <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">The process</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+          <div className="mb-8">
+            <p className="tl-label mb-3">The process</p>
+            <h2 className="tl-banner text-white" style={{ fontSize: 'clamp(24px,3.4vw,38px)' }}>
               Three steps to your first model.
             </h2>
           </div>
@@ -690,12 +684,10 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             {STEPS.map((s, i) => {
               const Icon = s.icon
               return (
-                <div key={s.n} className="relative group rounded-2xl p-7 text-center overflow-hidden"
+                <div key={s.n} className="relative group tl-sq2 p-7 text-center overflow-hidden"
                   style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
                   <div className="absolute top-0 inset-x-0 h-[1px] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                     style={{ background: 'linear-gradient(90deg,transparent,rgba(245,158,11,0.6),transparent)' }} />
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                    style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(245,158,11,0.05), transparent 70%)' }} />
                   {i < STEPS.length - 1 && (
                     <div className="hidden md:block absolute top-1/2 -right-[11px] w-[22px] h-px bg-gradient-to-r from-slate-700/80 to-transparent z-10" />
                   )}
@@ -707,7 +699,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
                   </p>
                   {/* Icon */}
                   <div className="flex items-center justify-center mb-4">
-                    <div className="w-9 h-9 rounded-xl flex items-center justify-center"
+                    <div className="w-9 h-9 tl-sq2 flex items-center justify-center"
                       style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)' }}>
                       <Icon size={16} className="text-amber-400" />
                     </div>
@@ -724,9 +716,9 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       {/* ── Tools ─────────────────────────────────────────────────── */}
       <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
         <div className="max-w-5xl mx-auto pt-24">
-          <div className="text-center mb-16">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">What's inside</p>
-            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+          <div className="mb-8">
+            <p className="tl-label mb-3">What's inside</p>
+            <h2 className="tl-banner text-white mb-4" style={{ fontSize: 'clamp(24px,3.4vw,38px)' }}>
               Fifteen tools for learning ICT.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-sm mx-auto">Build models, drill the concepts, journal your trades, and track what you actually know.</p>
@@ -734,17 +726,13 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 md:gap-4">
             {TOOLS.map(t => (
               <div key={t.name}
-                className="group relative rounded-2xl p-[14px] md:p-[24px] overflow-hidden transition-all duration-300 cursor-default hover:-translate-y-2 text-center flex flex-col items-center"
+                className="group relative tl-sq2 p-[14px] md:p-[24px] overflow-hidden transition-all duration-300 cursor-default text-center flex flex-col items-center"
                 style={{ background: 'rgba(6,6,12,0.98)', border: `1px solid rgba(255,255,255,0.055)` }}>
-                <div className="absolute top-0 inset-x-0 h-[2px] rounded-t-2xl opacity-35 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `linear-gradient(90deg,transparent,${t.color},transparent)` }} />
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{ background: `radial-gradient(ellipse 90% 55% at 50% 0%,${t.color}0c,transparent 70%)` }} />
-                <span className="w-9 h-9 md:w-11 md:h-11 rounded-xl flex items-center justify-center mb-2.5 md:mb-4 flex-shrink-0"
+                <span className="w-9 h-9 md:w-11 md:h-11 tl-sq2 flex items-center justify-center mb-2.5 md:mb-4 flex-shrink-0"
                   style={{ background: `${t.color}14`, border: `1px solid ${t.color}2e` }}>
                   <t.Icon size={19} strokeWidth={1.75} style={{ color: t.color }} />
                 </span>
-                <span className="hidden md:inline-block text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-0.5 rounded-full mb-4"
+                <span className="hidden md:inline-block text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-0.5 tl-sq2 mb-4"
                   style={{ color: t.color, background: `${t.color}12`, border: `1px solid ${t.color}25` }}>
                   {t.tag}
                 </span>
@@ -769,11 +757,11 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       <section className="px-5 pb-14 md:pb-28 border-t border-slate-800/30">
         <div className="max-w-5xl mx-auto pt-24">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-blue-500/25 bg-blue-500/8 mb-5">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 tl-sq2 border border-blue-500/25 bg-blue-500/8 mb-5">
               <span className="w-1.5 h-1.5 rounded-full bg-blue-400" style={{ boxShadow: '0 0 6px #60a5fa' }} />
               <span className="text-[11px] font-bold tracking-[0.2em] uppercase text-blue-400/90">See inside · live</span>
             </div>
-            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+            <h2 className="tl-banner text-white mb-4" style={{ fontSize: 'clamp(24px,3.4vw,38px)' }}>
               Start with the ten foundations.
             </h2>
             <p className="text-[14px] text-slate-500 max-w-md mx-auto leading-relaxed">
@@ -788,7 +776,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </div>
           <LazyOnVisible minHeight={460}>
             <Suspense fallback={
-              <div className="flex items-center justify-center gap-3 rounded-2xl" style={{ minHeight: 460, background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)' }}>
+              <div className="flex items-center justify-center gap-3 tl-sq2" style={{ minHeight: 460, background: 'rgba(8,8,15,0.98)', border: '1px solid rgba(96,165,250,0.16)' }}>
                 <div className="w-5 h-5 border-2 border-blue-500/30 border-t-blue-400 rounded-full animate-spin" />
                 <span className="text-[13px] text-slate-600 font-medium">Loading the map…</span>
               </div>
@@ -811,9 +799,9 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       <section className="relative px-5 py-14 md:py-28 border-t border-slate-800/30 overflow-hidden">
         <div className="relative max-w-5xl mx-auto">
 
-          <div className="text-center mb-8 md:mb-14">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Why it's worth it</p>
-            <h2 className="tl-display text-white mb-4" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+          <div className="mb-6 md:mb-10">
+            <p className="tl-label mb-3">Why it's worth it</p>
+            <h2 className="tl-banner text-white mb-4" style={{ fontSize: 'clamp(24px,3.4vw,38px)' }}>
               Why it's worth paying for.
             </h2>
             <p className="text-[15px] text-slate-400 leading-relaxed max-w-xl mx-auto">
@@ -824,7 +812,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           </div>
 
           {/* What changes — the old way vs Trading Lab */}
-          <div className="max-w-4xl mx-auto rounded-2xl overflow-hidden mb-8 md:mb-14" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="max-w-4xl mx-auto tl-sq2 overflow-hidden mb-8 md:mb-14" style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
             <div className="grid grid-cols-2 text-[10px] font-black uppercase tracking-[0.16em]">
               <div className="px-5 md:px-7 py-4 text-slate-600 border-b border-slate-800/50">The old way</div>
               <div className="px-5 md:px-7 py-4 text-amber-400 border-b border-l border-slate-800/50 bg-amber-500/[0.03]">With Trading Lab</div>
@@ -850,9 +838,9 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
               { Icon: Target,       color: '#34d399', title: 'No signals to follow', body: 'No signals, no guru calls, no group to copy. You learn the concepts and build your own reads instead of waiting on someone else.' },
               { Icon: InfinityIcon, color: '#f59e0b', title: 'One payment, forever', body: 'Not another monthly Discord. A single license, lifetime access, free updates, synced across every device you trade on.' },
             ].map(c => (
-              <div key={c.title} className="rounded-2xl p-5 md:p-7 text-center flex flex-col items-center"
+              <div key={c.title} className="tl-sq2 p-5 md:p-7 text-center flex flex-col items-center"
                 style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <span className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 md:mb-5 flex-shrink-0"
+                <span className="w-11 h-11 tl-sq2 flex items-center justify-center mb-4 md:mb-5 flex-shrink-0"
                   style={{ background: `${c.color}14`, border: `1px solid ${c.color}2e` }}>
                   <c.Icon size={19} strokeWidth={1.75} style={{ color: c.color }} />
                 </span>
@@ -866,16 +854,14 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           <p className="text-center text-[11px] font-black tracking-[0.22em] uppercase text-slate-600 mb-5">Everything included</p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5">
             {FEATURE_COLS.map(col => (
-              <div key={col.heading} className="relative rounded-2xl p-5 md:p-7 overflow-hidden text-center flex flex-col items-center"
+              <div key={col.heading} className="relative tl-sq2 p-5 md:p-7 overflow-hidden text-center flex flex-col items-center"
                 style={{ background: 'rgba(7,7,14,0.98)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                <div className="absolute top-0 inset-x-0 h-[1px]"
-                  style={{ background: `linear-gradient(90deg,transparent,${col.color}55,transparent)` }} />
                 <div className="w-[2px] h-8 rounded-full mb-4" style={{ background: col.color, opacity: 0.7 }} />
                 <p className="text-[11px] font-black tracking-[0.22em] uppercase mb-5" style={{ color: col.color }}>{col.heading}</p>
                 <div className="flex flex-wrap gap-2 justify-center">
                   {col.items.map(item => (
                     <span key={item}
-                      className="px-3 py-1 rounded-lg text-[12px] font-medium text-slate-400"
+                      className="px-3 py-1 tl-sq2 text-[12px] font-medium text-slate-400"
                       style={{ background: `${col.color}0d`, border: `1px solid ${col.color}22` }}>
                       {item}
                     </span>
@@ -892,9 +878,9 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       {/* ── FAQ ───────────────────────────────────────────────────── */}
       <section className="px-5 py-14 md:py-28 border-t border-slate-800/30">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-8 md:mb-14">
-            <p className="text-[11px] font-bold tracking-[0.3em] uppercase text-amber-500/60 mb-3">Questions</p>
-            <h2 className="tl-display text-white" style={{ fontSize: 'clamp(30px,4.4vw,46px)' }}>
+          <div className="mb-6 md:mb-10">
+            <p className="tl-label mb-3">Questions</p>
+            <h2 className="tl-banner text-white" style={{ fontSize: 'clamp(24px,3.4vw,38px)' }}>
               Common questions.
             </h2>
           </div>
@@ -921,7 +907,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
 
         <div className="relative z-10 max-w-3xl mx-auto px-5 py-16 md:py-32 flex flex-col items-center text-center">
 
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/20 bg-amber-500/6 mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 tl-sq2 border border-amber-500/20 bg-amber-500/6 mb-10">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400" style={{ boxShadow: '0 0 6px #f59e0b' }} />
             <span className="text-[11px] font-bold tracking-[0.22em] uppercase text-amber-400/80">
               {isAuthenticated ? "You're In" : 'Get Started Today'}
@@ -931,7 +917,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
           {/* Same clamp as the hero h1: the opening and closing statements share
               one display size, so the page keeps three display steps
               (104 hero/closer, 46 section, 40 price). */}
-          <h2 className="tl-display text-white mb-8 w-full"
+          <h2 className="tl-banner text-white mb-8 w-full"
             style={{ fontSize: 'clamp(54px, 10.5vw, 104px)', lineHeight: 0.92, letterSpacing: '-0.02em' }}>
             {/* Static gradient here on purpose: the panning animation is the hero's
                 one signature moment. Running it again at the bottom made the page
@@ -957,7 +943,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
             {/* Closing statement — same inversion as the hero and the pricing
                 card, and the last chance the page gets. */}
             <button onClick={isAuthenticated ? handleCTA : goBuy('footer')}
-              className="group flex items-center gap-3 rounded-2xl font-bold text-[16px] transition-all hover:scale-[1.03] active:scale-[0.97]"
+              className="group flex items-center gap-3 tl-sq2 font-bold text-[16px] transition-all"
               style={{ padding: '1.1rem 3rem', background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
               {isAuthenticated ? ctaLabel : (PRICE ? `Get Access — ${PRICE}` : 'Get Access')}
               <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
@@ -995,7 +981,7 @@ export function Landing({ isAuthenticated, onSignIn, onLaunch }: Props) {
       <div className="sm:hidden fixed bottom-0 inset-x-0 z-50 border-t border-slate-800/60 bg-[#05050a]/95 backdrop-blur-xl px-4 pt-3"
         style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
         <button onClick={goBuy('mobile-bar')}
-          className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-[15px] active:scale-[0.98] transition-transform"
+          className="w-full flex items-center justify-center gap-2 py-3.5 tl-sq2 font-bold text-[15px] transition-transform"
           style={{ background: 'linear-gradient(135deg,#f59e0b,#d97706)', color: '#0a0800' }}>
           {isAuthenticated ? 'Launch Trading Lab' : PRICE ? `Get instant access — ${PRICE}` : 'Get instant access'}
           <ArrowRight size={16} />
