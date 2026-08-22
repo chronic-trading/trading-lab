@@ -817,3 +817,46 @@ html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
    and soft shadows under everything is the tell this whole layer exists to
    avoid. */
 .tl-flat { box-shadow: none !important; }
+
+/* ── House geometry ──────────────────────────────────────────────────────────
+   The app carried 540 rounded-* utilities across 45 files. Rather than edit
+   every call site, this redefines the scale they all read from: Tailwind v4
+   emits .rounded-xl as border-radius: var(--radius-xl), so overriding the
+   variables squares the entire product in one decision — and keeps it squared
+   for anything written later, which editing call sites would not.
+
+   rounded-full is exempt by construction: Tailwind emits it as a literal
+   (3.4e38px), not a variable. Dots, avatars and the mastery marks stay round,
+   because a circle there is the shape, not a style.
+
+   This is the same call the landing page makes. A terminal has square corners;
+   soft radii on every panel is the house style of a component library. */
+@theme {
+  --radius-sm:  2px;
+  --radius-md:  2px;
+  --radius-lg:  2px;
+  --radius-xl:  2px;
+  --radius-2xl: 2px;
+  --radius-3xl: 2px;
+}
+:root {
+  --radius-card:    2px;
+  --radius-control: 2px;
+}
+
+/* Flat. A terminal is a screen, not paper — elevation is the other half of the
+   card look, and leaving it on would keep the shadow while losing the corner. */
+.tl-card { box-shadow: none; }
+
+/* Flat cards. Tailwind bakes shadow values into the utility rather than reading
+   a token, so there is no variable to override — this zeroes the utility inside
+   the app's content area instead.
+
+   Scoped to `main` on purpose. Modals and sheets render outside it, and their
+   elevation is doing real work: it separates an overlay from the page beneath.
+   A card sitting in a grid has nothing to separate itself from, so its shadow is
+   decoration — and 52 concept cards each casting one is the look this pass is
+   trying to leave behind. */
+main .shadow-sm, main .shadow-md, main .shadow-lg, main .shadow-xl {
+  --tw-shadow: 0 0 #0000;
+}
