@@ -61,13 +61,22 @@ create table if not exists user_data (
 -- cross-site progress sync (ict-replay scores/trades/streak, glossary learned terms).
 alter table user_data add column if not exists cross_site jsonb default '{}';
 
--- ── Row Level Security ────────────────────────────────────────────────────────
+-- ── Row Level Security ───────────────────────────────────────────────────────
+-- Every statement below is drop-then-create so the whole file can be re-run
+-- against a live database without erroring on policies that already exist.
+-- That matters: this file is the recovery path after a project restore, and a
+-- recovery script you can only run once is a trap.
+-- ── (original header) ────────────────────────────────────────────────────────
 alter table builds         enable row level security;
 alter table journal_entries enable row level security;
 alter table plans           enable row level security;
 alter table user_data       enable row level security;
 
+drop policy if exists "users own builds" on builds;
 create policy "users own builds"          on builds          for all using (auth.uid() = user_id);
+drop policy if exists "users own journal_entries" on journal_entries;
 create policy "users own journal_entries" on journal_entries for all using (auth.uid() = user_id);
+drop policy if exists "users own plans" on plans;
 create policy "users own plans"           on plans           for all using (auth.uid() = user_id);
+drop policy if exists "users own user_data" on user_data;
 create policy "users own user_data"       on user_data       for all using (auth.uid() = user_id);
