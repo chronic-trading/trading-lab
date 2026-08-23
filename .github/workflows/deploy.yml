@@ -42,6 +42,9 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           VITE_WHOP_BUY_URL: ${{ secrets.VITE_WHOP_BUY_URL }}
+          # Unset until the Cloudflare Worker is live; the app falls back to the
+          # Supabase function, so setting this is the switch-over.
+          VITE_LICENCE_URL: ${{ secrets.VITE_LICENCE_URL }}
         run: npm run build
 
       - name: Setup Pages

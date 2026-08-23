@@ -1,0 +1,22 @@
+# Cloudflare Worker config for the licence check.
+#
+# Deploy either way:
+#   Dashboard — Workers & Pages > Create > paste index.js > Deploy.
+#               Simplest, no CLI, no token. Fine for something that changes
+#               about twice a year.
+#   CLI       — npx wrangler deploy   (from this directory)
+#
+# Secrets are NEVER set here. This file is public; set them with
+#   npx wrangler secret put WHOP_API_KEY
+# or in the dashboard under Settings > Variables and Secrets:
+#   WHOP_API_KEY      required, needs Whop's member:basic:read permission
+#   TEST_LICENSE_KEY  optional — unset means no bypass exists at all
+
+name = "validate-licence"
+main = "index.js"
+compatibility_date = "2026-08-23"
+
+# No KV, no D1, no queues, nothing to provision. That is the point of the move:
+# a licence check needs to reach Whop and nothing else. The Supabase project
+# this replaces carried a database, an auth service and a schema, and all three
+# of those are what actually broke — twice by pausing, once by being deleted.

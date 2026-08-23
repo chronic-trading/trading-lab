@@ -20,7 +20,15 @@ function keyToEmail(key: string) {
 
 async function validateWhopKey(key: string): Promise<{ valid: boolean; error?: string }> {
   try {
-    const res = await fetch('https://hgvktmjqegywjrwbkipv.supabase.co/functions/v1/validate-whop', {
+    // Endpoint is configurable so the licence check can move off Supabase
+    // without a code change. VITE_LICENCE_URL points at the Cloudflare Worker
+    // in workers/validate-licence; unset, it falls back to the Supabase
+    // function so nothing breaks until the Worker is actually deployed and the
+    // secret is set. Both speak the same request and response shape.
+    const endpoint = (import.meta.env.VITE_LICENCE_URL as string | undefined)
+      || 'https://hgvktmjqegywjrwbkipv.supabase.co/functions/v1/validate-whop'
+
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ key }),
